@@ -31,10 +31,7 @@
 </script>
 
 <div
-  class="flex min-w-max flex-col items-center gap-1 rounded-2xl border-2 px-3 py-2 transition-transform duration-150"
-  class:border-slate-600={state === "unknown"}
-  class:border-emerald-400={state === "satisfy"}
-  class:border-rose-500={state === "violate"}
+  class={`flex min-w-max flex-col items-center gap-1 rounded-2xl border-2 px-3 py-2 transition-transform duration-150 ${state === "satisfy" ? "border-satisfy" : state === "violate" ? "border-violate" : "border-ink/25"}`}
   class:animate-pulse={glow}
 >
   <div class="flex items-center gap-1">

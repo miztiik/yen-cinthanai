@@ -37,9 +37,9 @@
   </header>
 
   <section class="grid grid-cols-3 gap-3 text-center">
-    <div class="rounded-2xl bg-slate-800 p-4"><p class="text-3xl font-bold tabular-nums">{save.streak.count}</p><p class="text-xs opacity-60">flame</p></div>
-    <div class="rounded-2xl bg-slate-800 p-4"><p class="text-3xl font-bold tabular-nums">{save.hero.bestMs ? `${Math.round(save.hero.bestMs / 1000)}s` : "-"}</p><p class="text-xs opacity-60">best</p></div>
-    <div class="rounded-2xl bg-slate-800 p-4"><p class="text-3xl font-bold tabular-nums">{solved}</p><p class="text-xs opacity-60">solved</p></div>
+    <div class="rounded-2xl bg-surface p-4"><p class="text-3xl font-bold tabular-nums">{save.streak.count}</p><p class="text-xs opacity-60">flame</p></div>
+    <div class="rounded-2xl bg-surface p-4"><p class="text-3xl font-bold tabular-nums">{save.hero.bestMs ? `${Math.round(save.hero.bestMs / 1000)}s` : "-"}</p><p class="text-xs opacity-60">best</p></div>
+    <div class="rounded-2xl bg-surface p-4"><p class="text-3xl font-bold tabular-nums">{solved}</p><p class="text-xs opacity-60">solved</p></div>
   </section>
 
   <section>
@@ -47,7 +47,7 @@
     {#if times.length}
       <div class="flex h-24 items-end gap-1">
         {#each times as t (t)}
-          <div class="flex-1 rounded-t bg-emerald-500" style={`height:${Math.max(8, (t / peak) * 100)}%`} title={`${Math.round(t / 1000)}s`}></div>
+          <div class="flex-1 rounded-t bg-accent" style={`height:${Math.max(8, (t / peak) * 100)}%`} title={`${Math.round(t / 1000)}s`}></div>
         {/each}
       </div>
     {:else}
@@ -59,13 +59,13 @@
     <p class="mb-2 text-xs uppercase tracking-wide opacity-60">last 7 days</p>
     <div class="flex gap-2">
       {#each week as d (d.date)}
-        <div class="h-6 w-6 rounded-full" class:bg-emerald-500={d.won} class:bg-slate-700={!d.won} aria-label={d.won ? "solved" : "open"}></div>
+        <div class="h-6 w-6 rounded-full" class:bg-accent={d.won} class:bg-surface={!d.won} aria-label={d.won ? "solved" : "open"}></div>
       {/each}
     </div>
   </section>
 
-  <section class="rounded-2xl bg-slate-800 p-4 text-center">
-    <p class="text-3xl font-bold tabular-nums text-amber-400">{stars}</p>
+  <section class="rounded-2xl bg-surface p-4 text-center">
+    <p class="text-3xl font-bold tabular-nums text-gold">{stars}</p>
     <p class="text-xs opacity-60">stars earned</p>
   </section>
 </main>

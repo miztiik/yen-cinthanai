@@ -1,13 +1,55 @@
 @import "tailwindcss";
 
+/* Semantic colour tokens (ui-shell.md "Tailwind tokens"). @theme inline maps each to
+   a live CSS custom property, so utilities like bg-surface / text-ink / border-accent
+   compile to var(--token) and a runtime swap (lib/theme.ts) restyles instantly - only
+   colours change, never layout. The authoritative palette values live in
+   config/palettes.toml (baked to public/config/palettes.json); the :root values below
+   are a bootstrap fallback (= the midnight palette) so there is no flash before that
+   JSON loads. Keep them in sync with config/palettes.toml [palette.midnight]. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-accent: var(--accent);
+  --color-satisfy: var(--satisfy);
+  --color-violate: var(--violate);
+  --color-near: var(--near);
+  --color-gold: var(--gold);
+}
+
 :root {
+  /* bootstrap fallback = config/palettes.toml [palette.midnight.dark] */
+  --bg: #0b1220;
+  --surface: #1e293b;
+  --ink: #e2e8f0;
+  --accent: #10b981;
+  --satisfy: #34d399;
+  --violate: #fb7185;
+  --near: #fbbf24;
+  --gold: #fcd34d;
   color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  /* bootstrap fallback = config/palettes.toml [palette.midnight.light] */
+  --bg: #eef2f7;
+  --surface: #ffffff;
+  --ink: #0f172a;
+  --accent: #0f9d6b;
+  --satisfy: #059669;
+  --violate: #e11d48;
+  --near: #b45309;
+  --gold: #b8860b;
+  color-scheme: light;
 }
 
 html,
 body {
   margin: 0;
   min-height: 100dvh;
+  background-color: var(--bg);
+  color: var(--ink);
 }
 
 /* Reduced-motion: drop transforms/animations to instant. Set via lib/motion.ts or

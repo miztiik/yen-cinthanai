@@ -123,7 +123,7 @@
   </header>
 
   {#if error}
-    <p class="text-rose-400">could not load: {error}</p>
+    <p class="text-violate">could not load: {error}</p>
   {:else if game}
     <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
       {#each game.m.constraints as c (c.id)}
@@ -140,10 +140,10 @@
     <section class="flex justify-center"><Pool {game} /></section>
 
     <div class="mt-auto flex items-center justify-center gap-3 pt-2">
-      <button class="rounded-xl bg-slate-700 px-4 py-2 disabled:opacity-30" disabled={game.locked} onclick={() => game?.reset()}>reset</button>
+      <button class="rounded-xl bg-surface px-4 py-2 disabled:opacity-30" disabled={game.locked} onclick={() => game?.reset()}>reset</button>
       {#if !game.live}
         <button
-          class="rounded-xl bg-sky-600 px-5 py-2 font-semibold disabled:opacity-30"
+          class="rounded-xl bg-accent px-5 py-2 font-semibold disabled:opacity-30"
           disabled={game.locked || game.attemptsLeft === 0}
           onclick={() => { game?.check(); if (game && !game.locked) play("violate"); else play("satisfy"); }}>{submitLabel}</button>
       {/if}
@@ -151,7 +151,7 @@
     </div>
 
     {#if game.checked && !game.locked}
-      <p class="text-center text-sm text-rose-300">
+      <p class="text-center text-sm text-violate">
         {game.dial.feedback === "count-wrong"
           ? `${game.m.constraints.filter((c) => game?.evalState.clues[c.id] === "violate").length} clues off`
           : "not yet - keep deducing"}

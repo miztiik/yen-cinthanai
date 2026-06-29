@@ -13,7 +13,7 @@ import json
 import tomllib
 from pathlib import Path
 
-CONFIGS = ("tiers", "shapes", "glyphpacks", "copy", "retention")
+CONFIGS = ("tiers", "shapes", "glyphpacks", "copy", "retention", "palettes")
 
 _ROOT = Path(__file__).resolve().parent.parent
 CONFIG_DIR = _ROOT / "config"

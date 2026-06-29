@@ -5,19 +5,25 @@
       "tea": "household/tea.svg",
       "coffee": "household/coffee.svg",
       "milk": "household/milk.svg",
-      "cola": "household/cola.svg"
+      "cola": "household/cola.svg",
+      "juice": "household/juice.svg",
+      "water": "household/water.svg"
     },
     "creatures": {
       "cat": "creatures/cat.svg",
       "dog": "creatures/dog.svg",
       "fish": "creatures/fish.svg",
-      "bird": "creatures/bird.svg"
+      "bird": "creatures/bird.svg",
+      "frog": "creatures/frog.svg",
+      "owl": "creatures/owl.svg"
     },
     "abstract": {
       "num1": "abstract/num1.svg",
       "num2": "abstract/num2.svg",
       "num3": "abstract/num3.svg",
       "num4": "abstract/num4.svg",
+      "num5": "abstract/num5.svg",
+      "num6": "abstract/num6.svg",
       "grid": "abstract/grid.svg",
       "seating": "abstract/seating.svg",
       "roundtable": "abstract/roundtable.svg",
@@ -29,6 +35,22 @@
       "square": "shapes/square.svg",
       "triangle": "shapes/triangle.svg",
       "diamond": "shapes/diamond.svg"
+    },
+    "food": {
+      "apple": "food/apple.svg",
+      "bread": "food/bread.svg",
+      "cheese": "food/cheese.svg",
+      "egg": "food/egg.svg",
+      "grape": "food/grape.svg",
+      "carrot": "food/carrot.svg"
+    },
+    "color": {
+      "red": "color/red.svg",
+      "orange": "color/orange.svg",
+      "yellow": "color/yellow.svg",
+      "green": "color/green.svg",
+      "blue": "color/blue.svg",
+      "violet": "color/violet.svg"
     }
   }
 }

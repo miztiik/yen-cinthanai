@@ -2,7 +2,7 @@
 
 **Last Updated**: 2026-06-29
 
-Screens, components, glyphs, tokens. Mid-tier Android portrait (~390x844). Tailwind for chrome only; canvas/board internals excluded. Four glyph packs ship v1 (household, creatures, abstract, shapes). Visual clarity (colour-is-one-signal), not a11y tooling.
+Screens, components, glyphs, tokens. Mid-tier Android portrait (~390x844). Tailwind for chrome only; canvas/board internals excluded. Six glyph packs ship (household, creatures, abstract, shapes, food, colour). Visual clarity (colour-is-one-signal), not a11y tooling.
 
 ## Screens
 

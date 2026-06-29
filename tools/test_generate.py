@@ -152,3 +152,33 @@ def test_standard_has_one_shared_category() -> None:
     for cells in m.solution.values():
         counts[cells[shared[0].id]] = counts.get(cells[shared[0].id], 0) + 1
     assert max(counts.values()) > 1  # a value really repeats across seats
+
+
+# --- bigger grids (sharp 5x4, expert 6x5; D17) ----------------------------------
+
+
+def test_sharp_is_five_by_four() -> None:
+    m, _, _ = g.generate(DATE, "sharp", CONFIG_DIR)
+    assert m.shapeId == "seating-row" and len(m.entities) == 5
+    bij = [c for c in m.categories.items if c.cardinality != "shared"]
+    assert len(bij) == 4  # 5x4: four bijective categories
+    for c in bij:
+        assert len(c.values) == 5  # each value pack supplies one value per seat
+
+
+def test_expert_is_six_by_five() -> None:
+    m, _, _ = g.generate(DATE, "expert", CONFIG_DIR)
+    assert m.shapeId == "round-table" and len(m.entities) == 6
+    cats = m.categories.items
+    assert len(cats) == 5  # 6x5: five categories on the ring
+    for c in cats:
+        assert len(c.values) == 6  # six seats -> six distinct values per category
+    assert {"food", "color"} <= {c.id for c in cats}  # the two new packs are in play
+
+
+def test_bigger_grids_stay_in_band() -> None:
+    for tier in ("sharp", "expert"):
+        lo, hi = g.load_toml("tiers", CONFIG_DIR)[tier]["band"]
+        _, d, _ = g.generate(DATE, tier, CONFIG_DIR)
+        assert lo <= d <= hi
+

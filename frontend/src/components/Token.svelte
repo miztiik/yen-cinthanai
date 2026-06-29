@@ -26,10 +26,10 @@
   use:draggable={handlers}
   aria-pressed={selected}
   aria-label={label}
-  class="touch-none select-none flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-700 text-slate-100 transition-[outline] duration-150 active:scale-95"
+  class="touch-none select-none flex h-12 w-12 items-center justify-center rounded-2xl bg-surface text-ink transition-[outline] duration-150 active:scale-95"
   class:outline={selected}
   class:outline-2={selected}
-  class:outline-emerald-400={selected}
+  class:outline-accent={selected}
 >
   <Glyph {ref} {label} size={28} />
 </button>

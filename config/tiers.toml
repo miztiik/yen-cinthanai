@@ -25,15 +25,18 @@ hints = 2
 feedback = "count-wrong"
 par_s = 240
 
-# v1 packs ship 3 categories x 4 values (docs/concepts/ui-shell.md). Sharp/expert
-# reuse the 4x3 seating-row and lean on the ENV dials (attempts/hints/feedback) to
-# reach band; 5x4/6x5 wait on more glyph packs. dials.toml comment notes the reuse.
+# Sharp 5x4 and Expert 6x5 land now that every value pack ships 6 values (D17:
+# household/creatures/food/colour + the abstract numerals). SIZE = entities*categories
+# climbs with the grid, so D sits structurally higher: Sharp ~57 (size+depth driven,
+# mostly direct eq/ends clues), Expert ~108 (the round-table's wrap relations are all
+# indirect, so INDIR maxes out). The ENV dials still separate the two. Bands bracket
+# the observed D with margin; they are the calibration gate. See difficulty-and-scoring.md.
 [sharp]
-band = [40, 59]
-entities = 4
-categories = 3
-clue_count = [5, 7]
-indir = [0.45, 0.60]
+band = [48, 66]
+entities = 5
+categories = 4
+clue_count = [9, 11]
+indir = [0.0, 0.20]
 cardinality = "bijective"
 attempts = 2
 hints = 1
@@ -41,11 +44,11 @@ feedback = "binary-check"
 par_s = 480
 
 [expert]
-band = [60, 90]
-entities = 4
-categories = 4
-clue_count = [5, 7]
-indir = [0.60, 0.75]
+band = [96, 120]
+entities = 6
+categories = 5
+clue_count = [14, 16]
+indir = [0.80, 1.0]
 cardinality = "bijective"
 attempts = 1
 hints = 0
