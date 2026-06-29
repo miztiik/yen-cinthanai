@@ -10,6 +10,7 @@
 - [system-design-DRAFT.md](system-design-DRAFT.md) - the originating brainstorm (4 turns of CSP notes).
 - [../docs/how-to/ship-to-github-pages.md](../docs/how-to/ship-to-github-pages.md) - deploy + base-path runbook.
 - [../docs/reference/documentation-structure.md](../docs/reference/documentation-structure.md) - where findings land at distill time.
+- Implementation spec (distilled): [../docs/concepts/core-loop.md](../docs/concepts/core-loop.md), [../docs/concepts/difficulty-and-scoring.md](../docs/concepts/difficulty-and-scoring.md), [../docs/concepts/ui-shell.md](../docs/concepts/ui-shell.md), [../docs/architecture/contracts/schemas.md](../docs/architecture/contracts/schemas.md), [../docs/architecture/generator/pipeline.md](../docs/architecture/generator/pipeline.md), [../docs/architecture/runtime/stack-and-bundle.md](../docs/architecture/runtime/stack-and-bundle.md).
 
 ---
 
@@ -51,7 +52,7 @@ What is not public off-the-shelf is the solver-driven GENERATOR (uniqueness + mi
 | D9 | Share | yes v1, shape-of-struggle: moves/0-wrong/time/no-hints/streak + shape label, never solution | Palm + Fowler |
 | D10 | Audio | SFX mute-by-default, in a settings hub | user |
 | D11 | Daily reset | 00:00 UTC, one global daily | user |
-| D12 | Theme | combine household + creatures + abstract glyphs, expands with categories | user |
+| D12 | Theme | 3 glyph packs v1 (household, creatures, abstract), palette-swappable; expands later | user |
 | D13 | Streak | forgiving: 1 free skip/week, no shame UI | user |
 | D14 | Budget/retention | RICHNESS-FIRST: no fixed shell/bundle cap; optimize (lazy, WASM, compression) only if mid-tier Android drops <60fps; progress retained while storage allows | user |
 | D15 | Architecture | Pydantic on 3 boundary contracts; backend = pipes+filters; frontend = Svelte runes (no bus/adapters) | review: Fowler/Carmack |
@@ -111,7 +112,7 @@ Each persisted surface gets a typed schema with a `schemaVersion`. Only SAVE mig
 | hero | obj | { bestMs, date } |
 | streak | obj | { count, lastDate, skipsLeft } (forgiving, D13) |
 | settings | obj | sound, volume, theme, palette, reducedMotion (PLAY resumes last-played - no defaultTier/shape) |
-| DayState | obj | date, tier, shapeId, status, placements, attempts, solveMs, hintsUsed |
+| DayState | obj | date, tier, shapeId, status, placements, attempts, solveMs, hintsUsed, stars (1-3; PAR in config) |
 
 Migration: prune oldest days only under storage pressure (hero/streak stats survive even when old puzzle JSON is gone); add field = minor; remove/retype = major + migrateV1toV2 on read. Yesterday's save always loads.
 
@@ -213,7 +214,7 @@ Unit (validate, prune, seed determinism), contract (4 schemas vs readers/writers
 | P3.1 | P3 | landing (PLAY=resume) + loader + board + pointer drag/tap (transform-only) | not-started |
 | P3.2 | P3 | validate-vs-constraints, satisfy/violate glyphs | not-started |
 | P4.1 | P4 | 4-tier config + dials | not-started |
-| P4.2 | P4 | hintTrace + brag-cost flag + save + prune + migrate + stats | not-started |
+| P4.2 | P4 | hintTrace + brag-cost + stars/PAR + save + prune + migrate + stats | not-started |
 | P5.1 | P5 | shape/constraint/glyph registries + maxEntities | not-started |
 | P5.2 | P5 | seating-row + shape drawer (behind PLAY) | not-started |
 | P6.1 | P6 | copy bags + hero beat + held end-card + share string | not-started |
