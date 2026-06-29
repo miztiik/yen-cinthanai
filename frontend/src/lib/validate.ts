@@ -25,34 +25,53 @@ function posOf(b: BoardModel, entity: string): number {
   return b.entities.indexOf(entity);
 }
 
-/** Find the entity holding (cat, value): anchor is fixed, others come from play. */
-function holder(b: BoardModel, anchor: AttributeCategory, place: Placements, cat: string, value: string): string | null {
+/** Entities holding (cat, value). Anchor is fixed; shared cats may hold many; a
+ *  bijective fillable cat holds at most one. eq/neq test set overlap so both work. */
+function holders(b: BoardModel, anchor: AttributeCategory, place: Placements, cat: string, value: string): string[] {
   if (cat === anchor.id) {
     const i = anchor.values.findIndex((v) => v.id === value);
-    return i >= 0 ? b.entities[i] : null;
+    return i >= 0 ? [b.entities[i]] : [];
   }
-  for (const e of b.entities) if (place[e]?.[cat] === value) return e;
-  return null;
+  return b.entities.filter((e) => place[e]?.[cat] === value);
+}
+
+/** First holder (bijective: the only one), or null - for ordinal/position clues. */
+function holder(b: BoardModel, anchor: AttributeCategory, place: Placements, cat: string, value: string): string | null {
+  return holders(b, anchor, place, cat, value)[0] ?? null;
+}
+
+/** Ring distance: min of forward/backward steps when the table wraps, else linear. */
+function span(b: BoardModel, a: string, c: string): number {
+  const n = b.entities.length;
+  const d = Math.abs(posOf(b, a) - posOf(b, c));
+  return b.wrap ? Math.min(d, n - d) : d;
 }
 
 function evalConstraint(b: BoardModel, anchor: AttributeCategory, place: Placements, k: Constraint): ClueState {
+  if (k.type === "eq" || k.type === "neq") {
+    const sa = new Set(holders(b, anchor, place, k.operands[0].cat, k.operands[0].value));
+    const sb = holders(b, anchor, place, k.operands[1].cat, k.operands[1].value);
+    if (sa.size === 0 || sb.length === 0) return "unknown";
+    const overlap = sb.some((e) => sa.has(e));
+    return (k.type === "eq" ? overlap : !overlap) ? "satisfy" : "violate";
+  }
   const ents = k.operands.map((o) => holder(b, anchor, place, o.cat, o.value));
   if (ents.some((e) => e === null)) return "unknown";
-  const [a, c] = ents as string[];
+  const [a, c, d] = ents as string[];
   switch (k.type) {
-    case "eq":
-      return a === c ? "satisfy" : "violate";
-    case "neq":
-      return a !== c ? "satisfy" : "violate";
     case "ends": {
       const last = b.entities.length - 1;
       const p = posOf(b, a);
       return p === 0 || p === last ? "satisfy" : "violate";
     }
     case "adjacent":
-      return Math.abs(posOf(b, a) - posOf(b, c)) === 1 ? "satisfy" : "violate";
+      return span(b, a, c) === 1 ? "satisfy" : "violate";
+    case "opposite":
+      return span(b, a, c) === b.entities.length / 2 ? "satisfy" : "violate";
+    case "between":
+      return span(b, a, c) === 1 && span(b, a, d) === 1 ? "satisfy" : "violate";
     case "distance":
-      return Math.abs(posOf(b, a) - posOf(b, c)) === Number(k.params.k) ? "satisfy" : "violate";
+      return span(b, a, c) === Number(k.params.k) ? "satisfy" : "violate";
     case "before":
       return posOf(b, a) < posOf(b, c) ? "satisfy" : "violate";
     default:
@@ -63,10 +82,7 @@ function evalConstraint(b: BoardModel, anchor: AttributeCategory, place: Placeme
 /** Entities a constraint currently touches (placed operands only). */
 function touched(b: BoardModel, anchor: AttributeCategory, place: Placements, k: Constraint): string[] {
   const out: string[] = [];
-  for (const o of k.operands) {
-    const e = holder(b, anchor, place, o.cat, o.value);
-    if (e) out.push(e);
-  }
+  for (const o of k.operands) out.push(...holders(b, anchor, place, o.cat, o.value));
   return out;
 }
 

@@ -15,7 +15,7 @@
   const streak = save.streak.count;
   applyMotion(save.settings.reducedMotion);
   const tiers: Tier[] = ["easy", "standard", "sharp", "expert"];
-  const DEFERRED = [{ id: "round-table", label: "round table" }]; // v2, greyed (D1)
+  const DEFERRED: { id: string; label: string }[] = []; // round-table is live (P8); next shapes wait
 
   let shapes = $state<Record<string, ShapeDef>>({});
   let entries = $state<{ tier: Tier; shapeId: string }[]>([]);

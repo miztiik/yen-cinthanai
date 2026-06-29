@@ -12,22 +12,22 @@
     {
       "date": "2026-06-29",
       "file": "2026-06-29-standard.json",
-      "sha": "a5271221babe5945b4bcbe1583a298286fc58a23547c8c2915db1272ea785ec2",
+      "sha": "9130018596a408a4e5f4b14305f06a8149866041601876146447767b78980d21",
       "shapeId": "seating-row",
       "tier": "standard"
     },
     {
       "date": "2026-06-29",
       "file": "2026-06-29-sharp.json",
-      "sha": "20c0f35b68d069a9ab5a7647e36d67c24e4eebeeb1e50f321639b2f549aae820",
+      "sha": "c062f3aba3a8bd13e23195164a5ba8aaf8c44f6a226328733023716189659962",
       "shapeId": "seating-row",
       "tier": "sharp"
     },
     {
       "date": "2026-06-29",
       "file": "2026-06-29-expert.json",
-      "sha": "b4c2cf8eb183c3c64930c4da1bae362b745962ecc195c58ad6927207553783b0",
-      "shapeId": "seating-row",
+      "sha": "8a8b3f7719c17b465e1cdefe1aded5a7a9b28aea047ae9b0da3d1b0274c839ea",
+      "shapeId": "round-table",
       "tier": "expert"
     }
   ],

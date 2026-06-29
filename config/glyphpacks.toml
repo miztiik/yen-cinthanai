@@ -33,6 +33,12 @@ label = "Four"
 label = "Grid"
 [abstract.seating]
 label = "Seating"
+[abstract.roundtable]
+label = "Round table"
+[abstract.opposite]
+label = "Opposite"
+[abstract.between]
+label = "Between"
 
 [shapes.circle]
 label = "Circle"

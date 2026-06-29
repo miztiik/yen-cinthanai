@@ -2,7 +2,7 @@
 // and TODO/2026-06-29-system-design.md sec 5.3. Types only; no logic here.
 
 export type Tier = "easy" | "standard" | "sharp" | "expert";
-export type ShapeId = "grid" | "seating-row";
+export type ShapeId = "grid" | "seating-row" | "round-table";
 export type DayStatus = "unplayed" | "playing" | "won" | "lost";
 
 /** entity id -> category id -> value id. */

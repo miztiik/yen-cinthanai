@@ -12,6 +12,7 @@ export interface BoardModel {
   anchor: AttributeCategory; // fixed identity column (header), value i -> entity i
   columns: AttributeCategory[]; // fillable categories, in manifest order
   values: Record<string, AttributeValue[]>; // catId -> token pool source
+  wrap: boolean; // circular table: adjacency wraps end-to-end (round-table)
 }
 
 /** Pick the anchor: the ordinal category if any, else the first category. */
@@ -30,10 +31,19 @@ export function buildBoard(m: PuzzleManifest): BoardModel {
   const columns = m.categories.list.filter((c) => c.id !== anchor.id);
   const values: Record<string, AttributeValue[]> = {};
   for (const c of m.categories.list) values[c.id] = c.values;
-  return { entities: m.entities, anchor, columns, values };
+  return { entities: m.entities, anchor, columns, values, wrap: m.shapeId === "round-table" };
 }
 
 /** Total fillable slots = entities x fillable columns. */
 export function slotCount(b: BoardModel): number {
   return b.entities.length * b.columns.length;
+}
+
+/** Ring seat centres as box fractions (0..1), seat 0 at top, clockwise. The circular
+ *  skin places seats here; capped at maxEntities 6 so each stays a >=44px target. */
+export function ringSeats(n: number, r = 0.42): { x: number; y: number }[] {
+  return Array.from({ length: n }, (_, i) => {
+    const t = (i / n) * 2 * Math.PI - Math.PI / 2;
+    return { x: 0.5 + r * Math.cos(t), y: 0.5 + r * Math.sin(t) };
+  });
 }

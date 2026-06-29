@@ -19,7 +19,10 @@
       "num3": "abstract/num3.svg",
       "num4": "abstract/num4.svg",
       "grid": "abstract/grid.svg",
-      "seating": "abstract/seating.svg"
+      "seating": "abstract/seating.svg",
+      "roundtable": "abstract/roundtable.svg",
+      "opposite": "abstract/opposite.svg",
+      "between": "abstract/between.svg"
     },
     "shapes": {
       "circle": "shapes/circle.svg",

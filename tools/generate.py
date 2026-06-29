@@ -53,7 +53,7 @@ GLYPHS_INDEX = _ROOT / "frontend" / "public" / "assets" / "glyphs" / "index.json
 LOGS_DIR = _ROOT / ".logs"
 
 DIRECT_TYPES = ("eq", "ends")
-INDIRECT_TYPES = ("neq", "adjacent", "distance", "before")
+INDIRECT_TYPES = ("neq", "adjacent", "distance", "before", "opposite", "between")
 SOLVE_LIMIT_S = 10.0
 
 # Difficulty ENV dial weights (docs/concepts/difficulty-and-scoring.md). Keyed by
@@ -98,7 +98,11 @@ def shape_for(tier: Tier, config_dir: Path) -> str:
 
 @dataclass(frozen=True)
 class Cat:
-    """A resolved category: glyph-backed values in solution order, ordinal or not."""
+    """A resolved category: glyph-backed values in solution order, ordinal or not.
+
+    bijective categories carry exactly `entities` values (a permutation); shared
+    categories carry fewer values that repeat across slots (e.g. a binary team).
+    """
 
     id: str
     label: str
@@ -106,10 +110,16 @@ class Cat:
     value_ids: list[str]
     glyphs: list[str]
     labels: list[str]
+    cardinality: str = "bijective"
+
+    @property
+    def shared(self) -> bool:
+        return self.cardinality == "shared"
 
 
 def build_categories(tier: Tier, entities: int, config_dir: Path) -> list[Cat]:
-    """Resolve tier categories from dials + glyph packs (bijective; first N values)."""
+    """Resolve tier categories from dials + glyph packs. bijective = first N values;
+    shared = first `values` (default 2) repeated across slots. ordinal stays bijective."""
     dials = load_toml("dials", config_dir)
     packs = json.loads(GLYPHS_INDEX.read_text(encoding="ascii"))["packs"]
     glyph_labels = load_toml("glyphpacks", config_dir)
@@ -117,7 +127,9 @@ def build_categories(tier: Tier, entities: int, config_dir: Path) -> list[Cat]:
     for cid in dials["tier"][tier]["categories"]:
         spec = dials["category"][cid]
         pack = spec["pack"]
-        ids = list(packs[pack].keys())[:entities]
+        card = spec.get("cardinality", "bijective")
+        count = spec.get("values", 2) if card == "shared" else entities
+        ids = list(packs[pack].keys())[:count]
         if spec["ordinal"]:
             labels = [str(i + 1) for i in range(entities)]
         else:
@@ -130,6 +142,7 @@ def build_categories(tier: Tier, entities: int, config_dir: Path) -> list[Cat]:
                 value_ids=ids,
                 glyphs=[f"{pack}.{vid}" for vid in ids],
                 labels=labels,
+                cardinality=card,
             )
         )
     return cats
@@ -150,26 +163,57 @@ def seed_int(date: str, tier: Tier, config_dir: Path) -> int:
 Clue = tuple[str, tuple[tuple[str, str], ...], tuple[tuple[str, int], ...]]
 
 
-def _add_clue(m: cp_model.CpModel, x: dict, n: int, clue: Clue) -> None:
+def _add_clue(m: cp_model.CpModel, x: dict, seat: dict, vid: dict, n: int, circular: bool, clue: Clue) -> None:
     typ, ops, params = clue
     p = dict(params)
-    a = x[ops[0][0]][ops[0][1]]
+    ca, va = ops[0]
     if typ == "ends":
-        m.Add(a == p["pos"])
+        m.Add(x[ca][va] == p["pos"])
         return
-    b = x[ops[1][0]][ops[1][1]]
-    if typ == "eq":
-        m.Add(a == b)
-    elif typ == "neq":
-        m.Add(a != b)
-    elif typ == "before":
-        m.Add(a < b)
-    else:  # adjacent (|d|=1) or distance:k
-        d = m.NewIntVar(-(n - 1), n - 1, "")
+    cb, vb = ops[1]
+    if typ in ("eq", "neq"):
+        # eq/neq across a bijective + a (possibly) shared cat: the shared value at the
+        # bijective value's slot == that value. Pure-bijective pairs compare slots.
+        if cb in seat:  # b is shared: value at slot of a (a is bijective) is vb
+            slot = m.NewIntVar(0, n - 1, "")
+            m.Add(slot == x[ca][va])
+            tv = m.NewIntVar(0, len(vid[cb]) - 1, "")
+            m.AddElement(slot, seat[cb], tv)
+            (m.Add(tv == vid[cb][vb]) if typ == "eq" else m.Add(tv != vid[cb][vb]))
+        else:
+            (m.Add(x[ca][va] == x[cb][vb]) if typ == "eq" else m.Add(x[ca][va] != x[cb][vb]))
+        return
+    if typ == "before":
+        m.Add(x[ca][va] < x[cb][vb])
+        return
+    if typ == "opposite":  # half the table apart (circular, n even)
         t = m.NewIntVar(0, n - 1, "")
-        m.Add(d == a - b)
-        m.AddAbsEquality(t, d)
-        m.Add(t == (1 if typ == "adjacent" else p["k"]))
+        m.AddAbsEquality(t, x[ca][va] - x[cb][vb])
+        m.Add(t == n // 2)
+        return
+    if typ == "between":  # a is flanked by b and c (adjacent to both, wraps)
+        _wrap_adjacent(m, x[ops[0][0]][ops[0][1]], x[ops[1][0]][ops[1][1]], n, circular)
+        _wrap_adjacent(m, x[ops[0][0]][ops[0][1]], x[ops[2][0]][ops[2][1]], n, circular)
+        return
+    if typ == "adjacent":
+        _wrap_adjacent(m, x[ca][va], x[cb][vb], n, circular)
+        return
+    t = m.NewIntVar(0, n - 1, "")  # distance:k
+    m.AddAbsEquality(t, x[ca][va] - x[cb][vb])
+    m.Add(t == p["k"])
+
+
+def _wrap_adjacent(m: cp_model.CpModel, a, b, n: int, circular: bool) -> None:
+    """|a-b| == 1, or == n-1 too when the table wraps (round table has no ends)."""
+    t = m.NewIntVar(0, n - 1, "")
+    m.AddAbsEquality(t, a - b)
+    if circular:
+        one, wrap = m.NewBoolVar(""), m.NewBoolVar("")
+        m.Add(t == 1).OnlyEnforceIf(one)
+        m.Add(t == n - 1).OnlyEnforceIf(wrap)
+        m.AddBoolOr(one, wrap)
+    else:
+        m.Add(t == 1)
 
 
 def identity_cat(cats: list[Cat]) -> Cat:
@@ -177,19 +221,25 @@ def identity_cat(cats: list[Cat]) -> Cat:
     return next((c for c in cats if c.ordinal), cats[0])
 
 
-def build_model(cats: list[Cat], n: int, clues: list[Clue]) -> tuple:
+def build_model(cats: list[Cat], n: int, clues: list[Clue], circular: bool = False) -> tuple:
     m = cp_model.CpModel()
     anchor = identity_cat(cats)
     x: dict[str, dict[str, cp_model.IntVar]] = {}
+    seat: dict[str, list[cp_model.IntVar]] = {}  # shared cats: slot -> value index
+    vid: dict[str, dict[str, int]] = {}
     for c in cats:
+        vid[c.id] = {v: i for i, v in enumerate(c.value_ids)}
+        if c.shared:  # repeats allowed: one value index per slot, no AllDifferent
+            seat[c.id] = [m.NewIntVar(0, len(c.value_ids) - 1, "") for _ in range(n)]
+            continue
         x[c.id] = {v: m.NewIntVar(0, n - 1, "") for v in c.value_ids}
         m.AddAllDifferent(list(x[c.id].values()))
         if c is anchor:  # identity: value at index i sits at slot i (no floating)
             for i, v in enumerate(c.value_ids):
                 m.Add(x[c.id][v] == i)
     for clue in clues:
-        _add_clue(m, x, n, clue)
-    return m, x
+        _add_clue(m, x, seat, vid, n, circular, clue)
+    return m, x, seat, vid
 
 
 def _solver(seed: int) -> cp_model.CpSolver:
@@ -200,19 +250,20 @@ def _solver(seed: int) -> cp_model.CpSolver:
     return s
 
 
-def is_unique(cats: list[Cat], n: int, clues: list[Clue], seed: int) -> bool:
+def is_unique(cats: list[Cat], n: int, clues: list[Clue], seed: int, circular: bool = False) -> bool:
     """Solve; forbid that exact assignment via reified bools; re-solve INFEASIBLE."""
-    m, x = build_model(cats, n, clues)
+    m, x, seat, _ = build_model(cats, n, clues, circular)
     s = _solver(seed)
     if s.Solve(m) not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         return False
     diff = []
-    for c in cats:
-        for v, var in x[c.id].items():
-            b = m.NewBoolVar("")
-            m.Add(var != s.Value(var)).OnlyEnforceIf(b)
-            m.Add(var == s.Value(var)).OnlyEnforceIf(b.Not())
-            diff.append(b)
+    cells = [(var, s.Value(var)) for c in cats if c.id in x for var in x[c.id].values()]
+    cells += [(var, s.Value(var)) for arr in seat.values() for var in arr]
+    for var, val in cells:
+        b = m.NewBoolVar("")
+        m.Add(var != val).OnlyEnforceIf(b)
+        m.Add(var == val).OnlyEnforceIf(b.Not())
+        diff.append(b)
     m.AddBoolOr(diff)
     return _solver(seed).Solve(m) == cp_model.INFEASIBLE
 
@@ -221,10 +272,16 @@ def is_unique(cats: list[Cat], n: int, clues: list[Clue], seed: int) -> bool:
 
 
 def sample_solution(cats: list[Cat], n: int, rng: random.Random) -> dict[str, list[str]]:
-    """value_id -> slot per category. Position identity; others random permutation."""
+    """value_id -> slot per category. Position identity; bijective others a random
+    permutation; shared repeats a balanced multiset across slots."""
     sol: dict[str, list[str]] = {}
     anchor = identity_cat(cats)
     for c in cats:
+        if c.shared:
+            mult = [c.value_ids[i % len(c.value_ids)] for i in range(n)]
+            rng.shuffle(mult)
+            sol[c.id] = mult  # slot -> value (repeats)
+            continue
         ids = list(c.value_ids)
         if c is not anchor:
             rng.shuffle(ids)
@@ -237,34 +294,56 @@ def _pos(sol: dict[str, list[str]], cat: str, val: str) -> int:
 
 
 def enumerate_clues(
-    cats: list[Cat], n: int, sol: dict[str, list[str]], allowed: tuple[str, ...] | None = None
+    cats: list[Cat], n: int, sol: dict[str, list[str]], allowed: tuple[str, ...] | None = None,
+    circular: bool = False
 ) -> list[Clue]:
-    """Every clue true under sol, drawn from the v1 catalog, kept only if the shape's
-    slot_rules allow the type (registry-gated, no per-shape code). cat/value operands."""
+    """Every clue true under sol, drawn from the v1/v2 catalog, kept only if the shape's
+    slot_rules allow the type (registry-gated, no per-shape code). cat/value operands.
+    Shared cats compare via the bijective slot; circular tables wrap + gain opposite."""
     out: list[Clue] = []
     ordinal = [c for c in cats if c.ordinal]
-    for ci, a in enumerate(cats):  # eq/neq across every category pair (incl anchor)
+    for ci, a in enumerate(cats):  # eq/neq across category pairs (skip shared-shared)
         for b in cats[ci + 1 :]:
-            for av in a.value_ids:
-                for bv in b.value_ids:
-                    typ = "eq" if _pos(sol, a.id, av) == _pos(sol, b.id, bv) else "neq"
-                    out.append((typ, ((a.id, av), (b.id, bv)), ()))
-    for oc in ordinal:
-        for v in oc.value_ids:
-            p = _pos(sol, oc.id, v)
-            if p in (0, n - 1):
-                out.append(("ends", ((oc.id, v),), (("pos", p),)))
-        vs = oc.value_ids
-        for i, av in enumerate(vs):
-            for bv in vs[i + 1 :]:
-                pa, pb = _pos(sol, oc.id, av), _pos(sol, oc.id, bv)
-                d = abs(pa - pb)
-                if d == 1:
-                    out.append(("adjacent", ((oc.id, av), (oc.id, bv)), ()))
-                else:
-                    out.append(("distance", ((oc.id, av), (oc.id, bv)), (("k", d),)))
-                lo, hi = (av, bv) if pa < pb else (bv, av)
-                out.append(("before", ((oc.id, lo), (oc.id, hi)), ()))
+            if a.shared and b.shared:
+                continue
+            lhs, rhs = (b, a) if a.shared else (a, b)  # bijective lhs resolves the slot
+            for av in lhs.value_ids:
+                slot = _pos(sol, lhs.id, av)
+                for bv in rhs.value_ids:
+                    same = sol[rhs.id][slot] == bv if rhs.shared else _pos(sol, rhs.id, bv) == slot
+                    out.append(("eq" if same else "neq", ((lhs.id, av), (rhs.id, bv)), ()))
+    if circular:  # ring relations across ALL bijective values (tea opposite cat, etc.)
+        bij = [(c.id, v) for c in cats if not c.shared for v in c.value_ids]
+        for i, (ca, va) in enumerate(bij):
+            for cb, vb in bij[i + 1 :]:
+                if ca == cb and va == vb:
+                    continue
+                d = abs(_pos(sol, ca, va) - _pos(sol, cb, vb))
+                dmin = min(d, n - d)
+                if dmin == 1:
+                    out.append(("adjacent", ((ca, va), (cb, vb)), ()))
+                if n % 2 == 0 and dmin == n // 2:
+                    out.append(("opposite", ((ca, va), (cb, vb)), ()))
+        for oc in ordinal:  # between: a seat flanked by its two ring neighbours
+            vs, order = oc.value_ids, [_pos(sol, oc.id, w) for w in oc.value_ids]
+            for mid in vs:
+                pm = _pos(sol, oc.id, mid)
+                lo, hi = vs[order.index((pm - 1) % n)], vs[order.index((pm + 1) % n)]
+                out.append(("between", ((oc.id, mid), (oc.id, lo), (oc.id, hi)), ()))
+    else:
+        for oc in ordinal:  # linear seat row: ends + ordinal seat relations
+            vs = oc.value_ids
+            for v in vs:
+                p = _pos(sol, oc.id, v)
+                if p in (0, n - 1):
+                    out.append(("ends", ((oc.id, v),), (("pos", p),)))
+            for i, av in enumerate(vs):
+                for bv in vs[i + 1 :]:
+                    pa, pb = _pos(sol, oc.id, av), _pos(sol, oc.id, bv)
+                    d = abs(pa - pb)
+                    out.append(("adjacent" if d == 1 else "distance", ((oc.id, av), (oc.id, bv)), () if d == 1 else (("k", d),)))
+                    lo, hi = (av, bv) if pa < pb else (bv, av)
+                    out.append(("before", ((oc.id, lo), (oc.id, hi)), ()))
     return out if allowed is None else [c for c in out if c[0] in allowed]
 
 
@@ -272,20 +351,21 @@ def enumerate_clues(
 
 
 def select_minimal(
-    cats: list[Cat], n: int, candidates: list[Clue], weights: dict, seed: int, rng: random.Random
+    cats: list[Cat], n: int, candidates: list[Clue], weights: dict, seed: int, rng: random.Random,
+    circular: bool = False
 ) -> list[Clue]:
     """Weighted greedy add to uniqueness, then shuffle-and-drop to a minimal set."""
     pool = sorted(candidates, key=lambda c: -weights.get(c[0], 1) + rng.random() / 1000)
     chosen: list[Clue] = []
     for clue in pool:
-        if is_unique(cats, n, chosen, seed):
+        if is_unique(cats, n, chosen, seed, circular):
             break
         chosen.append(clue)
     order = list(chosen)
     rng.shuffle(order)
     for clue in order:
         trial = [c for c in chosen if c != clue]
-        if is_unique(cats, n, trial, seed):
+        if is_unique(cats, n, trial, seed, circular):
             chosen = trial
     return chosen
 
@@ -293,10 +373,11 @@ def select_minimal(
 # --- hint trace (forced deduction order) ----------------------------------------
 
 
-def hint_trace(cats: list[Cat], n: int, clues: list[Clue], sol: dict, seed: int) -> list[HintStep]:
-    """Attribute cells forced in order: a cell is forced when no other value is feasible."""
+def hint_trace(cats: list[Cat], n: int, clues: list[Clue], sol: dict, seed: int, circular: bool = False) -> list[HintStep]:
+    """Bijective cells forced in order: a cell is forced when no other value is feasible.
+    Shared cells are not anchored to one entity, so the trace reveals bijective steps."""
     anchor = identity_cat(cats)
-    attr = [c for c in cats if c is not anchor]
+    attr = [c for c in cats if c is not anchor and not c.shared]
     known: list[tuple[str, str, int]] = []
     steps: list[HintStep] = []
     targets = [(c.id, v) for c in attr for v in c.value_ids]
@@ -306,7 +387,7 @@ def hint_trace(cats: list[Cat], n: int, clues: list[Clue], sol: dict, seed: int)
             if any(k[0] == cat and k[1] == val for k in known):
                 continue
             slot = _pos(sol, cat, val)
-            m, x = build_model(cats, n, clues)
+            m, x, _, _ = build_model(cats, n, clues, circular)
             for kc, kv, ks in known:
                 m.Add(x[kc][kv] == ks)
             m.Add(x[cat][val] != slot)
@@ -350,6 +431,8 @@ _TEMPLATES = {
     "adjacent": "{a} is next to {b}.",
     "distance": "{a} and {b} are {k} apart.",
     "before": "{a} is before {b}.",
+    "opposite": "{a} sits across from {b}.",
+    "between": "{a} sits between {b} and {c}.",
 }
 
 
@@ -365,13 +448,14 @@ def clue_text(cats: list[Cat], n: int, clue: Clue) -> str:
     if typ == "ends":
         return _TEMPLATES[typ].format(a=a, side="left" if p["pos"] == 0 else "right")
     b = _label(cats, *ops[1])
-    return _TEMPLATES[typ].format(a=a, b=b, k=p.get("k", ""))
+    c = _label(cats, *ops[2]) if len(ops) > 2 else ""
+    return _TEMPLATES[typ].format(a=a, b=b, c=c, k=p.get("k", ""))
 
 
 def to_manifest(date, tier, shape, rev, cats, n, clues, sol, hints) -> PuzzleManifest:
     cat_models = [
         AttributeCategory(
-            id=c.id, label=c.label, ordinal=c.ordinal, cardinality="bijective",
+            id=c.id, label=c.label, ordinal=c.ordinal, cardinality=c.cardinality,
             values=[AttributeValue(id=v, glyph=g, label=lb) for v, g, lb in zip(c.value_ids, c.glyphs, c.labels)],
         )
         for c in cats
@@ -412,9 +496,10 @@ def generate(date: str, tier: Tier, config_dir: Path = CONFIG_DIR) -> tuple[Puzz
         seed = seed_int(date, tier, config_dir) + attempt
         rng = random.Random(seed)
         sol = sample_solution(cats, entities, rng)
-        cand = enumerate_clues(cats, entities, sol, shape.slot_rules)
-        clues = select_minimal(cats, entities, cand, dials["weights"], seed, rng)
-        hints = hint_trace(cats, entities, clues, sol, seed)
+        circular = shape.topology == "circular"
+        cand = enumerate_clues(cats, entities, sol, shape.slot_rules, circular)
+        clues = select_minimal(cats, entities, cand, dials["weights"], seed, rng, circular)
+        hints = hint_trace(cats, entities, clues, sol, seed, circular)
         indirect = sum(1 for c in clues if c[0] in INDIRECT_TYPES)
         d = difficulty(tiers, entities, n_cats, len(clues), indirect, len(hints))
         log.append({"attempt": attempt, "clues": len(clues), "indirect": indirect, "depth": len(hints), "D": d})

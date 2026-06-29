@@ -70,10 +70,12 @@ def test_hinttrace_solves(tier: str) -> None:
     m, _, _ = g.generate(DATE, tier, CONFIG_DIR)
     cats = _cats(tier)
     anchor = g.identity_cat(cats)
+    shared = {c.id for c in cats if c.shared}  # shared cells are not forced to one seat
     placed = {f"e{i}": {anchor.id: anchor.value_ids[i]} for i in range(len(m.entities))}
     for step in m.hintTrace:
         placed[step.forces.entity][step.forces.cat] = step.forces.value
-    assert placed == m.solution
+    expect = {e: {k: v for k, v in cells.items() if k not in shared} for e, cells in m.solution.items()}
+    assert placed == expect
 
 
 def test_index_and_log(tmp_path: Path) -> None:
@@ -86,16 +88,17 @@ def test_index_and_log(tmp_path: Path) -> None:
 # --- shape registry seam (grid + seating-row) -----------------------------------
 
 
-def test_registry_has_two_entries() -> None:
+def test_registry_has_three_entries() -> None:
     reg = g.load_toml("shapes", CONFIG_DIR)
-    assert set(reg) == {"grid", "seating-row"}
+    assert set(reg) == {"grid", "seating-row", "round-table"}
     assert reg["grid"]["topology"] == "matrix" and reg["grid"]["ordinal_axis"] is False
     assert reg["seating-row"]["topology"] == "linear" and reg["seating-row"]["ordinal_axis"] is True
+    assert reg["round-table"]["topology"] == "circular" and reg["round-table"]["ordinal_axis"] is True
 
 
 def test_resolve_shape_rejects_unknown() -> None:
     with pytest.raises(KeyError):
-        g.resolve_shape("round-table", CONFIG_DIR)
+        g.resolve_shape("hex-spiral", CONFIG_DIR)
 
 
 @pytest.mark.parametrize("tier", TIERS)
@@ -111,6 +114,41 @@ def test_seating_uses_an_ordinal_clue_grid_does_not() -> None:
     assert {k.type for k in grid.constraints} <= {"eq", "neq"} and grid.shapeId == "grid"
     seat_rules = set(g.resolve_shape("seating-row", CONFIG_DIR).slot_rules)
     assert {"ends", "adjacent", "distance", "before"} <= seat_rules  # ordinal unlocked
-    for tier in ("standard", "sharp", "expert"):
+    for tier in ("standard", "sharp"):
         m, _, _ = g.generate(DATE, tier, CONFIG_DIR)
         assert m.shapeId == "seating-row" and {k.type for k in m.constraints} <= seat_rules
+
+
+# --- round-table (v2: circular topology, wrap clue types) -----------------------
+
+
+def test_expert_is_round_table_with_wrap_clues() -> None:
+    m, _, _ = g.generate(DATE, "expert", CONFIG_DIR)
+    assert m.shapeId == "round-table"
+    rules = set(g.resolve_shape("round-table", CONFIG_DIR).slot_rules)
+    assert "ends" not in rules  # a ring has no first/last
+    assert {k.type for k in m.constraints} <= rules
+    assert {k.type for k in m.constraints} & {"opposite", "between", "adjacent"}  # wraps used
+
+
+def test_round_table_unique_and_minimal() -> None:
+    m, _, _ = g.generate(DATE, "expert", CONFIG_DIR)
+    cats, n = _cats("expert"), len(m.entities)
+    seed = g.seed_int(DATE, "expert", CONFIG_DIR)
+    clues = _clues_from(m)
+    assert g.is_unique(cats, n, clues, seed, circular=True)
+    for i in range(len(clues)):
+        assert not g.is_unique(cats, n, clues[:i] + clues[i + 1 :], seed, circular=True)
+
+
+# --- shared cardinality (binary team on standard) -------------------------------
+
+
+def test_standard_has_one_shared_category() -> None:
+    m, _, _ = g.generate(DATE, "standard", CONFIG_DIR)
+    shared = [c for c in m.categories.items if c.cardinality == "shared"]
+    assert len(shared) == 1 and len(shared[0].values) < len(m.entities)  # repeats
+    counts = {}
+    for cells in m.solution.values():
+        counts[cells[shared[0].id]] = counts.get(cells[shared[0].id], 0) + 1
+    assert max(counts.values()) > 1  # a value really repeats across seats

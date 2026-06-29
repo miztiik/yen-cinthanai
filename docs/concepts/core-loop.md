@@ -16,7 +16,7 @@ Every puzzle reduces to: entities + slots (a topology) + typed constraints + exa
 | --- | --- | --- | --- |
 | Seating row | linear | adjacency, ends, left/right-of | yes |
 | Logic grid | N cats x M entities | eq, neq, distance, conditional | yes |
-| Round table | circular | wraps, opposite, between | v2 |
+| Round table | circular | wraps, opposite, between | yes (v2) |
 | Ranking / scheduling / pairing | ordered / time-grid / partition | before-after, capacity, group | later |
 
 The hard part is the solver-driven generator (uniqueness + minimal-clue prune), not the UI. See [../architecture/generator/pipeline.md](../architecture/generator/pipeline.md).

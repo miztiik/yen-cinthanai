@@ -12,7 +12,7 @@ Screens, components, glyphs, tokens. Mid-tier Android portrait (~390x844). Tailw
 - Fail-card: encourage phrase + progress + reveal(opt-in)/retry.
 - Settings: Audio, Look, Data, Credits (4 groups, sound mute-default).
 - Stats: flame/best/solved, sparkline, 7-day dots (x=skip). No shame UI.
-- Shape-drawer: tier + shape, behind PLAY, own route (clean back); round-table greyed v2.
+- Shape-drawer: tier + shape, behind PLAY, own route (clean back); grid/seating/round-table all live.
 
 ## Feedback (transform/opacity)
 
@@ -20,7 +20,7 @@ satisfy ring+check 180ms; violate slash+shake 120ms; near amber pulse; locked so
 
 ## Clue glyphs
 
-eq A=B | neq A/B | ends [A.]/[.A] | adjacent A-B | distance A>k>B | before A>>B. Text under glyph teaches vocab; generator uses only types with a legible glyph.
+eq A=B | neq A/B | ends [A.]/[.A] | adjacent A-B | distance A>k>B | before A>>B | opposite A<>B | between A-|-B. Text under glyph teaches vocab; generator uses only types with a legible glyph.
 
 ## Glyph assets (no inline SVG)
 

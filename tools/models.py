@@ -17,7 +17,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 Tier = Literal["easy", "standard", "sharp", "expert"]
-ShapeId = Literal["grid", "seating-row"]
+ShapeId = Literal["grid", "seating-row", "round-table"]
 Cardinality = Literal["bijective", "shared"]
 DayStatus = Literal["unplayed", "playing", "won", "lost"]
 
