@@ -17,6 +17,8 @@ export interface CopyBags {
   success: string[];
   encourage: string[];
   hero: string[];
+  share?: { title: string; line: string; streak: string };
+  credits?: { intro: string; license: string };
 }
 export interface Pace {
   idle_pulse_s: number;
