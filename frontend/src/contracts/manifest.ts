@@ -1,8 +1,8 @@
-// Bundle-shipped contracts (rewrite-in-place, no migration). See
+// PuzzleManifest v1 - bundle-shipped (rewrite-in-place, no migration). See
 // docs/architecture/contracts/schemas.md and TODO/2026-06-29-system-design.md sec 5.
-// Types only; no logic here.
+// Types only; no logic here. BankIndex -> bank.ts, ShareCard -> share.ts.
 
-import type { Tier, ShapeId, DayStatus } from "./save";
+import type { Tier, ShapeId } from "./save";
 
 export type Cardinality = "bijective" | "shared";
 
@@ -50,32 +50,4 @@ export interface PuzzleManifest {
   constraints: Constraint[];
   solution: Record<string, Record<string, string>>;
   hintTrace: HintStep[];
-}
-
-export interface BankEntry {
-  date: string;
-  tier: Tier;
-  shapeId: ShapeId;
-  file: string;
-  sha: string;
-}
-
-export interface BankIndex {
-  schemaVersion: 1;
-  generatedSeed: string;
-  builtAt: string;
-  puzzles: BankEntry[];
-}
-
-export interface ShareCard {
-  schemaVersion: 1;
-  date: string;
-  tier: Tier;
-  shapeGlyph: string;
-  status: DayStatus;
-  moves: number;
-  wrong: number;
-  solveMs: number;
-  hintsUsed: number;
-  streak: number;
 }
