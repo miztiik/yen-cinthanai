@@ -49,8 +49,8 @@ describe("loader", () => {
     expect(m.entities).toHaveLength(3);
   });
 
-  it("throws on a missing tier", async () => {
+  it("throws on a missing entry", async () => {
     const bank = await loadBank();
-    expect(() => pickEntry(bank, "2026-06-29", "expert")).toThrow();
+    expect(() => pickEntry(bank, "1999-01-01", "expert")).toThrow();
   });
 });

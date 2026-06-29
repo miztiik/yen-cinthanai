@@ -33,3 +33,12 @@ label = "Four"
 label = "Grid"
 [abstract.seating]
 label = "Seating"
+
+[shapes.circle]
+label = "Circle"
+[shapes.square]
+label = "Square"
+[shapes.triangle]
+label = "Triangle"
+[shapes.diamond]
+label = "Diamond"

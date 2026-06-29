@@ -15,6 +15,20 @@
       "sha": "a5271221babe5945b4bcbe1583a298286fc58a23547c8c2915db1272ea785ec2",
       "shapeId": "seating-row",
       "tier": "standard"
+    },
+    {
+      "date": "2026-06-29",
+      "file": "2026-06-29-sharp.json",
+      "sha": "20c0f35b68d069a9ab5a7647e36d67c24e4eebeeb1e50f321639b2f549aae820",
+      "shapeId": "seating-row",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-29",
+      "file": "2026-06-29-expert.json",
+      "sha": "b4c2cf8eb183c3c64930c4da1bae362b745962ecc195c58ad6927207553783b0",
+      "shapeId": "seating-row",
+      "tier": "expert"
     }
   ],
   "schemaVersion": 1

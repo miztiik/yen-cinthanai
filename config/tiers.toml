@@ -25,13 +25,16 @@ hints = 2
 feedback = "count-wrong"
 par_s = 240
 
+# v1 packs ship 3 categories x 4 values (docs/concepts/ui-shell.md). Sharp/expert
+# reuse the 4x3 seating-row and lean on the ENV dials (attempts/hints/feedback) to
+# reach band; 5x4/6x5 wait on more glyph packs. dials.toml comment notes the reuse.
 [sharp]
 band = [40, 59]
-entities = 5
-categories = 4
-clue_count = [7, 9]
+entities = 4
+categories = 3
+clue_count = [5, 7]
 indir = [0.45, 0.60]
-cardinality = "mixed"
+cardinality = "bijective"
 attempts = 2
 hints = 1
 feedback = "binary-check"
@@ -39,11 +42,11 @@ par_s = 480
 
 [expert]
 band = [60, 90]
-entities = 6
-categories = 5
-clue_count = [8, 11]
+entities = 4
+categories = 4
+clue_count = [5, 7]
 indir = [0.60, 0.75]
-cardinality = "mixed"
+cardinality = "bijective"
 attempts = 1
 hints = 0
 feedback = "submit-binary"

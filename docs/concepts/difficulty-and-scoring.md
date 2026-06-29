@@ -23,8 +23,10 @@ A generated puzzle whose D is outside the tier band is rejected and reseeded - t
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Easy | 0-13 | 3x2 | 3-4 | 0.0 | unlimited | unlimited | realtime-names | 90s |
 | Standard | 14-39 | 4x3 | 5-7 | .25-.40 | 3 | 2 | count-wrong | 240s |
-| Sharp | 40-59 | 5x4 | 7-9 | .45-.60 | 2 | 1 | binary-check | 480s |
-| Expert | 60-90 | 6x4-5 | 8-11 | .60-.75 | 1 | 0 | submit-binary | 900s |
+| Sharp | 40-59 | 4x3 | 5-7 | .45-.60 | 2 | 1 | binary-check | 480s |
+| Expert | 60-90 | 4x4 | 5-7 | .60-.75 | 1 | 0 | submit-binary | 900s |
+
+v1 packs ship 4 categories x 4 values, so Sharp/Expert reuse the 4x3-4x4 seating frame and reach band via the ENV dials; 5x4/6x5 land when more packs ship.
 
 ## Stars
 

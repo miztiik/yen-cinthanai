@@ -10,3 +10,10 @@ trigger = "quota-exceeded"
 skips_per_week = 1
 refill_weekday = "monday"
 reset_utc_hour = 0
+
+# Stuck-moment pacing (difficulty-and-scoring.md). Idle nudges, never a sell or a
+# timer-wall: pulse a token, then glow the clue. stats_window = sparkline length.
+[pace]
+idle_pulse_s = 12
+idle_glow_s = 25
+stats_window = 10

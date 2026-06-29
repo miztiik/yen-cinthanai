@@ -1,0 +1,58 @@
+// Unit: scoring + forgiving streak. Pure functions, no IO. Stars are config-driven
+// (par from the tier dial). Streak: same-day no-op, consecutive +1, a gap burns a
+// skip and holds, no skip resets; refill on a new ISO week. Hero only on clean solves.
+
+import { describe, it, expect } from "vitest";
+import type { TierDial } from "../../src/lib/config";
+import type { Streak, Hero, DayState } from "../../src/contracts/save";
+import {
+  computeStars, parMs, dayGap, updateStreak, updateHero, isHero, recentSolveMs,
+} from "../../src/lib/scoring";
+
+const STD: TierDial = { par_s: 240, hints: 2, attempts: 3, feedback: "count-wrong" };
+
+describe("computeStars", () => {
+  it("3 = no hints, 0 wrong, under par", () => expect(computeStars(200_000, 0, 0, STD)).toBe(3));
+  it("2 = no hints but over par", () => expect(computeStars(999_000, 0, 0, STD)).toBe(2));
+  it("2 = no hints but a wrong check", () => expect(computeStars(10_000, 0, 1, STD)).toBe(2));
+  it("1 = any hint", () => expect(computeStars(10_000, 1, 0, STD)).toBe(1));
+  it("par boundary is inclusive", () => expect(computeStars(parMs(STD), 0, 0, STD)).toBe(3));
+});
+
+describe("forgiving streak", () => {
+  const base: Streak = { count: 3, lastDate: "2026-06-27", skipsLeft: 1 };
+  it("consecutive day increments", () => expect(updateStreak(base, "2026-06-28").count).toBe(4));
+  it("same day is a no-op count", () => expect(updateStreak(base, "2026-06-27").count).toBe(3));
+  it("one missed day burns a skip and holds", () => {
+    const r = updateStreak(base, "2026-06-29"); // skip 28
+    expect(r.count).toBe(4);
+    expect(r.skipsLeft).toBe(0);
+  });
+  it("a gap with no skip resets to 1", () => {
+    const r = updateStreak({ count: 5, lastDate: "2026-06-24", skipsLeft: 0 }, "2026-06-27");
+    expect(r.count).toBe(1);
+  });
+  it("first ever solve starts at 1", () =>
+    expect(updateStreak({ count: 0, lastDate: "", skipsLeft: 1 }, "2026-06-29").count).toBe(1));
+  it("dayGap counts whole days", () => expect(dayGap("2026-06-27", "2026-06-29")).toBe(2));
+});
+
+describe("hero best-time (brag-cost)", () => {
+  const hero: Hero = { bestMs: 41000, date: "2026-06-20" };
+  it("faster clean solve sets a record", () => expect(updateHero(hero, 30000, 0, "x").bestMs).toBe(30000));
+  it("hinted solve never sets best", () => expect(updateHero(hero, 1, 1, "x").bestMs).toBe(41000));
+  it("isHero true only when clean + faster", () => {
+    expect(isHero(hero, 30000, 0)).toBe(true);
+    expect(isHero(hero, 30000, 1)).toBe(false);
+    expect(isHero(hero, 50000, 0)).toBe(false);
+  });
+});
+
+describe("sparkline window", () => {
+  it("keeps last N won solve times oldest->newest", () => {
+    const days: Record<string, DayState> = {};
+    for (let i = 0; i < 5; i++)
+      days[`2026-06-0${i + 1}`] = { date: `2026-06-0${i + 1}`, tier: "easy", shapeId: "grid", status: "won", placements: {}, attempts: 0, solveMs: (i + 1) * 1000, hintsUsed: 0, stars: 3 };
+    expect(recentSolveMs(days, 3)).toEqual([3000, 4000, 5000]);
+  });
+});

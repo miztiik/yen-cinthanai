@@ -416,7 +416,7 @@ def write_index(date: str, entries: list[dict], out_dir: Path = PUZZLES_DIR) -> 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Build the daily puzzle bank.")
     ap.add_argument("--date", default=datetime.now(timezone.utc).strftime("%Y-%m-%d"))
-    ap.add_argument("--tiers", default="easy,standard")
+    ap.add_argument("--tiers", default="easy,standard,sharp,expert")
     args = ap.parse_args(argv)
     tiers = [t.strip() for t in args.tiers.split(",") if t.strip()]
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
