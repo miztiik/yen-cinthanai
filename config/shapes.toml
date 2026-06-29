@@ -1,6 +1,6 @@
-# Shape registry. v1 = grid + seating-row (2 entries prove the seam); round-table v2.
+# Shape registry. v2 = grid + seating-row + round-table (3 topologies prove the seam).
 # One entry per topology; engine + generator read it by shapeId, no per-shape code.
-# topology    : render skin (matrix grid vs linear seat row).
+# topology    : render skin (matrix grid vs linear seat row vs circular ring).
 # ordinal_axis: anchor is a position (seat number) -> ordinal clue types unlock.
 # max_entities: hard cap on rows/seats the shape supports.
 # slot_rules  : the clue catalog this shape may use (generator filters to these).
@@ -21,4 +21,15 @@ ordinal_axis = true
 max_entities = 6
 slot_rules = ["eq", "neq", "ends", "adjacent", "distance", "before"]
 glyph = "abstract.seating"
+v = 1
+
+# Round table: circular seating, ordinal but no ends (a ring has no first/last). New
+# clue types: adjacency WRAPS, opposite (n/2 apart), between (flanked by two). Cap 6
+# keeps every seat >=44px on a phone (ui-shell.md). Wrap relations draw as an arc.
+[round-table]
+topology = "circular"
+ordinal_axis = true
+max_entities = 6
+slot_rules = ["eq", "neq", "adjacent", "opposite", "between"]
+glyph = "abstract.roundtable"
 v = 1

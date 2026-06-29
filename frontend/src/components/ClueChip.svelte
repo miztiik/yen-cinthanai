@@ -16,6 +16,8 @@
     adjacent: "-",
     distance: ">k>",
     before: ">>",
+    opposite: "<>",
+    between: "-|-",
   };
 
   function symbol(): string {

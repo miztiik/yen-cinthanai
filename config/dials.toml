@@ -8,17 +8,20 @@ template_rev = 1
 max_reseeds = 64
 
 # Clue-type selection weights. Harder tiers favour indirect (relational) types.
-# direct = eq, ends; indirect = neq, adjacent, distance, before.
+# direct = eq, ends; indirect = neq, adjacent, distance, before, opposite, between.
 [weights]
-eq = 5
+eq = 4
 ends = 4
 neq = 2
-adjacent = 3
+adjacent = 4
 distance = 2
 before = 3
+opposite = 5
+between = 4
 
-# Categories: id -> label, glyph pack, ordinal axis. Values + labels come from the
-# pack (frontend/public/assets/glyphs/index.json + config/glyphpacks.toml).
+# Categories: id -> label, glyph pack, ordinal axis, cardinality. Values + labels come
+# from the pack (frontend/public/assets/glyphs/index.json + config/glyphpacks.toml).
+# cardinality=shared (default bijective) repeats `values` across slots (pool refills).
 [category.drink]
 label = "Drink"
 pack = "household"
@@ -35,18 +38,25 @@ ordinal = true
 label = "Shape"
 pack = "shapes"
 ordinal = false
+[category.team]
+label = "Team"
+pack = "shapes"
+ordinal = false
+cardinality = "shared"
+values = 2
 
-# Tier -> shape + ordered categories. v1 = easy (grid 3x2) + standard (seating 4x3),
-# bijective only (shared-value deferred per task). Sharp/expert reuse these knobs.
+# Tier -> shape + ordered categories. easy=grid 3x2; standard=seating 4x3 +1 shared
+# team; sharp=seating 4x3; expert=round-table 4 seats (wrap/opposite/between). Mixed
+# cardinality + round-table land here (D4 + round-table v2). bijective stays default.
 [tier.easy]
 shape = "grid"
 categories = ["drink", "animal"]
 [tier.standard]
 shape = "seating-row"
-categories = ["drink", "animal", "position"]
+categories = ["drink", "animal", "position", "team"]
 [tier.sharp]
 shape = "seating-row"
 categories = ["drink", "animal", "position"]
 [tier.expert]
-shape = "seating-row"
-categories = ["drink", "animal", "position", "shape"]
+shape = "round-table"
+categories = ["drink", "animal", "position"]

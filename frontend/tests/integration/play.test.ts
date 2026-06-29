@@ -31,15 +31,9 @@ beforeEach(() => {
   (globalThis as { localStorage?: Storage }).localStorage = new FakeStorage() as unknown as Storage;
 });
 
-// seat i: cola/cat, coffee/dog, tea/bird, milk/fish
-const SOLUTION: Record<string, Record<string, string>> = {
-  e0: { drink: "cola", animal: "cat" },
-  e1: { drink: "coffee", animal: "dog" },
-  e2: { drink: "tea", animal: "bird" },
-  e3: { drink: "milk", animal: "fish" },
-};
+// fill from the manifest solution: covers every fillable column incl. shared cats
 function fill(g: Game) {
-  for (const e of g.board.entities) for (const c of g.board.columns) g.place(e, c.id, SOLUTION[e][c.id]);
+  for (const e of g.board.entities) for (const c of g.board.columns) g.place(e, c.id, m.solution[e][c.id]);
 }
 
 describe("realtime tier (Easy)", () => {

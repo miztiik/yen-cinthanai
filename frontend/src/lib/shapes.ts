@@ -5,7 +5,7 @@
 
 const BASE = import.meta.env.BASE_URL;
 
-export type Topology = "matrix" | "linear";
+export type Topology = "matrix" | "linear" | "circular";
 
 export interface ShapeDef {
   topology: Topology;
@@ -35,8 +35,9 @@ interface RawShape {
 }
 
 function fromRaw(r: RawShape): ShapeDef {
+  const t = r.topology === "linear" ? "linear" : r.topology === "circular" ? "circular" : "matrix";
   return {
-    topology: r.topology === "linear" ? "linear" : "matrix",
+    topology: t,
     ordinalAxis: r.ordinal_axis,
     maxEntities: r.max_entities,
     slotRules: r.slot_rules,

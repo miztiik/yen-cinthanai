@@ -73,8 +73,10 @@ export class Game {
     return this.hintsUsed > 0;
   }
 
-  /** Values of a category still in the pool (not yet placed). */
+  /** Values of a category still in the pool. Shared cats repeat, so never deplete. */
   remaining(cat: string): string[] {
+    const col = this.board.columns.find((c) => c.id === cat);
+    if (col?.cardinality === "shared") return this.board.values[cat].map((v) => v.id);
     const placed = new Set<string>();
     for (const e of this.board.entities) {
       const v = this.placements[e]?.[cat];
@@ -83,10 +85,12 @@ export class Game {
     return this.board.values[cat].filter((v) => !placed.has(v.id)).map((v) => v.id);
   }
 
-  /** Place value in (entity, cat); bijective so swap out any prior holder. */
+  /** Place value in (entity, cat); bijective swaps out any prior holder, shared repeats. */
   place(entity: string, cat: string, value: string): void {
     if (this.locked) return;
-    for (const e of this.board.entities) if (this.placements[e]?.[cat] === value) delete this.placements[e][cat];
+    const col = this.board.columns.find((c) => c.id === cat);
+    if (col?.cardinality !== "shared")
+      for (const e of this.board.entities) if (this.placements[e]?.[cat] === value) delete this.placements[e][cat];
     this.placements[entity] = { ...this.placements[entity], [cat]: value };
     this.selected = null;
     this.lastMoveMs = Date.now();

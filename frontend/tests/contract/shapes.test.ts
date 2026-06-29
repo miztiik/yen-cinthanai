@@ -20,15 +20,22 @@ const manifests = readdirSync(PUZZLES)
   .map((f) => JSON.parse(readFileSync(resolve(PUZZLES, f), "utf8")) as PuzzleManifest);
 
 describe("shape registry", () => {
-  it("ships grid + seating-row, two entries to prove the seam", () => {
-    expect(Object.keys(reg).sort()).toEqual(["grid", "seating-row"]);
+  it("ships grid + seating-row + round-table, three topologies", () => {
+    expect(Object.keys(reg).sort()).toEqual(["grid", "round-table", "seating-row"]);
   });
 
-  it("grid is a nominal matrix; seating-row is an ordinal linear axis", () => {
+  it("grid matrix, seating linear, round-table circular; ordinal axes set", () => {
     expect(reg.grid.topology).toBe("matrix");
     expect(reg.grid.ordinal_axis).toBe(false);
     expect(reg["seating-row"].topology).toBe("linear");
     expect(reg["seating-row"].ordinal_axis).toBe(true);
+    expect(reg["round-table"].topology).toBe("circular");
+    expect(reg["round-table"].ordinal_axis).toBe(true);
+  });
+
+  it("round-table wraps: opposite/between unlocked, ends excluded (no first/last)", () => {
+    expect(reg["round-table"].slot_rules).toEqual(expect.arrayContaining(["opposite", "between", "adjacent"]));
+    expect(reg["round-table"].slot_rules).not.toContain("ends");
   });
 
   it("each entry carries every registry field with a pack.id glyph and cap", () => {
@@ -55,5 +62,9 @@ describe("shape registry", () => {
       expect(m.entities.length).toBeLessThanOrEqual(shape.max_entities);
       for (const k of m.constraints) expect(shape.slot_rules).toContain(k.type);
     }
+  });
+
+  it("the bank ships a round-table puzzle so the drawer chip is enabled (not greyed)", () => {
+    expect(manifests.some((m) => m.shapeId === "round-table")).toBe(true);
   });
 });
