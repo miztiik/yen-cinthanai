@@ -62,3 +62,8 @@ coverage/
 playwright-report/
 test-results/
 ephemeral/
+*.local
+
+# --- Build logs (.logs is agent/build memory; keep the dir, ignore contents) ---
+.logs/*
+!.logs/README.md

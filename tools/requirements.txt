@@ -1,0 +1,4 @@
+# Generator build-time deps (CI venv). Contract: docs/architecture/generator/pipeline.md.
+ortools==9.15.6755
+pydantic==2.11
+pytest==8.3

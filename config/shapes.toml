@@ -1,0 +1,16 @@
+# Shape registry. v1 = grid + seating-row (2 entries prove the seam); round-table v2.
+# Contract: docs/concepts/core-loop.md, TODO/2026-06-29-system-design.md sec 6.
+
+[grid]
+topology = "matrix"
+ordinal_axis = false
+max_entities = 6
+glyph = "grid"
+v = 1
+
+[seating-row]
+topology = "linear"
+ordinal_axis = true
+max_entities = 6
+glyph = "row"
+v = 1
