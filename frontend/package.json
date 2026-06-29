@@ -5,7 +5,9 @@
   "type": "module",
   "description": "Daily constraint-satisfaction logic puzzle. Static GitHub Pages bundle, no runtime backend.",
   "scripts": {
+    "predev": "python ../tools/bake_glyphs.py",
     "dev": "vite",
+    "prebuild": "python ../tools/bake_glyphs.py",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",

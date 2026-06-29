@@ -60,6 +60,11 @@ describe("loadSave", () => {
     expect(s.schemaVersion).toBe(1);
     expect(s.days["2026-06-26"].stars).toBe(3);
   });
+
+  it("defaults puckSize to medium for a save that predates the setting", () => {
+    fake.store.set(KEY, read("save-v1.json")); // settings has no puckSize field
+    expect(loadSave().settings.puckSize).toBe("medium");
+  });
 });
 
 describe("validateSave", () => {

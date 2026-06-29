@@ -20,6 +20,7 @@ Tier = Literal["easy", "standard", "sharp", "expert"]
 ShapeId = Literal["grid", "seating-row", "round-table"]
 Cardinality = Literal["bijective", "shared"]
 DayStatus = Literal["unplayed", "playing", "won", "lost"]
+PuckSize = Literal["small", "medium", "large"]
 
 SCHEMA_VERSION = 1
 
@@ -140,6 +141,7 @@ class Settings(_Strict):
     theme: str
     palette: str
     reducedMotion: bool
+    puckSize: PuckSize = "medium"
 
 
 class Save(_Strict):

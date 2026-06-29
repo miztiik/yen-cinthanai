@@ -5,6 +5,7 @@
   // names asset licenses (config/copy.toml). Chrome only - Tailwind, transform/opacity.
   import { homeHref, navigate } from "../lib/router.svelte";
   import { loadSave, updateSettings } from "../state/save.svelte";
+  import type { PuckSize } from "../contracts/save";
   import { loadCopy, loadPalettes, type CopyBags, type Palettes } from "../lib/config";
   import { configureAudio, play } from "../lib/audio";
   import { applyMotion } from "../lib/motion";
@@ -84,6 +85,11 @@
     </label>
     <label class="flex items-center justify-between py-2"><span>reduced motion</span>
       <button class="rounded-full px-4 py-1 text-sm font-bold active:scale-95 transition-transform" class:bg-accent={s.reducedMotion} class:text-black={s.reducedMotion} class:bg-bg={!s.reducedMotion} onclick={() => { s.reducedMotion = !s.reducedMotion; save(); }}>{s.reducedMotion ? "on" : "off"}</button>
+    </label>
+    <label class="flex items-center justify-between py-2"><span>puck size</span>
+      <select class="rounded-lg bg-bg px-3 py-1" value={s.puckSize} onchange={(e) => { s.puckSize = e.currentTarget.value as PuckSize; save(); }} aria-label="puck size">
+        {#each ["small", "medium", "large"] as z (z)}<option value={z}>{z}</option>{/each}
+      </select>
     </label>
   </section>
 

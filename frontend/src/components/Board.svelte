@@ -3,13 +3,14 @@
   // + pools + actions, lock + celebrate on win. PLAY enters here; one-tap back to home.
   // Progress persists to save on every commit. Chrome is Tailwind; the canvas-equal is
   // the SlotBoard. transform/opacity feedback only. See ui-shell.md, core-loop.md.
+  import { setContext } from "svelte";
   import SlotBoard from "./SlotBoard.svelte";
   import Pool from "./Pool.svelte";
   import ClueChip from "./ClueChip.svelte";
   import ResultCard from "./ResultCard.svelte";
   import { route, homeHref, navigate } from "../lib/router.svelte";
   import { loadBank, loadManifest, pickEntry } from "../lib/loader";
-  import { loadTiers, loadCopy, loadPace, pick, type TierDial, type CopyBags, type Pace } from "../lib/config";
+  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, type TierDial, type CopyBags, type Pace, type PuckPreset } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { isHero } from "../lib/scoring";
   import { buildShareCard, shareText, type ShareCopy } from "../contracts/share";
@@ -32,6 +33,14 @@
   let idleMs = $state(0);
   let hero = $state(false);
   let heroBaseline = { bestMs: 0, date: "" };
+
+  // Puck sizing + drag-magnet come from config (config/ui.toml), keyed by the player's
+  // puckSize setting, and are provided to every Puck/Token via context so the circle +
+  // glyph scale together with no hardcoded px. Resolved in start() once save + ui load.
+  let puck = $state<PuckPreset>({ diameter: 52, glyph: 0.64 });
+  let snap = $state({ radius_factor: 1.4, ease: 0.55 });
+  setContext("puckSize", () => puck);
+  setContext("snap", () => snap);
 
   /** Tier from /play/<tier>, default standard; resumes last if just /play. */
   function wantedTier(): Tier {
@@ -58,6 +67,9 @@
       heroBaseline = { ...sv.hero };
       configureAudio(sv.settings.sound, sv.settings.volume);
       applyMotion(sv.settings.reducedMotion);
+      const ui = await loadUi();
+      puck = puckPreset(ui, sv.settings.puckSize);
+      snap = ui.snap;
       game = new Game(m, dial, prior);
       tick();
     } catch (e) {

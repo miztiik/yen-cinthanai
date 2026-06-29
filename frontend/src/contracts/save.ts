@@ -5,6 +5,9 @@ export type Tier = "easy" | "standard" | "sharp" | "expert";
 export type ShapeId = "grid" | "seating-row" | "round-table";
 export type DayStatus = "unplayed" | "playing" | "won" | "lost";
 
+/** Puck (token/slot circle) size preset; a player setting, scaled from config/ui.toml. */
+export type PuckSize = "small" | "medium" | "large";
+
 /** entity id -> category id -> value id. */
 export type Placements = Record<string, Record<string, string>>;
 
@@ -37,6 +40,7 @@ export interface Settings {
   theme: string;
   palette: string;
   reducedMotion: boolean;
+  puckSize: PuckSize;
 }
 
 export interface Save {

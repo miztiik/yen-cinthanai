@@ -1,8 +1,8 @@
 # UI Shell
 
-**Last Updated**: 2026-06-29
+**Last Updated**: 2026-06-30
 
-Screens, components, glyphs, tokens. Mid-tier Android portrait (~390x844). Tailwind for chrome only; canvas/board internals excluded. Six glyph packs ship (household, creatures, abstract, shapes, food, colour). Visual clarity (colour-is-one-signal), not a11y tooling.
+Screens, components, glyphs, tokens. Mid-tier Android portrait (~390x844). Tailwind for chrome only; canvas/board internals excluded. Glyph packs are auto-discovered from the asset tree (the GlyphManifest; 12+ and growing). Visual clarity (colour-is-one-signal), not a11y tooling.
 
 ## Screens
 
@@ -24,11 +24,15 @@ eq A=B | neq A/B | ends [A.]/[.A] | adjacent A-B | distance A>k>B | before A>>B 
 
 ## Glyph assets (no inline SVG)
 
-Every icon ships as a 24x24 currentColor file under `frontend/public/assets/glyphs/<pack>/<id>.svg`, referenced as `"pack.id"` (e.g. `household.tea`). Registry `glyphs/index.json` maps ref -> POSIX path; `config/glyphpacks.toml` holds labels only, file derived from the registry (no hardcoded paths, CLAUDE.md #6). `src/lib/glyphs.ts::glyphPath` resolves base-aware (`/yen-cinthanai/`); `Glyph.svelte` is the ONLY glyph renderer - components reference ids, never inline SVG.
+Every icon ships as a file under `frontend/public/assets/glyphs/<pack>/<name>.svg`, referenced `"pack.slug"`. Icons come from MANY sources (varied size/weight/paint - NOT all monochrome currentColor), so the UI normalizes them visually with the Puck (below), never by assuming one paint model. The manifest `glyphs/index.json` is GENERATED every build by `tools/bake_glyphs.py` (GlyphManifest v2: auto-discovers every folder + svg; `slug` = the `pack.slug` id, `file` = the descriptive kebab filename, `label` = derived). `src/lib/glyphs.ts::glyphPath`/`glyphLabel` resolve base-aware (`/yen-cinthanai/`); `Glyph.svelte` is the ONLY image renderer - components reference ids, never inline SVG. See [../architecture/contracts/schemas.md](../architecture/contracts/schemas.md) GlyphManifest v2.
 
-## Components (11, metadata-driven)
+## Puck (the circular normalizer) + drag magnet
 
-TokenChip, Slot, SlotBoard, Pool, ClueChip, HUDBar, ActionBar, ResultCard, ShareBar, StatTile, SettingsRow (+ BottomSheet primitive). No per-screen bespoke.
+Heterogeneous-source icons are normalized by seating each inside ONE standard circle - the Puck - so the eye groups by the repeated outer shape, not the mismatched interiors. Token, filled slot, and seat are all Pucks. Size is config-driven (`config/ui.toml [puck]`, no hardcoded px) and a player setting `puckSize` (small | medium | large, Settings > Look) scales the circle AND the inner glyph together (safe-area inset < 0.707 so the glyph never touches the rim); the Board provides it to every Puck via context. The state ring (selected/satisfy/violate/near/locked) lives in the border so it never reflows the grid. Dragging eases the puck toward the nearest valid slot centre once within capture range (`[snap]`: radius_factor x diameter + ease) and highlights that slot - a near-enough release snaps home (forgiving on a phone); capture/ease are pure + unit-tested, transform/opacity only, and tap-token-then-tap-slot stays the fallback.
+
+## Components (metadata-driven)
+
+Puck (the universal circular frame), Token, Slot, SlotBoard, Pool, ClueChip, HUDBar, ActionBar, ResultCard, ShareBar, StatTile, SettingsRow (+ BottomSheet primitive). No per-screen bespoke; one Puck is the single circle used by token + filled slot + seat.
 
 ## Tailwind tokens
 

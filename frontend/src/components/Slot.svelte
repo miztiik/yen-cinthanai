@@ -1,8 +1,9 @@
 <script lang="ts">
-  // Slot: one fillable cell. Drop target (data attrs read by drag.ts hit-test) and a
-  // tap target for the fallback. State ring is the only feedback: satisfy/violate/near
-  // via transform+opacity, colour-is-one-signal (ui-shell.md). No solution shown.
-  import Glyph from "../lib/Glyph.svelte";
+  // Slot: one fillable cell, rendered as a Puck. Drop target (data attrs read by drag.ts
+  // for hit-test + magnet) and a tap target for the fallback. Empty = an outlined circle;
+  // filled = the placed glyph. The state ring (satisfy/violate/near) is the only feedback,
+  // colour-is-one-signal (ui-shell.md). No solution shown. Size scales from config via Puck.
+  import Puck from "./Puck.svelte";
   import type { RowState } from "../lib/validate";
 
   let {
@@ -31,7 +32,7 @@
   data-slot-cat={cat}
   aria-label={glyph ? label : `empty ${cat}`}
   onclick={ontap}
-  class={`flex h-12 w-12 items-center justify-center rounded-2xl border-2 transition-transform duration-150 ${locked ? "bg-accent/20" : "bg-surface"} ${state === "satisfy" ? "border-satisfy" : state === "violate" ? "border-violate" : state === "near" ? "border-near" : "border-ink/25"} ${pulse ? "animate-pulse" : ""}`}
+  class={`rounded-full transition-transform duration-150 ${pulse ? "animate-pulse" : ""}`}
 >
-  {#if glyph}<Glyph ref={glyph} {label} size={28} />{/if}
+  <Puck ref={glyph} {label} {state} {locked} />
 </button>

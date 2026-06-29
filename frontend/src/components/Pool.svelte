@@ -23,6 +23,7 @@
         <Token
           ref={glyphOf(col.id, v)}
           label={labelOf(col.id, v)}
+          cat={col.id}
           selected={game.selected?.cat === col.id && game.selected?.value === v}
           onpick={() => game.tapToken(col.id, v)}
           ondrop={(e, c) => c === col.id && game.place(e, c, v)}

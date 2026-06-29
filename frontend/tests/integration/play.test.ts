@@ -17,6 +17,12 @@ const m = JSON.parse(
   readFileSync(resolve(here, "../../public/puzzles/2026-06-29-standard.json"), "utf8"),
 ) as PuzzleManifest;
 
+// Dimensions are auto-discovered + date-seeded, so the test must not assume which packs
+// were picked. Derive a fillable bijective column + sample values from the loaded puzzle.
+const COL = m.categories.list.find((c) => !c.ordinal && c.cardinality !== "shared")!.id;
+const E0_VAL = m.solution["e0"][COL];
+const E1_VAL = m.solution["e1"][COL]; // belongs to another seat -> a wrong value on e0
+
 const REALTIME: TierDial = { par_s: 90, hints: -1, attempts: -1, feedback: "realtime-names" };
 const SUBMIT: TierDial = { par_s: 900, hints: 0, attempts: 1, feedback: "submit-binary" };
 const STD: TierDial = { par_s: 240, hints: 2, attempts: 3, feedback: "count-wrong" };
@@ -47,9 +53,9 @@ describe("realtime tier (Easy)", () => {
   });
   it("tap-token-then-tap-slot fallback commits", () => {
     const g = new Game(m, REALTIME);
-    g.tapToken("drink", "cola");
-    g.tapSlot("e0", "drink");
-    expect(g.placements.e0.drink).toBe("cola");
+    g.tapToken(COL, E0_VAL);
+    g.tapSlot("e0", COL);
+    expect(g.placements.e0[COL]).toBe(E0_VAL);
   });
 });
 
@@ -64,7 +70,7 @@ describe("submit tier (Expert)", () => {
   });
   it("a wrong CHECK burns an attempt and exhausts the cap", () => {
     const g = new Game(m, SUBMIT);
-    g.place("e0", "drink", "tea"); // wrong
+    g.place("e0", COL, E1_VAL); // wrong: belongs to another seat
     g.check();
     expect(g.attempts).toBe(1);
     expect(g.attemptsLeft).toBe(0);
@@ -74,9 +80,10 @@ describe("submit tier (Expert)", () => {
 describe("brag-cost", () => {
   it("a hint forces the next step and caps to 1 star, no best-time", () => {
     const g = new Game(m, STD);
-    const before = g.remaining("drink").length;
+    const cat = m.hintTrace[0].forces.cat; // the column the hint will fill
+    const before = g.remaining(cat).length;
     g.hint();
-    expect(g.remaining("drink").length).toBe(before - 1);
+    expect(g.remaining(cat).length).toBe(before - 1);
     expect(g.hintsUsed).toBe(1);
     fill(g);
     g.check();

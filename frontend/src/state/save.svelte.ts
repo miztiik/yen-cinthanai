@@ -26,6 +26,7 @@ export function freshSave(): Save {
       theme: "system",
       palette: "midnight",
       reducedMotion: false,
+      puckSize: "medium",
     },
   };
 }

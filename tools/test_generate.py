@@ -24,7 +24,7 @@ def _clues_from(m: PuzzleManifest) -> list[g.Clue]:
 
 def _cats(tier: str) -> list[g.Cat]:
     ent = g.load_toml("tiers", CONFIG_DIR)[tier]["entities"]
-    return g.build_categories(tier, ent, CONFIG_DIR)
+    return g.build_categories(tier, ent, CONFIG_DIR, DATE)
 
 
 @pytest.mark.parametrize("tier", TIERS)
@@ -173,7 +173,6 @@ def test_expert_is_six_by_five() -> None:
     assert len(cats) == 5  # 6x5: five categories on the ring
     for c in cats:
         assert len(c.values) == 6  # six seats -> six distinct values per category
-    assert {"food", "color"} <= {c.id for c in cats}  # the two new packs are in play
 
 
 def test_bigger_grids_stay_in_band() -> None:

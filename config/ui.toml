@@ -1,0 +1,26 @@
+# UI sizing + interaction tunables. No hardcoded sizes in components (CLAUDE.md #6): the
+# Puck - the circular token / slot / seat - and the glyph inside it scale entirely from
+# here, and the drag magnet is tuned here too. Baked to public/config/ui.json by
+# tools/bake_config.py; the game reads the JSON, never the TOML. See docs/concepts/ui-shell.md.
+
+# Puck size presets. `diameter` = the circle's edge in px; `glyph` = the inner glyph as a
+# fraction of the diameter (the safe-area inset; keep < 0.707 so it never touches the rim).
+# The active size is a player setting (save.settings.puckSize); `default` seeds a fresh save.
+[puck]
+default = "medium"
+[puck.small]
+diameter = 40
+glyph = 0.60
+[puck.medium]
+diameter = 52
+glyph = 0.64
+[puck.large]
+diameter = 64
+glyph = 0.66
+
+# Drag magnet. When a dragged puck's centre comes within (radius_factor x diameter) of a
+# valid slot centre it is captured: the puck eases `ease` (0..1) of the way to that centre
+# and the slot highlights, so a near-enough release snaps home (forgiving on a phone).
+[snap]
+radius_factor = 1.4
+ease = 0.55

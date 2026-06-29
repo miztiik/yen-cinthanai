@@ -1,18 +1,24 @@
 # Generator Pipeline
 
-**Last Updated**: 2026-06-29
+**Last Updated**: 2026-06-30
 
 Build-time only (tools/, Python, CI). Pipes and filters, one Pydantic model per arrow, JSONL log to `.logs/build-<date>.jsonl`. No runtime backend; no in-browser solver in v1 (WASM allowed later if it enriches play).
 
 ## Stages
 
 ```
-config/tiers.toml + date
+config/tiers.toml + config/dials.toml + glyph manifest + date
+  -> bake_glyphs.py walks the asset tree -> GlyphManifest (every build)
+  -> date-seed picks DIMENSIONS from the manifest packs + values from the full pool
   -> seed (PRNG + CP-SAT seed) -> sample full bijective solution
   -> enumerate clues true under solution -> select weighted subset
   -> verify uniqueness -> prune to minimal -> template clueText
-  -> emit PuzzleManifest + sha256 -> append BankIndex
+  -> emit PuzzleManifest + sha256 -> ADD-ONLY into BankIndex (existing dated files frozen)
 ```
+
+## Auto-discovered dimensions + add-only freeze
+
+Puzzle DIMENSIONS are derived from the GlyphManifest packs (every `<pack>/` folder except the structural `abstract` seat-numerals), and which folders + values fill a tier are DATE-SEEDED from the full pool - so a new collection folder joins the rotation with no code change, and each day draws a different slice (diversity). `config/dials.toml [tier.X]` carries only `shape` + `nominal`/`shared` counts; `build_categories` reads the manifest, not a hardcoded category list. The solver is glyph-agnostic, so selection never changes uniqueness/difficulty - only the skin. Puzzles are ADD-ONLY: an existing dated file is FROZEN (never regenerated), so expanding packs can't invalidate a shipped puzzle; `--force` overrides for a one-time migration.
 
 ## CP-SAT model (4x3 bijective grid)
 
@@ -28,7 +34,7 @@ python 3.12 | ortools 9.15.6755 | pydantic 2.11 | pytest 8.3. Config baked to pu
 
 ## CI (.github/workflows/daily.yml)
 
-cron 0 0 * * * + dispatch -> setup-python -> generate today's easy/standard/sharp/expert -> ruff/mypy/pytest + determinism + share-no-leak -> vite build base /yen-cinthanai/ -> Pages. Past days commit back; bank accretes.
+cron 0 0 * * * + dispatch -> setup-python -> generate today's easy/standard/sharp/expert (add-only; existing dated files frozen) -> ruff/mypy/pytest + determinism + share-no-leak -> vite build base /yen-cinthanai/ (prebuild rebakes the GlyphManifest) -> Pages. Past days commit back; bank accretes.
 
 ## See also
 - [../contracts/schemas.md](../contracts/schemas.md) - manifest/bank output.

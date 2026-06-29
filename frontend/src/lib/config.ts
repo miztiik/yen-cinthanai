@@ -78,6 +78,39 @@ export async function loadPalettes(): Promise<Palettes> {
   return fetchJson("palettes.json", PALETTES_FALLBACK);
 }
 
+// --- Puck sizing + drag magnet (config/ui.toml) ---------------------------------
+
+export type PuckSize = "small" | "medium" | "large";
+export interface PuckPreset {
+  diameter: number; // the circle edge, in px
+  glyph: number; // inner glyph as a fraction of the diameter (safe-area inset)
+}
+export interface UiConfig {
+  puck: { default: PuckSize; small: PuckPreset; medium: PuckPreset; large: PuckPreset };
+  snap: { radius_factor: number; ease: number };
+}
+
+const UI_FALLBACK: UiConfig = {
+  puck: {
+    default: "medium",
+    small: { diameter: 40, glyph: 0.6 },
+    medium: { diameter: 52, glyph: 0.64 },
+    large: { diameter: 64, glyph: 0.66 },
+  },
+  snap: { radius_factor: 1.4, ease: 0.55 },
+};
+
+/** Puck sizing + drag-magnet tunables (config/ui.toml). Fail-soft to bootstrap sizes. */
+export async function loadUi(): Promise<UiConfig> {
+  return fetchJson("ui.json", UI_FALLBACK);
+}
+
+/** Resolve a size name to its preset, falling back to the config default. */
+export function puckPreset(ui: UiConfig, size: string): PuckPreset {
+  if (size === "small" || size === "medium" || size === "large") return ui.puck[size];
+  return ui.puck[ui.puck.default];
+}
+
 /** Pick one line from a bag; empty bag yields "". */
 export function pick(bag: string[]): string {
   return bag.length ? bag[Math.floor(Math.random() * bag.length)] : "";

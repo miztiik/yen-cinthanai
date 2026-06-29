@@ -19,53 +19,28 @@ before = 3
 opposite = 5
 between = 4
 
-# Categories: id -> label, glyph pack, ordinal axis, cardinality. Values + labels come
-# from the pack (frontend/public/assets/glyphs/index.json + config/glyphpacks.toml).
-# cardinality=shared (default bijective) repeats `values` across slots (pool refills).
-[category.drink]
-label = "Drink"
-pack = "household"
-ordinal = false
-[category.animal]
-label = "Animal"
-pack = "creatures"
-ordinal = false
-[category.position]
-label = "Seat"
-pack = "abstract"
-ordinal = true
-[category.shape]
-label = "Shape"
-pack = "shapes"
-ordinal = false
-[category.team]
-label = "Team"
-pack = "shapes"
-ordinal = false
-cardinality = "shared"
-values = 2
-[category.food]
-label = "Food"
-pack = "food"
-ordinal = false
-[category.color]
-label = "Colour"
-pack = "color"
-ordinal = false
-
-# Tier -> shape + ordered categories. easy=grid 3x2; standard=seating 4x3 +1 shared
-# team; sharp=seating-row 5x4 (5 seats x 4 cats); expert=round-table 6x5 (6 seats x 5
-# cats: seat + drink/animal/food/colour). Value packs each ship 6 values (D17). The
-# ordinal `position` category is the seat axis (anchor); the rest are the fill columns.
+# Tier -> shape + how many value dimensions to draw. The generator (tools/generate.py
+# build_categories) AUTO-DISCOVERS packs from the glyph manifest and date-seeds which
+# folders + which values fill these slots, so a new collection folder joins the rotation
+# with NO code change - diversity comes from the full pool, not a fixed list. `nominal` =
+# bijective value packs (one distinct value per seat); `shared` = binary packs (2 values
+# repeat across seats). The ordinal seat axis (abstract numerals) is added automatically
+# when the shape has one (seating-row, round-table); the structural `abstract` pack is
+# never itself a value dimension. easy=grid 3x2; standard=seating 4x3 (+1 shared);
+# sharp=seating 5x4; expert=round-table 6x5.
 [tier.easy]
 shape = "grid"
-categories = ["drink", "animal"]
+nominal = 2
+shared = 0
 [tier.standard]
 shape = "seating-row"
-categories = ["drink", "animal", "position", "team"]
+nominal = 2
+shared = 1
 [tier.sharp]
 shape = "seating-row"
-categories = ["drink", "animal", "position", "food"]
+nominal = 3
+shared = 0
 [tier.expert]
 shape = "round-table"
-categories = ["drink", "animal", "position", "food", "color"]
+nominal = 4
+shared = 0

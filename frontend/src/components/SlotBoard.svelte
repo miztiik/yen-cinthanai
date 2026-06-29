@@ -6,7 +6,7 @@
   // opposite/between. Value->glyph/label derives from the manifest (no hardcode). Cells
   // are generic Slots; layout is chrome (Tailwind); glyphs are the only images.
   import Slot from "./Slot.svelte";
-  import Glyph from "../lib/Glyph.svelte";
+  import Puck from "./Puck.svelte";
   import { anchorValue, ringSeats } from "../lib/board";
   import type { Topology } from "../lib/shapes";
   import type { Game } from "../state/play.svelte";
@@ -51,8 +51,8 @@
     {#each b.entities as e, i (e)}
       {@const c = seats[i]}
       <div class="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1" style={`left:${c.x * 100}%;top:${c.y * 100}%`}>
-        <button class="flex h-11 w-11 items-center justify-center rounded-full bg-surface" aria-label={`seat ${i + 1}`} onclick={() => (arcSeat = arcSeat === i ? null : i)}>
-          <Glyph ref={anchorValue(b.anchor, i).glyph} label={anchorValue(b.anchor, i).label} size={22} />
+        <button class="rounded-full transition-transform active:scale-95" aria-label={`seat ${i + 1}`} onclick={() => (arcSeat = arcSeat === i ? null : i)}>
+          <Puck ref={anchorValue(b.anchor, i).glyph} label={anchorValue(b.anchor, i).label} />
         </button>
         {#each b.columns as col (col.id)}
           {@const v = game.placements[e]?.[col.id] ?? null}
@@ -66,9 +66,7 @@
   <div class="flex gap-2 overflow-x-auto pb-1">
     {#each b.entities as e, i (e)}
       <div class="flex flex-col items-center gap-2">
-        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface">
-          <Glyph ref={anchorValue(b.anchor, i).glyph} label={anchorValue(b.anchor, i).label} size={24} />
-        </div>
+        <Puck ref={anchorValue(b.anchor, i).glyph} label={anchorValue(b.anchor, i).label} />
         {#each b.columns as col (col.id)}
           {@const v = game.placements[e]?.[col.id] ?? null}
           <Slot
@@ -92,9 +90,7 @@
       <div class="text-center text-xs uppercase tracking-wide opacity-70">{col.label}</div>
     {/each}
     {#each b.entities as e, i (e)}
-      <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface">
-        <Glyph ref={anchorValue(b.anchor, i).glyph} label={anchorValue(b.anchor, i).label} size={24} />
-      </div>
+      <Puck ref={anchorValue(b.anchor, i).glyph} label={anchorValue(b.anchor, i).label} />
       {#each b.columns as col (col.id)}
         {@const v = game.placements[e]?.[col.id] ?? null}
         <Slot

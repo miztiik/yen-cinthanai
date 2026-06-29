@@ -1,56 +1,842 @@
 {
-  "schemaVersion": 1,
+  "generatedAt": "2026-06-29T22:31:42Z",
   "packs": {
-    "household": {
-      "tea": "household/tea.svg",
-      "coffee": "household/coffee.svg",
-      "milk": "household/milk.svg",
-      "cola": "household/cola.svg",
-      "juice": "household/juice.svg",
-      "water": "household/water.svg"
-    },
-    "creatures": {
-      "cat": "creatures/cat.svg",
-      "dog": "creatures/dog.svg",
-      "fish": "creatures/fish.svg",
-      "bird": "creatures/bird.svg",
-      "frog": "creatures/frog.svg",
-      "owl": "creatures/owl.svg"
-    },
     "abstract": {
-      "num1": "abstract/num1.svg",
-      "num2": "abstract/num2.svg",
-      "num3": "abstract/num3.svg",
-      "num4": "abstract/num4.svg",
-      "num5": "abstract/num5.svg",
-      "num6": "abstract/num6.svg",
-      "grid": "abstract/grid.svg",
-      "seating": "abstract/seating.svg",
-      "roundtable": "abstract/roundtable.svg",
-      "opposite": "abstract/opposite.svg",
-      "between": "abstract/between.svg"
-    },
-    "shapes": {
-      "circle": "shapes/circle.svg",
-      "square": "shapes/square.svg",
-      "triangle": "shapes/triangle.svg",
-      "diamond": "shapes/diamond.svg"
-    },
-    "food": {
-      "apple": "food/apple.svg",
-      "bread": "food/bread.svg",
-      "cheese": "food/cheese.svg",
-      "egg": "food/egg.svg",
-      "grape": "food/grape.svg",
-      "carrot": "food/carrot.svg"
+      "between": {
+        "file": "abstract/between.svg",
+        "label": "Between"
+      },
+      "grid": {
+        "file": "abstract/grid.svg",
+        "label": "Grid"
+      },
+      "num1": {
+        "file": "abstract/num1.svg",
+        "label": "Num 1"
+      },
+      "num2": {
+        "file": "abstract/num2.svg",
+        "label": "Num 2"
+      },
+      "num3": {
+        "file": "abstract/num3.svg",
+        "label": "Num 3"
+      },
+      "num4": {
+        "file": "abstract/num4.svg",
+        "label": "Num 4"
+      },
+      "num5": {
+        "file": "abstract/num5.svg",
+        "label": "Num 5"
+      },
+      "num6": {
+        "file": "abstract/num6.svg",
+        "label": "Num 6"
+      },
+      "opposite": {
+        "file": "abstract/opposite.svg",
+        "label": "Opposite"
+      },
+      "roundtable": {
+        "file": "abstract/roundtable.svg",
+        "label": "Roundtable"
+      },
+      "seating": {
+        "file": "abstract/seating.svg",
+        "label": "Seating"
+      }
     },
     "color": {
-      "red": "color/red.svg",
-      "orange": "color/orange.svg",
-      "yellow": "color/yellow.svg",
-      "green": "color/green.svg",
-      "blue": "color/blue.svg",
-      "violet": "color/violet.svg"
+      "black": {
+        "file": "color/black.svg",
+        "label": "Black"
+      },
+      "blue": {
+        "file": "color/blue.svg",
+        "label": "Blue"
+      },
+      "brown": {
+        "file": "color/brown.svg",
+        "label": "Brown"
+      },
+      "green": {
+        "file": "color/green.svg",
+        "label": "Green"
+      },
+      "orange": {
+        "file": "color/orange.svg",
+        "label": "Orange"
+      },
+      "pink": {
+        "file": "color/pink.svg",
+        "label": "Pink"
+      },
+      "purple": {
+        "file": "color/purple.svg",
+        "label": "Purple"
+      },
+      "red": {
+        "file": "color/red.svg",
+        "label": "Red"
+      },
+      "yellow": {
+        "file": "color/yellow.svg",
+        "label": "Yellow"
+      }
+    },
+    "creatures": {
+      "bear": {
+        "file": "creatures/bear.svg",
+        "label": "Bear"
+      },
+      "cat": {
+        "file": "creatures/cat.svg",
+        "label": "Cat"
+      },
+      "cow": {
+        "file": "creatures/cow.svg",
+        "label": "Cow"
+      },
+      "crab": {
+        "file": "creatures/crab.svg",
+        "label": "Crab"
+      },
+      "deer": {
+        "file": "creatures/deer.svg",
+        "label": "Deer"
+      },
+      "dog": {
+        "file": "creatures/dog.svg",
+        "label": "Dog"
+      },
+      "elephant": {
+        "file": "creatures/elephant.svg",
+        "label": "Elephant"
+      },
+      "fish": {
+        "file": "creatures/fish.svg",
+        "label": "Fish"
+      },
+      "fox": {
+        "file": "creatures/fox.svg",
+        "label": "Fox"
+      },
+      "frog": {
+        "file": "creatures/frog.svg",
+        "label": "Frog"
+      },
+      "giraffe": {
+        "file": "creatures/giraffe.svg",
+        "label": "Giraffe"
+      },
+      "goat": {
+        "file": "creatures/goat.svg",
+        "label": "Goat"
+      },
+      "horse": {
+        "file": "creatures/horse.svg",
+        "label": "Horse"
+      },
+      "kangaroo": {
+        "file": "creatures/kangaroo.svg",
+        "label": "Kangaroo"
+      },
+      "lion": {
+        "file": "creatures/lion.svg",
+        "label": "Lion"
+      },
+      "monkey": {
+        "file": "creatures/monkey.svg",
+        "label": "Monkey"
+      },
+      "mouse": {
+        "file": "creatures/mouse.svg",
+        "label": "Mouse"
+      },
+      "owl": {
+        "file": "creatures/owl.svg",
+        "label": "Owl"
+      },
+      "penguin": {
+        "file": "creatures/penguin.svg",
+        "label": "Penguin"
+      },
+      "rabbit": {
+        "file": "creatures/rabbit.svg",
+        "label": "Rabbit"
+      },
+      "shark": {
+        "file": "creatures/shark.svg",
+        "label": "Shark"
+      },
+      "sheep": {
+        "file": "creatures/sheep.svg",
+        "label": "Sheep"
+      },
+      "shrimp": {
+        "file": "creatures/shrimp.svg",
+        "label": "Shrimp"
+      },
+      "sparrow": {
+        "file": "creatures/sparrow.svg",
+        "label": "Sparrow"
+      },
+      "spider": {
+        "file": "creatures/spider.svg",
+        "label": "Spider"
+      },
+      "squirrel": {
+        "file": "creatures/squirrel.svg",
+        "label": "Squirrel"
+      },
+      "tiger": {
+        "file": "creatures/tiger.svg",
+        "label": "Tiger"
+      },
+      "turtle": {
+        "file": "creatures/turtle.svg",
+        "label": "Turtle"
+      }
+    },
+    "drinks": {
+      "cocktail": {
+        "file": "drinks/cocktail.svg",
+        "label": "Cocktail"
+      },
+      "coffee": {
+        "file": "drinks/coffee.svg",
+        "label": "Coffee"
+      },
+      "juice": {
+        "file": "drinks/juice.svg",
+        "label": "Juice"
+      },
+      "milk": {
+        "file": "drinks/milk.svg",
+        "label": "Milk"
+      },
+      "soda": {
+        "file": "drinks/soda.svg",
+        "label": "Soda"
+      },
+      "tea": {
+        "file": "drinks/tea.svg",
+        "label": "Tea"
+      },
+      "water": {
+        "file": "drinks/water.svg",
+        "label": "Water"
+      },
+      "wine": {
+        "file": "drinks/wine.svg",
+        "label": "Wine"
+      }
+    },
+    "food": {
+      "baguette": {
+        "file": "food/baguette.svg",
+        "label": "Baguette"
+      },
+      "bread": {
+        "file": "food/bread.svg",
+        "label": "Bread"
+      },
+      "burger": {
+        "file": "food/burger.svg",
+        "label": "Burger"
+      },
+      "cheese": {
+        "file": "food/cheese.svg",
+        "label": "Cheese"
+      },
+      "chocolate": {
+        "file": "food/chocolate.svg",
+        "label": "Chocolate"
+      },
+      "cookie": {
+        "file": "food/cookie.svg",
+        "label": "Cookie"
+      },
+      "cupcake": {
+        "file": "food/cup-cake.svg",
+        "label": "Cup cake"
+      },
+      "donut": {
+        "file": "food/donut.svg",
+        "label": "Donut"
+      },
+      "egg": {
+        "file": "food/egg.svg",
+        "label": "Egg"
+      },
+      "fries": {
+        "file": "food/fries.svg",
+        "label": "Fries"
+      },
+      "gingerbread": {
+        "file": "food/gingerbread.svg",
+        "label": "Gingerbread"
+      },
+      "icecream": {
+        "file": "food/icecream.svg",
+        "label": "Icecream"
+      },
+      "omelette": {
+        "file": "food/omelette.svg",
+        "label": "Omelette"
+      },
+      "pizza": {
+        "file": "food/pizza.svg",
+        "label": "Pizza"
+      },
+      "popsicle": {
+        "file": "food/popsicle.svg",
+        "label": "Popsicle"
+      },
+      "seafood": {
+        "file": "food/seafood.svg",
+        "label": "Seafood"
+      },
+      "sushi": {
+        "file": "food/sushi.svg",
+        "label": "Sushi"
+      },
+      "toast": {
+        "file": "food/toast.svg",
+        "label": "Toast"
+      }
+    },
+    "household": {
+      "axe": {
+        "file": "household/axe.svg",
+        "label": "Axe"
+      },
+      "bench": {
+        "file": "household/bench.svg",
+        "label": "Bench"
+      },
+      "bookshelf": {
+        "file": "household/book-shelf.svg",
+        "label": "Book shelf"
+      },
+      "broom": {
+        "file": "household/broom.svg",
+        "label": "Broom"
+      },
+      "bulb": {
+        "file": "household/bulb.svg",
+        "label": "Bulb"
+      },
+      "chair": {
+        "file": "household/chair.svg",
+        "label": "Chair"
+      },
+      "closet": {
+        "file": "household/closet.svg",
+        "label": "Closet"
+      },
+      "cocktail": {
+        "file": "household/cocktail.svg",
+        "label": "Cocktail"
+      },
+      "coffee": {
+        "file": "household/coffee.svg",
+        "label": "Coffee"
+      },
+      "computertable": {
+        "file": "household/computer-table.svg",
+        "label": "Computer table"
+      },
+      "deckchair": {
+        "file": "household/deckchair.svg",
+        "label": "Deckchair"
+      },
+      "doublebed": {
+        "file": "household/double-bed.svg",
+        "label": "Double bed"
+      },
+      "gascylinder": {
+        "file": "household/gas-cylinder.svg",
+        "label": "Gas cylinder"
+      },
+      "juice": {
+        "file": "household/juice.svg",
+        "label": "Juice"
+      },
+      "knives": {
+        "file": "household/knives.svg",
+        "label": "Knives"
+      },
+      "laptopopen": {
+        "file": "household/laptop-open.svg",
+        "label": "Laptop open"
+      },
+      "milk": {
+        "file": "household/milk.svg",
+        "label": "Milk"
+      },
+      "printer": {
+        "file": "household/printer.svg",
+        "label": "Printer"
+      },
+      "refrigerator": {
+        "file": "household/refrigerator.svg",
+        "label": "Refrigerator"
+      },
+      "scissors": {
+        "file": "household/scissors.svg",
+        "label": "Scissors"
+      },
+      "soda": {
+        "file": "household/soda.svg",
+        "label": "Soda"
+      },
+      "tea": {
+        "file": "household/tea.svg",
+        "label": "Tea"
+      },
+      "teapot": {
+        "file": "household/teapot.svg",
+        "label": "Teapot"
+      },
+      "televisioncabinet": {
+        "file": "household/television-cabinet.svg",
+        "label": "Television cabinet"
+      },
+      "toilet": {
+        "file": "household/toilet.svg",
+        "label": "Toilet"
+      },
+      "umbrella": {
+        "file": "household/umbrella.svg",
+        "label": "Umbrella"
+      },
+      "vacuumcleaner": {
+        "file": "household/vacuum-cleaner.svg",
+        "label": "Vacuum cleaner"
+      },
+      "washingmachine": {
+        "file": "household/washing-machine.svg",
+        "label": "Washing machine"
+      },
+      "water": {
+        "file": "household/water.svg",
+        "label": "Water"
+      },
+      "wateringcan": {
+        "file": "household/watering-can.svg",
+        "label": "Watering can"
+      },
+      "wheelbarrow": {
+        "file": "household/wheelbarrow.svg",
+        "label": "Wheelbarrow"
+      },
+      "wine": {
+        "file": "household/wine.svg",
+        "label": "Wine"
+      }
+    },
+    "medals": {
+      "bronze": {
+        "file": "medals/bronze.svg",
+        "label": "Bronze"
+      },
+      "gold": {
+        "file": "medals/gold.svg",
+        "label": "Gold"
+      },
+      "silver": {
+        "file": "medals/silver.svg",
+        "label": "Silver"
+      }
+    },
+    "occupation": {
+      "ant": {
+        "file": "occupation/ant.svg",
+        "label": "Ant"
+      },
+      "astronomer": {
+        "file": "occupation/astronomer.svg",
+        "label": "Astronomer"
+      },
+      "biologist": {
+        "file": "occupation/biologist.svg",
+        "label": "Biologist"
+      },
+      "builder": {
+        "file": "occupation/builder.svg",
+        "label": "Builder"
+      },
+      "captain": {
+        "file": "occupation/captain.svg",
+        "label": "Captain"
+      },
+      "carpenter": {
+        "file": "occupation/carpenter.svg",
+        "label": "Carpenter"
+      },
+      "chainsaw": {
+        "file": "occupation/chainsaw.svg",
+        "label": "Chainsaw"
+      },
+      "chemist": {
+        "file": "occupation/chemist.svg",
+        "label": "Chemist"
+      },
+      "detective": {
+        "file": "occupation/detective.svg",
+        "label": "Detective"
+      },
+      "dice": {
+        "file": "occupation/dice.svg",
+        "label": "Dice"
+      },
+      "dj": {
+        "file": "occupation/dj.svg",
+        "label": "Dj"
+      },
+      "engineer": {
+        "file": "occupation/engineer.svg",
+        "label": "Engineer"
+      },
+      "farmer": {
+        "file": "occupation/farmer.svg",
+        "label": "Farmer"
+      },
+      "firefighter": {
+        "file": "occupation/firefighter.svg",
+        "label": "Firefighter"
+      },
+      "footballer": {
+        "file": "occupation/footballer.svg",
+        "label": "Footballer"
+      },
+      "gardener": {
+        "file": "occupation/gardener.svg",
+        "label": "Gardener"
+      },
+      "hairdresser": {
+        "file": "occupation/hairdresser.svg",
+        "label": "Hairdresser"
+      },
+      "lawyer": {
+        "file": "occupation/lawyer.svg",
+        "label": "Lawyer"
+      },
+      "mathematician": {
+        "file": "occupation/mathematician.svg",
+        "label": "Mathematician"
+      },
+      "mechanic": {
+        "file": "occupation/mechanic.svg",
+        "label": "Mechanic"
+      },
+      "nurse": {
+        "file": "occupation/nurse.svg",
+        "label": "Nurse"
+      },
+      "painter": {
+        "file": "occupation/painter.svg",
+        "label": "Painter"
+      },
+      "photographer": {
+        "file": "occupation/photographer.svg",
+        "label": "Photographer"
+      },
+      "rake": {
+        "file": "occupation/rake.svg",
+        "label": "Rake"
+      },
+      "researcher": {
+        "file": "occupation/researcher.svg",
+        "label": "Researcher"
+      },
+      "scientist": {
+        "file": "occupation/scientist.svg",
+        "label": "Scientist"
+      },
+      "shears": {
+        "file": "occupation/shears.svg",
+        "label": "Shears"
+      },
+      "shovel": {
+        "file": "occupation/shovel.svg",
+        "label": "Shovel"
+      },
+      "soldier": {
+        "file": "occupation/soldier.svg",
+        "label": "Soldier"
+      },
+      "sunbath": {
+        "file": "occupation/sun-bath.svg",
+        "label": "Sun bath"
+      },
+      "surgeon": {
+        "file": "occupation/surgeon.svg",
+        "label": "Surgeon"
+      },
+      "swimmer": {
+        "file": "occupation/swimmer.svg",
+        "label": "Swimmer"
+      },
+      "writer": {
+        "file": "occupation/writer.svg",
+        "label": "Writer"
+      }
+    },
+    "shapes": {
+      "asterisk": {
+        "file": "shapes/asterisk.svg",
+        "label": "Asterisk"
+      },
+      "circle": {
+        "file": "shapes/circle.svg",
+        "label": "Circle"
+      },
+      "diamond": {
+        "file": "shapes/diamond.svg",
+        "label": "Diamond"
+      },
+      "heart": {
+        "file": "shapes/heart.svg",
+        "label": "Heart"
+      },
+      "hexagon": {
+        "file": "shapes/hexagon.svg",
+        "label": "Hexagon"
+      },
+      "pentagon": {
+        "file": "shapes/pentagon.svg",
+        "label": "Pentagon"
+      },
+      "square": {
+        "file": "shapes/square.svg",
+        "label": "Square"
+      },
+      "star": {
+        "file": "shapes/star.svg",
+        "label": "Star"
+      },
+      "starfish": {
+        "file": "shapes/starfish.svg",
+        "label": "Starfish"
+      },
+      "triangle": {
+        "file": "shapes/triangle.svg",
+        "label": "Triangle"
+      }
+    },
+    "sports": {
+      "badminton": {
+        "file": "sports/badminton.svg",
+        "label": "Badminton"
+      },
+      "baseball": {
+        "file": "sports/baseball.svg",
+        "label": "Baseball"
+      },
+      "beach": {
+        "file": "sports/beach.svg",
+        "label": "Beach"
+      },
+      "golf": {
+        "file": "sports/golf.svg",
+        "label": "Golf"
+      },
+      "gymnastics": {
+        "file": "sports/gymnastics.svg",
+        "label": "Gymnastics"
+      },
+      "hockey": {
+        "file": "sports/hockey.svg",
+        "label": "Hockey"
+      },
+      "rowing": {
+        "file": "sports/rowing.svg",
+        "label": "Rowing"
+      },
+      "shooting": {
+        "file": "sports/shooting.svg",
+        "label": "Shooting"
+      },
+      "tennis": {
+        "file": "sports/tennis.svg",
+        "label": "Tennis"
+      },
+      "waterpolo": {
+        "file": "sports/waterpolo.svg",
+        "label": "Waterpolo"
+      }
+    },
+    "transport": {
+      "aeroplane": {
+        "file": "transport/aeroplane.svg",
+        "label": "Aeroplane"
+      },
+      "ambulance": {
+        "file": "transport/ambulance.svg",
+        "label": "Ambulance"
+      },
+      "bicycle": {
+        "file": "transport/bicycle.svg",
+        "label": "Bicycle"
+      },
+      "car": {
+        "file": "transport/car.svg",
+        "label": "Car"
+      },
+      "cruise": {
+        "file": "transport/cruise.svg",
+        "label": "Cruise"
+      },
+      "familycar": {
+        "file": "transport/family-car.svg",
+        "label": "Family car"
+      },
+      "helicopter": {
+        "file": "transport/helicopter.svg",
+        "label": "Helicopter"
+      },
+      "jeep": {
+        "file": "transport/jeep.svg",
+        "label": "Jeep"
+      },
+      "jetski": {
+        "file": "transport/jet-ski.svg",
+        "label": "Jet ski"
+      },
+      "lorry": {
+        "file": "transport/lorry.svg",
+        "label": "Lorry"
+      },
+      "motorcycle": {
+        "file": "transport/motorcycle.svg",
+        "label": "Motorcycle"
+      },
+      "racecar": {
+        "file": "transport/race-car.svg",
+        "label": "Race car"
+      },
+      "rollerskate": {
+        "file": "transport/roller-skate.svg",
+        "label": "Roller skate"
+      },
+      "sailingboat": {
+        "file": "transport/sailing-boat.svg",
+        "label": "Sailing boat"
+      },
+      "shipboat": {
+        "file": "transport/ship-boat.svg",
+        "label": "Ship boat"
+      },
+      "skateboard": {
+        "file": "transport/skateboard.svg",
+        "label": "Skateboard"
+      },
+      "stroller": {
+        "file": "transport/stroller.svg",
+        "label": "Stroller"
+      },
+      "tractor": {
+        "file": "transport/tractor.svg",
+        "label": "Tractor"
+      },
+      "train": {
+        "file": "transport/train.svg",
+        "label": "Train"
+      },
+      "truck": {
+        "file": "transport/truck.svg",
+        "label": "Truck"
+      },
+      "van": {
+        "file": "transport/van.svg",
+        "label": "Van"
+      },
+      "vespa": {
+        "file": "transport/vespa.svg",
+        "label": "Vespa"
+      },
+      "yacht": {
+        "file": "transport/yacht.svg",
+        "label": "Yacht"
+      }
+    },
+    "vegetables": {
+      "apple": {
+        "file": "vegetables/apple.svg",
+        "label": "Apple"
+      },
+      "beet": {
+        "file": "vegetables/beet.svg",
+        "label": "Beet"
+      },
+      "bellpepper": {
+        "file": "vegetables/bell-pepper.svg",
+        "label": "Bell pepper"
+      },
+      "cabbage": {
+        "file": "vegetables/cabbage.svg",
+        "label": "Cabbage"
+      },
+      "carrot": {
+        "file": "vegetables/carrot.svg",
+        "label": "Carrot"
+      },
+      "cherries": {
+        "file": "vegetables/cherries.svg",
+        "label": "Cherries"
+      },
+      "chili": {
+        "file": "vegetables/chili.svg",
+        "label": "Chili"
+      },
+      "coconut": {
+        "file": "vegetables/coconut.svg",
+        "label": "Coconut"
+      },
+      "corn": {
+        "file": "vegetables/corn.svg",
+        "label": "Corn"
+      },
+      "eggplant": {
+        "file": "vegetables/eggplant.svg",
+        "label": "Eggplant"
+      },
+      "grape": {
+        "file": "vegetables/grape.svg",
+        "label": "Grape"
+      },
+      "mango": {
+        "file": "vegetables/mango.svg",
+        "label": "Mango"
+      },
+      "mushroom": {
+        "file": "vegetables/mushroom.svg",
+        "label": "Mushroom"
+      },
+      "okra": {
+        "file": "vegetables/okra.svg",
+        "label": "Okra"
+      },
+      "peanut": {
+        "file": "vegetables/peanut.svg",
+        "label": "Peanut"
+      },
+      "pickle": {
+        "file": "vegetables/pickle.svg",
+        "label": "Pickle"
+      },
+      "potato": {
+        "file": "vegetables/potato.svg",
+        "label": "Potato"
+      },
+      "spinach": {
+        "file": "vegetables/spinach.svg",
+        "label": "Spinach"
+      }
     }
-  }
+  },
+  "schemaVersion": 2
 }

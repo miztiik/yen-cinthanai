@@ -117,34 +117,58 @@ class Cat:
         return self.cardinality == "shared"
 
 
-def build_categories(tier: Tier, entities: int, config_dir: Path) -> list[Cat]:
-    """Resolve tier categories from dials + glyph packs. bijective = first N values;
-    shared = first `values` (default 2) repeated across slots. ordinal stays bijective."""
-    dials = load_toml("dials", config_dir)
-    packs = json.loads(GLYPHS_INDEX.read_text(encoding="ascii"))["packs"]
-    glyph_labels = load_toml("glyphpacks", config_dir)
+# Packs that are NOT puzzle value dimensions: 'abstract' holds the ordinal seat numerals
+# (num1..numN) plus the clue/UI glyphs (grid, opposite, between, ...).
+_STRUCTURAL_PACKS = ("abstract",)
+_CAT_SALT = 0x9E3779B9  # decorrelate the dimension-pick PRNG from the per-attempt solution PRNG
+
+
+def _manifest_packs(config_dir: Path) -> dict:
+    """pack -> {slug: {file,label}} from the generated glyph manifest (tools/bake_glyphs.py)."""
+    return json.loads(GLYPHS_INDEX.read_text(encoding="ascii"))["packs"]
+
+
+def _value_cat(pack: str, manifest: dict, value_ids: list[str], cardinality: str) -> Cat:
+    """A nominal value dimension: the folder is the category, its files are the values."""
+    return Cat(
+        id=pack,
+        label=pack[:1].upper() + pack[1:],
+        ordinal=False,
+        value_ids=value_ids,
+        glyphs=[f"{pack}.{v}" for v in value_ids],
+        labels=[manifest[pack][v]["label"] for v in value_ids],
+        cardinality=cardinality,
+    )
+
+
+def build_categories(tier: Tier, entities: int, config_dir: Path, date: str) -> list[Cat]:
+    """Derive the puzzle's dimensions FROM THE GLYPH MANIFEST (auto-discovering: a new pack
+    folder becomes selectable with zero code change). Date-seeded, so each day draws a
+    different slice of folders + values from the FULL pool (that is the diversity), while a
+    rebuild of the same date is identical. The solver is glyph-agnostic, so which packs and
+    values get picked never changes uniqueness or difficulty - only the visual skin.
+
+    Structure comes from config (dials [tier.<tier>]): `nominal` bijective value packs and
+    `shared` binary packs, plus the ordinal seat axis when the shape has one."""
+    manifest = _manifest_packs(config_dir)
+    shape = resolve_shape(shape_for(tier, config_dir), config_dir)
+    spec = load_toml("dials", config_dir)["tier"][tier]
+    n_nominal, n_shared = spec["nominal"], spec.get("shared", 0)
+    rng = random.Random(seed_int(date, tier, config_dir) ^ _CAT_SALT)
+
     cats: list[Cat] = []
-    for cid in dials["tier"][tier]["categories"]:
-        spec = dials["category"][cid]
-        pack = spec["pack"]
-        card = spec.get("cardinality", "bijective")
-        count = spec.get("values", 2) if card == "shared" else entities
-        ids = list(packs[pack].keys())[:count]
-        if spec["ordinal"]:
-            labels = [str(i + 1) for i in range(entities)]
-        else:
-            labels = [glyph_labels[pack][vid]["label"] for vid in ids]
-        cats.append(
-            Cat(
-                id=cid,
-                label=spec["label"],
-                ordinal=spec["ordinal"],
-                value_ids=ids,
-                glyphs=[f"{pack}.{vid}" for vid in ids],
-                labels=labels,
-                cardinality=card,
-            )
-        )
+    if shape.ordinal_axis:  # seat axis: value i sits at seat i (abstract numerals)
+        nums = [f"num{i + 1}" for i in range(entities)]
+        cats.append(Cat("position", "Seat", True, nums, [f"abstract.{v}" for v in nums],
+                        [str(i + 1) for i in range(entities)], "bijective"))
+
+    # eligible value packs: every folder (except structural) with enough glyphs to fill a seat
+    pool = sorted(p for p in manifest if p not in _STRUCTURAL_PACKS and len(manifest[p]) >= entities)
+    picks = rng.sample(pool, min(n_nominal + n_shared, len(pool)))
+    for pack in picks[:n_nominal]:  # bijective: one distinct value per seat
+        cats.append(_value_cat(pack, manifest, sorted(rng.sample(sorted(manifest[pack]), entities)), "bijective"))
+    for pack in picks[n_nominal:n_nominal + n_shared]:  # shared: 2 values repeat across seats
+        cats.append(_value_cat(pack, manifest, sorted(rng.sample(sorted(manifest[pack]), 2)), "shared"))
     return cats
 
 
@@ -489,7 +513,7 @@ def generate(date: str, tier: Tier, config_dir: Path = CONFIG_DIR) -> tuple[Puzz
     shape = resolve_shape(shape_for(tier, config_dir), config_dir)
     entities = min(tiers["entities"], shape.max_entities)  # registry caps the seat count
     n_cats = tiers["categories"]
-    cats = build_categories(tier, entities, config_dir)
+    cats = build_categories(tier, entities, config_dir, date)
     lo, hi = tiers["band"]
     log: list[dict] = []
     for attempt in range(dials["max_reseeds"]):
@@ -529,20 +553,36 @@ def write_index(date: str, entries: list[dict], out_dir: Path = PUZZLES_DIR) -> 
     return out
 
 
+def _entry_for(date: str, tier: Tier, out_dir: Path, config_dir: Path, force: bool) -> dict:
+    """Add-only: an EXISTING dated puzzle file is FROZEN - never regenerated - so an already
+    shipped puzzle can't be invalidated when the glyph packs expand. The manifest is rebaked
+    every build, but puzzles are immutable once written. Returns the bank entry either way;
+    --force overrides the freeze (used once to migrate puzzles built before this contract)."""
+    fpath = out_dir / f"{date}-{tier}.json"
+    if fpath.exists() and not force:
+        m = PuzzleManifest.model_validate_json(fpath.read_text(encoding="ascii"))
+        _, sha = canonical_sha(m)
+        return {"date": date, "tier": tier, "shapeId": m.shapeId, "file": fpath.name, "sha": sha, "D": -1, "frozen": True}
+    e = write_puzzle(date, tier, out_dir, config_dir)
+    e["frozen"] = False
+    return e
+
+
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Build the daily puzzle bank.")
+    ap = argparse.ArgumentParser(description="Build the daily puzzle bank (add-only; existing files frozen).")
     ap.add_argument("--date", default="today", help="YYYY-MM-DD or 'today' (UTC)")
     ap.add_argument("--tiers", default="easy,standard,sharp,expert")
+    ap.add_argument("--force", action="store_true", help="regenerate even if the dated file already exists")
     args = ap.parse_args(argv)
     date = datetime.now(timezone.utc).strftime("%Y-%m-%d") if args.date == "today" else args.date
     tiers = [t.strip() for t in args.tiers.split(",") if t.strip()]
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
     entries, lines = [], []
     for tier in tiers:
-        e = write_puzzle(date, tier)
+        e = _entry_for(date, tier, PUZZLES_DIR, CONFIG_DIR, args.force)
         entries.append(e)
         lines.append(json.dumps({"date": date, **e}, sort_keys=True))
-        print(f"{e['file']} sha={e['sha'][:12]} D={e['D']}")
+        print(f"{e['file']} " + ("frozen" if e["frozen"] else f"sha={e['sha'][:12]} D={e['D']}"))
     write_index(date, entries)
     (LOGS_DIR / f"build-{date}.jsonl").write_text("\n".join(lines) + "\n", encoding="ascii")
     print(f"index.json ({len(entries)} puzzles)")

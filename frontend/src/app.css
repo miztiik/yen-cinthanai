@@ -69,3 +69,11 @@ body {
     animation-duration: 0ms !important;
   }
 }
+
+/* Drag magnet (lib/drag.ts): the slot the dragged puck will snap into. A ring that
+   hugs the circle, compositor-cheap (box-shadow), with no layout shift. The accent
+   token keeps it palette-swappable; colour is never the only signal (the puck also
+   eases to this slot's centre, so the cue is motion + ring, not colour alone). */
+.snap-target {
+  box-shadow: 0 0 0 3px var(--accent);
+}
