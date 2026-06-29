@@ -131,7 +131,6 @@ Commit messages describe the change. **No AI co-author / attribution tags.**
 - [ ] Lockfiles in sync with manifests.
 - [ ] Responsiveness held on the target device (60fps, input-to-photon <50ms). No fixed byte cap; optimize only if the device drops below target.
 - [ ] Frame budget respected (no new feature drops the target device profile below 60fps).
-- [ ] Every new asset names its license in the asset manifest.
 
 ## 10. Anti-Patterns (Do NOT)
 
@@ -147,7 +146,6 @@ Commit messages describe the change. **No AI co-author / attribution tags.**
 - Ship a layout-triggering CSS animation when `transform` + `opacity` will do.
 - Style canvas internals with Tailwind. Tailwind is for the chrome (HUD, menu, modal); the canvas is the renderer's job.
 - Commit raw source assets (`.obj`, 4K PNG, uncompressed WAV) into the served bundle. Run them through `tools/` first (`gltf-pipeline` for mesh, `basisu` / KTX2 for texture, ogg/opus for audio).
-- Ship an asset without naming its license in the asset manifest.
 - Add a runtime telemetry / analytics / error-tracking SDK.
 - Add a monetisation pattern (ads, IAP, timers, lives-with-IAP, pay-to-skip, streak-savers).
 - Ship a feature that depends on a runtime backend, account, or push notification.
@@ -165,7 +163,7 @@ The persisted surfaces yen-cinthanai cares about:
 
 - **Save format** (`localStorage` / `IndexedDB` JSON) - owned by the game; consumed by the next version of the game. Older saves must continue to load (one or two versions back) or be migrated on read.
 - **Level data** (per-level JSON shipped in the bundle).
-- **Asset manifest** (the index of in-bundle assets + their licenses).
+- **Asset manifest** (the index of in-bundle assets).
 
 Each gets a typed schema before logic is written (Holy Law #3). Each carries a `version` field. Bump rules:
 
