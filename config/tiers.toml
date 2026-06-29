@@ -1,0 +1,50 @@
+# Tier presets over the difficulty dials. Contract: docs/concepts/difficulty-and-scoring.md.
+# attempts/hints: -1 = unlimited. band = [min, max] inclusive D score. par_s = seconds.
+
+[easy]
+band = [0, 13]
+entities = 3
+categories = 2
+clue_count = [3, 4]
+indir = [0.0, 0.0]
+cardinality = "bijective"
+attempts = -1
+hints = -1
+feedback = "realtime-names"
+par_s = 90
+
+[standard]
+band = [14, 39]
+entities = 4
+categories = 3
+clue_count = [5, 7]
+indir = [0.25, 0.40]
+cardinality = "shared"
+attempts = 3
+hints = 2
+feedback = "count-wrong"
+par_s = 240
+
+[sharp]
+band = [40, 59]
+entities = 5
+categories = 4
+clue_count = [7, 9]
+indir = [0.45, 0.60]
+cardinality = "mixed"
+attempts = 2
+hints = 1
+feedback = "binary-check"
+par_s = 480
+
+[expert]
+band = [60, 90]
+entities = 6
+categories = 5
+clue_count = [8, 11]
+indir = [0.60, 0.75]
+cardinality = "mixed"
+attempts = 1
+hints = 0
+feedback = "submit-binary"
+par_s = 900

@@ -1,0 +1,35 @@
+# Glyph pack labels. Human-edited. D12: 3 packs v1 (household, creatures, abstract).
+# Labels ONLY - the file map lives in frontend/public/assets/glyphs/index.json, file
+# path derived from the registry. See docs/concepts/ui-shell.md (assets convention).
+# Contract: every id here has a registry entry; no hardcoded paths (CLAUDE.md #6).
+
+[household.tea]
+label = "Tea"
+[household.coffee]
+label = "Coffee"
+[household.milk]
+label = "Milk"
+[household.cola]
+label = "Cola"
+
+[creatures.cat]
+label = "Cat"
+[creatures.dog]
+label = "Dog"
+[creatures.fish]
+label = "Fish"
+[creatures.bird]
+label = "Bird"
+
+[abstract.num1]
+label = "One"
+[abstract.num2]
+label = "Two"
+[abstract.num3]
+label = "Three"
+[abstract.num4]
+label = "Four"
+[abstract.grid]
+label = "Grid"
+[abstract.seating]
+label = "Seating"

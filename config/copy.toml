@@ -1,0 +1,6 @@
+# Celebration copy bags. Full v1 ships 50/50/10; this P0 stub is a tiny sample.
+# ASCII only, <=22 chars, spoiler-free. Contract: docs/concepts/difficulty-and-scoring.md.
+
+success = ["Case closed.", "Airtight.", "Pure logic.", "Locked in.", "Nailed it."]
+encourage = ["So close.", "One clue off.", "Trust the clues.", "Back tomorrow."]
+hero = ["NEW RECORD.", "Fastest yet.", "Personal best."]

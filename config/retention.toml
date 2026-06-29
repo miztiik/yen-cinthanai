@@ -1,0 +1,12 @@
+# Save retention + streak forgiveness. Contract: docs/architecture/contracts/schemas.md.
+# Richness-first: keep days while storage allows; prune oldest only under pressure.
+
+[prune]
+oldest_first = true
+protect_today = true
+trigger = "quota-exceeded"
+
+[streak]
+skips_per_week = 1
+refill_weekday = "monday"
+reset_utc_hour = 0

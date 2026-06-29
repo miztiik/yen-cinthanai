@@ -1,0 +1,12 @@
+{
+  "name": "yen-cinthanai",
+  "short_name": "yen-cinthanai",
+  "description": "A daily logic puzzle.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f1115",
+  "theme_color": "#0f1115",
+  "icons": []
+}

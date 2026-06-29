@@ -1,0 +1,33 @@
+{
+  "name": "yen-cinthanai",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Daily constraint-satisfaction logic puzzle. Static GitHub Pages bundle, no runtime backend.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "svelte-check --tsconfig ./tsconfig.json && tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,svelte,css}\" \"*.{ts,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,svelte,css}\" \"*.{ts,json}\""
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^5.0.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@tsconfig/svelte": "^5.0.0",
+    "@types/node": "^22.20.0",
+    "prettier": "^3.3.0",
+    "prettier-plugin-svelte": "^3.2.0",
+    "svelte": "^5.0.0",
+    "svelte-check": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "tslib": "^2.7.0",
+    "typescript": "^5.8.0",
+    "vite": "^6.3.0",
+    "vitest": "^3.0.0"
+  }
+}
