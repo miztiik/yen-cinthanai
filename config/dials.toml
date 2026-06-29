@@ -31,6 +31,10 @@ ordinal = false
 label = "Seat"
 pack = "abstract"
 ordinal = true
+[category.shape]
+label = "Shape"
+pack = "shapes"
+ordinal = false
 
 # Tier -> shape + ordered categories. v1 = easy (grid 3x2) + standard (seating 4x3),
 # bijective only (shared-value deferred per task). Sharp/expert reuse these knobs.
@@ -45,4 +49,4 @@ shape = "seating-row"
 categories = ["drink", "animal", "position"]
 [tier.expert]
 shape = "seating-row"
-categories = ["drink", "animal", "position"]
+categories = ["drink", "animal", "position", "shape"]

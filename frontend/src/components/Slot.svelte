@@ -11,6 +11,7 @@
     glyph = null,
     label = "",
     state = "empty",
+    pulse = false,
     locked = false,
     ontap,
   }: {
@@ -19,6 +20,7 @@
     glyph?: string | null;
     label?: string;
     state?: RowState;
+    pulse?: boolean;
     locked?: boolean;
     ontap: () => void;
   } = $props();
@@ -33,6 +35,7 @@
   class:border-slate-600={state === "empty" || state === "near"}
   class:border-emerald-400={state === "satisfy"}
   class:border-rose-500={state === "violate"}
+  class:animate-pulse={pulse}
   class:bg-slate-800={!locked}
   class:bg-emerald-900={locked}
 >

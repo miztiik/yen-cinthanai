@@ -20,6 +20,12 @@
       "num4": "abstract/num4.svg",
       "grid": "abstract/grid.svg",
       "seating": "abstract/seating.svg"
+    },
+    "shapes": {
+      "circle": "shapes/circle.svg",
+      "square": "shapes/square.svg",
+      "triangle": "shapes/triangle.svg",
+      "diamond": "shapes/diamond.svg"
     }
   }
 }

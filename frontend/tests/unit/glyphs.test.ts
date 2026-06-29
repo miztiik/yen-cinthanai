@@ -27,8 +27,8 @@ describe("glyph registry", () => {
     }
   });
 
-  it("ships exactly the three v1 packs", () => {
-    expect(Object.keys(glyphs.packs).sort()).toEqual(["abstract", "creatures", "household"]);
+  it("ships exactly the four v1 packs", () => {
+    expect(Object.keys(glyphs.packs).sort()).toEqual(["abstract", "creatures", "household", "shapes"]);
   });
 });
 

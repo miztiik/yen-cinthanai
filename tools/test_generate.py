@@ -12,7 +12,7 @@ from models import PuzzleManifest
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_DIR = ROOT / "config"
 DATE = "2026-06-29"
-TIERS = ("easy", "standard")
+TIERS = ("easy", "standard", "sharp", "expert")
 
 
 def _clues_from(m: PuzzleManifest) -> list[g.Clue]:

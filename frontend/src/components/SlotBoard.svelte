@@ -8,7 +8,7 @@
   import { anchorValue } from "../lib/board";
   import type { Game } from "../state/play.svelte";
 
-  let { game }: { game: Game } = $props();
+  let { game, revealed = true, pulse = false }: { game: Game; revealed?: boolean; pulse?: boolean } = $props();
   const b = $derived(game.board);
 
   function glyphOf(cat: string, value: string): string {
@@ -35,7 +35,8 @@
         cat={col.id}
         glyph={v ? glyphOf(col.id, v) : null}
         label={v ? labelOf(col.id, v) : ""}
-        state={game.evalState.rows[e]}
+        state={revealed ? game.evalState.rows[e] : v ? "near" : "empty"}
+        pulse={pulse && !v}
         locked={game.locked}
         ontap={() => game.tapSlot(e, col.id)}
       />

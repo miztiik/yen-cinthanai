@@ -5,6 +5,7 @@
 // never pruned. ASCII, no game logic.
 
 import type { Save, DayState, Tier, ShapeId, DayStatus } from "../contracts/save";
+import { updateHero, updateStreak } from "../lib/scoring";
 
 const SAVE_KEY = "yen-cinthanai/save";
 const TARGET_VERSION = 1;
@@ -113,4 +114,12 @@ export function persistSave(save: Save, today: string): void {
       if (!isQuota(e) || !pruneOldest(save, today)) return;
     }
   }
+}
+
+/** On a fresh win, advance the streak once and set best-time only on a clean solve. */
+export function recordWin(save: Save, day: DayState): Save {
+  if (save.streak.lastDate === day.date) return save; // already counted today
+  save.streak = updateStreak(save.streak, day.date);
+  save.hero = updateHero(save.hero, day.solveMs, day.hintsUsed, day.date);
+  return save;
 }

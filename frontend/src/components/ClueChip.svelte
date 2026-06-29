@@ -7,7 +7,7 @@
   import type { Constraint, PuzzleManifest } from "../contracts/manifest";
   import type { ClueState } from "../lib/validate";
 
-  let { c, m, state = "unknown" }: { c: Constraint; m: PuzzleManifest; state?: ClueState } = $props();
+  let { c, m, state = "unknown", glow = false }: { c: Constraint; m: PuzzleManifest; state?: ClueState; glow?: boolean } = $props();
 
   const REL: Record<string, string> = {
     eq: "=",
@@ -33,6 +33,7 @@
   class:border-slate-600={state === "unknown"}
   class:border-emerald-400={state === "satisfy"}
   class:border-rose-500={state === "violate"}
+  class:animate-pulse={glow}
 >
   <div class="flex items-center gap-1">
     {#each c.operands as o, i (o.cat + o.value)}
