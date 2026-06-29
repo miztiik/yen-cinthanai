@@ -2,7 +2,7 @@
 
 **Last Updated**: 2026-06-29
 
-**Status**: Design freeze for v1. Genre = daily constraint-satisfaction logic puzzles (zebra / seating / grid family) shipped as a static GitHub Pages bundle, no runtime backend. GitHub Action builds a daily puzzle bank and publishes; browser renders, validates client-side, persists to localStorage. Decisions below are frozen from a 5-advisor consult (Carmack/Fowler/Jony/Palm/Player) plus user sign-off. Build is phased; the master roadmap (section 12) is the single source of truth for status. This is a plan-doc: the work ledger, not canonical docs. Findings distill to `docs/` per how-to/distill-a-plan.md once rows close.
+**Status**: SHIPPED 2026-06-29. P0-P9 merged (PR #1-#10) to master; live at https://miztiik.github.io/yen-cinthanai/. v1 + v2 (3 shapes, 4 tiers, shared-value, live themes) delivered. The master roadmap (section 12) is the single source of truth for status; the "Plan complete" block lists known non-blocking follow-ups. This is a plan-doc: the work ledger, not canonical docs. Spec is distilled to `docs/` (See also).
 
 ## See also
 
@@ -190,36 +190,47 @@ Unit (validate, prune, seed determinism), contract (4 schemas vs readers/writers
 
 | Phase | Goal | Lvl | Status |
 | --- | --- | --- | --- |
-| P0 | Stack + repo + CI skeleton | 4 | not-started |
-| P1 | Contracts: 4 schemas + tunable config | 4 | not-started |
-| P2 | Generator: solver + uniqueness + grid bank (bijective) | 4 | not-started |
-| P3 | Walking skeleton: landing + 1 grid puzzle playable | 3 | not-started |
-| P4 | 4 tiers + brag-cost hints + save + stats | 3 | not-started |
-| P5 | Seating-row shape + shape drawer | 2 | not-started |
-| P6 | Celebrate end-card + share + settings + audio | 3 | not-started |
-| P7 | PWA offline cache + daily CI + GH Pages | 3 | not-started |
-| P8 | v2: round-table (N<=6) + shared-value categories | 3 | not-started |
+| P0 | Stack + repo + CI skeleton | 4 | done (PR #1) |
+| P1 | Contracts: 4 schemas + tunable config | 4 | done (PR #2) |
+| P2 | Generator: solver + uniqueness + grid bank (bijective) | 4 | done (PR #3) |
+| P3 | Walking skeleton: landing + 1 grid puzzle playable | 3 | done (PR #4) |
+| P4 | 4 tiers + brag-cost hints + save + stats | 3 | done (PR #5) |
+| P5 | Seating-row shape + shape drawer | 2 | done (PR #6) |
+| P6 | Celebrate end-card + share + settings + audio | 3 | done (PR #7) |
+| P7 | PWA offline cache + daily CI + GH Pages | 3 | done (PR #8) |
+| P8 | v2: round-table (N<=6) + shared-value categories | 3 | done (PR #9) |
+| P9 | Richness: 5x4/6x5 grids (food/color packs) + live palette/theme | 3 | done (PR #10) |
 
 ### Sub-plans
 
 | ID | Phase | Task | Status |
 | --- | --- | --- | --- |
-| P0.1 | P0 | vite6 + ts + svelte5 + tailwind init | not-started |
-| P0.2 | P0 | config/ + .logs/ + history routing + 404.html | not-started |
-| P0.3 | P0 | CI: lint/type/test/build gates | not-started |
-| P1.1 | P1 | PuzzleManifest/BankIndex/Save/ShareCard v1 + contract tests (no-leak assert) | not-started |
-| P1.2 | P1 | Pydantic contract models + tunable config JSON (no bus) | not-started |
-| P2.1 | P2 | OR-Tools grid solver (bijective v1; shared field stays unused) | not-started |
-| P2.2 | P2 | uniqueness + prune-to-minimal + seed=UTC + sha | not-started |
-| P3.1 | P3 | landing (PLAY=resume) + loader + board + pointer drag/tap (transform-only) | not-started |
-| P3.2 | P3 | validate-vs-constraints, satisfy/violate glyphs | not-started |
-| P4.1 | P4 | 4-tier config + dials | not-started |
-| P4.2 | P4 | hintTrace + brag-cost + stars/PAR + save + prune + migrate + stats | not-started |
-| P5.1 | P5 | shape/constraint/glyph registries + maxEntities | not-started |
-| P5.2 | P5 | seating-row + shape drawer (behind PLAY) | not-started |
-| P6.1 | P6 | copy bags + hero beat + held end-card + share string | not-started |
-| P6.2 | P6 | 4-group settings + Credits + SFX (mute default) | not-started |
-| P7.1 | P7 | vite-plugin-pwa offline cache + nightly Action + base-path smoke | not-started |
+| P0.1 | P0 | vite6 + ts + svelte5 + tailwind init | done |
+| P0.2 | P0 | config/ + .logs/ + history routing + 404.html | done |
+| P0.3 | P0 | CI: lint/type/test/build gates | done |
+| P1.1 | P1 | PuzzleManifest/BankIndex/Save/ShareCard v1 + contract tests (no-leak assert) | done |
+| P1.2 | P1 | Pydantic contract models + tunable config JSON (no bus) | done |
+| P2.1 | P2 | OR-Tools grid solver (bijective v1; shared field stays unused) | done |
+| P2.2 | P2 | uniqueness + prune-to-minimal + seed=UTC + sha | done |
+| P3.1 | P3 | landing (PLAY=resume) + loader + board + pointer drag/tap (transform-only) | done |
+| P3.2 | P3 | validate-vs-constraints, satisfy/violate glyphs | done |
+| P4.1 | P4 | 4-tier config + dials | done |
+| P4.2 | P4 | hintTrace + brag-cost + stars/PAR + save + prune + migrate + stats | done |
+| P5.1 | P5 | shape/constraint/glyph registries + maxEntities | done |
+| P5.2 | P5 | seating-row + shape drawer (behind PLAY) | done |
+| P6.1 | P6 | copy bags + hero beat + held end-card + share string | done |
+| P6.2 | P6 | 4-group settings + Credits + SFX (mute default) | done |
+| P7.1 | P7 | vite-plugin-pwa offline cache + nightly Action + base-path smoke | done |
+
+## Plan complete
+
+Shipped 2026-06-29. P0-P9 merged (PR #1-#10) to master; live at https://miztiik.github.io/yen-cinthanai/. Spec distilled to docs/concepts + docs/architecture (section See also). Plan-doc remains as the audit ledger.
+
+Known follow-ups (non-blocking, not yet scheduled):
+- DayState keyed by date only -> multiple tiers/shapes same day share one save slot; needs date+tier+shape key to track drawer puzzles independently.
+- Glyphs render as currentColor <img>, so palette swap recolors chrome not glyph fill; color category uses pattern swatches.
+- Daily bank holds today only in-repo; backfill or rely on the daily Action to accrete dates.
+- Credits screen content + markdownlint blank-line nits in docs.
 
 ## 13. Open questions - RESOLVED in review (2026-06-29)
 - Round-table legibility -> DEFERRED to P8: ship grid + seating-row v1; when round-table returns, cap N<=6, clues stay in the flat panel (never wrap on ring), wrap-relations draw as arc glyphs on tap (Jony). Two shapes still prove the registry.
