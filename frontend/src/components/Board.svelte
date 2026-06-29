@@ -6,18 +6,22 @@
   import SlotBoard from "./SlotBoard.svelte";
   import Pool from "./Pool.svelte";
   import ClueChip from "./ClueChip.svelte";
-  import Glyph from "../lib/Glyph.svelte";
+  import ResultCard from "./ResultCard.svelte";
   import { route, homeHref, navigate } from "../lib/router.svelte";
   import { loadBank, loadManifest, pickEntry } from "../lib/loader";
   import { loadTiers, loadCopy, loadPace, pick, type TierDial, type CopyBags, type Pace } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { isHero } from "../lib/scoring";
-  import { Game, saveProgress } from "../state/play.svelte";
+  import { buildShareCard, shareText, type ShareCopy } from "../contracts/share";
+  import { configureAudio, play } from "../lib/audio";
+  import { applyMotion } from "../lib/motion";
+  import { Game, saveProgress, toDayState } from "../state/play.svelte";
   import { loadSave } from "../state/save.svelte";
   import type { Tier } from "../contracts/save";
 
   const TODAY = new Date().toISOString().slice(0, 10);
   const ALLOWED: Tier[] = ["easy", "standard", "sharp", "expert"];
+  const SHARE_FALLBACK: ShareCopy = { title: "yen-cinthanai {tier}", line: "{stars} {time}s w{wrong} h{hints}", streak: "flame {streak}" };
 
   let game = $state<Game | null>(null);
   let copy = $state<CopyBags>({ success: [], encourage: [], hero: [] });
@@ -49,8 +53,11 @@
       copy = await loadCopy();
       pace = await loadPace();
       shape = shapeOf(await loadShapes(), m.shapeId);
-      const prior = loadSave().days[m.puzzleId];
-      heroBaseline = { ...loadSave().hero };
+      const sv = loadSave();
+      const prior = sv.days[m.puzzleId];
+      heroBaseline = { ...sv.hero };
+      configureAudio(sv.settings.sound, sv.settings.volume);
+      applyMotion(sv.settings.reducedMotion);
       game = new Game(m, dial, prior);
       tick();
     } catch (e) {
@@ -77,7 +84,25 @@
     }
   });
 
+  // Audio cues (synth, mute-default): tick on each new commit, fanfare on the win.
+  let prevFilled = 0;
+  let prevLocked = false;
+  $effect(() => {
+    if (!game) return;
+    const filled = game.evalState.filled;
+    if (filled > prevFilled) play("place");
+    prevFilled = filled;
+    if (game.locked && !prevLocked) play("win");
+    prevLocked = game.locked;
+  });
+
+  const failed = $derived(!!game && !game.locked && game.attemptsLeft === 0);
   const wonText = $derived(game?.locked ? (hero ? pick(copy.hero) : pick(copy.success)) : pick(copy.encourage));
+  const share = $derived(
+    game?.locked
+      ? shareText(buildShareCard(toDayState(game), loadSave().streak, shape?.glyph ?? "abstract.grid"), game.stars, copy.share ?? SHARE_FALLBACK)
+      : "",
+  );
   const hintsLeft = $derived(game?.hintsLeft ?? -1);
   const pulse = $derived(!!game && !game.locked && idleMs > pace.idle_pulse_s * 1000);
   const glow = $derived(!!game && !game.locked && idleMs > pace.idle_glow_s * 1000);
@@ -120,7 +145,7 @@
         <button
           class="rounded-xl bg-sky-600 px-5 py-2 font-semibold disabled:opacity-30"
           disabled={game.locked || game.attemptsLeft === 0}
-          onclick={() => game?.check()}>{submitLabel}</button>
+          onclick={() => { game?.check(); if (game && !game.locked) play("violate"); else play("satisfy"); }}>{submitLabel}</button>
       {/if}
       <span class="tabular-nums text-sm opacity-60">{game.evalState.filled}/{game.evalState.total}</span>
     </div>
@@ -134,20 +159,35 @@
     {/if}
 
     {#if game.locked}
-      <div class="fixed inset-0 flex items-center justify-center bg-black/70 p-6">
-        <div class="flex flex-col items-center gap-4 rounded-2xl bg-slate-800 p-8 text-center" class:ring-4={hero} class:ring-amber-400={hero}>
-          <Glyph ref={shape?.glyph ?? "abstract.grid"} label="solved" size={48} />
-          <p class="flex gap-1 text-2xl text-amber-400" aria-label={`${game.stars} stars`}>
-            {#each [1, 2, 3] as s (s)}<span class:opacity-25={game.stars < s}>{game.stars >= s ? "*" : "."}</span>{/each}
-          </p>
-          <p class="text-2xl font-bold">{wonText}</p>
-          <p class="tabular-nums opacity-70">{Math.round((game.solveMs || elapsed) / 1000)}s{game.bragged ? " - hints" : ""}</p>
-          <div class="flex gap-3">
-            <button class="rounded-2xl bg-emerald-500 px-6 py-3 font-bold text-black active:scale-95 transition-transform" onclick={() => navigate("")}>home</button>
-            <button class="rounded-2xl bg-slate-600 px-6 py-3 font-bold active:scale-95 transition-transform" onclick={() => navigate("stats")}>stats</button>
-          </div>
-        </div>
-      </div>
+      <ResultCard
+        variant="win"
+        {hero}
+        phrase={wonText}
+        stars={game.stars}
+        solveMs={game.solveMs || elapsed}
+        hintsUsed={game.hintsUsed}
+        wrong={game.attempts}
+        streak={loadSave().streak.count}
+        shapeGlyph={shape?.glyph ?? "abstract.grid"}
+        {share}
+        onhome={() => navigate("")}
+        onstats={() => navigate("stats")}
+      />
+    {:else if failed}
+      <ResultCard
+        variant="fail"
+        phrase={wonText}
+        stars={0}
+        solveMs={elapsed}
+        hintsUsed={game.hintsUsed}
+        wrong={game.attempts}
+        streak={loadSave().streak.count}
+        shapeGlyph={shape?.glyph ?? "abstract.grid"}
+        share=""
+        onhome={() => navigate("")}
+        onstats={() => navigate("stats")}
+        onretry={() => start()}
+      />
     {/if}
   {:else}
     <p class="opacity-60">loading...</p>

@@ -4,7 +4,7 @@
 // hero/streak) -> caller. Write: prune oldest under QuotaExceededError, today
 // never pruned. ASCII, no game logic.
 
-import type { Save, DayState, Tier, ShapeId, DayStatus } from "../contracts/save";
+import type { Save, DayState, Tier, ShapeId, DayStatus, Settings } from "../contracts/save";
 import { updateHero, updateStreak } from "../lib/scoring";
 
 const SAVE_KEY = "yen-cinthanai/save";
@@ -121,5 +121,13 @@ export function recordWin(save: Save, day: DayState): Save {
   if (save.streak.lastDate === day.date) return save; // already counted today
   save.streak = updateStreak(save.streak, day.date);
   save.hero = updateHero(save.hero, day.solveMs, day.hintsUsed, day.date);
+  return save;
+}
+
+/** Merge a settings patch and persist (today never pruned). Returns the new save. */
+export function updateSettings(patch: Partial<Settings>, today: string): Save {
+  const save = loadSave();
+  save.settings = { ...save.settings, ...patch };
+  persistSave(save, today);
   return save;
 }

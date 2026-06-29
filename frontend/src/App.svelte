@@ -6,11 +6,14 @@
   import Glyph from "./lib/Glyph.svelte";
   import Board from "./components/Board.svelte";
   import Stats from "./components/Stats.svelte";
+  import Settings from "./components/Settings.svelte";
+  import { applyMotion } from "./lib/motion";
   import type { Tier } from "./contracts/save";
 
   const save = loadSave();
   const best = save.hero.bestMs;
   const streak = save.streak.count;
+  applyMotion(save.settings.reducedMotion);
   const tiers: Tier[] = ["easy", "standard", "sharp", "expert"];
   const DEFERRED = [{ id: "round-table", label: "round table" }]; // v2, greyed (D1)
 
@@ -41,6 +44,8 @@
   <Board />
 {:else if route() === "/stats"}
   <Stats />
+{:else if route() === "/settings"}
+  <Settings />
 {:else}
   <main class="min-h-dvh flex flex-col items-center justify-center gap-8 p-6 text-center">
     <header class="flex w-full max-w-sm items-center justify-between text-sm opacity-70">

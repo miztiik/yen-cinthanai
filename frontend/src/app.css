@@ -9,3 +9,21 @@ body {
   margin: 0;
   min-height: 100dvh;
 }
+
+/* Reduced-motion: drop transforms/animations to instant. Set via lib/motion.ts or
+   the OS preference. Colour-is-one-signal so removing motion never hides state. */
+[data-motion="reduce"] *,
+[data-motion="reduce"] *::before,
+[data-motion="reduce"] *::after {
+  transition-duration: 0ms !important;
+  animation-duration: 0ms !important;
+  animation-iteration-count: 1 !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}
