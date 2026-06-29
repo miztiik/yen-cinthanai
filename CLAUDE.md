@@ -22,7 +22,7 @@ User approval supersedes every agent and every rule in this file. Amend conflict
 ## 1. Holy Laws (Read First, Every Session)
 
 1. **Static-first production.** Deployed game is a static bundle on GitHub Pages. No production backend. Everything the game needs at runtime ships in the bundle.
-2. **The player's phone is the architecture.** Every runtime decision is measured against: input-to-photon <50ms, sustained 60fps (frame budget 16.7ms, game-logic budget ~4ms), <50KB shell + declared total-bundle cap, on a mid-tier Android (Snapdragon 6-series, 4GB RAM, ~2022 vintage) over patchy 4G. The target device is the contract; features bend to it. (See `.github/agents/carmack.agent.md`.)
+2. **The player's phone is the architecture.** Every runtime decision is measured against responsiveness on a mid-tier Android (Snapdragon 6-series, 4GB RAM, ~2022 vintage) over patchy 4G: input-to-photon <50ms, sustained 60fps. Richness comes first - there is NO fixed shell or total-bundle byte cap; ship the richer game and optimize (code-split, lazy-load, WASM, asset compression) only when the target device drops below 60fps or feels unresponsive. Measure, then optimize. WASM is permitted where it earns gameplay. (See `.github/agents/carmack.agent.md`.)
 3. **Contracts before logic.** Every persisted shape - save format, level data, asset manifest - gets a typed schema before logic is written.
 4. **docs/ = agent memory, not ADR sprawl.** Gameplay rules, UI shape, tuning knobs, and current subsystem contracts live in `docs/concepts/`, `docs/how-to/`, or the relevant `docs/architecture/<area>/` living doc. Create a new file under `docs/architecture/decisions/` only for an actively explored architecture choice with a real rejected alternative, cross-system consequences, and non-trivial reversal cost.
 5. **Structural fixes only.** No band-aids, no monkey patches, no "temporary" hacks. Escalate the correction level instead.
@@ -131,7 +131,7 @@ Commit messages describe the change. **No AI co-author / attribution tags.**
 - [ ] No new hardcoded values.
 - [ ] No new mocks unless explicitly requested.
 - [ ] Lockfiles in sync with manifests.
-- [ ] Bundle-size budgets respected (shell <50KB gzipped; total-bundle within the declared cap).
+- [ ] Responsiveness held on the target device (60fps, input-to-photon <50ms). No fixed byte cap; optimize only if the device drops below target.
 - [ ] Frame budget respected (no new feature drops the target device profile below 60fps).
 - [ ] Every new asset names its license in the asset manifest.
 
