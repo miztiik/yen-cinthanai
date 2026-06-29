@@ -1,0 +1,21 @@
+{
+  "builtAt": "2026-06-29T00:00:00Z",
+  "generatedSeed": "2026-06-29",
+  "puzzles": [
+    {
+      "date": "2026-06-29",
+      "file": "2026-06-29-easy.json",
+      "sha": "fbaa7a2a59bfb0f8ca3868c5f26c8c76f81b0d9afcdd61829923685efddc1e30",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-29",
+      "file": "2026-06-29-standard.json",
+      "sha": "a5271221babe5945b4bcbe1583a298286fc58a23547c8c2915db1272ea785ec2",
+      "shapeId": "seating-row",
+      "tier": "standard"
+    }
+  ],
+  "schemaVersion": 1
+}

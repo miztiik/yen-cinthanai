@@ -1,0 +1,48 @@
+# Generator dials. Build-time tunables for tools/generate.py. No hardcoding in code
+# (CLAUDE.md #6). Contract: docs/architecture/generator/pipeline.md, 6b/6c.
+# seed_salt feeds sha256(salt + date + ":" + tier) -> PRNG + CP-SAT random_seed.
+# templateRev pins the clueText template registry below; bump on any wording change.
+
+seed_salt = "yen-cinthanai-v1"
+template_rev = 1
+max_reseeds = 64
+
+# Clue-type selection weights. Harder tiers favour indirect (relational) types.
+# direct = eq, ends; indirect = neq, adjacent, distance, before.
+[weights]
+eq = 5
+ends = 4
+neq = 2
+adjacent = 3
+distance = 2
+before = 3
+
+# Categories: id -> label, glyph pack, ordinal axis. Values + labels come from the
+# pack (frontend/public/assets/glyphs/index.json + config/glyphpacks.toml).
+[category.drink]
+label = "Drink"
+pack = "household"
+ordinal = false
+[category.animal]
+label = "Animal"
+pack = "creatures"
+ordinal = false
+[category.position]
+label = "Seat"
+pack = "abstract"
+ordinal = true
+
+# Tier -> shape + ordered categories. v1 = easy (grid 3x2) + standard (seating 4x3),
+# bijective only (shared-value deferred per task). Sharp/expert reuse these knobs.
+[tier.easy]
+shape = "grid"
+categories = ["drink", "animal"]
+[tier.standard]
+shape = "seating-row"
+categories = ["drink", "animal", "position"]
+[tier.sharp]
+shape = "seating-row"
+categories = ["drink", "animal", "position"]
+[tier.expert]
+shape = "seating-row"
+categories = ["drink", "animal", "position"]
