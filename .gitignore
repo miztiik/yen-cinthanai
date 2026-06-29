@@ -34,9 +34,13 @@ ENV/
 
 # --- Node / Frontend ---
 node_modules/
+frontend/node_modules/
+.node_modules_old/
 dist/
+frontend/dist/
 build/
 .cache/
+*.local
 .parcel-cache/
 .vite/
 .svelte-kit/
@@ -56,6 +60,7 @@ pnpm-debug.log*
 
 # --- Build / Runtime artifacts ---
 .runtime/
+.logs/
 .tmp_*
 *.tmp
 coverage/

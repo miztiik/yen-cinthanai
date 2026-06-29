@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "packs": {
+    "household": {
+      "tea": "household/tea.svg",
+      "coffee": "household/coffee.svg",
+      "milk": "household/milk.svg",
+      "cola": "household/cola.svg"
+    },
+    "creatures": {
+      "cat": "creatures/cat.svg",
+      "dog": "creatures/dog.svg",
+      "fish": "creatures/fish.svg",
+      "bird": "creatures/bird.svg"
+    },
+    "abstract": {
+      "num1": "abstract/num1.svg",
+      "num2": "abstract/num2.svg",
+      "num3": "abstract/num3.svg",
+      "num4": "abstract/num4.svg",
+      "grid": "abstract/grid.svg",
+      "seating": "abstract/seating.svg"
+    }
+  }
+}

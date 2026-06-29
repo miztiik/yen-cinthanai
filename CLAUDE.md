@@ -50,13 +50,11 @@ In-memory `Path` objects for local I/O may stay platform-native. Rule applies at
 | `README.md`       | TBD        | Entry point                                                                                                                       |
 | `docs/`           | partial    | Canonical knowledge (Diataxis tiers, 3-level depth)                                                                               |
 | `.github/agents/` | created    | Persona advisors (Carmack, Fowler, Jony, Palm, Player)                                                                            |
-| `config/`         | TBD        | Human-edited tunable knobs (game balance, level thresholds)                                                                       |
-| `src/`            | TBD        | Game source. Exact layout (TypeScript / Svelte / vanilla, components/, scenes/) decided by Fowler + Carmack on the first real PR. |
+| `config/`         | created    | Human-edited tunable knobs (game balance, level thresholds). Shared by `frontend/` + `tools/`.                                    |
+| `frontend/`       | created    | The web app: `package.json`, `vite.config.ts`, `svelte.config.js`, `tsconfig.json`, `index.html`, `src/`, `public/`, `tests/`.    |
 | `assets/`         | TBD        | Source assets pre-pipeline (raw textures, models, sounds). Never read directly by the game.                                       |
-| `tools/`          | TBD        | Build-time asset pipeline (`gltf-pipeline`, `basisu`, sound compression).                                                         |
-| `public/`         | TBD        | Static files served as-is (`index.html`, favicon, web manifest, service worker).                                                  |
-| `dist/`           | gitignored | Built bundle for GitHub Pages.                                                                                                    |
-| `tests/`          | TBD        | Unit / contract / integration / e2e tests (section 13).                                                                           |
+| `tools/`          | TBD        | Build-time generator/asset pipeline (Python: OR-Tools solver; later `basisu`, sound compression).                                 |
+| `frontend/dist/`  | gitignored | Built bundle for GitHub Pages.                                                                                                    |
 | `TODO/` `notes/`  | optional   | Working scratchpads - non-authoritative.                                                                                          |
 
 Folders are created only when real code is about to land. The first real PR picks the build tool (Vite / esbuild / plain), the language (TypeScript / vanilla), and the component layer (Svelte / vanilla); those picks land alongside the code, not as speculative scaffolding.

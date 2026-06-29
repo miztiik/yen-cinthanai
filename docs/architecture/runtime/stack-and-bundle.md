@@ -21,12 +21,16 @@ autoUpdate; base /yen-cinthanai/; precache shell + today; runtimeCaching Network
 ```
 config/  tiers shapes glyphpacks copy budgets retention dials .toml        build
 tools/   generator solver uniqueness prune templates emit models bake      build
-assets/  glyphs/{household,creatures,abstract}/*.svg                        build
+public/  assets/glyphs/{household,creatures,abstract}/*.svg + index.json    runtime
 public/  index.html 404.html manifest.webmanifest config/*.json puzzles/*   runtime
-src/     main.ts App.svelte state/ board/ play/ contracts/                  runtime
+src/     main.ts App.svelte lib/glyphs.ts Glyph.svelte state/ contracts/    runtime
 tests/   fixtures unit contract integration e2e
 ```
 Modules created when code lands, not pre-stubbed.
+
+## Glyphs (centralized assets, no inline SVG)
+
+All SVG/icons live under `public/assets/glyphs/<pack>/*.svg`, indexed by `glyphs/index.json` (ref -> POSIX path). `config/glyphpacks.toml` carries labels only. `lib/glyphs.ts::glyphPath` resolves "pack.id" to a base-aware URL; `Glyph.svelte` is the sole renderer. No bytes are inlined into components (CLAUDE.md #6, #10).
 
 ## Responsiveness gates (P3)
 

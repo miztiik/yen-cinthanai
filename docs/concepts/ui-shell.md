@@ -22,6 +22,10 @@ satisfy ring+check 180ms; violate slash+shake 120ms; near amber pulse; locked so
 
 eq A=B | neq A/B | ends [A.]/[.A] | adjacent A-B | distance A>k>B | before A>>B. Text under glyph teaches vocab; generator uses only types with a legible glyph.
 
+## Glyph assets (no inline SVG)
+
+Every icon ships as a 24x24 currentColor file under `frontend/public/assets/glyphs/<pack>/<id>.svg`, referenced as `"pack.id"` (e.g. `household.tea`). Registry `glyphs/index.json` maps ref -> POSIX path; `config/glyphpacks.toml` holds labels only, file derived from the registry (no hardcoded paths, CLAUDE.md #6). `src/lib/glyphs.ts::glyphPath` resolves base-aware (`/yen-cinthanai/`); `Glyph.svelte` is the ONLY glyph renderer - components reference ids, never inline SVG.
+
 ## Components (11, metadata-driven)
 
 TokenChip, Slot, SlotBoard, Pool, ClueChip, HUDBar, ActionBar, ResultCard, ShareBar, StatTile, SettingsRow (+ BottomSheet primitive). No per-screen bespoke.
