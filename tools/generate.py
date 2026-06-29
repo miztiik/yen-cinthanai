@@ -446,19 +446,20 @@ def write_index(date: str, entries: list[dict], out_dir: Path = PUZZLES_DIR) -> 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Build the daily puzzle bank.")
-    ap.add_argument("--date", default=datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+    ap.add_argument("--date", default="today", help="YYYY-MM-DD or 'today' (UTC)")
     ap.add_argument("--tiers", default="easy,standard,sharp,expert")
     args = ap.parse_args(argv)
+    date = datetime.now(timezone.utc).strftime("%Y-%m-%d") if args.date == "today" else args.date
     tiers = [t.strip() for t in args.tiers.split(",") if t.strip()]
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
     entries, lines = [], []
     for tier in tiers:
-        e = write_puzzle(args.date, tier)
+        e = write_puzzle(date, tier)
         entries.append(e)
-        lines.append(json.dumps({"date": args.date, **e}, sort_keys=True))
+        lines.append(json.dumps({"date": date, **e}, sort_keys=True))
         print(f"{e['file']} sha={e['sha'][:12]} D={e['D']}")
-    write_index(args.date, entries)
-    (LOGS_DIR / f"build-{args.date}.jsonl").write_text("\n".join(lines) + "\n", encoding="ascii")
+    write_index(date, entries)
+    (LOGS_DIR / f"build-{date}.jsonl").write_text("\n".join(lines) + "\n", encoding="ascii")
     print(f"index.json ({len(entries)} puzzles)")
     return 0
 
