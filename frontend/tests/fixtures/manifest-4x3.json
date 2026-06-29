@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "puzzleId": "2026-06-29",
+  "tier": "standard",
+  "shapeId": "seating-row",
+  "templateRev": 1,
+  "entities": ["e0", "e1", "e2", "e3"],
+  "categories": {
+    "n": 3,
+    "list": [
+      {
+        "id": "drink",
+        "label": "Drink",
+        "ordinal": false,
+        "cardinality": "bijective",
+        "values": [
+          { "id": "tea", "glyph": "household.tea", "label": "Tea" },
+          { "id": "coffee", "glyph": "household.coffee", "label": "Coffee" },
+          { "id": "milk", "glyph": "household.milk", "label": "Milk" },
+          { "id": "cola", "glyph": "household.cola", "label": "Cola" }
+        ]
+      },
+      {
+        "id": "animal",
+        "label": "Animal",
+        "ordinal": false,
+        "cardinality": "bijective",
+        "values": [
+          { "id": "cat", "glyph": "creatures.cat", "label": "Cat" },
+          { "id": "dog", "glyph": "creatures.dog", "label": "Dog" },
+          { "id": "fish", "glyph": "creatures.fish", "label": "Fish" },
+          { "id": "bird", "glyph": "creatures.bird", "label": "Bird" }
+        ]
+      },
+      {
+        "id": "position",
+        "label": "Seat",
+        "ordinal": true,
+        "cardinality": "bijective",
+        "values": [
+          { "id": "p0", "glyph": "abstract.num1", "label": "1" },
+          { "id": "p1", "glyph": "abstract.num2", "label": "2" },
+          { "id": "p2", "glyph": "abstract.num3", "label": "3" },
+          { "id": "p3", "glyph": "abstract.num4", "label": "4" }
+        ]
+      }
+    ]
+  },
+  "constraints": [
+    {
+      "id": "c1",
+      "type": "ends",
+      "operands": [{ "cat": "drink", "value": "tea" }],
+      "params": { "pos": 0 },
+      "clueText": "Tea is far left.",
+      "renderHint": "ends"
+    },
+    {
+      "id": "c2",
+      "type": "eq",
+      "operands": [
+        { "cat": "drink", "value": "tea" },
+        { "cat": "animal", "value": "cat" }
+      ],
+      "params": {},
+      "clueText": "Tea sits with the cat.",
+      "renderHint": "eq"
+    },
+    {
+      "id": "c3",
+      "type": "adjacent",
+      "operands": [
+        { "cat": "drink", "value": "coffee" },
+        { "cat": "drink", "value": "tea" }
+      ],
+      "params": {},
+      "clueText": "Coffee is next to tea.",
+      "renderHint": "adjacent"
+    },
+    {
+      "id": "c4",
+      "type": "before",
+      "operands": [
+        { "cat": "drink", "value": "coffee" },
+        { "cat": "drink", "value": "milk" }
+      ],
+      "params": {},
+      "clueText": "Coffee is before milk.",
+      "renderHint": "before"
+    },
+    {
+      "id": "c5",
+      "type": "distance",
+      "operands": [
+        { "cat": "animal", "value": "cat" },
+        { "cat": "animal", "value": "fish" }
+      ],
+      "params": { "k": 2 },
+      "clueText": "Cat and fish are two apart.",
+      "renderHint": "distance"
+    },
+    {
+      "id": "c6",
+      "type": "eq",
+      "operands": [
+        { "cat": "drink", "value": "cola" },
+        { "cat": "animal", "value": "bird" }
+      ],
+      "params": {},
+      "clueText": "Cola sits with the bird.",
+      "renderHint": "eq"
+    },
+    {
+      "id": "c7",
+      "type": "ends",
+      "operands": [{ "cat": "drink", "value": "cola" }],
+      "params": { "pos": 3 },
+      "clueText": "Cola is far right.",
+      "renderHint": "ends"
+    }
+  ],
+  "solution": {
+    "e0": { "drink": "tea", "animal": "cat", "position": "p0" },
+    "e1": { "drink": "coffee", "animal": "dog", "position": "p1" },
+    "e2": { "drink": "milk", "animal": "fish", "position": "p2" },
+    "e3": { "drink": "cola", "animal": "bird", "position": "p3" }
+  },
+  "hintTrace": [
+    { "fromClues": ["c1"], "forces": { "entity": "e0", "cat": "drink", "value": "tea" } },
+    { "fromClues": ["c1", "c2"], "forces": { "entity": "e0", "cat": "animal", "value": "cat" } },
+    { "fromClues": ["c7"], "forces": { "entity": "e3", "cat": "drink", "value": "cola" } },
+    { "fromClues": ["c6", "c7"], "forces": { "entity": "e3", "cat": "animal", "value": "bird" } },
+    { "fromClues": ["c3", "c4"], "forces": { "entity": "e1", "cat": "drink", "value": "coffee" } },
+    { "fromClues": ["c4", "c7"], "forces": { "entity": "e2", "cat": "drink", "value": "milk" } },
+    { "fromClues": ["c5"], "forces": { "entity": "e2", "cat": "animal", "value": "fish" } },
+    { "fromClues": ["c5", "c2"], "forces": { "entity": "e1", "cat": "animal", "value": "dog" } }
+  ]
+}

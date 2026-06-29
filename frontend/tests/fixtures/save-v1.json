@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "days": {
+    "2026-06-27": {
+      "date": "2026-06-27",
+      "tier": "easy",
+      "shapeId": "grid",
+      "status": "won",
+      "placements": { "e0": { "drink": "tea" } },
+      "attempts": 0,
+      "solveMs": 41000,
+      "hintsUsed": 0,
+      "stars": 3
+    },
+    "2026-06-28": {
+      "date": "2026-06-28",
+      "tier": "standard",
+      "shapeId": "seating-row",
+      "status": "won",
+      "placements": { "e0": { "drink": "tea", "animal": "cat" } },
+      "attempts": 1,
+      "solveMs": 200000,
+      "hintsUsed": 1,
+      "stars": 1
+    }
+  },
+  "hero": { "bestMs": 41000, "date": "2026-06-27" },
+  "streak": { "count": 2, "lastDate": "2026-06-28", "skipsLeft": 1 },
+  "settings": {
+    "sound": false,
+    "volume": 0,
+    "theme": "household",
+    "palette": "default",
+    "reducedMotion": false
+  }
+}
