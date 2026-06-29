@@ -44,10 +44,19 @@ pack = "shapes"
 ordinal = false
 cardinality = "shared"
 values = 2
+[category.food]
+label = "Food"
+pack = "food"
+ordinal = false
+[category.color]
+label = "Colour"
+pack = "color"
+ordinal = false
 
 # Tier -> shape + ordered categories. easy=grid 3x2; standard=seating 4x3 +1 shared
-# team; sharp=seating 4x3; expert=round-table 4 seats (wrap/opposite/between). Mixed
-# cardinality + round-table land here (D4 + round-table v2). bijective stays default.
+# team; sharp=seating-row 5x4 (5 seats x 4 cats); expert=round-table 6x5 (6 seats x 5
+# cats: seat + drink/animal/food/colour). Value packs each ship 6 values (D17). The
+# ordinal `position` category is the seat axis (anchor); the rest are the fill columns.
 [tier.easy]
 shape = "grid"
 categories = ["drink", "animal"]
@@ -56,7 +65,7 @@ shape = "seating-row"
 categories = ["drink", "animal", "position", "team"]
 [tier.sharp]
 shape = "seating-row"
-categories = ["drink", "animal", "position"]
+categories = ["drink", "animal", "position", "food"]
 [tier.expert]
 shape = "round-table"
-categories = ["drink", "animal", "position"]
+categories = ["drink", "animal", "position", "food", "color"]

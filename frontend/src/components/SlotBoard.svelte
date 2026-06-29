@@ -46,12 +46,12 @@
 {#if topology === "circular"}
   <div class="relative h-72 w-72 sm:h-80 sm:w-80">
     <svg viewBox="0 0 1 1" class="pointer-events-none absolute inset-0 h-full w-full transition-opacity duration-150" style:opacity={arcs.length ? 1 : 0}>
-      {#each arcs as a (a.x2 + "" + a.y2)}<line x1={a.x1} y1={a.y1} x2={a.x2} y2={a.y2} stroke="currentColor" stroke-width="0.012" stroke-linecap="round" class="text-sky-400" />{/each}
+      {#each arcs as a (a.x2 + "" + a.y2)}<line x1={a.x1} y1={a.y1} x2={a.x2} y2={a.y2} stroke="currentColor" stroke-width="0.012" stroke-linecap="round" class="text-accent" />{/each}
     </svg>
     {#each b.entities as e, i (e)}
       {@const c = seats[i]}
       <div class="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1" style={`left:${c.x * 100}%;top:${c.y * 100}%`}>
-        <button class="flex h-11 w-11 items-center justify-center rounded-full bg-slate-900" aria-label={`seat ${i + 1}`} onclick={() => (arcSeat = arcSeat === i ? null : i)}>
+        <button class="flex h-11 w-11 items-center justify-center rounded-full bg-surface" aria-label={`seat ${i + 1}`} onclick={() => (arcSeat = arcSeat === i ? null : i)}>
           <Glyph ref={anchorValue(b.anchor, i).glyph} label={anchorValue(b.anchor, i).label} size={22} />
         </button>
         {#each b.columns as col (col.id)}
@@ -66,7 +66,7 @@
   <div class="flex gap-2 overflow-x-auto pb-1">
     {#each b.entities as e, i (e)}
       <div class="flex flex-col items-center gap-2">
-        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900">
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface">
           <Glyph ref={anchorValue(b.anchor, i).glyph} label={anchorValue(b.anchor, i).label} size={24} />
         </div>
         {#each b.columns as col (col.id)}
@@ -92,7 +92,7 @@
       <div class="text-center text-xs uppercase tracking-wide opacity-70">{col.label}</div>
     {/each}
     {#each b.entities as e, i (e)}
-      <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900">
+      <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-surface">
         <Glyph ref={anchorValue(b.anchor, i).glyph} label={anchorValue(b.anchor, i).label} size={24} />
       </div>
       {#each b.columns as col (col.id)}

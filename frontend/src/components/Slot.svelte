@@ -31,13 +31,7 @@
   data-slot-cat={cat}
   aria-label={glyph ? label : `empty ${cat}`}
   onclick={ontap}
-  class="flex h-12 w-12 items-center justify-center rounded-2xl border-2 transition-transform duration-150"
-  class:border-slate-600={state === "empty" || state === "near"}
-  class:border-emerald-400={state === "satisfy"}
-  class:border-rose-500={state === "violate"}
-  class:animate-pulse={pulse}
-  class:bg-slate-800={!locked}
-  class:bg-emerald-900={locked}
+  class={`flex h-12 w-12 items-center justify-center rounded-2xl border-2 transition-transform duration-150 ${locked ? "bg-accent/20" : "bg-surface"} ${state === "satisfy" ? "border-satisfy" : state === "violate" ? "border-violate" : state === "near" ? "border-near" : "border-ink/25"} ${pulse ? "animate-pulse" : ""}`}
 >
   {#if glyph}<Glyph ref={glyph} {label} size={28} />{/if}
 </button>

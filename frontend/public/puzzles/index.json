@@ -19,14 +19,14 @@
     {
       "date": "2026-06-29",
       "file": "2026-06-29-sharp.json",
-      "sha": "c062f3aba3a8bd13e23195164a5ba8aaf8c44f6a226328733023716189659962",
+      "sha": "7aef5d9a89f3e88ff2b80134df6beb45eb1a30b7fa03d17d3e7b7033b0e67d56",
       "shapeId": "seating-row",
       "tier": "sharp"
     },
     {
       "date": "2026-06-29",
       "file": "2026-06-29-expert.json",
-      "sha": "8a8b3f7719c17b465e1cdefe1aded5a7a9b28aea047ae9b0da3d1b0274c839ea",
+      "sha": "28d14a9f844e58acaea135c00ab9e0d970740c018fe491cf3b4dfe3afd55b206",
       "shapeId": "round-table",
       "tier": "expert"
     }

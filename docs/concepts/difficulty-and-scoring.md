@@ -23,10 +23,17 @@ A generated puzzle whose D is outside the tier band is rejected and reseeded - t
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Easy | 0-13 | 3x2 | 3-4 | 0.0 | unlimited | unlimited | realtime-names | 90s |
 | Standard | 14-39 | 4x3 | 5-7 | .25-.40 | 3 | 2 | count-wrong | 240s |
-| Sharp | 40-59 | 4x3 | 5-7 | .45-.60 | 2 | 1 | binary-check | 480s |
-| Expert | 60-90 | 4x4 | 5-7 | .60-.75 | 1 | 0 | submit-binary | 900s |
+| Sharp | 48-66 | 5x4 | 9-11 | ~0.0 | 2 | 1 | binary-check | 480s |
+| Expert | 96-120 | 6x5 | 14-16 | ~1.0 | 1 | 0 | submit-binary | 900s |
 
-v1 packs ship 4 categories x 4 values, so Sharp/Expert reuse the 4x3-4x4 seating frame and reach band via the ENV dials; 5x4/6x5 land when more packs ship. Standard adds one shared category (binary team); Expert seats the 4 on a round-table (wrap/opposite/between).
+Six glyph packs now ship 6 values each (household, creatures, food, colour) plus the
+abstract numerals, so the full grids land: Sharp seats 5 on a row across 4 categories;
+Expert seats 6 on a round-table across 5 categories. Their D is structurally pinned by
+the grid: Sharp ~57 is SIZE+DEPTH driven and its minimal clue set comes out mostly
+direct (eq/ends), so INDIR is ~0; Expert ~108 leans on the ring's wrap relations
+(adjacent/opposite/between/neq), which are all indirect, so INDIR saturates at 20
+(`round(20*indirect/N)` with indirect==N). Standard adds one shared category (binary
+team). INDIR is capped at 20 by construction.
 
 ## Stars
 

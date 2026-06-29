@@ -26,7 +26,28 @@ export interface Pace {
   stats_window: number;
 }
 
+/** A palette's token values for one scheme: token name -> CSS colour. */
+export type TokenSet = Record<string, string>;
+export interface PaletteSet {
+  label: string;
+  light: TokenSet;
+  dark: TokenSet;
+}
+export interface Palettes {
+  default: string;
+  themes: string[]; // theme modes: light | dark | system
+  tokens: string[]; // ordered token names (bg, surface, ink, ...)
+  palette: Record<string, PaletteSet>;
+}
+
 const PACE_FALLBACK: Pace = { idle_pulse_s: 12, idle_glow_s: 25, stats_window: 10 };
+
+const PALETTES_FALLBACK: Palettes = {
+  default: "midnight",
+  themes: ["light", "dark", "system"],
+  tokens: ["bg", "surface", "ink", "accent", "satisfy", "violate", "near", "gold"],
+  palette: {},
+};
 
 async function fetchJson<T>(file: string, fallback: T): Promise<T> {
   try {
@@ -49,6 +70,12 @@ export async function loadCopy(): Promise<CopyBags> {
 export async function loadPace(): Promise<Pace> {
   const r = await fetchJson<{ pace?: Pace }>("retention.json", { pace: PACE_FALLBACK });
   return r.pace ?? PACE_FALLBACK;
+}
+
+/** Theme palettes (config/palettes.toml). Fail-soft to an empty palette map so the
+ *  app.css bootstrap fallback keeps rendering when the JSON is missing. */
+export async function loadPalettes(): Promise<Palettes> {
+  return fetchJson("palettes.json", PALETTES_FALLBACK);
 }
 
 /** Pick one line from a bag; empty bag yields "". */

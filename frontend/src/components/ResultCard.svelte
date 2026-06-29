@@ -56,17 +56,16 @@
 
 <div class="fixed inset-0 z-20 flex items-center justify-center bg-black/70 p-6" role="dialog" aria-modal="true" aria-label={variant === "win" ? "solved" : "result"}>
   <div
-    class="flex w-full max-w-xs flex-col items-center gap-4 rounded-2xl bg-slate-800 p-8 text-center"
+    class="flex w-full max-w-xs flex-col items-center gap-4 rounded-2xl bg-surface p-8 text-center"
     class:ring-4={hero}
-    class:ring-amber-400={hero}
-    class:bg-amber-950={hero}
+    class:ring-gold={hero}
   >
-    {#if hero}<p class="text-xs font-bold uppercase tracking-widest text-amber-400" aria-label="new best">crown - personal best</p>{/if}
+    {#if hero}<p class="text-xs font-bold uppercase tracking-widest text-gold" aria-label="new best">crown - personal best</p>{/if}
     <Glyph ref={shapeGlyph} label="result" size={48} />
-    <p class="flex gap-1 text-2xl" class:text-amber-400={hero} aria-label={`${stars} of 3 stars`}>
+    <p class="flex gap-1 text-2xl" class:text-gold={hero} aria-label={`${stars} of 3 stars`}>
       {#each [1, 2, 3] as s (s)}<span class:opacity-25={stars < s}>{stars >= s ? "*" : "."}</span>{/each}
     </p>
-    <p class="text-2xl font-bold" class:text-amber-300={hero}>{phrase}</p>
+    <p class="text-2xl font-bold" class:text-gold={hero}>{phrase}</p>
 
     <div class="flex w-full justify-around text-sm tabular-nums opacity-80">
       <span aria-label="time">{secs}s</span>
@@ -78,18 +77,18 @@
     <!-- spoiler-safe progress: stars only, never a slot. -->
     <div class="flex w-full gap-1" aria-hidden="true">
       {#each [1, 2, 3] as s (s)}
-        <div class="h-2 flex-1 rounded-full" class:bg-emerald-500={variant === "win" && stars >= s} class:bg-amber-400={hero && stars >= s} class:bg-slate-600={stars < s}></div>
+        <div class="h-2 flex-1 rounded-full" class:bg-accent={variant === "win" && stars >= s} class:bg-gold={hero && stars >= s} class:bg-bg={stars < s}></div>
       {/each}
     </div>
 
     {#if variant === "win"}
-      <button class="w-full rounded-2xl bg-emerald-500 px-6 py-3 font-bold text-black active:scale-95 transition-transform" onclick={copyShare}>{copied ? "copied" : "share"}</button>
+      <button class="w-full rounded-2xl bg-accent px-6 py-3 font-bold text-black active:scale-95 transition-transform" onclick={copyShare}>{copied ? "copied" : "share"}</button>
     {:else if onretry}
-      <button class="w-full rounded-2xl bg-sky-600 px-6 py-3 font-bold active:scale-95 transition-transform" onclick={onretry}>retry</button>
+      <button class="w-full rounded-2xl bg-accent px-6 py-3 font-bold active:scale-95 transition-transform" onclick={onretry}>retry</button>
     {/if}
     <div class="flex w-full gap-3">
-      <button class="flex-1 rounded-2xl bg-slate-600 px-4 py-3 font-bold active:scale-95 transition-transform" onclick={onhome}>home</button>
-      <button class="flex-1 rounded-2xl bg-slate-700 px-4 py-3 font-bold active:scale-95 transition-transform" onclick={onstats}>stats</button>
+      <button class="flex-1 rounded-2xl bg-bg px-4 py-3 font-bold active:scale-95 transition-transform" onclick={onhome}>home</button>
+      <button class="flex-1 rounded-2xl bg-bg px-4 py-3 font-bold active:scale-95 transition-transform" onclick={onstats}>stats</button>
     </div>
     {#if copied}<p class="text-xs opacity-60" role="status">copied to clipboard</p>{/if}
   </div>

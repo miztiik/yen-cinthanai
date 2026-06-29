@@ -21,6 +21,11 @@ describe("settings", () => {
     expect(s.sound).toBe(false);
     expect(s.volume).toBe(0);
   });
+  it("default theme follows system, palette is midnight", () => {
+    const s = freshSave().settings;
+    expect(s.theme).toBe("system");
+    expect(s.palette).toBe("midnight");
+  });
   it("persist and reload", () => {
     updateSettings({ sound: true, volume: 0.6, reducedMotion: true }, "2026-06-29");
     const s = loadSave().settings;
@@ -28,11 +33,11 @@ describe("settings", () => {
     expect(s.volume).toBe(0.6);
     expect(s.reducedMotion).toBe(true);
   });
-  it("merge keeps unrelated fields", () => {
-    updateSettings({ theme: "creatures" }, "2026-06-29");
-    updateSettings({ palette: "warm" }, "2026-06-29");
+  it("theme + palette persist and merge keeps unrelated fields", () => {
+    updateSettings({ theme: "dark" }, "2026-06-29");
+    updateSettings({ palette: "ember" }, "2026-06-29");
     const s = loadSave().settings;
-    expect(s.theme).toBe("creatures");
-    expect(s.palette).toBe("warm");
+    expect(s.theme).toBe("dark");
+    expect(s.palette).toBe("ember");
   });
 });

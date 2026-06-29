@@ -1,0 +1,77 @@
+# Live theme palettes. Settings picks a PALETTE (a hue family -> data-palette) and a
+# THEME MODE (light/dark/system -> resolved to data-theme); "system" follows the OS
+# prefers-color-scheme. app.css consumes the 8 tokens as CSS custom properties and the
+# chrome reads them via Tailwind @theme, so a swap restyles live (transform/opacity-safe;
+# only colours change). Colours live HERE, not in code (CLAUDE.md #6) - app.css carries
+# only a bootstrap fallback (= midnight) to avoid a flash before this JSON loads.
+# Contract: docs/concepts/ui-shell.md (Tailwind tokens). Baked by tools/bake_config.py.
+
+default = "midnight"
+themes = ["light", "dark", "system"]
+tokens = ["bg", "surface", "ink", "accent", "satisfy", "violate", "near", "gold"]
+
+# Cool slate + emerald - the founding look.
+[palette.midnight]
+label = "Midnight"
+[palette.midnight.dark]
+bg = "#0b1220"
+surface = "#1e293b"
+ink = "#e2e8f0"
+accent = "#10b981"
+satisfy = "#34d399"
+violate = "#fb7185"
+near = "#fbbf24"
+gold = "#fcd34d"
+[palette.midnight.light]
+bg = "#eef2f7"
+surface = "#ffffff"
+ink = "#0f172a"
+accent = "#0f9d6b"
+satisfy = "#059669"
+violate = "#e11d48"
+near = "#b45309"
+gold = "#b8860b"
+
+# Warm stone + amber.
+[palette.ember]
+label = "Ember"
+[palette.ember.dark]
+bg = "#1a1411"
+surface = "#2c2018"
+ink = "#f5ece2"
+accent = "#f97316"
+satisfy = "#84cc16"
+violate = "#ef4444"
+near = "#f59e0b"
+gold = "#fbbf24"
+[palette.ember.light]
+bg = "#fbf6f0"
+surface = "#fffaf4"
+ink = "#2a1c12"
+accent = "#ea580c"
+satisfy = "#4d7c0f"
+violate = "#dc2626"
+near = "#b45309"
+gold = "#a16207"
+
+# Deep green + lime.
+[palette.forest]
+label = "Forest"
+[palette.forest.dark]
+bg = "#0b140f"
+surface = "#16241c"
+ink = "#e6efe8"
+accent = "#22c55e"
+satisfy = "#4ade80"
+violate = "#f87171"
+near = "#facc15"
+gold = "#fde047"
+[palette.forest.light]
+bg = "#eff5f0"
+surface = "#ffffff"
+ink = "#0f1f16"
+accent = "#15803d"
+satisfy = "#16a34a"
+violate = "#dc2626"
+near = "#a16207"
+gold = "#92740a"

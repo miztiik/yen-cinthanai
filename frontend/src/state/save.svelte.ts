@@ -11,7 +11,7 @@ const SAVE_KEY = "yen-cinthanai/save";
 const TARGET_VERSION = 1;
 
 const TIERS: readonly Tier[] = ["easy", "standard", "sharp", "expert"];
-const SHAPES: readonly ShapeId[] = ["grid", "seating-row"];
+const SHAPES: readonly ShapeId[] = ["grid", "seating-row", "round-table"];
 const STATUSES: readonly DayStatus[] = ["unplayed", "playing", "won", "lost"];
 
 export function freshSave(): Save {
@@ -23,8 +23,8 @@ export function freshSave(): Save {
     settings: {
       sound: false,
       volume: 0,
-      theme: "household",
-      palette: "default",
+      theme: "system",
+      palette: "midnight",
       reducedMotion: false,
     },
   };
