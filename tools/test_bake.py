@@ -29,3 +29,11 @@ def test_tiers_par_survives_bake(tmp_path: Path) -> None:
     bake_all(CONFIG_DIR, tmp_path)
     tiers = json.loads((tmp_path / "tiers.json").read_text(encoding="ascii"))
     assert tiers["easy"]["par_s"] == 90 and tiers["expert"]["par_s"] == 900
+
+
+def test_copy_bags_ship_full_and_in_bounds() -> None:
+    copy = tomllib.loads((CONFIG_DIR / "copy.toml").read_text(encoding="ascii"))
+    assert len(copy["success"]) >= 50 and len(copy["encourage"]) >= 50 and len(copy["hero"]) >= 10
+    for line in copy["success"] + copy["encourage"] + copy["hero"]:
+        assert len(line) <= 22 and line.isascii()  # spoiler-free, <=22 chars, ASCII
+
