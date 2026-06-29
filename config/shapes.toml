@@ -1,16 +1,24 @@
 # Shape registry. v1 = grid + seating-row (2 entries prove the seam); round-table v2.
-# Contract: docs/concepts/core-loop.md, TODO/2026-06-29-system-design.md sec 6.
+# One entry per topology; engine + generator read it by shapeId, no per-shape code.
+# topology    : render skin (matrix grid vs linear seat row).
+# ordinal_axis: anchor is a position (seat number) -> ordinal clue types unlock.
+# max_entities: hard cap on rows/seats the shape supports.
+# slot_rules  : the clue catalog this shape may use (generator filters to these).
+# glyph       : registry ref (pack.id) for the drawer chip + lock card.
+# Contract: docs/concepts/core-loop.md, TODO/2026-06-29-system-design.md sec 6/6c.
 
 [grid]
 topology = "matrix"
 ordinal_axis = false
 max_entities = 6
-glyph = "grid"
+slot_rules = ["eq", "neq"]
+glyph = "abstract.grid"
 v = 1
 
 [seating-row]
 topology = "linear"
 ordinal_axis = true
 max_entities = 6
-glyph = "row"
+slot_rules = ["eq", "neq", "ends", "adjacent", "distance", "before"]
+glyph = "abstract.seating"
 v = 1

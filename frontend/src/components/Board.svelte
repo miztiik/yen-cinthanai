@@ -10,6 +10,7 @@
   import { route, homeHref, navigate } from "../lib/router.svelte";
   import { loadBank, loadManifest, pickEntry } from "../lib/loader";
   import { loadTiers, loadCopy, loadPace, pick, type TierDial, type CopyBags, type Pace } from "../lib/config";
+  import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { isHero } from "../lib/scoring";
   import { Game, saveProgress } from "../state/play.svelte";
   import { loadSave } from "../state/save.svelte";
@@ -21,6 +22,7 @@
   let game = $state<Game | null>(null);
   let copy = $state<CopyBags>({ success: [], encourage: [], hero: [] });
   let pace = $state<Pace>({ idle_pulse_s: 12, idle_glow_s: 25, stats_window: 10 });
+  let shape = $state<ShapeDef | null>(null);
   let error = $state("");
   let elapsed = $state(0);
   let idleMs = $state(0);
@@ -46,6 +48,7 @@
       const dial: TierDial = tiers[m.tier] ?? { par_s: 240, hints: -1, attempts: -1, feedback: "realtime-names" };
       copy = await loadCopy();
       pace = await loadPace();
+      shape = shapeOf(await loadShapes(), m.shapeId);
       const prior = loadSave().days[m.puzzleId];
       heroBaseline = { ...loadSave().hero };
       game = new Game(m, dial, prior);
@@ -108,7 +111,7 @@
       {/each}
     </div>
 
-    <section class="flex justify-center"><SlotBoard {game} revealed={game.revealed} {pulse} /></section>
+    <section class="flex justify-center"><SlotBoard {game} topology={shape?.topology ?? "matrix"} revealed={game.revealed} {pulse} /></section>
     <section class="flex justify-center"><Pool {game} /></section>
 
     <div class="mt-auto flex items-center justify-center gap-3 pt-2">
@@ -133,7 +136,7 @@
     {#if game.locked}
       <div class="fixed inset-0 flex items-center justify-center bg-black/70 p-6">
         <div class="flex flex-col items-center gap-4 rounded-2xl bg-slate-800 p-8 text-center" class:ring-4={hero} class:ring-amber-400={hero}>
-          <Glyph ref="abstract.grid" label="solved" size={48} />
+          <Glyph ref={shape?.glyph ?? "abstract.grid"} label="solved" size={48} />
           <p class="flex gap-1 text-2xl text-amber-400" aria-label={`${game.stars} stars`}>
             {#each [1, 2, 3] as s (s)}<span class:opacity-25={game.stars < s}>{game.stars >= s ? "*" : "."}</span>{/each}
           </p>
