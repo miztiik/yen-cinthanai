@@ -81,3 +81,36 @@ def test_index_and_log(tmp_path: Path) -> None:
     out = g.write_index(DATE, [e], tmp_path)
     idx = json.loads(out.read_text("ascii"))
     assert idx["schemaVersion"] == 1 and idx["puzzles"][0]["sha"] == e["sha"]
+
+
+# --- shape registry seam (grid + seating-row) -----------------------------------
+
+
+def test_registry_has_two_entries() -> None:
+    reg = g.load_toml("shapes", CONFIG_DIR)
+    assert set(reg) == {"grid", "seating-row"}
+    assert reg["grid"]["topology"] == "matrix" and reg["grid"]["ordinal_axis"] is False
+    assert reg["seating-row"]["topology"] == "linear" and reg["seating-row"]["ordinal_axis"] is True
+
+
+def test_resolve_shape_rejects_unknown() -> None:
+    with pytest.raises(KeyError):
+        g.resolve_shape("round-table", CONFIG_DIR)
+
+
+@pytest.mark.parametrize("tier", TIERS)
+def test_clues_stay_within_shape_rules(tier: str) -> None:
+    m, _, _ = g.generate(DATE, tier, CONFIG_DIR)
+    shape = g.resolve_shape(m.shapeId, CONFIG_DIR)
+    assert len(m.entities) <= shape.max_entities
+    assert {k.type for k in m.constraints} <= set(shape.slot_rules)
+
+
+def test_seating_uses_an_ordinal_clue_grid_does_not() -> None:
+    grid, _, _ = g.generate(DATE, "easy", CONFIG_DIR)
+    assert {k.type for k in grid.constraints} <= {"eq", "neq"} and grid.shapeId == "grid"
+    seat_rules = set(g.resolve_shape("seating-row", CONFIG_DIR).slot_rules)
+    assert {"ends", "adjacent", "distance", "before"} <= seat_rules  # ordinal unlocked
+    for tier in ("standard", "sharp", "expert"):
+        m, _, _ = g.generate(DATE, tier, CONFIG_DIR)
+        assert m.shapeId == "seating-row" and {k.type for k in m.constraints} <= seat_rules

@@ -71,6 +71,32 @@ def load_toml(name: str, config_dir: Path) -> dict:
 
 
 @dataclass(frozen=True)
+class Shape:
+    """A resolved shape-registry entry (config/shapes.toml). The engine reads shapeId."""
+
+    id: str
+    topology: str
+    ordinal_axis: bool
+    max_entities: int
+    slot_rules: tuple[str, ...]
+
+
+def resolve_shape(shape_id: str, config_dir: Path) -> Shape:
+    """Look up a shapeId in the registry; raise on unknown (fail fast, no bespoke code)."""
+    reg = load_toml("shapes", config_dir)
+    if shape_id not in reg:
+        raise KeyError(f"unknown shapeId '{shape_id}' (registry: {sorted(reg)})")
+    s = reg[shape_id]
+    return Shape(shape_id, s["topology"], s["ordinal_axis"], s["max_entities"], tuple(s["slot_rules"]))
+
+
+def shape_for(tier: Tier, config_dir: Path) -> str:
+    """Tier -> shapeId (config/dials.toml tier table). The only place tier picks shape."""
+    return load_toml("dials", config_dir)["tier"][tier]["shape"]
+
+
+
+@dataclass(frozen=True)
 class Cat:
     """A resolved category: glyph-backed values in solution order, ordinal or not."""
 
@@ -210,8 +236,11 @@ def _pos(sol: dict[str, list[str]], cat: str, val: str) -> int:
     return sol[cat].index(val)
 
 
-def enumerate_clues(cats: list[Cat], n: int, sol: dict[str, list[str]]) -> list[Clue]:
-    """Every clue true under sol, drawn from the v1 catalog. cat/value operands."""
+def enumerate_clues(
+    cats: list[Cat], n: int, sol: dict[str, list[str]], allowed: tuple[str, ...] | None = None
+) -> list[Clue]:
+    """Every clue true under sol, drawn from the v1 catalog, kept only if the shape's
+    slot_rules allow the type (registry-gated, no per-shape code). cat/value operands."""
     out: list[Clue] = []
     ordinal = [c for c in cats if c.ordinal]
     for ci, a in enumerate(cats):  # eq/neq across every category pair (incl anchor)
@@ -236,7 +265,7 @@ def enumerate_clues(cats: list[Cat], n: int, sol: dict[str, list[str]]) -> list[
                     out.append(("distance", ((oc.id, av), (oc.id, bv)), (("k", d),)))
                 lo, hi = (av, bv) if pa < pb else (bv, av)
                 out.append(("before", ((oc.id, lo), (oc.id, hi)), ()))
-    return out
+    return out if allowed is None else [c for c in out if c[0] in allowed]
 
 
 # --- select + prune -------------------------------------------------------------
@@ -373,7 +402,9 @@ def canonical_sha(manifest: PuzzleManifest) -> tuple[str, str]:
 def generate(date: str, tier: Tier, config_dir: Path = CONFIG_DIR) -> tuple[PuzzleManifest, int, list[dict]]:
     tiers = load_toml("tiers", config_dir)[tier]
     dials = load_toml("dials", config_dir)
-    entities, n_cats = tiers["entities"], tiers["categories"]
+    shape = resolve_shape(shape_for(tier, config_dir), config_dir)
+    entities = min(tiers["entities"], shape.max_entities)  # registry caps the seat count
+    n_cats = tiers["categories"]
     cats = build_categories(tier, entities, config_dir)
     lo, hi = tiers["band"]
     log: list[dict] = []
@@ -381,14 +412,14 @@ def generate(date: str, tier: Tier, config_dir: Path = CONFIG_DIR) -> tuple[Puzz
         seed = seed_int(date, tier, config_dir) + attempt
         rng = random.Random(seed)
         sol = sample_solution(cats, entities, rng)
-        clues = select_minimal(cats, entities, enumerate_clues(cats, entities, sol), dials["weights"], seed, rng)
+        cand = enumerate_clues(cats, entities, sol, shape.slot_rules)
+        clues = select_minimal(cats, entities, cand, dials["weights"], seed, rng)
         hints = hint_trace(cats, entities, clues, sol, seed)
         indirect = sum(1 for c in clues if c[0] in INDIRECT_TYPES)
         d = difficulty(tiers, entities, n_cats, len(clues), indirect, len(hints))
         log.append({"attempt": attempt, "clues": len(clues), "indirect": indirect, "depth": len(hints), "D": d})
         if lo <= d <= hi:
-            return to_manifest(date, tier, tiers["shape"] if "shape" in tiers else dials["tier"][tier]["shape"],
-                               dials["template_rev"], cats, entities, clues, sol, hints), d, log
+            return to_manifest(date, tier, shape.id, dials["template_rev"], cats, entities, clues, sol, hints), d, log
     raise RuntimeError(f"no in-band puzzle for {date}/{tier} after {dials['max_reseeds']} reseeds (band {lo}-{hi})")
 
 
