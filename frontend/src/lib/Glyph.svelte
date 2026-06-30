@@ -13,5 +13,6 @@
   class="inline-block align-middle object-contain"
   src={glyphPath(ref)}
   alt={label}
+  draggable={false}
   style={`width:${size}px;height:${size}px`}
 />

@@ -9,13 +9,13 @@
 [puck]
 default = "medium"
 [puck.small]
-diameter = 40
+diameter = 46
 glyph = 0.60
 [puck.medium]
-diameter = 52
+diameter = 60
 glyph = 0.64
 [puck.large]
-diameter = 64
+diameter = 74
 glyph = 0.66
 
 # Drag magnet. When a dragged puck's centre comes within (radius_factor x diameter) of a

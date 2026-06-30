@@ -2,9 +2,12 @@
 // setPointerCapture -> transform translate3d follow (compositor-only, never top/left) ->
 // a MAGNET eases the puck toward the nearest valid slot centre once it comes within
 // capture range (config/ui.toml [snap]) and highlights that slot -> pointerup drops on
-// the captured (or hit-tested) slot. A short press is a tap: tap-token-then-tap-slot is
-// the mobile-equal fallback (core-loop.md). transform + opacity only. The play store owns
-// placement + selection; the magnet's radius/ease come from config, nothing hardcoded.
+// the captured (or hit-tested) slot; a pointercancel (OS reclaims the pointer) aborts the
+// drag cleanly. A short press is a tap: tap-token-then-tap-slot is the mobile-equal
+// fallback (core-loop.md). The glyph <img> is non-draggable (Glyph.svelte + app.css) so
+// the browser's native image-drag never hijacks this pointer-drag. transform + opacity
+// only. The play store owns placement + selection; the magnet's radius/ease come from
+// config, nothing hardcoded.
 
 export interface DragHandlers {
   cat?: string; // the token's category; the magnet only attracts to slots of this category
@@ -104,20 +107,40 @@ export function draggable(node: HTMLElement, h: DragHandlers) {
     node.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
   }
 
-  function up(e: PointerEvent) {
-    node.releasePointerCapture(e.pointerId);
+  // Tear down one drag: release capture, drop the per-drag listeners, clear the follow
+  // transform + lifted chrome, and unhighlight. Shared by a normal release (up) and an
+  // aborted gesture (cancel) so a pointer the OS reclaims never leaves the puck stuck
+  // mid-drag with leaked listeners (the touch "stops responding" bug).
+  function end(pointerId: number) {
+    try {
+      node.releasePointerCapture(pointerId);
+    } catch {
+      // The browser already released/cancelled this pointer - nothing to free.
+    }
     node.removeEventListener("pointermove", move);
     node.removeEventListener("pointerup", up);
+    node.removeEventListener("pointercancel", cancel);
     node.style.transform = "";
     node.style.willChange = "";
     node.classList.remove("z-50", "opacity-90");
-    const snapped = captured ? { entity: captured.entity, cat: captured.cat } : null;
     highlight(null);
-    if (!moved) handlers.onTap();
+  }
+
+  function up(e: PointerEvent) {
+    const snapped = captured ? { entity: captured.entity, cat: captured.cat } : null;
+    const dragged = moved;
+    end(e.pointerId); // clears the transform BEFORE slotAt hit-tests the slot underneath
+    if (!dragged) handlers.onTap();
     else {
       const drop = snapped ?? slotAt(e.clientX, e.clientY);
       if (drop) handlers.onDrop(drop.entity, drop.cat);
     }
+  }
+
+  // The browser cancelled the pointer (scroll/zoom takeover, palm-reject, focus loss):
+  // abandon the gesture - no tap, no drop - so the next press starts from a clean state.
+  function cancel(e: PointerEvent) {
+    end(e.pointerId);
   }
 
   function down(e: PointerEvent) {
@@ -132,6 +155,7 @@ export function draggable(node: HTMLElement, h: DragHandlers) {
     node.classList.add("z-50", "opacity-90");
     node.addEventListener("pointermove", move);
     node.addEventListener("pointerup", up);
+    node.addEventListener("pointercancel", cancel);
   }
 
   node.addEventListener("pointerdown", down);

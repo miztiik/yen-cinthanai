@@ -93,9 +93,9 @@ export interface UiConfig {
 const UI_FALLBACK: UiConfig = {
   puck: {
     default: "medium",
-    small: { diameter: 40, glyph: 0.6 },
-    medium: { diameter: 52, glyph: 0.64 },
-    large: { diameter: 64, glyph: 0.66 },
+    small: { diameter: 46, glyph: 0.6 },
+    medium: { diameter: 60, glyph: 0.64 },
+    large: { diameter: 74, glyph: 0.66 },
   },
   snap: { radius_factor: 1.4, ease: 0.55 },
 };

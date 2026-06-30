@@ -24,7 +24,7 @@
     locked?: boolean;
   } = $props();
 
-  const FALLBACK: PuckPreset = { diameter: 52, glyph: 0.64 };
+  const FALLBACK: PuckPreset = { diameter: 60, glyph: 0.64 };
   const getSize = getContext<() => PuckPreset>("puckSize");
   const size = $derived(getSize?.() ?? FALLBACK);
   const glyphPx = $derived(Math.round(size.diameter * size.glyph));

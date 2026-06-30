@@ -77,3 +77,15 @@ body {
 .snap-target {
   box-shadow: 0 0 0 3px var(--accent);
 }
+
+/* Glyphs are the only <img> in the app (registry-sourced) and they live inside draggable
+   pucks. Browsers make <img> natively draggable, so a mouse press-and-move on a token
+   would start an OS image-drag (ghost image) that HIJACKS the pointer-drag in lib/drag.ts
+   - the puck never follows and never drops. On touch, a long-press would pop the image
+   "save/copy" callout. Suppress both here (the `draggable={false}` attr covers Chromium/
+   Firefox; -webkit-user-drag covers Safari/WebKit). See lib/drag.ts. */
+img {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}

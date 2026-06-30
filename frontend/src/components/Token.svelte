@@ -29,7 +29,7 @@
   // Magnet capture radius scales with the puck diameter (config/ui.toml [snap]).
   const handlers = $derived.by<DragHandlers>(() => {
     const snapCfg = getSnap?.();
-    const diameter = getSize?.()?.diameter ?? 52;
+    const diameter = getSize?.()?.diameter ?? 60;
     return {
       cat,
       onTap: () => onpick(),
