@@ -4,7 +4,9 @@
   "story": {
     "weights": {
       "eq": 2,
-      "neq": 2
+      "neq": 2,
+      "numDiff": 2,
+      "threshold": 2
     },
     "share_cap": 0.8
   },

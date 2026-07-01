@@ -76,15 +76,19 @@ def _clue_slots(cats: list, cat_id: str, val_id: str, mode: str, prefix: str) ->
 
 
 def render_clue(scenario, tier: str, cats: list, clue: tuple, seed: int, index: int = 0) -> str:
-    """Render an eq/neq clue to a full sentence from scenario.clueTemplates[type] (date-seeded
-    variant), honoring indirection.byTier[tier]. Always supplies a_ref/a_label/a_phrase and the
-    b_* trio so no variant hits a missing slot."""
+    """Render a story clue to a full sentence from scenario.clueTemplates[type] (date-seeded
+    variant), honoring indirection.byTier[tier]. Supplies a_ref/a_label/a_phrase (+ the b_* trio
+    when a second operand exists) plus any numeric params (delta/bound) so numDiff/threshold
+    variants fill cleanly; unused slots are ignored by str.format."""
     typ, ops = clue[0], clue[1]
+    params = dict(clue[2]) if len(clue) > 2 else {}
     variants = scenario.clueTemplates[typ].variants
     rng = random.Random((seed ^ _CLUE_SALT) + index)
     variant = variants[rng.randrange(len(variants))]
     mode = scenario.indirection.byTier[tier]
     slots: dict = {}
     slots.update(_clue_slots(cats, ops[0][0], ops[0][1], mode, "a"))
-    slots.update(_clue_slots(cats, ops[1][0], ops[1][1], mode, "b"))
+    if len(ops) > 1:
+        slots.update(_clue_slots(cats, ops[1][0], ops[1][1], mode, "b"))
+    slots.update(params)  # numeric params: delta / bound (numericCat, dir ignored by the templates)
     return variant.format(**slots)
