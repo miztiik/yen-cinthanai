@@ -38,6 +38,10 @@ class AttributeValue(_Strict):
     id: str
     glyph: str
     label: str
+    # Story-first (Expand phase, all optional; schemaVersion stays 1):
+    magnitude: int | None = None
+    phrase: str | None = None
+    refPhrase: str | None = None
 
 
 class AttributeCategory(_Strict):
@@ -46,6 +50,11 @@ class AttributeCategory(_Strict):
     ordinal: bool
     cardinality: Cardinality
     values: list[AttributeValue]
+    # Story-first (Expand phase, all optional; kind and ordinal coexist for now):
+    kind: Literal["nominal", "ordinal", "numeric"] | None = None
+    unit: str | None = None
+    anchor: bool | None = None
+    glyphPack: str | None = None
 
 
 class Operand(_Strict):
@@ -89,6 +98,11 @@ class PuzzleManifest(_Strict):
     constraints: list[Constraint]
     solution: dict[str, dict[str, str]]
     hintTrace: list[HintStep]
+    # Story-first (Expand phase, all optional; schemaVersion stays 1):
+    scenarioId: str | None = None
+    story: str | None = None
+    subjectNoun: str | None = None
+    variant: int | None = None
 
 
 # --- BankIndex ------------------------------------------------------------------

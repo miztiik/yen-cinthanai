@@ -8,10 +8,17 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { PuzzleManifest } from "../../src/contracts/manifest";
+import { isManifest } from "../../src/lib/loader";
 
 const here = fileURLToPath(new URL(".", import.meta.url));
 const fixture = resolve(here, "../fixtures/manifest-4x3.json");
 const m = JSON.parse(readFileSync(fixture, "utf8")) as PuzzleManifest;
+
+// A hand-authored story-first golden (Expand phase: story/scenarioId/kind/magnitude/
+// phrase present, schemaVersion still 1). Lives under datasets/ (build-time source).
+const storyFirst = JSON.parse(
+  readFileSync(resolve(here, "../../../datasets/2026/07/01/standard/2026-07-01-001.json"), "utf8"),
+) as PuzzleManifest;
 
 describe("PuzzleManifest v1 (4x3 fixture)", () => {
   it("is version 1 with date puzzleId and known tier/shape", () => {
@@ -56,5 +63,28 @@ describe("PuzzleManifest v1 (4x3 fixture)", () => {
       const f = step.forces;
       expect(m.solution[f.entity]?.[f.cat]).toBe(f.value);
     }
+  });
+});
+
+describe("tolerant reader accepts both pre-pivot and story-first manifests", () => {
+  it("accepts the pre-pivot 4x3 fixture (no kind/story; values id/glyph/label)", () => {
+    expect(isManifest(m)).toBe(true);
+    expect(m.story).toBeUndefined();
+    for (const c of m.categories.list) expect(c.kind).toBeUndefined();
+  });
+
+  it("accepts a story-first manifest and exposes story/scenarioId/kind/magnitude/phrase", () => {
+    expect(isManifest(storyFirst)).toBe(true);
+    expect(typeof storyFirst.story).toBe("string");
+    expect(storyFirst.scenarioId).toBe("weekend-market");
+    expect(storyFirst.subjectNoun).toBe("friend");
+    expect(storyFirst.variant).toBe(1);
+    const numeric = storyFirst.categories.list.find((c) => c.kind === "numeric");
+    expect(numeric?.unit).toBe("dollars");
+    expect(numeric?.values.some((v) => typeof v.magnitude === "number")).toBe(true);
+    const hasPhrase = storyFirst.categories.list.some((c) =>
+      c.values.some((v) => typeof v.phrase === "string"),
+    );
+    expect(hasPhrase).toBe(true);
   });
 });
