@@ -1,13 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
     <clipPath id="c"><rect x="6" y="6" width="52" height="52" rx="14"/></clipPath>
+    <clipPath id="i"><rect x="11" y="11" width="42" height="42" rx="9"/></clipPath>
     <pattern id="p" width="13" height="13" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <path d="M0 0H13M0 0V13" fill="none" stroke="#4a4a4f" stroke-width="2"/>
+      <circle cx="6.5" cy="6.5" r="3" fill="#3a3a41"/>
     </pattern>
   </defs>
   <g clip-path="url(#c)">
-    <rect x="6" y="6" width="52" height="52" fill="#1c1c1f"/>
-    <rect x="6" y="6" width="52" height="52" fill="url(#p)"/>
+    <rect x="6" y="6" width="52" height="52" fill="#202024"/>
+    <rect x="6" y="6" width="52" height="52" fill="url(#p)" clip-path="url(#i)"/>
   </g>
-  <rect x="6.5" y="6.5" width="51" height="51" rx="13.5" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="2"/>
+  <rect x="6.5" y="6.5" width="51" height="51" rx="13.5" fill="none" stroke="#ffffff" stroke-opacity="0.22" stroke-width="2"/>
 </svg>
