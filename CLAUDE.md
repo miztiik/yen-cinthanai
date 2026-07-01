@@ -75,7 +75,7 @@ Folders are created only when real code is about to land. The first real PR pick
 - One concept defined once; everywhere else links to it.
 - ASCII-only in all repo text: commit messages, docs, code comments, log strings, agent markdown, CLI output (use `-`, `->`, `>=`, "section", "INR"). No curly quotes, em-dashes, or non-ASCII symbols. Applies going forward; no retroactive fixing.
 - Agent memory (`AGENTS.md`, `/memories/repo/`) is derived, not authoritative; if it disagrees with `docs/`, docs win.
-- New ADRs are exceptional. Most changes update an existing concept, how-to, reference, or subsystem doc in place.
+- New ADRs are exceptional (the Holy Law #4 bar: real rejected alternative, cross-system consequences, non-trivial reversal cost). When one clears that bar, the decision record lives as a numbered file under `docs/architecture/decisions/`, and its resulting rules are ALSO folded into the concept / architecture / contract doc where they take effect (the ADR is the immutable record; the living doc carries the current state). Most changes are NOT ADRs - they update an existing concept, how-to, reference, or subsystem doc in place.
 - Open questions live in the active plan-doc under `TODO/`, not in this file.
 - Docs-only PRs are a code smell.
 

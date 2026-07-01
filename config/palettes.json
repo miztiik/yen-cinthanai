@@ -1,0 +1,89 @@
+{
+  "default": "midnight",
+  "palette": {
+    "ember": {
+      "dark": {
+        "accent": "#f97316",
+        "bg": "#1a1411",
+        "gold": "#fbbf24",
+        "ink": "#f5ece2",
+        "near": "#f59e0b",
+        "satisfy": "#84cc16",
+        "surface": "#2c2018",
+        "violate": "#ef4444"
+      },
+      "label": "Ember",
+      "light": {
+        "accent": "#ea580c",
+        "bg": "#fbf6f0",
+        "gold": "#a16207",
+        "ink": "#2a1c12",
+        "near": "#b45309",
+        "satisfy": "#4d7c0f",
+        "surface": "#fffaf4",
+        "violate": "#dc2626"
+      }
+    },
+    "forest": {
+      "dark": {
+        "accent": "#22c55e",
+        "bg": "#0b140f",
+        "gold": "#fde047",
+        "ink": "#e6efe8",
+        "near": "#facc15",
+        "satisfy": "#4ade80",
+        "surface": "#16241c",
+        "violate": "#f87171"
+      },
+      "label": "Forest",
+      "light": {
+        "accent": "#15803d",
+        "bg": "#eff5f0",
+        "gold": "#92740a",
+        "ink": "#0f1f16",
+        "near": "#a16207",
+        "satisfy": "#16a34a",
+        "surface": "#ffffff",
+        "violate": "#dc2626"
+      }
+    },
+    "midnight": {
+      "dark": {
+        "accent": "#10b981",
+        "bg": "#0b1220",
+        "gold": "#fcd34d",
+        "ink": "#e2e8f0",
+        "near": "#fbbf24",
+        "satisfy": "#34d399",
+        "surface": "#1e293b",
+        "violate": "#fb7185"
+      },
+      "label": "Midnight",
+      "light": {
+        "accent": "#0f9d6b",
+        "bg": "#eef2f7",
+        "gold": "#b8860b",
+        "ink": "#0f172a",
+        "near": "#b45309",
+        "satisfy": "#059669",
+        "surface": "#ffffff",
+        "violate": "#e11d48"
+      }
+    }
+  },
+  "themes": [
+    "light",
+    "dark",
+    "system"
+  ],
+  "tokens": [
+    "bg",
+    "surface",
+    "ink",
+    "accent",
+    "satisfy",
+    "violate",
+    "near",
+    "gold"
+  ]
+}

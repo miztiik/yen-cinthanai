@@ -3,14 +3,14 @@
 Pydantic 2.11, strict, ASCII. One model per persisted surface, each carrying a
 schemaVersion. Bank/manifest/share are bundle-shipped (rewrite-in-place); Save is
 the only migrating surface. The TS readers in frontend/src/contracts mirror these.
-Types only - no game logic. PAR/stars read from config/tiers.toml (no hardcoding).
+Types only - no game logic. PAR/stars read from config/tiers.json (no hardcoding).
 
 See docs/architecture/contracts/schemas.md and docs/concepts/difficulty-and-scoring.md.
 """
 
 from __future__ import annotations
 
-import tomllib
+import json
 from pathlib import Path
 from typing import Literal
 
@@ -174,8 +174,8 @@ _CONFIG_DIR = Path(__file__).resolve().parent.parent / "config"
 
 
 def par_seconds(tier: Tier, config_dir: Path = _CONFIG_DIR) -> int:
-    """PAR for a tier, read from config/tiers.toml. Raises if absent (fail fast)."""
-    data = tomllib.loads((config_dir / "tiers.toml").read_text(encoding="ascii"))
+    """PAR for a tier, read from config/tiers.json. Raises if absent (fail fast)."""
+    data = json.loads((config_dir / "tiers.json").read_text(encoding="ascii"))
     return int(data[tier]["par_s"])
 
 

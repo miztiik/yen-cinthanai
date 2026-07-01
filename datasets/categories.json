@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "note": "Authored category value pools = the DIMENSION SOURCE (original content). The generator date-seeds a pick of N values per puzzle. kind: nominal | ordinal | numeric. An optional 'glyphPack' makes a category GLYPH-BACKED: each value.id must be a slug in that pack and renders as value.glyph = '<glyphPack>.<id>'; absent glyphPack = TEXT-ONLY (no asset). See plan sec 22 for the mapping contract.",
+  "categories": {
+    "fruit": {
+      "label": "Fruit",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "note": "GLYPH-BACKED example: value ids align with the food pack's slugs (extend to match public/assets/glyphs/food/*.svg).",
+      "values": [
+        { "id": "apple", "label": "Apple" },
+        { "id": "banana", "label": "Banana" },
+        { "id": "cherry", "label": "Cherry" }
+      ]
+    },
+    "first-name": {
+      "label": "First name",
+      "kind": "nominal",
+      "values": [
+        { "id": "ana", "label": "Ana" }, { "id": "ben", "label": "Ben" }, { "id": "cara", "label": "Cara" },
+        { "id": "dev", "label": "Dev" }, { "id": "eli", "label": "Eli" }, { "id": "fay", "label": "Fay" },
+        { "id": "gus", "label": "Gus" }, { "id": "hana", "label": "Hana" }, { "id": "ivo", "label": "Ivo" },
+        { "id": "juno", "label": "Juno" }, { "id": "kit", "label": "Kit" }, { "id": "lena", "label": "Lena" },
+        { "id": "milo", "label": "Milo" }, { "id": "nia", "label": "Nia" }, { "id": "omar", "label": "Omar" },
+        { "id": "priya", "label": "Priya" }, { "id": "quinn", "label": "Quinn" }, { "id": "rosa", "label": "Rosa" },
+        { "id": "sami", "label": "Sami" }, { "id": "tara", "label": "Tara" }
+      ]
+    },
+    "last-name": {
+      "label": "Last name",
+      "kind": "nominal",
+      "values": [
+        { "id": "reed", "label": "Reed" }, { "id": "cole", "label": "Cole" }, { "id": "vance", "label": "Vance" },
+        { "id": "shah", "label": "Shah" }, { "id": "flynn", "label": "Flynn" }, { "id": "ortiz", "label": "Ortiz" },
+        { "id": "bello", "label": "Bello" }, { "id": "frost", "label": "Frost" }, { "id": "kaur", "label": "Kaur" },
+        { "id": "lund", "label": "Lund" }, { "id": "mercer", "label": "Mercer" }, { "id": "nash", "label": "Nash" },
+        { "id": "pike", "label": "Pike" }, { "id": "raine", "label": "Raine" }, { "id": "sato", "label": "Sato" },
+        { "id": "voss", "label": "Voss" }
+      ]
+    },
+    "pet-name": {
+      "label": "Pet name",
+      "kind": "nominal",
+      "values": [
+        { "id": "biscuit", "label": "Biscuit" }, { "id": "pepper", "label": "Pepper" }, { "id": "olive", "label": "Olive" },
+        { "id": "mango", "label": "Mango" }, { "id": "shadow", "label": "Shadow" }, { "id": "clover", "label": "Clover" },
+        { "id": "waffle", "label": "Waffle" }, { "id": "pixel", "label": "Pixel" }, { "id": "juniper", "label": "Juniper" },
+        { "id": "biscoff", "label": "Biscoff" }, { "id": "mochi", "label": "Mochi" }, { "id": "pumpkin", "label": "Pumpkin" }
+      ]
+    },
+    "weekday": {
+      "label": "Day",
+      "kind": "ordinal",
+      "values": [
+        { "id": "mon", "label": "Monday", "magnitude": 1 }, { "id": "tue", "label": "Tuesday", "magnitude": 2 },
+        { "id": "wed", "label": "Wednesday", "magnitude": 3 }, { "id": "thu", "label": "Thursday", "magnitude": 4 },
+        { "id": "fri", "label": "Friday", "magnitude": 5 }, { "id": "sat", "label": "Saturday", "magnitude": 6 },
+        { "id": "sun", "label": "Sunday", "magnitude": 7 }
+      ]
+    },
+    "month": {
+      "label": "Month",
+      "kind": "ordinal",
+      "values": [
+        { "id": "jan", "label": "January", "magnitude": 1 }, { "id": "feb", "label": "February", "magnitude": 2 },
+        { "id": "mar", "label": "March", "magnitude": 3 }, { "id": "apr", "label": "April", "magnitude": 4 },
+        { "id": "may", "label": "May", "magnitude": 5 }, { "id": "jun", "label": "June", "magnitude": 6 },
+        { "id": "jul", "label": "July", "magnitude": 7 }, { "id": "aug", "label": "August", "magnitude": 8 },
+        { "id": "sep", "label": "September", "magnitude": 9 }, { "id": "oct", "label": "October", "magnitude": 10 },
+        { "id": "nov", "label": "November", "magnitude": 11 }, { "id": "dec", "label": "December", "magnitude": 12 }
+      ]
+    },
+    "year": {
+      "label": "Year",
+      "kind": "numeric",
+      "unit": "CE",
+      "values": [
+        { "id": "y2016", "label": "2016", "magnitude": 2016 }, { "id": "y2017", "label": "2017", "magnitude": 2017 },
+        { "id": "y2018", "label": "2018", "magnitude": 2018 }, { "id": "y2019", "label": "2019", "magnitude": 2019 },
+        { "id": "y2020", "label": "2020", "magnitude": 2020 }, { "id": "y2021", "label": "2021", "magnitude": 2021 },
+        { "id": "y2022", "label": "2022", "magnitude": 2022 }, { "id": "y2023", "label": "2023", "magnitude": 2023 },
+        { "id": "y2024", "label": "2024", "magnitude": 2024 }, { "id": "y2025", "label": "2025", "magnitude": 2025 }
+      ]
+    },
+    "chinese-zodiac": {
+      "label": "Zodiac animal",
+      "kind": "ordinal",
+      "note": "12-year cycle order preserved via magnitude",
+      "values": [
+        { "id": "rat", "label": "Rat", "magnitude": 1 }, { "id": "ox", "label": "Ox", "magnitude": 2 },
+        { "id": "tiger", "label": "Tiger", "magnitude": 3 }, { "id": "rabbit", "label": "Rabbit", "magnitude": 4 },
+        { "id": "dragon", "label": "Dragon", "magnitude": 5 }, { "id": "snake", "label": "Snake", "magnitude": 6 },
+        { "id": "horse", "label": "Horse", "magnitude": 7 }, { "id": "goat", "label": "Goat", "magnitude": 8 },
+        { "id": "monkey", "label": "Monkey", "magnitude": 9 }, { "id": "rooster", "label": "Rooster", "magnitude": 10 },
+        { "id": "dog", "label": "Dog", "magnitude": 11 }, { "id": "pig", "label": "Pig", "magnitude": 12 }
+      ]
+    },
+    "tamil-year": {
+      "label": "Tamil year",
+      "kind": "ordinal",
+      "note": "The Tamil 60-year cycle (starter subset; magnitude = position in the 60-name cycle). Extend to all 60 as needed.",
+      "values": [
+        { "id": "prabhava", "label": "Prabhava", "magnitude": 1 }, { "id": "vibhava", "label": "Vibhava", "magnitude": 2 },
+        { "id": "shukla", "label": "Shukla", "magnitude": 3 }, { "id": "pramoda", "label": "Pramoda", "magnitude": 4 },
+        { "id": "prajapati", "label": "Prajapati", "magnitude": 5 }, { "id": "angirasa", "label": "Angirasa", "magnitude": 6 },
+        { "id": "srimukha", "label": "Srimukha", "magnitude": 7 }, { "id": "bhava", "label": "Bhava", "magnitude": 8 },
+        { "id": "yuva", "label": "Yuva", "magnitude": 9 }, { "id": "dhatu", "label": "Dhatu", "magnitude": 10 },
+        { "id": "ishvara", "label": "Ishvara", "magnitude": 11 }, { "id": "vehudanya", "label": "Vehudanya", "magnitude": 12 }
+      ]
+    },
+    "currency": {
+      "label": "Currency",
+      "kind": "nominal",
+      "values": [
+        { "id": "dollar", "label": "Dollar" }, { "id": "euro", "label": "Euro" }, { "id": "yen", "label": "Yen" },
+        { "id": "rupee", "label": "Rupee" }, { "id": "pound", "label": "Pound" }, { "id": "franc", "label": "Franc" },
+        { "id": "peso", "label": "Peso" }, { "id": "won", "label": "Won" }, { "id": "real", "label": "Real" },
+        { "id": "rand", "label": "Rand" }, { "id": "dirham", "label": "Dirham" }, { "id": "baht", "label": "Baht" },
+        { "id": "lira", "label": "Lira" }, { "id": "krona", "label": "Krona" }
+      ]
+    },
+    "life-event": {
+      "label": "Life event",
+      "kind": "nominal",
+      "values": [
+        { "id": "wedding", "label": "Wedding" }, { "id": "graduation", "label": "Graduation" }, { "id": "new-job", "label": "New job" },
+        { "id": "house-move", "label": "House move" }, { "id": "first-child", "label": "First child" }, { "id": "retirement", "label": "Retirement" },
+        { "id": "road-trip", "label": "Road trip" }, { "id": "marathon", "label": "Marathon" }, { "id": "book-launch", "label": "Book launch" },
+        { "id": "gallery-show", "label": "Gallery show" }, { "id": "reunion", "label": "Reunion" }, { "id": "adoption", "label": "Pet adoption" },
+        { "id": "promotion", "label": "Promotion" }, { "id": "sabbatical", "label": "Sabbatical" }
+      ]
+    }
+  }
+}

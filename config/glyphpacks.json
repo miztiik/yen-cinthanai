@@ -1,0 +1,131 @@
+{
+  "abstract": {
+    "between": {
+      "label": "Between"
+    },
+    "grid": {
+      "label": "Grid"
+    },
+    "num1": {
+      "label": "One"
+    },
+    "num2": {
+      "label": "Two"
+    },
+    "num3": {
+      "label": "Three"
+    },
+    "num4": {
+      "label": "Four"
+    },
+    "num5": {
+      "label": "Five"
+    },
+    "num6": {
+      "label": "Six"
+    },
+    "opposite": {
+      "label": "Opposite"
+    },
+    "roundtable": {
+      "label": "Round table"
+    },
+    "seating": {
+      "label": "Seating"
+    }
+  },
+  "color": {
+    "blue": {
+      "label": "Blue"
+    },
+    "green": {
+      "label": "Green"
+    },
+    "orange": {
+      "label": "Orange"
+    },
+    "red": {
+      "label": "Red"
+    },
+    "violet": {
+      "label": "Violet"
+    },
+    "yellow": {
+      "label": "Yellow"
+    }
+  },
+  "creatures": {
+    "bird": {
+      "label": "Bird"
+    },
+    "cat": {
+      "label": "Cat"
+    },
+    "dog": {
+      "label": "Dog"
+    },
+    "fish": {
+      "label": "Fish"
+    },
+    "frog": {
+      "label": "Frog"
+    },
+    "owl": {
+      "label": "Owl"
+    }
+  },
+  "food": {
+    "apple": {
+      "label": "Apple"
+    },
+    "bread": {
+      "label": "Bread"
+    },
+    "carrot": {
+      "label": "Carrot"
+    },
+    "cheese": {
+      "label": "Cheese"
+    },
+    "egg": {
+      "label": "Egg"
+    },
+    "grape": {
+      "label": "Grape"
+    }
+  },
+  "household": {
+    "coffee": {
+      "label": "Coffee"
+    },
+    "cola": {
+      "label": "Cola"
+    },
+    "juice": {
+      "label": "Juice"
+    },
+    "milk": {
+      "label": "Milk"
+    },
+    "tea": {
+      "label": "Tea"
+    },
+    "water": {
+      "label": "Water"
+    }
+  },
+  "shapes": {
+    "circle": {
+      "label": "Circle"
+    },
+    "diamond": {
+      "label": "Diamond"
+    },
+    "square": {
+      "label": "Square"
+    },
+    "triangle": {
+      "label": "Triangle"
+    }
+  }
+}

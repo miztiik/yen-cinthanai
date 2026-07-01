@@ -1,6 +1,6 @@
 """Build-time daily-bank generator: pipes and filters, no in-browser solver.
 
-  config/tiers.toml + config/dials.toml + date
+  config/tiers.json + config/dials.json + date
     -> seed (PRNG + CP-SAT random_seed)
     -> sample full bijective solution
     -> enumerate clues true under solution
@@ -22,7 +22,6 @@ import hashlib
 import json
 import random
 import sys
-import tomllib
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -57,7 +56,7 @@ INDIRECT_TYPES = ("neq", "adjacent", "distance", "before", "opposite", "between"
 SOLVE_LIMIT_S = 10.0
 
 # Difficulty ENV dial weights (docs/concepts/difficulty-and-scoring.md). Keyed by
-# the config/tiers.toml dial values; no magic numbers escape this table.
+# the config/tiers.json dial values; no magic numbers escape this table.
 _ATT = {-1: 0, 3: 4, 2: 8, 1: 12}
 _HINT = {-1: 0, 2: 3, 1: 6, 0: 10}
 _FB = {"realtime-names": 0, "count-wrong": 4, "binary-check": 8, "submit-binary": 12}
@@ -66,13 +65,13 @@ _FB = {"realtime-names": 0, "count-wrong": 4, "binary-check": 8, "submit-binary"
 # --- config ---------------------------------------------------------------------
 
 
-def load_toml(name: str, config_dir: Path) -> dict:
-    return tomllib.loads((config_dir / f"{name}.toml").read_text(encoding="ascii"))
+def load_config(name: str, config_dir: Path) -> dict:
+    return json.loads((config_dir / f"{name}.json").read_text(encoding="ascii"))
 
 
 @dataclass(frozen=True)
 class Shape:
-    """A resolved shape-registry entry (config/shapes.toml). The engine reads shapeId."""
+    """A resolved shape-registry entry (config/shapes.json). The engine reads shapeId."""
 
     id: str
     topology: str
@@ -83,7 +82,7 @@ class Shape:
 
 def resolve_shape(shape_id: str, config_dir: Path) -> Shape:
     """Look up a shapeId in the registry; raise on unknown (fail fast, no bespoke code)."""
-    reg = load_toml("shapes", config_dir)
+    reg = load_config("shapes", config_dir)
     if shape_id not in reg:
         raise KeyError(f"unknown shapeId '{shape_id}' (registry: {sorted(reg)})")
     s = reg[shape_id]
@@ -91,8 +90,8 @@ def resolve_shape(shape_id: str, config_dir: Path) -> Shape:
 
 
 def shape_for(tier: Tier, config_dir: Path) -> str:
-    """Tier -> shapeId (config/dials.toml tier table). The only place tier picks shape."""
-    return load_toml("dials", config_dir)["tier"][tier]["shape"]
+    """Tier -> shapeId (config/dials.json tier table). The only place tier picks shape."""
+    return load_config("dials", config_dir)["tier"][tier]["shape"]
 
 
 
@@ -152,7 +151,7 @@ def build_categories(tier: Tier, entities: int, config_dir: Path, date: str) -> 
     `shared` binary packs, plus the ordinal seat axis when the shape has one."""
     manifest = _manifest_packs(config_dir)
     shape = resolve_shape(shape_for(tier, config_dir), config_dir)
-    spec = load_toml("dials", config_dir)["tier"][tier]
+    spec = load_config("dials", config_dir)["tier"][tier]
     n_nominal, n_shared = spec["nominal"], spec.get("shared", 0)
     rng = random.Random(seed_int(date, tier, config_dir) ^ _CAT_SALT)
 
@@ -176,7 +175,7 @@ def build_categories(tier: Tier, entities: int, config_dir: Path, date: str) -> 
 
 
 def seed_int(date: str, tier: Tier, config_dir: Path) -> int:
-    salt = load_toml("dials", config_dir)["seed_salt"]
+    salt = load_config("dials", config_dir)["seed_salt"]
     digest = hashlib.sha256(f"{salt}:{date}:{tier}".encode("ascii")).hexdigest()
     return int(digest[:8], 16)
 
@@ -508,8 +507,8 @@ def canonical_sha(manifest: PuzzleManifest) -> tuple[str, str]:
 
 
 def generate(date: str, tier: Tier, config_dir: Path = CONFIG_DIR) -> tuple[PuzzleManifest, int, list[dict]]:
-    tiers = load_toml("tiers", config_dir)[tier]
-    dials = load_toml("dials", config_dir)
+    tiers = load_config("tiers", config_dir)[tier]
+    dials = load_config("dials", config_dir)
     shape = resolve_shape(shape_for(tier, config_dir), config_dir)
     entities = min(tiers["entities"], shape.max_entities)  # registry caps the seat count
     n_cats = tiers["categories"]

@@ -1,0 +1,13 @@
+{
+  "device": {
+    "cpu_throttle": 4,
+    "network": "slow-4g",
+    "profile": "mid-tier-android"
+  },
+  "targets": {
+    "byte_cap": false,
+    "first_interaction_ms": 2000,
+    "fps": 60,
+    "input_to_photon_ms": 50
+  }
+}
