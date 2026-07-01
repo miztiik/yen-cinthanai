@@ -7,8 +7,8 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadSave, persistSave, validateSave, freshSave } from "../../src/state/save.svelte";
-import type { Save } from "../../src/contracts/save";
+import { loadSave, persistSave, validateSave, freshSave, dayKey } from "../../src/state/save.svelte";
+import type { Save, Tier, ShapeId, DayStatus } from "../../src/contracts/save";
 
 const here = fileURLToPath(new URL(".", import.meta.url));
 const read = (f: string) => readFileSync(resolve(here, `../fixtures/${f}`), "utf8");
@@ -49,7 +49,10 @@ describe("loadSave", () => {
   it("loads a valid v1 save with both days and hero/streak", () => {
     fake.store.set(KEY, read("save-v1.json"));
     const s = loadSave();
-    expect(Object.keys(s.days).sort()).toEqual(["2026-06-27", "2026-06-28"]);
+    expect(Object.keys(s.days).sort()).toEqual([
+      dayKey("2026-06-27", "easy", "grid"),
+      dayKey("2026-06-28", "standard", "seating-row"),
+    ]);
     expect(s.hero.bestMs).toBe(41000);
     expect(s.streak.count).toBe(2);
   });
@@ -58,7 +61,7 @@ describe("loadSave", () => {
     fake.store.set(KEY, read("save-v0.json"));
     const s = loadSave();
     expect(s.schemaVersion).toBe(1);
-    expect(s.days["2026-06-26"].stars).toBe(3);
+    expect(s.days[dayKey("2026-06-26", "easy", "grid")].stars).toBe(3);
   });
 
   it("defaults puckSize to medium for a save that predates the setting", () => {
@@ -76,6 +79,60 @@ describe("validateSave", () => {
     expect(Object.keys(s.days)).toHaveLength(2);
     expect(s.hero.bestMs).toBe(41000);
     expect(s.streak.count).toBe(2);
+  });
+});
+
+describe("composite day keying (dayKey)", () => {
+  it("keys distinctly per tier/shape so the same calendar day never collides", () => {
+    expect(dayKey("2026-07-01", "easy", "grid")).toBe("2026-07-01|easy|grid");
+    expect(dayKey("2026-07-01", "standard", "seating-row")).not.toBe(dayKey("2026-07-01", "easy", "grid"));
+  });
+
+  it("normalizes an older date-only save to the composite key on read", () => {
+    // save-v1.json is stored with legacy date-only map keys; the value fields are the truth.
+    const s = validateSave(JSON.parse(read("save-v1.json")));
+    expect(s.days[dayKey("2026-06-27", "easy", "grid")]).toBeDefined();
+    expect(s.days[dayKey("2026-06-28", "standard", "seating-row")].tier).toBe("standard");
+    expect(s.days["2026-06-27"]).toBeUndefined(); // the old date-only key is gone
+  });
+
+  it("keeps two same-date, different-tier days as separate slots", () => {
+    const mk = (tier: Tier, shapeId: ShapeId) => ({
+      date: "2026-07-01", tier, shapeId, status: "won" as DayStatus,
+      placements: {}, attempts: 0, solveMs: 1000, hintsUsed: 0, stars: 2,
+    });
+    const raw: Record<string, unknown> = {
+      schemaVersion: 1,
+      days: {
+        "2026-07-01|easy|grid": mk("easy", "grid"),
+        "2026-07-01|standard|seating-row": mk("standard", "seating-row"),
+      },
+    };
+    const s = validateSave(raw);
+    expect(Object.keys(s.days).sort()).toEqual([
+      dayKey("2026-07-01", "easy", "grid"),
+      dayKey("2026-07-01", "standard", "seating-row"),
+    ]);
+  });
+
+  it("prunes the oldest DATE slot under quota, never today", () => {
+    const today = "2026-07-01";
+    const s = freshSave();
+    const add = (date: string, tier: Tier, shapeId: ShapeId, status: DayStatus) => {
+      s.days[dayKey(date, tier, shapeId)] = {
+        date, tier, shapeId, status, placements: {}, attempts: 0, solveMs: 1, hintsUsed: 0, stars: 1,
+      };
+    };
+    add("2026-06-28", "easy", "grid", "won");
+    add("2026-06-29", "standard", "seating-row", "won");
+    add(today, "easy", "grid", "won");
+    add(today, "sharp", "seating-row", "playing"); // two of today's slots
+    fake.quotaUnder = JSON.stringify(s).length - 1; // force exactly one prune
+    persistSave(s, today);
+    expect(s.days[dayKey("2026-06-28", "easy", "grid")]).toBeUndefined(); // oldest date gone
+    expect(s.days[dayKey("2026-06-29", "standard", "seating-row")]).toBeDefined();
+    expect(s.days[dayKey(today, "easy", "grid")]).toBeDefined(); // today never pruned
+    expect(s.days[dayKey(today, "sharp", "seating-row")]).toBeDefined();
   });
 });
 

@@ -6,7 +6,7 @@ The difficulty scorer, tier bands, stars, streak, and celebration copy. Tunable 
 
 ## Scorer
 
-```
+```text
 D = SIZE + DEPTH + INDIR + ENV
 SIZE  = entities * categories
 DEPTH = len(hintTrace)                  forced deduction steps

@@ -39,4 +39,5 @@ Puck (the universal circular frame), Token, Slot, SlotBoard, Pool, ClueChip, HUD
 colors bg/surface/ink/accent/satisfy/violate/near/gold (CSS vars, palette-swappable); space 4-32, targets >=48; radii 8/16; motion 120/180 transform+opacity. Config-driven (D16).
 
 ## See also
+
 - [core-loop.md](core-loop.md) | [difficulty-and-scoring.md](difficulty-and-scoring.md) | [../architecture/runtime/stack-and-bundle.md](../architecture/runtime/stack-and-bundle.md)

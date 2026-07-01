@@ -6,7 +6,7 @@
   import { homeHref, navigate } from "../lib/router.svelte";
   import { loadSave } from "../state/save.svelte";
   import { loadPace } from "../lib/config";
-  import { recentSolveMs } from "../lib/scoring";
+  import { recentSolveMs, wonOnDate } from "../lib/scoring";
 
   const save = loadSave();
   let window = $state(10);
@@ -18,11 +18,12 @@
   const solved = $derived(Object.values(save.days).filter((d) => d.status === "won").length);
 
   // last 7 UTC days: won (filled) | other-day (open) | none (gap). Quiet, never shaming.
+  // A day counts as won if ANY tier/shape slot for that date won (days are composite-keyed).
   function lastWeek(): { date: string; won: boolean }[] {
     const out: { date: string; won: boolean }[] = [];
     for (let i = 6; i >= 0; i--) {
       const d = new Date(Date.now() - i * 86_400_000).toISOString().slice(0, 10);
-      out.push({ date: d, won: save.days[d]?.status === "won" });
+      out.push({ date: d, won: wonOnDate(save.days, d) });
     }
     return out;
   }

@@ -10,11 +10,14 @@ import { fileURLToPath } from "node:url";
 import type { PuzzleManifest } from "../../src/contracts/manifest";
 import type { TierDial } from "../../src/lib/config";
 import { Game, saveProgress } from "../../src/state/play.svelte";
-import { loadSave } from "../../src/state/save.svelte";
+import { loadSave, dayKey } from "../../src/state/save.svelte";
 
 const here = fileURLToPath(new URL(".", import.meta.url));
 const m = JSON.parse(
   readFileSync(resolve(here, "../../public/puzzles/2026-06-29-standard.json"), "utf8"),
+) as PuzzleManifest;
+const mEasy = JSON.parse(
+  readFileSync(resolve(here, "../../public/puzzles/2026-06-29-easy.json"), "utf8"),
 ) as PuzzleManifest;
 
 // Dimensions are auto-discovered + date-seeded, so the test must not assume which packs
@@ -100,10 +103,35 @@ describe("persist + resume", () => {
     fill(g);
     saveProgress(g);
     const s = loadSave();
-    expect(s.days[m.puzzleId].status).toBe("won");
-    expect(s.days[m.puzzleId].stars).toBe(3);
+    const k = dayKey(m.puzzleId, m.tier, m.shapeId);
+    expect(s.days[k].status).toBe("won");
+    expect(s.days[k].stars).toBe(3);
     expect(s.streak.count).toBe(1);
     expect(s.hero.bestMs).toBeGreaterThanOrEqual(0);
-    expect(new Game(m, REALTIME, s.days[m.puzzleId]).locked).toBe(true);
+    expect(new Game(m, REALTIME, s.days[k]).locked).toBe(true);
+  });
+});
+
+describe("composite day slots (multi-tier same day)", () => {
+  it("a second tier the same day persists as its own slot, no overwrite", () => {
+    const g1 = new Game(m, STD); // standard / seating-row
+    fill(g1);
+    g1.check();
+    saveProgress(g1);
+
+    const g2 = new Game(mEasy, REALTIME); // easy / grid, SAME date
+    for (const e of g2.board.entities) for (const c of g2.board.columns) g2.place(e, c.id, mEasy.solution[e][c.id]);
+    saveProgress(g2);
+
+    const s = loadSave();
+    const kStd = dayKey(m.puzzleId, m.tier, m.shapeId);
+    const kEasy = dayKey(mEasy.puzzleId, mEasy.tier, mEasy.shapeId);
+    expect(kStd).not.toBe(kEasy);
+    expect(Object.keys(s.days)).toHaveLength(2); // both slots coexist, no collision
+    expect(s.days[kStd].tier).toBe("standard");
+    expect(s.days[kEasy].tier).toBe("easy");
+    expect(s.days[kStd].status).toBe("won");
+    expect(s.days[kEasy].status).toBe("won");
+    expect(s.streak.count).toBe(1); // one calendar-day streak advance, not one per tier
   });
 });

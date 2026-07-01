@@ -181,3 +181,38 @@ def test_bigger_grids_stay_in_band() -> None:
         _, d, _ = g.generate(DATE, tier, CONFIG_DIR)
         assert lo <= d <= hi
 
+
+# --- past-archive backfill (never future) ---------------------------------------
+
+
+def test_backfill_dates_last_n_including_end_oldest_first() -> None:
+    dates = g.backfill_dates("2026-06-29", 3)
+    assert dates == ["2026-06-27", "2026-06-28", "2026-06-29"]  # oldest-first, includes end
+    assert dates[-1] == "2026-06-29"  # newest is the served seed (today plays)
+    assert all(d <= "2026-06-29" for d in dates)  # nothing past the end
+    assert g.backfill_dates("2026-07-01", 1) == ["2026-07-01"]  # n=1 is just the end
+
+
+def test_backfill_clamp_never_future() -> None:
+    # main clamps the range end to today via min(anchor, today); a future anchor -> today.
+    today, future = "2026-07-01", "2027-01-01"
+    end = min(future, today)
+    assert end == today
+    assert all(d <= today for d in g.backfill_dates(end, 7))
+
+
+def test_backfill_index_lists_all_days_seed_is_newest(tmp_path: Path) -> None:
+    end, n, tiers = "2026-06-29", 2, ("easy", "standard")
+    dates = g.backfill_dates(end, n)  # 2026-06-28, 2026-06-29
+    entries = [g._entry_for(d, t, tmp_path, CONFIG_DIR, False) for d in dates for t in tiers]
+    out = g.write_index(dates[-1], entries, tmp_path)
+    idx = json.loads(out.read_text("ascii"))
+    assert idx["generatedSeed"] == end  # newest day is served for play
+    assert sorted({p["date"] for p in idx["puzzles"]}) == list(dates)  # every backfilled day indexed
+    assert len(idx["puzzles"]) == n * len(tiers)
+    assert max(p["date"] for p in idx["puzzles"]) == end  # never past today
+    # deterministic: the now-frozen files re-freeze to identical shas
+    again = [g._entry_for(d, t, tmp_path, CONFIG_DIR, False) for d in dates for t in tiers]
+    assert [e["sha"] for e in again] == [e["sha"] for e in entries]
+    assert all(e["frozen"] for e in again)  # second pass reads the frozen files
+

@@ -14,6 +14,13 @@ const TIERS: readonly Tier[] = ["easy", "standard", "sharp", "expert"];
 const SHAPES: readonly ShapeId[] = ["grid", "seating-row", "round-table"];
 const STATUSES: readonly DayStatus[] = ["unplayed", "playing", "won", "lost"];
 
+/** Composite day-slot key: one slot per (date, tier, shape) so multiple tiers/shapes
+ *  the same calendar day coexist instead of overwriting one slot. Older date-only saves
+ *  normalize to this on read (validateSave), so schemaVersion stays 1 (backward compat). */
+export function dayKey(date: string, tier: Tier, shapeId: ShapeId): string {
+  return `${date}|${tier}|${shapeId}`;
+}
+
 export function freshSave(): Save {
   return {
     schemaVersion: 1,
@@ -69,7 +76,9 @@ export function validateSave(raw: Record<string, unknown>): Save {
   const base = freshSave();
   const days: Record<string, DayState> = {};
   const rawDays = (raw.days ?? {}) as Record<string, unknown>;
-  for (const [date, d] of Object.entries(rawDays)) if (isDay(d)) days[date] = d;
+  // Rebuild keyed by dayKey DERIVED from each day's own fields (never trust the incoming
+  // map key), so an older date-only save normalizes transparently to the composite key.
+  for (const d of Object.values(rawDays)) if (isDay(d)) days[dayKey(d.date, d.tier, d.shapeId)] = d;
   return {
     schemaVersion: 1,
     days,
@@ -89,13 +98,14 @@ export function loadSave(): Save {
   }
 }
 
-/** Drop the oldest day != today; today is never pruned. Returns true if pruned. */
+/** Drop the oldest slot whose DATE portion != today; today is never pruned. Keys are
+ *  composite (date|tier|shape); the date prefix orders chronologically. Returns true if pruned. */
 function pruneOldest(save: Save, today: string): boolean {
-  const dates = Object.keys(save.days)
-    .filter((d) => d !== today)
-    .sort();
-  if (dates.length === 0) return false;
-  delete save.days[dates[0]];
+  const keys = Object.keys(save.days)
+    .filter((k) => k.split("|")[0] !== today)
+    .sort((a, b) => a.split("|")[0].localeCompare(b.split("|")[0]));
+  if (keys.length === 0) return false;
+  delete save.days[keys[0]];
   return true;
 }
 
