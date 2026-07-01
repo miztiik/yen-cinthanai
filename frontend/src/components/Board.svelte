@@ -7,10 +7,12 @@
   import SlotBoard from "./SlotBoard.svelte";
   import Pool from "./Pool.svelte";
   import ClueChip from "./ClueChip.svelte";
+  import StoryPanel from "./StoryPanel.svelte";
+  import ClueList from "./ClueList.svelte";
   import ResultCard from "./ResultCard.svelte";
   import { route, homeHref, navigate } from "../lib/router.svelte";
   import { loadBank, loadManifest, pickEntry } from "../lib/loader";
-  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, type TierDial, type CopyBags, type Pace, type PuckPreset } from "../lib/config";
+  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, CLUES_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { isHero } from "../lib/scoring";
   import { buildShareCard, shareText, type ShareCopy } from "../contracts/share";
@@ -28,6 +30,7 @@
   let copy = $state<CopyBags>({ success: [], encourage: [], hero: [] });
   let pace = $state<Pace>({ idle_pulse_s: 12, idle_glow_s: 25, stats_window: 10 });
   let shape = $state<ShapeDef | null>(null);
+  let soft = $state<Feedback[]>(["realtime-names", "count-wrong"]); // dials that may auto-dim a satisfied clue
   let error = $state("");
   let elapsed = $state(0);
   let idleMs = $state(0);
@@ -70,6 +73,7 @@
       const ui = await loadUi();
       puck = puckPreset(ui, sv.settings.puckSize);
       snap = ui.snap;
+      soft = softFeedback(ui);
       game = new Game(m, dial, prior);
       tick();
     } catch (e) {
@@ -119,10 +123,11 @@
   const pulse = $derived(!!game && !game.locked && idleMs > pace.idle_pulse_s * 1000);
   const glow = $derived(!!game && !game.locked && idleMs > pace.idle_glow_s * 1000);
   const submitLabel = $derived(game?.dial.feedback === "submit-binary" ? "submit" : "check");
+  const storyMode = $derived(!!game?.m.story); // story-first: text ClueList replaces the glyph ClueChip strip
   start();
 </script>
 
-<main class="mx-auto flex min-h-dvh max-w-md flex-col gap-4 p-4">
+<main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-3xl" : "max-w-md"}`}>
   <header class="flex items-center justify-between text-sm">
     <a href={homeHref()} aria-label="back" onclick={(e) => { e.preventDefault(); navigate(""); }}>back</a>
     <span class="uppercase tracking-wide opacity-70">{game?.m.tier ?? ""}</span>
@@ -137,19 +142,30 @@
   {#if error}
     <p class="text-violate">could not load: {error}</p>
   {:else if game}
-    <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
-      {#each game.m.constraints as c (c.id)}
-        <ClueChip
-          {c}
-          m={game.m}
-          state={game.revealed ? game.evalState.clues[c.id] : "unknown"}
-          glow={glow && game.evalState.clues[c.id] !== "satisfy"}
-        />
-      {/each}
-    </div>
+    {#if storyMode}
+      <StoryPanel story={game.m.story ?? ""} />
+    {:else}
+      <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
+        {#each game.m.constraints as c (c.id)}
+          <ClueChip
+            {c}
+            m={game.m}
+            state={game.revealed ? game.evalState.clues[c.id] : "unknown"}
+            glow={glow && game.evalState.clues[c.id] !== "satisfy"}
+          />
+        {/each}
+      </div>
+    {/if}
 
-    <section class="flex justify-center"><SlotBoard {game} topology={shape?.topology ?? "matrix"} revealed={game.revealed} {pulse} /></section>
-    <section class="flex justify-center"><Pool {game} /></section>
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-center">
+      <div class="flex min-w-0 flex-col gap-4">
+        <section class="flex justify-center"><SlotBoard {game} topology={shape?.topology ?? "matrix"} revealed={game.revealed} {pulse} /></section>
+        <section class="flex justify-center"><Pool {game} /></section>
+      </div>
+      {#if storyMode}
+        <ClueList {game} copy={copy.clues ?? CLUES_COPY_FALLBACK} {soft} />
+      {/if}
+    </div>
 
     <div class="mt-auto flex items-center justify-center gap-3 pt-2">
       <button class="rounded-xl bg-surface px-4 py-2 disabled:opacity-30" disabled={game.locked} onclick={() => game?.reset()}>reset</button>

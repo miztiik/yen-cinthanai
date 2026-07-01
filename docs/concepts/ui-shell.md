@@ -1,6 +1,6 @@
 # UI Shell
 
-**Last Updated**: 2026-06-30
+**Last Updated**: 2026-07-02
 
 Screens, components, glyphs, tokens. Mid-tier Android portrait (~390x844). Tailwind for chrome only; canvas/board internals excluded. Glyph packs are auto-discovered from the asset tree (the GlyphManifest; 12+ and growing). Visual clarity (colour-is-one-signal), not a11y tooling.
 
@@ -22,6 +22,10 @@ satisfy ring+check 180ms; violate slash+shake 120ms; near amber pulse; locked so
 
 eq A=B | neq A/B | ends [A.]/[.A] | adjacent A-B | distance A>k>B | before A>>B | opposite A<>B | between A-|-B. Text under glyph teaches vocab; generator uses only types with a legible glyph.
 
+## Story-first clues (Expand)
+
+A story-first manifest (has `story`) swaps the glyph ClueChip strip for TEXT. StoryPanel renders the narrative cold-open; ClueList renders a numbered `<ol>` of full-sentence clues (glyphs/flags decorate the board axis headers only, never the clue language). Each ClueRow carries a trailing check-dot the player taps to strike that clue - a manual, reversible bookkeeping mark (clues start bright; never required, never nagged; LOCAL this session, persisted in Row 7 via `DayState.notes.struckClues`). A satisfied clue may ALSO auto-dim, but only on the soft feedback dials (easy realtime-names, standard count-wrong); sharp/expert (binary-check/submit-binary) never auto-dim so withheld feedback cannot leak. The soft-dial set is config-driven (`config/ui.json [clue].autoDimFeedback`); the chrome labels live in `config/copy.json [clues]`. Legacy (no-story) manifests keep the glyph ClueChip strip. Layout is chrome-only: a pull-down disclosure on phone, an always-open side panel to the right of the board on desktop. a11y: semantic `<ol><li>`, each dot a labelled `<button aria-pressed>`, visible focus ring, keyboard reachable, a polite live region announces each strike. See `src/lib/clues.ts` + `src/components/{StoryPanel,ClueList,ClueRow}.svelte`.
+
 ## Glyph assets (no inline SVG)
 
 Every icon ships as a file under `frontend/public/assets/glyphs/<pack>/<name>.svg`, referenced `"pack.slug"`. Icons come from MANY sources (varied size/weight/paint - NOT all monochrome currentColor), so the UI normalizes them visually with the Puck (below), never by assuming one paint model. The manifest `glyphs/index.json` is GENERATED every build by `tools/bake_glyphs.py` (GlyphManifest v2: auto-discovers every folder + svg; `slug` = the `pack.slug` id, `file` = the descriptive kebab filename, `label` = derived). `src/lib/glyphs.ts::glyphPath`/`glyphLabel` resolve base-aware (`/yen-cinthanai/`); `Glyph.svelte` is the ONLY image renderer - components reference ids, never inline SVG. See [../architecture/contracts/schemas.md](../architecture/contracts/schemas.md) GlyphManifest v2.
@@ -32,7 +36,7 @@ Heterogeneous-source icons are normalized by seating each inside ONE standard ci
 
 ## Components (metadata-driven)
 
-Puck (the universal circular frame), Token, Slot, SlotBoard, Pool, ClueChip, HUDBar, ActionBar, ResultCard, ShareBar, StatTile, SettingsRow (+ BottomSheet primitive). No per-screen bespoke; one Puck is the single circle used by token + filled slot + seat.
+Puck (the universal circular frame), Token, Slot, SlotBoard, Pool, ClueChip, StoryPanel, ClueList, ClueRow, HUDBar, ActionBar, ResultCard, ShareBar, StatTile, SettingsRow (+ BottomSheet primitive). No per-screen bespoke; one Puck is the single circle used by token + filled slot + seat. Story-first manifests render StoryPanel + ClueList (text) in place of the ClueChip strip.
 
 ## Tailwind tokens
 

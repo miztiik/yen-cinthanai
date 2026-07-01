@@ -1,4 +1,13 @@
 {
+  "clues": {
+    "heading": "Clues",
+    "show": "Clues",
+    "hide": "Hide clues",
+    "strike": "Cross out clue {n}",
+    "unstrike": "Restore clue {n}",
+    "struck": "Clue {n} crossed out",
+    "restored": "Clue {n} restored"
+  },
   "encourage": [
     "So close.",
     "One clue off.",

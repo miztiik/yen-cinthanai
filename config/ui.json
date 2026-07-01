@@ -1,4 +1,7 @@
 {
+  "clue": {
+    "autoDimFeedback": ["realtime-names", "count-wrong"]
+  },
   "puck": {
     "default": "medium",
     "large": {
