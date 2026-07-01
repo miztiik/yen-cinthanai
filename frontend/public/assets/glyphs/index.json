@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T22:31:42Z",
+  "generatedAt": "2026-07-01T04:35:30Z",
   "packs": {
     "abstract": {
       "between": {
@@ -45,6 +45,108 @@
       "seating": {
         "file": "abstract/seating.svg",
         "label": "Seating"
+      }
+    },
+    "clothes": {
+      "manbag": {
+        "file": "clothes/man-bag.svg",
+        "label": "Man bag"
+      },
+      "manbelt": {
+        "file": "clothes/man-belt.svg",
+        "label": "Man belt"
+      },
+      "manbriefcase": {
+        "file": "clothes/man-briefcase.svg",
+        "label": "Man briefcase"
+      },
+      "manhat": {
+        "file": "clothes/man-hat.svg",
+        "label": "Man hat"
+      },
+      "manshirt": {
+        "file": "clothes/man-shirt.svg",
+        "label": "Man shirt"
+      },
+      "manshorts": {
+        "file": "clothes/man-shorts.svg",
+        "label": "Man shorts"
+      },
+      "manslippers": {
+        "file": "clothes/man-slippers.svg",
+        "label": "Man slippers"
+      },
+      "mansuit": {
+        "file": "clothes/man-suit.svg",
+        "label": "Man suit"
+      },
+      "mantie": {
+        "file": "clothes/man-tie.svg",
+        "label": "Man tie"
+      },
+      "manwatch": {
+        "file": "clothes/man-watch.svg",
+        "label": "Man watch"
+      },
+      "womandress": {
+        "file": "clothes/woman-dress.svg",
+        "label": "Woman dress"
+      },
+      "womanearrings": {
+        "file": "clothes/woman-earrings.svg",
+        "label": "Woman earrings"
+      },
+      "womanhandbag": {
+        "file": "clothes/woman-handbag.svg",
+        "label": "Woman handbag"
+      },
+      "womanhat": {
+        "file": "clothes/woman-hat.svg",
+        "label": "Woman hat"
+      },
+      "womanlocket": {
+        "file": "clothes/woman-locket.svg",
+        "label": "Woman locket"
+      },
+      "womannecklace": {
+        "file": "clothes/woman-necklace.svg",
+        "label": "Woman necklace"
+      },
+      "womanpartydress": {
+        "file": "clothes/woman-party-dress.svg",
+        "label": "Woman party dress"
+      },
+      "womanpoloshirt": {
+        "file": "clothes/woman-polo-shirt.svg",
+        "label": "Woman polo shirt"
+      },
+      "womanpurse": {
+        "file": "clothes/woman-purse.svg",
+        "label": "Woman purse"
+      },
+      "womanpyjamas": {
+        "file": "clothes/woman-pyjamas.svg",
+        "label": "Woman pyjamas"
+      },
+      "womansandal": {
+        "file": "clothes/woman-sandal.svg",
+        "label": "Woman sandal"
+      },
+      "womanshirt": {
+        "file": "clothes/woman-shirt.svg",
+        "label": "Woman shirt"
+      },
+      "womanskirt": {
+        "file": "clothes/woman-skirt.svg",
+        "label": "Woman skirt"
+      },
+      "womanswimmingvest": {
+        "file": "clothes/woman-swimming-vest.svg",
+        "label": "Woman swimming vest"
+      },
+      "womantshirt": {
+        "file": "clothes/woman-t-shirt.svg",
+        "label": "Woman t shirt"
       }
     },
     "color": {
@@ -231,6 +333,12 @@
       "wine": {
         "file": "drinks/wine.svg",
         "label": "Wine"
+      }
+    },
+    "events": {
+      "partypopper": {
+        "file": "events/party-popper.svg",
+        "label": "Party popper"
       }
     },
     "food": {
@@ -761,6 +869,88 @@
       "yacht": {
         "file": "transport/yacht.svg",
         "label": "Yacht"
+      }
+    },
+    "vacation": {
+      "arcdetriomphe": {
+        "file": "vacation/arc-de-triomphe.svg",
+        "label": "Arc de triomphe"
+      },
+      "bigben": {
+        "file": "vacation/big-ben.svg",
+        "label": "Big ben"
+      },
+      "burjalarab": {
+        "file": "vacation/burj-al-arab.svg",
+        "label": "Burj al arab"
+      },
+      "christtheredeemer": {
+        "file": "vacation/christ-the-redeemer.svg",
+        "label": "Christ the redeemer"
+      },
+      "colosseum": {
+        "file": "vacation/colosseum.svg",
+        "label": "Colosseum"
+      },
+      "easterisland": {
+        "file": "vacation/easter-island.svg",
+        "label": "Easter island"
+      },
+      "eiffeltower": {
+        "file": "vacation/eiffel-tower.svg",
+        "label": "Eiffel tower"
+      },
+      "flamingo": {
+        "file": "vacation/flamingo.svg",
+        "label": "Flamingo"
+      },
+      "greatwall": {
+        "file": "vacation/great-wall.svg",
+        "label": "Great wall"
+      },
+      "japaneseshrine": {
+        "file": "vacation/japanese-shrine.svg",
+        "label": "Japanese shrine"
+      },
+      "leaningtowerofpisa": {
+        "file": "vacation/leaning-tower-of-pisa.svg",
+        "label": "Leaning tower of pisa"
+      },
+      "londonbridge": {
+        "file": "vacation/london-bridge.svg",
+        "label": "London bridge"
+      },
+      "mountfuji": {
+        "file": "vacation/mount-fuji.svg",
+        "label": "Mount fuji"
+      },
+      "parthenon": {
+        "file": "vacation/parthenon.svg",
+        "label": "Parthenon"
+      },
+      "pearloftheorient": {
+        "file": "vacation/pearl-of-the-orient.svg",
+        "label": "Pearl of the orient"
+      },
+      "pyramid": {
+        "file": "vacation/pyramid.svg",
+        "label": "Pyramid"
+      },
+      "statueofliberty": {
+        "file": "vacation/statue-of-liberty.svg",
+        "label": "Statue of liberty"
+      },
+      "stonehenge": {
+        "file": "vacation/stonehenge.svg",
+        "label": "Stonehenge"
+      },
+      "sydneyoperahouse": {
+        "file": "vacation/sydney-opera-house.svg",
+        "label": "Sydney opera house"
+      },
+      "tajmahal": {
+        "file": "vacation/taj-mahal.svg",
+        "label": "Taj mahal"
       }
     },
     "vegetables": {

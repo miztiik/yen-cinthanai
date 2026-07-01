@@ -5,28 +5,28 @@
     {
       "date": "2026-07-01",
       "file": "2026-07-01-easy.json",
-      "sha": "a28a93f8df71cb6ca7de538dd69f5c8fda695cf58583d1b4aa8e47726f9d095c",
+      "sha": "bc0fd1b6758ab3baba0c25e273e1fbe7a443927cf0916752be38f6f98537ad35",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-07-01",
       "file": "2026-07-01-standard.json",
-      "sha": "44929c9e2f08bf2c2022825b25c0d60ad73047e176d794c8180838c30fba50da",
+      "sha": "becca6f43291250193ff94f33145849f96eb241ca7ab609067535aa04c60f4e9",
       "shapeId": "seating-row",
       "tier": "standard"
     },
     {
       "date": "2026-07-01",
       "file": "2026-07-01-sharp.json",
-      "sha": "9478f5b414a0f7c477ff2456c1e69da85243ee789189448c4d939863c917243f",
+      "sha": "c0030a2c103e8eab88ff4db7ab4cad88801e20efe3765dbe2e80cf9e0896472a",
       "shapeId": "seating-row",
       "tier": "sharp"
     },
     {
       "date": "2026-07-01",
       "file": "2026-07-01-expert.json",
-      "sha": "55f67e3a1a32d6fae96a7cd003cfaa72c9485c07a054f1163ff42bd21e2d3c8e",
+      "sha": "d184eee11506023d39b52e96228865718bd017eaeb4e196ed81098ce7bf62086",
       "shapeId": "round-table",
       "tier": "expert"
     }

@@ -30,21 +30,27 @@ beforeEach(() => {
 afterEach(() => vi.restoreAllMocks());
 
 describe("loader", () => {
+  // The served date is whatever the daily bank was generated for (single-date index,
+  // rewrite-in-place). Derive it from the bank so the daily bot advancing the index
+  // never decouples this contract from the shipped files.
   it("reads the bank index and finds today's standard", async () => {
     const bank = await loadBank();
     expect(bank.schemaVersion).toBe(1);
-    const e = pickEntry(bank, "2026-06-29", "standard");
+    const e = pickEntry(bank, bank.generatedSeed, "standard");
     expect(e.shapeId).toBe("seating-row");
   });
 
   it("loads the manifest for the picked entry", async () => {
-    const m = await loadManifest("2026-06-29-standard.json");
+    const bank = await loadBank();
+    const e = pickEntry(bank, bank.generatedSeed, "standard");
+    const m = await loadManifest(e.file);
     expect(m.tier).toBe("standard");
     expect(m.entities).toHaveLength(4);
   });
 
   it("loadPuzzle resolves index + manifest in one call", async () => {
-    const m = await loadPuzzle("2026-06-29", "easy");
+    const bank = await loadBank();
+    const m = await loadPuzzle(bank.generatedSeed, "easy");
     expect(m.tier).toBe("easy");
     expect(m.entities).toHaveLength(3);
   });
