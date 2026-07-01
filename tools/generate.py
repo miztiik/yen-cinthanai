@@ -44,6 +44,7 @@ from models import (  # noqa: E402
     PuzzleManifest,
     Tier,
 )
+from translator import clue_text  # noqa: E402
 
 _ROOT = Path(__file__).resolve().parent.parent
 CONFIG_DIR = _ROOT / "config"
@@ -446,33 +447,6 @@ def difficulty(tier_dial: dict, entities: int, n_cats: int, n_clues: int, indire
 
 
 # --- emit manifest --------------------------------------------------------------
-
-_TEMPLATES = {
-    "eq": "{a} sits with the {b}.",
-    "neq": "{a} is not with the {b}.",
-    "ends": "{a} is far {side}.",
-    "adjacent": "{a} is next to {b}.",
-    "distance": "{a} and {b} are {k} apart.",
-    "before": "{a} is before {b}.",
-    "opposite": "{a} sits across from {b}.",
-    "between": "{a} sits between {b} and {c}.",
-}
-
-
-def _label(cats: list[Cat], cat: str, val: str) -> str:
-    c = next(c for c in cats if c.id == cat)
-    return c.labels[c.value_ids.index(val)]
-
-
-def clue_text(cats: list[Cat], n: int, clue: Clue) -> str:
-    typ, ops, params = clue
-    p = dict(params)
-    a = _label(cats, *ops[0])
-    if typ == "ends":
-        return _TEMPLATES[typ].format(a=a, side="left" if p["pos"] == 0 else "right")
-    b = _label(cats, *ops[1])
-    c = _label(cats, *ops[2]) if len(ops) > 2 else ""
-    return _TEMPLATES[typ].format(a=a, b=b, c=c, k=p.get("k", ""))
 
 
 def to_manifest(date, tier, shape, rev, cats, n, clues, sol, hints) -> PuzzleManifest:
