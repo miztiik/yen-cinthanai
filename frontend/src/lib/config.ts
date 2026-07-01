@@ -19,7 +19,30 @@ export interface CopyBags {
   hero: string[];
   share?: { title: string; line: string; streak: string };
   credits?: { intro: string; license: string };
+  clues?: CluesCopy;
 }
+
+/** Chrome copy for the story-first clue list (config/copy.json [clues]). `{n}` = number. */
+export interface CluesCopy {
+  heading: string;
+  show: string;
+  hide: string;
+  strike: string;
+  unstrike: string;
+  struck: string;
+  restored: string;
+}
+
+/** Fail-soft clue chrome so a missing copy.json never blanks the labels. */
+export const CLUES_COPY_FALLBACK: CluesCopy = {
+  heading: "Clues",
+  show: "Clues",
+  hide: "Hide clues",
+  strike: "Cross out clue {n}",
+  unstrike: "Restore clue {n}",
+  struck: "Clue {n} crossed out",
+  restored: "Clue {n} restored",
+};
 export interface Pace {
   idle_pulse_s: number;
   idle_glow_s: number;
@@ -85,10 +108,19 @@ export interface PuckPreset {
   diameter: number; // the circle edge, in px
   glyph: number; // inner glyph as a fraction of the diameter (safe-area inset)
 }
+/** Clue-list behaviour tunables (config/ui.json [clue]). Which feedback dials may
+ *  auto-dim a satisfied clue - the soft dials only, so harder tiers never leak. */
+export interface ClueUi {
+  autoDimFeedback: Feedback[];
+}
 export interface UiConfig {
   puck: { default: PuckSize; small: PuckPreset; medium: PuckPreset; large: PuckPreset };
   snap: { radius_factor: number; ease: number };
+  clue?: ClueUi;
 }
+
+/** Soft-feedback fallback: easy (realtime-names) + standard (count-wrong) auto-dim. */
+const SOFT_FEEDBACK_FALLBACK: Feedback[] = ["realtime-names", "count-wrong"];
 
 const UI_FALLBACK: UiConfig = {
   puck: {
@@ -98,6 +130,7 @@ const UI_FALLBACK: UiConfig = {
     large: { diameter: 74, glyph: 0.66 },
   },
   snap: { radius_factor: 1.4, ease: 0.55 },
+  clue: { autoDimFeedback: SOFT_FEEDBACK_FALLBACK },
 };
 
 /** Puck sizing + drag-magnet tunables (config/ui.toml). Fail-soft to bootstrap sizes. */
@@ -109,6 +142,11 @@ export async function loadUi(): Promise<UiConfig> {
 export function puckPreset(ui: UiConfig, size: string): PuckPreset {
   if (size === "small" || size === "medium" || size === "large") return ui.puck[size];
   return ui.puck[ui.puck.default];
+}
+
+/** The feedback dials that may auto-dim a satisfied clue (config-driven, fail-soft). */
+export function softFeedback(ui: UiConfig): Feedback[] {
+  return ui.clue?.autoDimFeedback ?? SOFT_FEEDBACK_FALLBACK;
 }
 
 /** Pick one line from a bag; empty bag yields "". */

@@ -36,6 +36,10 @@ export class Game {
   stars = $state(0);
   checked = $state(false); // last CHECK revealed feedback (non-realtime tiers)
   lastMoveMs = $state(0); // for stuck-moment pacing
+  // Manual clue strikes: player-driven, reversible, LOCAL to this session. Not in
+  // toDayState/save this row - Row 7 persists via DayState.notes.struckClues. See
+  // lib/clues.ts + components/ClueList.svelte.
+  struck = $state<Record<string, boolean>>({});
 
   constructor(m: PuzzleManifest, dial: TierDial, prior?: DayState) {
     this.m = m;
@@ -148,6 +152,11 @@ export class Game {
     this.selected = null;
     this.checked = false;
     this.lastMoveMs = Date.now();
+  }
+
+  /** Toggle a manual clue strike (reversible, never required). Local this session. */
+  toggleStruck(id: string): void {
+    this.struck[id] = !this.struck[id];
   }
 
   /** Lock + score on a complete correct board. Stars: brag-cost via hintsUsed. */

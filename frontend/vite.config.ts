@@ -51,11 +51,16 @@ function pwa() {
   });
 }
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   base,
   plugins: [svelte(), tailwindcss(), pwa(), spaFallback()],
+  // Component render tests opt into jsdom per-file (`@vitest-environment jsdom`) and mount
+  // Svelte; the browser condition makes a bare `svelte` import resolve to its client build
+  // so mount/flushSync work (svelte.dev/docs/svelte/testing). Scoped to test mode - the
+  // production build + dev resolution are untouched; node-env tests keep the default env.
+  ...(mode === "test" ? { resolve: { conditions: ["browser"] } } : {}),
   test: {
     environment: "node",
     include: ["tests/**/*.{test,spec}.ts"],
   },
-});
+}));
