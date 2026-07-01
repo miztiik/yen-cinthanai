@@ -56,7 +56,10 @@ GLYPHS_INDEX = _ROOT / "frontend" / "public" / "assets" / "glyphs" / "index.json
 LOGS_DIR = _ROOT / ".logs"
 
 DIRECT_TYPES = ("eq", "ends")
-INDIRECT_TYPES = ("neq", "adjacent", "distance", "before", "opposite", "between")
+# Compound reified clues are INDIRECT reasoning: they weaken any single cell, so they lift the
+# indirection score (and the tier band) the same way neq does. Only the story path emits them.
+COMPOUND_TYPES = ("oneOf", "oneEachOf", "ifThen")  # oneOf/oneEachOf Sharp+, ifThen Expert-only
+INDIRECT_TYPES = ("neq", "adjacent", "distance", "before", "opposite", "between", *COMPOUND_TYPES)
 NUMERIC_TYPES = ("numDiff", "threshold")  # integer-magnitude clues on a numeric category
 SOLVE_LIMIT_S = 10.0
 
@@ -274,6 +277,15 @@ def _mag_at_slot(m: cp_model.CpModel, x: dict, cat_id: str, mags: dict, slot: in
     return mag_v
 
 
+def _reify_at(m: cp_model.CpModel, var, slot: int):
+    """A fresh bool b with b <-> (var == slot), enforced both ways so the compound clues built on
+    it (oneOf disjunction, ifThen implication) reason correctly in either direction."""
+    b = m.NewBoolVar("")
+    m.Add(var == slot).OnlyEnforceIf(b)
+    m.Add(var != slot).OnlyEnforceIf(b.Not())
+    return b
+
+
 def _add_clue(
     m: cp_model.CpModel, x: dict, seat: dict, vid: dict, n: int, circular: bool,
     mag: dict, clue: Clue,
@@ -301,6 +313,33 @@ def _add_clue(
             t = m.NewIntVar(0, span, "")
             m.AddAbsEquality(t, mag_a - mag_b)
             m.Add(t == p["delta"])
+        return
+    if typ == "oneOf":  # disjunction: the C-value at a's (anchor-fixed) slot is x OR y
+        sa = vid[ca][va]  # a is an anchor value, so its slot is a constant (identity)
+        cx, vx = ops[1]
+        cy, vy = ops[2]
+        bx = _reify_at(m, x[cx][vx], sa)
+        by = _reify_at(m, x[cy][vy], sa)
+        m.AddBoolOr([bx, by])
+        return
+    if typ == "oneEachOf":  # of entities x, y one holds fact A and the other holds fact B
+        sx = vid[ops[0][0]][ops[0][1]]
+        sy = vid[ops[1][0]][ops[1][1]]
+        (ac, av), (bc2, bv2) = ops[2], ops[3]
+        t = m.NewBoolVar("")  # t: x holds A and y holds B; not t: the mirror
+        m.Add(x[ac][av] == sx).OnlyEnforceIf(t)
+        m.Add(x[bc2][bv2] == sy).OnlyEnforceIf(t)
+        m.Add(x[ac][av] == sy).OnlyEnforceIf(t.Not())
+        m.Add(x[bc2][bv2] == sx).OnlyEnforceIf(t.Not())
+        return
+    if typ == "ifThen":  # material implication: (a holds P) => not (b holds Q)
+        sa = vid[ops[0][0]][ops[0][1]]
+        (pc, pv) = ops[1]
+        sb = vid[ops[2][0]][ops[2][1]]
+        (qc, qv) = ops[3]
+        bp = _reify_at(m, x[pc][pv], sa)
+        bq = _reify_at(m, x[qc][qv], sb)
+        m.AddImplication(bp, bq.Not())
         return
     if typ in ("eq", "neq"):
         # eq/neq across a bijective + a (possibly) shared cat: the shared value at the
@@ -523,6 +562,51 @@ def enumerate_numeric_clues(cats: list[Cat], n: int, sol: dict[str, list[str]], 
     return out
 
 
+def enumerate_compound_clues(cats: list[Cat], n: int, sol: dict[str, list[str]], tier: str, scenario) -> list[Clue]:
+    """Reified compound candidates TRUE under the sampled solution, over the NON-anchor NOMINAL
+    bijective categories (a numeric axis keeps its numDiff/threshold clues; "one of $5 or $8"
+    reads poorly). Each type is gated by its clueTemplate minTier vs the tier, so oneOf/oneEachOf
+    appear Sharp+ and ifThen Expert-only - no hardcoded tier list. Empty when the scenario omits a
+    template or has no nominal attribute category. Operands put the anchor (identity) value first
+    so its slot is a constant the model can reify against (see _add_clue)."""
+    tmpl = scenario.clueTemplates
+    anchor = identity_cat(cats)
+    noms = [c for c in cats if c is not anchor and not c.shared and getattr(c, "kind", None) != "numeric"]
+    out: list[Clue] = []
+    if not noms:
+        return out
+
+    def val_at(cat: Cat, slot: int) -> str:  # the category value occupying a slot in the solution
+        return sol[cat.id][slot]
+
+    if "oneOf" in tmpl and tier_at_least(tier, tmpl["oneOf"].minTier):
+        for a in anchor.value_ids:
+            sa = _pos(sol, anchor.id, a)
+            for c in noms:
+                tv = val_at(c, sa)  # the value truly at a's slot (keeps the disjunction true)
+                for decoy in c.value_ids:
+                    if decoy != tv:
+                        out.append(("oneOf", ((anchor.id, a), (c.id, tv), (c.id, decoy)), ()))
+    if "oneEachOf" in tmpl and tier_at_least(tier, tmpl["oneEachOf"].minTier):
+        for c in noms:
+            for i, xe in enumerate(anchor.value_ids):
+                for ye in anchor.value_ids[i + 1 :]:
+                    sx, sy = _pos(sol, anchor.id, xe), _pos(sol, anchor.id, ye)
+                    out.append(("oneEachOf", ((anchor.id, xe), (anchor.id, ye),
+                                              (c.id, val_at(c, sx)), (c.id, val_at(c, sy))), ()))
+    if "ifThen" in tmpl and tier_at_least(tier, tmpl["ifThen"].minTier):
+        cp, cq = noms[0], noms[-1]  # antecedent over the first nominal, consequent over the last
+        for i, a in enumerate(anchor.value_ids):
+            sa = _pos(sol, anchor.id, a)
+            for b in anchor.value_ids[i + 1 :]:  # one directed pair per couple keeps the pool small
+                sb = _pos(sol, anchor.id, b)
+                pv = val_at(cp, sa)  # a really holds P (antecedent true under the solution)
+                qv = val_at(cq, (sb + 1) % n)  # a value b does NOT hold -> "b not Q" holds -> clue true
+                if not (cp.id == cq.id and pv == qv):
+                    out.append(("ifThen", ((anchor.id, a), (cp.id, pv), (anchor.id, b), (cq.id, qv)), ()))
+    return out
+
+
 # --- select + prune -------------------------------------------------------------
 
 
@@ -693,9 +777,10 @@ def _story_acceptable(
 ) -> bool:
     """Accept a story puzzle only when it is in the tier band, is zero-guess (the forced trace
     reaches every non-anchor cell), keeps eq present with no clue type past the share cap
-    (variety), carries at least one numeric clue when the tier gates one in, and has at least one
-    single-clue eq opener. Guarantees the quality gates (P1/P2/P4/P5) hold on the emitted manifest
-    even with numeric clues present."""
+    (variety), carries at least one numeric clue when the tier gates one in, holds at most one
+    ifThen (the compound conditional is a rare spice), and has at least one single-clue eq opener.
+    Guarantees the quality gates (P1/P2/P4/P5) hold on the emitted manifest even with numeric and
+    compound clues present."""
     lo, hi = band
     if not (lo <= d <= hi):
         return False
@@ -705,6 +790,8 @@ def _story_acceptable(
     if not types or "eq" not in types:
         return False
     if numeric_types and not any(t in numeric_types for t in types):  # a numeric clue must appear
+        return False
+    if types.count("ifThen") > 1:  # at most one conditional per puzzle (the gate the tests assert)
         return False
     if max(types.count(t) for t in set(types)) / len(types) > share_cap:
         return False
@@ -774,11 +861,13 @@ class StoryBuild:
 def build_story(
     date: str, tier: Tier, variant: int = 1, config_dir: Path = CONFIG_DIR, scenario_path: Path | None = None
 ) -> StoryBuild:
-    """Corpus-driven story-first matrix reusing the CP-SAT pipeline: sample a unique solution,
-    enumerate eq/neq + numeric (numDiff/threshold, tier-gated) clues TRUE under it, weighted-select
-    a minimal set, verify uniqueness, trace the forced deduction, and reseed until the puzzle is in
-    band + zero-guess + varied + carries a numeric clue when the tier gates one in. Deterministic
-    for a given (date, tier, variant). Returns the manifest plus the internals used to build it."""
+    """Corpus-driven story-first matrix reusing the CP-SAT pipeline: take the tier's dimension
+    budget (tiers.json categories, subject first), sample a unique solution, enumerate eq/neq +
+    numeric (numDiff/threshold) + compound (oneOf/oneEachOf/ifThen) clues TRUE under it - each
+    tier-gated by its clueTemplate minTier - weighted-select a minimal set, verify uniqueness,
+    trace the forced deduction, and reseed until the puzzle is in band + zero-guess + varied +
+    carries a numeric clue when the tier gates one in (<= 1 ifThen). Deterministic for a given
+    (date, tier, variant). Returns the manifest plus the internals used to build it."""
     tiers = load_config("tiers", config_dir)[tier]
     dials = load_config("dials", config_dir)
     story = dials["story"]
@@ -786,6 +875,8 @@ def build_story(
     entities = tiers["entities"]
     base = story_seed(date, tier, variant)
     cats = build_story_categories(scenario, entities, base)
+    budget = min(tiers["categories"], len(cats))  # config-driven dimension count per tier (tiers.json)
+    cats = cats[:budget]  # subject stays cats[0] (the identity anchor); lower tiers use fewer axes
     anchor = identity_cat(cats)
     full_depth = sum(1 for c in cats if c is not anchor and not c.shared) * entities
     numeric_types = _numeric_types_for_tier(scenario, tier)
@@ -798,6 +889,7 @@ def build_story(
         sol = sample_solution(cats, entities, rng)
         cand = enumerate_clues(cats, entities, sol, allowed=("eq", "neq"))
         cand += enumerate_numeric_clues(cats, entities, sol, tier, scenario)
+        cand += enumerate_compound_clues(cats, entities, sol, tier, scenario)
         clues = select_minimal(cats, entities, cand, story["weights"], seed, rng)
         hints = hint_trace(cats, entities, clues, sol, seed)
         indirect = sum(1 for c in clues if c[0] in INDIRECT_TYPES)

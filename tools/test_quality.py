@@ -2,9 +2,13 @@
 single-clue eq opener (P2), difficulty in the tier band (P4), variety with eq present (P5), no
 non-anchor value leaked into the story (P7), and every clue rendered to brace-free ASCII (T1).
 Row 5 adds numeric clues: magnitude round-trip (T13), numeric facts true (T14), and a DEFINITE
-solver-status guard. Real solver + real corpus, deterministic, no mocks (CLAUDE.md #7, #13)."""
+solver-status guard. Row 6 adds reified compound clues (oneOf/oneEachOf Sharp+, ifThen Expert-only
+and at most one): the per-tier type gate (T15), the indirection gate (T16), and the zero-guess P1
+tripwire on a Sharp manifest carrying a oneOf and an Expert manifest carrying an ifThen. Real solver
++ real corpus, deterministic, no mocks (CLAUDE.md #7, #13)."""
 
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -16,6 +20,9 @@ from models import PuzzleManifest
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_DIR = ROOT / "config"
 DATE, TIER, VARIANT = "2026-07-01", "standard", 1
+# Compound tiers pinned to deterministic variants that keep the compound spice in their minimal
+# set: Sharp v1 retains a oneOf, Expert v2 retains an ifThen (both in band + full-depth zero-guess).
+SHARP_VARIANT, EXPERT_VARIANT = 1, 2
 
 
 @pytest.fixture(scope="module")
@@ -29,6 +36,18 @@ def build() -> g.StoryBuild:
     # The full accepted attempt, exposing the solver-internal cats/clues/solution/seed so the
     # numeric + DEFINITE-status gates can re-verify without re-running the reseed loop.
     return g.build_story(DATE, TIER, VARIANT, CONFIG_DIR)
+
+
+@pytest.fixture(scope="module")
+def sharp_build() -> g.StoryBuild:
+    # Sharp gates in oneOf + oneEachOf (Sharp+); the pinned variant keeps a oneOf in the minimal set.
+    return g.build_story(DATE, "sharp", SHARP_VARIANT, CONFIG_DIR)
+
+
+@pytest.fixture(scope="module")
+def expert_build() -> g.StoryBuild:
+    # Expert additionally gates in ifThen (Expert-only, <= 1); the pinned variant keeps an ifThen.
+    return g.build_story(DATE, "expert", EXPERT_VARIANT, CONFIG_DIR)
 
 
 def _mag_by_anchor(m) -> tuple:
@@ -192,3 +211,81 @@ def test_numeric_modeling_undirected_and_atmost() -> None:
     assert g._definite(s.Solve(m)) in (cp_model.OPTIMAL, cp_model.FEASIBLE)
     slot_val = {s.Value(x["amt"][v]): v for v in num.value_ids}
     assert abs(magmap[slot_val[0]] - magmap[slot_val[1]]) == 7
+
+
+# --- Row 6: compound clue gates (oneOf/oneEachOf Sharp+, ifThen Expert-only) --------------------
+
+
+def _full_depth(m) -> int:
+    # Zero-guess target: one forced step per non-anchor bijective cell (non-anchor cats * entities).
+    anchor = _anchor_id(m)
+    non_anchor_bij = [c for c in m.categories.items if c.id != anchor and c.cardinality == "bijective"]
+    return len(non_anchor_bij) * len(m.entities)
+
+
+def _allowed_types(scenario, tier: str) -> set:
+    # The clue types a tier gates IN (each clueTemplate's minTier <= tier). Config-driven: the single
+    # source of truth is the template's minTier, never a hardcoded tier list in the test or logic.
+    return {t for t, ct in scenario.clueTemplates.items() if g.tier_at_least(tier, ct.minTier)}
+
+
+def test_t15_tier_type_gate(build: g.StoryBuild, sharp_build: g.StoryBuild, expert_build: g.StoryBuild) -> None:
+    # Every generated manifest uses only clue types its tier gates in; the compound spice is tier
+    # gated - oneOf/oneEachOf are Sharp+, ifThen is Expert-only and appears at most once per puzzle.
+    scenario = build.scenario
+    for b, tier in ((build, "standard"), (sharp_build, "sharp"), (expert_build, "expert")):
+        types = {c.type for c in b.manifest.constraints}
+        assert types <= _allowed_types(scenario, tier), (tier, sorted(types - _allowed_types(scenario, tier)))
+    assert not any(c.type == "oneOf" for c in build.manifest.constraints)     # oneOf is Sharp+
+    assert not any(c.type == "ifThen" for c in build.manifest.constraints)    # ifThen is Expert-only
+    assert not any(c.type == "ifThen" for c in sharp_build.manifest.constraints)
+    assert sum(1 for c in expert_build.manifest.constraints if c.type == "ifThen") <= 1
+    # The gate lives in the enumerator (each clueTemplate's minTier), not a hardcoded tier list:
+    assert g.enumerate_compound_clues(build.cats, build.entities, build.sol, "standard", scenario) == []
+    assert not any(
+        cl[0] == "ifThen"
+        for cl in g.enumerate_compound_clues(sharp_build.cats, sharp_build.entities, sharp_build.sol, "sharp", scenario)
+    )
+
+
+def test_t16_indirection_gate(build: g.StoryBuild, sharp_build: g.StoryBuild) -> None:
+    # Indirection is tier gated: standard names operands directly (no "the <refPhrase>"), while
+    # sharp/expert refer to them indirectly by refPhrase ("the potter"), like a printed logic puzzle.
+    # Word-boundary match so "the potter" is not spuriously found inside "threw the pottery".
+    def ref_rendered(m) -> bool:
+        refs = {v.refPhrase for c in m.categories.items for v in c.values if v.refPhrase}
+        pats = [re.compile(rf"\bthe {re.escape(rp)}\b") for rp in refs]
+        return any(p.search(cc.clueText) for cc in m.constraints for p in pats)
+
+    assert not ref_rendered(build.manifest)    # standard: indirection.byTier == "name" -> labels only
+    assert ref_rendered(sharp_build.manifest)  # sharp: indirection.byTier == "attribute" -> refPhrase
+
+
+def test_p1_compound_sharp_oneof_full_depth(sharp_build: g.StoryBuild) -> None:
+    # P1 tripwire with a compound clue present: a Sharp manifest carrying a oneOf is still fully
+    # forced (the reified disjunction participates in is_unique + hint_trace; zero guesses remain).
+    m = sharp_build.manifest
+    assert any(c.type == "oneOf" for c in m.constraints)
+    assert len(m.hintTrace) == _full_depth(m)
+    assert g.is_unique(sharp_build.cats, sharp_build.entities, sharp_build.clues, sharp_build.seed) is True
+
+
+def test_p1_compound_expert_ifthen_full_depth(expert_build: g.StoryBuild) -> None:
+    # P1 tripwire with the conditional: an Expert manifest carrying an ifThen (AddImplication) stays
+    # fully forced and unique - the implication reasons correctly inside the forced deduction trace.
+    m = expert_build.manifest
+    assert any(c.type == "ifThen" for c in m.constraints)
+    assert len(m.hintTrace) == _full_depth(m)
+    assert g.is_unique(expert_build.cats, expert_build.entities, expert_build.clues, expert_build.seed) is True
+
+
+def test_rebuild_is_byte_identical_sharp(sharp_build: g.StoryBuild) -> None:
+    # Determinism holds with oneOf/oneEachOf present: same (date, tier, variant) -> identical manifest.
+    rebuilt = g.generate_story(DATE, "sharp", SHARP_VARIANT, CONFIG_DIR)[0]
+    assert rebuilt.model_dump(by_alias=True) == sharp_build.manifest.model_dump(by_alias=True)
+
+
+def test_rebuild_is_byte_identical_expert(expert_build: g.StoryBuild) -> None:
+    # Determinism holds with an ifThen present: same (date, tier, variant) -> identical manifest.
+    rebuilt = g.generate_story(DATE, "expert", EXPERT_VARIANT, CONFIG_DIR)[0]
+    assert rebuilt.model_dump(by_alias=True) == expert_build.manifest.model_dump(by_alias=True)
