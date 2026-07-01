@@ -23,7 +23,7 @@ def _clues_from(m: PuzzleManifest) -> list[g.Clue]:
 
 
 def _cats(tier: str) -> list[g.Cat]:
-    ent = g.load_toml("tiers", CONFIG_DIR)[tier]["entities"]
+    ent = g.load_config("tiers", CONFIG_DIR)[tier]["entities"]
     return g.build_categories(tier, ent, CONFIG_DIR, DATE)
 
 
@@ -53,7 +53,7 @@ def test_prune_minimal(tier: str) -> None:
 
 @pytest.mark.parametrize("tier", TIERS)
 def test_difficulty_in_band(tier: str) -> None:
-    lo, hi = g.load_toml("tiers", CONFIG_DIR)[tier]["band"]
+    lo, hi = g.load_config("tiers", CONFIG_DIR)[tier]["band"]
     _, d, _ = g.generate(DATE, tier, CONFIG_DIR)
     assert lo <= d <= hi
 
@@ -89,7 +89,7 @@ def test_index_and_log(tmp_path: Path) -> None:
 
 
 def test_registry_has_three_entries() -> None:
-    reg = g.load_toml("shapes", CONFIG_DIR)
+    reg = g.load_config("shapes", CONFIG_DIR)
     assert set(reg) == {"grid", "seating-row", "round-table"}
     assert reg["grid"]["topology"] == "matrix" and reg["grid"]["ordinal_axis"] is False
     assert reg["seating-row"]["topology"] == "linear" and reg["seating-row"]["ordinal_axis"] is True
@@ -177,7 +177,7 @@ def test_expert_is_six_by_five() -> None:
 
 def test_bigger_grids_stay_in_band() -> None:
     for tier in ("sharp", "expert"):
-        lo, hi = g.load_toml("tiers", CONFIG_DIR)[tier]["band"]
+        lo, hi = g.load_config("tiers", CONFIG_DIR)[tier]["band"]
         _, d, _ = g.generate(DATE, tier, CONFIG_DIR)
         assert lo <= d <= hi
 

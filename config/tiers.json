@@ -1,0 +1,86 @@
+{
+  "easy": {
+    "attempts": -1,
+    "band": [
+      0,
+      13
+    ],
+    "cardinality": "bijective",
+    "categories": 2,
+    "clue_count": [
+      3,
+      4
+    ],
+    "entities": 3,
+    "feedback": "realtime-names",
+    "hints": -1,
+    "indir": [
+      0.0,
+      0.0
+    ],
+    "par_s": 90
+  },
+  "expert": {
+    "attempts": 1,
+    "band": [
+      96,
+      120
+    ],
+    "cardinality": "bijective",
+    "categories": 5,
+    "clue_count": [
+      14,
+      16
+    ],
+    "entities": 6,
+    "feedback": "submit-binary",
+    "hints": 0,
+    "indir": [
+      0.8,
+      1.0
+    ],
+    "par_s": 900
+  },
+  "sharp": {
+    "attempts": 2,
+    "band": [
+      48,
+      66
+    ],
+    "cardinality": "bijective",
+    "categories": 4,
+    "clue_count": [
+      9,
+      11
+    ],
+    "entities": 5,
+    "feedback": "binary-check",
+    "hints": 1,
+    "indir": [
+      0.0,
+      0.2
+    ],
+    "par_s": 480
+  },
+  "standard": {
+    "attempts": 3,
+    "band": [
+      14,
+      39
+    ],
+    "cardinality": "shared",
+    "categories": 3,
+    "clue_count": [
+      5,
+      7
+    ],
+    "entities": 4,
+    "feedback": "count-wrong",
+    "hints": 2,
+    "indir": [
+      0.25,
+      0.4
+    ],
+    "par_s": 240
+  }
+}

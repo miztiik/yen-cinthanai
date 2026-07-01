@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "puzzleId": "2026-07-01",
+  "variant": 1,
+  "tier": "easy",
+  "shapeId": "grid",
+  "templateRev": 1,
+  "scenarioId": "lunchroom-swap",
+  "subjectNoun": "kid",
+  "story": "At Maple Street School, three friends meet at the same lunch table every day to swap snacks. Today each of them brought a different piece of fruit to trade. Work out which fruit each friend ended up with.",
+  "entities": ["e0", "e1", "e2"],
+  "categories": {
+    "n": 2,
+    "list": [
+      {
+        "id": "name",
+        "label": "Kid",
+        "kind": "nominal",
+        "ordinal": false,
+        "cardinality": "bijective",
+        "anchor": true,
+        "values": [
+          { "id": "mia", "label": "Mia", "glyph": "" },
+          { "id": "leo", "label": "Leo", "glyph": "" },
+          { "id": "zoe", "label": "Zoe", "glyph": "" }
+        ]
+      },
+      {
+        "id": "fruit",
+        "label": "Fruit",
+        "kind": "nominal",
+        "ordinal": false,
+        "cardinality": "bijective",
+        "values": [
+          { "id": "apple", "label": "Apple", "glyph": "food.apple", "phrase": "picked the apple", "refPhrase": "apple-picker" },
+          { "id": "banana", "label": "Banana", "glyph": "food.banana", "phrase": "picked the banana", "refPhrase": "banana-picker" },
+          { "id": "cherry", "label": "Cherry", "glyph": "food.cherry", "phrase": "picked the cherry", "refPhrase": "cherry-picker" }
+        ]
+      }
+    ]
+  },
+  "constraints": [
+    { "id": "c1", "type": "neq", "renderHint": "neq", "operands": [ { "cat": "name", "value": "mia" }, { "cat": "fruit", "value": "apple" } ], "params": {}, "clueText": "Mia turned her nose up at the apple." },
+    { "id": "c2", "type": "neq", "renderHint": "neq", "operands": [ { "cat": "name", "value": "zoe" }, { "cat": "fruit", "value": "apple" } ], "params": {}, "clueText": "The apple was not the one Zoe walked away with." },
+    { "id": "c3", "type": "eq", "renderHint": "eq", "operands": [ { "cat": "name", "value": "zoe" }, { "cat": "fruit", "value": "banana" } ], "params": {}, "clueText": "Zoe was happy to take the banana." }
+  ],
+  "solution": {
+    "e0": { "name": "mia", "fruit": "cherry" },
+    "e1": { "name": "leo", "fruit": "apple" },
+    "e2": { "name": "zoe", "fruit": "banana" }
+  },
+  "hintTrace": [
+    { "fromClues": ["c1", "c2"], "forces": { "entity": "e1", "cat": "fruit", "value": "apple" } },
+    { "fromClues": ["c3"], "forces": { "entity": "e2", "cat": "fruit", "value": "banana" } },
+    { "fromClues": ["c3"], "forces": { "entity": "e0", "cat": "fruit", "value": "cherry" } }
+  ]
+}

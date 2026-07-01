@@ -1,0 +1,17 @@
+{
+  "pace": {
+    "idle_glow_s": 25,
+    "idle_pulse_s": 12,
+    "stats_window": 10
+  },
+  "prune": {
+    "oldest_first": true,
+    "protect_today": true,
+    "trigger": "quota-exceeded"
+  },
+  "streak": {
+    "refill_weekday": "monday",
+    "reset_utc_hour": 0,
+    "skips_per_week": 1
+  }
+}

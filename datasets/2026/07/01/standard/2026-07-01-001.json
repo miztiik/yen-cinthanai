@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "puzzleId": "2026-07-01",
+  "variant": 1,
+  "tier": "standard",
+  "shapeId": "grid",
+  "templateRev": 1,
+  "scenarioId": "weekend-market",
+  "subjectNoun": "friend",
+  "story": "Every Saturday, four friends run neighbouring stalls at the riverside craft market, watched over by old Mr. Pemberton, who has kept the market ledger for forty years and still records every sale in green ink. This week each friend brought a different handmade craft and settled on a different price for it. Mr. Pemberton has misplaced his ledger page - match every friend to the craft they made and the price they charged.",
+  "entities": ["e0", "e1", "e2", "e3"],
+  "categories": {
+    "n": 3,
+    "list": [
+      {
+        "id": "name",
+        "label": "Friend",
+        "kind": "nominal",
+        "ordinal": false,
+        "cardinality": "bijective",
+        "anchor": true,
+        "values": [
+          { "id": "ana", "label": "Ana", "glyph": "" },
+          { "id": "ben", "label": "Ben", "glyph": "" },
+          { "id": "cara", "label": "Cara", "glyph": "" },
+          { "id": "dev", "label": "Dev", "glyph": "" }
+        ]
+      },
+      {
+        "id": "craft",
+        "label": "Craft",
+        "kind": "nominal",
+        "ordinal": false,
+        "cardinality": "bijective",
+        "values": [
+          { "id": "candles", "label": "Candles", "glyph": "", "phrase": "made the candles", "refPhrase": "candle-maker" },
+          { "id": "jam", "label": "Jam", "glyph": "", "phrase": "made the jam", "refPhrase": "jam-maker" },
+          { "id": "pottery", "label": "Pottery", "glyph": "", "phrase": "threw the pottery", "refPhrase": "potter" },
+          { "id": "soap", "label": "Soap", "glyph": "", "phrase": "made the soap", "refPhrase": "soap-maker" }
+        ]
+      },
+      {
+        "id": "price",
+        "label": "Price",
+        "kind": "numeric",
+        "unit": "dollars",
+        "ordinal": true,
+        "cardinality": "bijective",
+        "values": [
+          { "id": "p5", "label": "$5", "glyph": "", "magnitude": 5, "phrase": "charged 5 dollars" },
+          { "id": "p8", "label": "$8", "glyph": "", "magnitude": 8, "phrase": "charged 8 dollars" },
+          { "id": "p12", "label": "$12", "glyph": "", "magnitude": 12, "phrase": "charged 12 dollars" },
+          { "id": "p20", "label": "$20", "glyph": "", "magnitude": 20, "phrase": "charged 20 dollars" }
+        ]
+      }
+    ]
+  },
+  "constraints": [
+    { "id": "c1", "type": "eq", "renderHint": "eq", "operands": [ { "cat": "name", "value": "ben" }, { "cat": "craft", "value": "candles" } ], "params": {}, "clueText": "Ben's stall smelled of warm beeswax all morning - the candles were his." },
+    { "id": "c2", "type": "eq", "renderHint": "eq", "operands": [ { "cat": "name", "value": "cara" }, { "cat": "price", "value": "p5" } ], "params": {}, "clueText": "Cara went home with the smallest takings of the day, just 5 dollars." },
+    { "id": "c3", "type": "neq", "renderHint": "neq", "operands": [ { "cat": "name", "value": "ana" }, { "cat": "craft", "value": "soap" } ], "params": {}, "clueText": "Ana never works with lye, so the soap was not hers." },
+    { "id": "c4", "type": "neq", "renderHint": "neq", "operands": [ { "cat": "name", "value": "ana" }, { "cat": "craft", "value": "jam" } ], "params": {}, "clueText": "With no fruit to spare that week, Ana brought no jam." },
+    { "id": "c5", "type": "eq", "renderHint": "eq", "operands": [ { "cat": "craft", "value": "soap" }, { "cat": "price", "value": "p8" } ], "params": {}, "clueText": "The soap on the tables was priced at 8 dollars." },
+    { "id": "c6", "type": "numDiff", "renderHint": "numDiff", "operands": [ { "cat": "name", "value": "ana" }, { "cat": "name", "value": "dev" } ], "params": { "delta": 4, "dir": "greater", "numericCat": "price" }, "clueText": "Ana's takings came to 4 dollars more than Dev's." }
+  ],
+  "solution": {
+    "e0": { "name": "ana", "craft": "pottery", "price": "p12" },
+    "e1": { "name": "ben", "craft": "candles", "price": "p20" },
+    "e2": { "name": "cara", "craft": "jam", "price": "p5" },
+    "e3": { "name": "dev", "craft": "soap", "price": "p8" }
+  },
+  "hintTrace": [
+    { "fromClues": ["c1"], "forces": { "entity": "e1", "cat": "craft", "value": "candles" } },
+    { "fromClues": ["c1", "c3", "c4"], "forces": { "entity": "e0", "cat": "craft", "value": "pottery" } },
+    { "fromClues": ["c2"], "forces": { "entity": "e2", "cat": "price", "value": "p5" } },
+    { "fromClues": ["c2", "c5"], "forces": { "entity": "e2", "cat": "craft", "value": "jam" } },
+    { "fromClues": ["c5"], "forces": { "entity": "e3", "cat": "craft", "value": "soap" } },
+    { "fromClues": ["c5"], "forces": { "entity": "e3", "cat": "price", "value": "p8" } },
+    { "fromClues": ["c6"], "forces": { "entity": "e0", "cat": "price", "value": "p12" } },
+    { "fromClues": ["c6"], "forces": { "entity": "e1", "cat": "price", "value": "p20" } }
+  ]
+}

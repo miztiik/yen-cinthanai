@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "id": "weekend-market",
+  "title": "The Saturday Market",
+  "subjectNoun": "friend",
+  "subjectCategory": "name",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content, not transcribed from any source). The generator picks N values per category, samples a unique solution, emits clues from clueTemplates honoring the tier's indirection + compound gates, verifies uniqueness (is_unique), then renders story + numbered clues. Rich COMPOUND puzzles are GENERATED and verified-unique, never hand-authored - see plan sec 19.",
+  "narrativeTemplate": "Every Saturday, {n} friends run neighbouring stalls at the riverside craft market, watched over by old {mentor}, who has kept the market ledger for forty years and still records every sale in {ink} ink. This week each friend brought a different handmade craft and settled on a different price. {mentor} has misplaced the ledger page - match every friend to the craft they made and the price they charged.",
+  "flavorPools": {
+    "mentor": ["Mr. Pemberton", "Mrs. Alvarez", "old Tomas", "Miss Okafor"],
+    "ink": ["green", "violet", "sepia"]
+  },
+  "indirection": {
+    "note": "How an operand is named in a clue. 'name' -> 'Ana'; 'attribute' -> 'the potter' (uses the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "name",
+      "label": "Friend",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "ana", "label": "Ana" },
+        { "id": "ben", "label": "Ben" },
+        { "id": "cara", "label": "Cara" },
+        { "id": "dev", "label": "Dev" },
+        { "id": "eli", "label": "Eli" },
+        { "id": "fay", "label": "Fay" }
+      ]
+    },
+    {
+      "id": "craft",
+      "label": "Craft",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "candles", "label": "Candles", "phrase": "made the candles", "refPhrase": "candle-maker" },
+        { "id": "jam", "label": "Jam", "phrase": "made the jam", "refPhrase": "jam-maker" },
+        { "id": "pottery", "label": "Pottery", "phrase": "threw the pottery", "refPhrase": "potter" },
+        { "id": "soap", "label": "Soap", "phrase": "made the soap", "refPhrase": "soap-maker" },
+        { "id": "honey", "label": "Honey", "phrase": "jarred the honey", "refPhrase": "beekeeper" },
+        { "id": "prints", "label": "Prints", "phrase": "sold the prints", "refPhrase": "printer" }
+      ]
+    },
+    {
+      "id": "price",
+      "label": "Price",
+      "kind": "numeric",
+      "unit": "dollars",
+      "valuePool": [
+        { "id": "p5", "label": "$5", "magnitude": 5 },
+        { "id": "p8", "label": "$8", "magnitude": 8 },
+        { "id": "p10", "label": "$10", "magnitude": 10 },
+        { "id": "p12", "label": "$12", "magnitude": 12 },
+        { "id": "p15", "label": "$15", "magnitude": 15 },
+        { "id": "p20", "label": "$20", "magnitude": 20 }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "{a_ref}'s table was the one that {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} did not {b_phrase}.",
+        "{b_label} was not {a_ref}'s work that week.",
+        "Whatever {a_ref} brought, it was not the {b_label}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "price",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref}'s takings came to {delta} dollars more than {b_ref}'s.",
+        "The {a_ref} charged {delta} dollars more than the {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "price",
+      "minTier": "sharp",
+      "variants": [
+        "The {a_ref} charged at least {bound} dollars.",
+        "Whoever {a_phrase} did not charge less than {bound} dollars."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} could not decide between the {x_label} and the {y_label}, and set out just one.",
+        "{a_ref} brought either the {x_label} or the {y_label} - not both."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of the {x_ref} and the {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then the {b_ref} did not {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "puck": {
+    "default": "medium",
+    "large": {
+      "diameter": 74,
+      "glyph": 0.66
+    },
+    "medium": {
+      "diameter": 60,
+      "glyph": 0.64
+    },
+    "small": {
+      "diameter": 46,
+      "glyph": 0.6
+    }
+  },
+  "snap": {
+    "ease": 0.55,
+    "radius_factor": 1.4
+  }
+}
