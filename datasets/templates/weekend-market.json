@@ -10,7 +10,7 @@
   "note": "SAMPLE authoring template (original content, not transcribed from any source). The generator picks N values per category, samples a unique solution, emits clues from clueTemplates honoring the tier's indirection + compound gates, verifies uniqueness (is_unique), then renders story + numbered clues. Rich COMPOUND puzzles are GENERATED and verified-unique, never hand-authored - see plan sec 19.",
   "narrativeTemplate": "Every Saturday, {n} friends run neighbouring stalls at the riverside craft market, watched over by old {mentor}, who has kept the market ledger for forty years and still records every sale in {ink} ink. This week each friend brought a different handmade craft and settled on a different price. {mentor} has misplaced the ledger page - match every friend to the craft they made and the price they charged.",
   "flavorPools": {
-    "mentor": ["Mr. Pemberton", "Mrs. Alvarez", "old Tomas", "Miss Okafor"],
+    "mentor": ["Mr. Pemberton", "Mrs. Alvarez", "Tomas", "Miss Okafor"],
     "ink": ["green", "violet", "sepia"]
   },
   "indirection": {
@@ -51,12 +51,12 @@
       "kind": "numeric",
       "unit": "dollars",
       "valuePool": [
-        { "id": "p5", "label": "$5", "magnitude": 5 },
-        { "id": "p8", "label": "$8", "magnitude": 8 },
-        { "id": "p10", "label": "$10", "magnitude": 10 },
-        { "id": "p12", "label": "$12", "magnitude": 12 },
-        { "id": "p15", "label": "$15", "magnitude": 15 },
-        { "id": "p20", "label": "$20", "magnitude": 20 }
+        { "id": "p5", "label": "$5", "magnitude": 5, "phrase": "charged 5 dollars" },
+        { "id": "p8", "label": "$8", "magnitude": 8, "phrase": "charged 8 dollars" },
+        { "id": "p10", "label": "$10", "magnitude": 10, "phrase": "charged 10 dollars" },
+        { "id": "p12", "label": "$12", "magnitude": 12, "phrase": "charged 12 dollars" },
+        { "id": "p15", "label": "$15", "magnitude": 15, "phrase": "charged 15 dollars" },
+        { "id": "p20", "label": "$20", "magnitude": 20, "phrase": "charged 20 dollars" }
       ]
     }
   ],
@@ -72,7 +72,7 @@
     "neq": {
       "minTier": "easy",
       "variants": [
-        "{a_ref} did not {b_phrase}.",
+        "{a_ref} did not bring the {b_label}.",
         "{b_label} was not {a_ref}'s work that week.",
         "Whatever {a_ref} brought, it was not the {b_label}."
       ]

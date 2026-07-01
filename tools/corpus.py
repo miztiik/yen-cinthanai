@@ -72,6 +72,7 @@ class TemplateCategory(_Strict):
     valuePool: list[TemplateValue]
     anchor: bool | None = None
     unit: str | None = None
+    glyphPack: str | None = None
 
 
 class ClueTemplate(_Strict):

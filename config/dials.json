@@ -1,6 +1,13 @@
 {
   "max_reseeds": 64,
   "seed_salt": "yen-cinthanai-v1",
+  "story": {
+    "weights": {
+      "eq": 2,
+      "neq": 2
+    },
+    "share_cap": 0.8
+  },
   "template_rev": 1,
   "tier": {
     "easy": {

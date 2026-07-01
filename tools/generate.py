@@ -44,11 +44,13 @@ from models import (  # noqa: E402
     PuzzleManifest,
     Tier,
 )
-from translator import clue_text  # noqa: E402
+from corpus import load_scenario_template  # noqa: E402
+from translator import clue_text, render_clue, render_story  # noqa: E402
 
 _ROOT = Path(__file__).resolve().parent.parent
 CONFIG_DIR = _ROOT / "config"
 PUZZLES_DIR = _ROOT / "frontend" / "public" / "puzzles"
+DATASETS_DIR = _ROOT / "datasets"
 GLYPHS_INDEX = _ROOT / "frontend" / "public" / "assets" / "glyphs" / "index.json"
 LOGS_DIR = _ROOT / ".logs"
 
@@ -111,6 +113,15 @@ class Cat:
     glyphs: list[str]
     labels: list[str]
     cardinality: str = "bijective"
+    # Story-first (corpus-driven matrix) parallel metadata; all optional so the existing
+    # glyph-manifest Cat construction (build_categories/_value_cat) is unaffected.
+    phrases: list[str | None] | None = None
+    ref_phrases: list[str | None] | None = None
+    magnitudes: list[int | None] | None = None
+    kind: str | None = None
+    unit: str | None = None
+    glyph_pack: str | None = None
+    anchor: bool | None = None
 
     @property
     def shared(self) -> bool:
@@ -121,6 +132,7 @@ class Cat:
 # (num1..numN) plus the clue/UI glyphs (grid, opposite, between, ...).
 _STRUCTURAL_PACKS = ("abstract",)
 _CAT_SALT = 0x9E3779B9  # decorrelate the dimension-pick PRNG from the per-attempt solution PRNG
+_STORY_SALT = 0x85EBCA6B  # decorrelate the story value-pick PRNG (corpus-driven matrix)
 
 
 def _manifest_packs(config_dir: Path) -> dict:
@@ -172,6 +184,33 @@ def build_categories(tier: Tier, entities: int, config_dir: Path, date: str) -> 
     return cats
 
 
+def build_story_categories(scenario, entities: int, seed: int) -> list[Cat]:
+    """Build one bijective Cat per scenario category (subject first == the anchor). Every Cat
+    keeps ordinal=False so identity_cat() anchors on the subject; the emitted manifest derives
+    its display ordinal from kind. Date-seeded pick of N values per category (N = entities);
+    glyphPack decorates value.glyph as '<pack>.<id>' or '' when the category has no pack."""
+    rng = random.Random(seed ^ _STORY_SALT)
+    cats: list[Cat] = []
+    for tc in scenario.categories:
+        pool = list(tc.valuePool)
+        picked = rng.sample(pool, min(entities, len(pool)))
+        gp = getattr(tc, "glyphPack", None)
+        cats.append(
+            Cat(
+                id=tc.id, label=tc.label, ordinal=False,
+                value_ids=[v.id for v in picked],
+                glyphs=[f"{gp}.{v.id}" if gp else "" for v in picked],
+                labels=[v.label for v in picked],
+                cardinality="bijective",
+                phrases=[v.phrase for v in picked],
+                ref_phrases=[v.refPhrase for v in picked],
+                magnitudes=[v.magnitude for v in picked],
+                kind=tc.kind, unit=tc.unit, glyph_pack=gp, anchor=tc.anchor,
+            )
+        )
+    return cats
+
+
 # --- seed -----------------------------------------------------------------------
 
 
@@ -179,6 +218,12 @@ def seed_int(date: str, tier: Tier, config_dir: Path) -> int:
     salt = load_config("dials", config_dir)["seed_salt"]
     digest = hashlib.sha256(f"{salt}:{date}:{tier}".encode("ascii")).hexdigest()
     return int(digest[:8], 16)
+
+
+def story_seed(date: str, tier: Tier, variant: int) -> int:
+    """Deterministic per (date, tier, variant) seed for the story-first matrix path, so the
+    same triple rebuilds byte-identically (num_search_workers=1 + fixed clue order)."""
+    return int(hashlib.sha256(f"{date}:{tier}:{variant}".encode("ascii")).hexdigest()[:8], 16)
 
 
 # --- CP-SAT model ---------------------------------------------------------------
@@ -526,6 +571,119 @@ def write_index(date: str, entries: list[dict], out_dir: Path = PUZZLES_DIR) -> 
     return out
 
 
+# --- story-first (corpus-driven matrix) -----------------------------------------
+
+
+def _story_acceptable(
+    clues: list[Clue], hints: list[HintStep], d: int, band: tuple[int, int], share_cap: float
+) -> bool:
+    """Accept a story puzzle only when it is in the tier band, keeps eq present with no clue
+    type past the share cap (variety), and has at least one single-clue eq opener (a clue that
+    alone forces a cell). Guarantees the Row-3 quality gates hold on the emitted manifest."""
+    lo, hi = band
+    if not (lo <= d <= hi):
+        return False
+    types = [c[0] for c in clues]
+    if not types or "eq" not in types:
+        return False
+    if max(types.count(t) for t in set(types)) / len(types) > share_cap:
+        return False
+    ctype = {f"c{i + 1}": clues[i][0] for i in range(len(clues))}
+    return any(len(s.fromClues) == 1 and ctype.get(s.fromClues[0]) == "eq" for s in hints)
+
+
+def to_story_manifest(date, tier, scenario, variant, cats, n, clues, sol, hints, rev, seed) -> PuzzleManifest:
+    """Story-first manifest: subject-anchored grid with narrative + full-sentence eq/neq clues.
+    Emits kind/anchor/unit/glyphPack per category and magnitude/phrase/refPhrase per value; the
+    solver-internal ordinal stays False (the subject is the identity) while the emitted ordinal
+    follows kind (a numeric price reads as ordinal for the UI). schemaVersion stays 1."""
+    cat_models = []
+    for c in cats:
+        values = [
+            AttributeValue(
+                id=v, glyph=c.glyphs[i], label=c.labels[i],
+                magnitude=(c.magnitudes[i] if c.magnitudes else None),
+                phrase=(c.phrases[i] if c.phrases else None),
+                refPhrase=(c.ref_phrases[i] if c.ref_phrases else None),
+            )
+            for i, v in enumerate(c.value_ids)
+        ]
+        cat_models.append(
+            AttributeCategory(
+                id=c.id, label=c.label, ordinal=(c.kind != "nominal"), cardinality=c.cardinality,
+                values=values, kind=c.kind, unit=c.unit, anchor=c.anchor, glyphPack=c.glyph_pack,
+            )
+        )
+    constraints = [
+        Constraint(
+            id=f"c{i + 1}", type=cl[0], operands=[Operand(cat=o[0], value=o[1]) for o in cl[1]],
+            params={k: v for k, v in cl[2]}, clueText=render_clue(scenario, tier, cats, cl, seed, i),
+            renderHint=cl[0],
+        )
+        for i, cl in enumerate(clues)
+    ]
+    solution = {f"e{i}": {c.id: sol[c.id][i] for c in cats} for i in range(n)}
+    return PuzzleManifest(
+        schemaVersion=SCHEMA_VERSION, puzzleId=date, tier=tier, shapeId="grid", templateRev=rev,
+        entities=[f"e{i}" for i in range(n)],
+        categories=Categories.model_validate({"n": len(cats), "list": cat_models}),
+        constraints=constraints, solution=solution, hintTrace=hints,
+        scenarioId=scenario.id, story=render_story(scenario, n, seed),
+        subjectNoun=scenario.subjectNoun, variant=variant,
+    )
+
+
+def generate_story(
+    date: str, tier: Tier, variant: int = 1, config_dir: Path = CONFIG_DIR, scenario_path: Path | None = None
+) -> tuple[PuzzleManifest, int, list[dict]]:
+    """Corpus-driven story-first matrix (eq/neq only), reusing the CP-SAT pipeline: sample a
+    unique solution, enumerate eq/neq clues, weighted-select to a minimal set, verify
+    uniqueness, trace the forced deduction, and reseed until the puzzle is in band with the
+    quality gates (variety + single-eq opener). Deterministic for a given (date, tier, variant)."""
+    tiers = load_config("tiers", config_dir)[tier]
+    dials = load_config("dials", config_dir)
+    story = dials["story"]
+    scenario = load_scenario_template() if scenario_path is None else load_scenario_template(scenario_path)
+    entities = tiers["entities"]
+    base = story_seed(date, tier, variant)
+    cats = build_story_categories(scenario, entities, base)
+    band = (tiers["band"][0], tiers["band"][1])
+    share_cap = story["share_cap"]
+    log: list[dict] = []
+    for attempt in range(dials["max_reseeds"]):
+        seed = base + attempt
+        rng = random.Random(seed)
+        sol = sample_solution(cats, entities, rng)
+        cand = enumerate_clues(cats, entities, sol, allowed=("eq", "neq"))
+        clues = select_minimal(cats, entities, cand, story["weights"], seed, rng)
+        hints = hint_trace(cats, entities, clues, sol, seed)
+        indirect = sum(1 for c in clues if c[0] in INDIRECT_TYPES)
+        d = difficulty(tiers, entities, len(cats), len(clues), indirect, len(hints))
+        log.append({"attempt": attempt, "clues": len(clues), "indirect": indirect, "depth": len(hints), "D": d})
+        if _story_acceptable(clues, hints, d, band, share_cap):
+            m = to_story_manifest(
+                date, tier, scenario, variant, cats, entities, clues, sol, hints, dials["template_rev"], seed
+            )
+            return m, d, log
+    raise RuntimeError(f"no acceptable story puzzle for {date}/{tier} v{variant} after {dials['max_reseeds']} reseeds (band {band})")
+
+
+def write_story_master(
+    date: str, tier: Tier, variant: int = 1, out_root: Path = DATASETS_DIR,
+    config_dir: Path = CONFIG_DIR, scenario_path: Path | None = None,
+) -> dict:
+    """Emit the story master to datasets/<yyyy>/<mm>/<dd>/<tier>/<date>-<vvv>.json as canonical
+    JSON (sort_keys, ASCII, 2-space indent, trailing newline). None-valued optionals dropped."""
+    m, d, _ = generate_story(date, tier, variant, config_dir, scenario_path)
+    payload = m.model_dump(by_alias=True, exclude_none=True)
+    text = json.dumps(payload, sort_keys=True, ensure_ascii=True, indent=2) + "\n"
+    out_dir = out_root / date[:4] / date[5:7] / date[8:10] / tier
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out = out_dir / f"{date}-{variant:03d}.json"
+    out.write_text(text, encoding="ascii")
+    return {"file": out.as_posix(), "tier": tier, "variant": variant, "D": d}
+
+
 def _entry_for(date: str, tier: Tier, out_dir: Path, config_dir: Path, force: bool) -> dict:
     """Add-only: an EXISTING dated puzzle file is FROZEN - never regenerated - so an already
     shipped puzzle can't be invalidated when the glyph packs expand. The manifest is rebaked
@@ -557,10 +715,20 @@ def main(argv: list[str] | None = None) -> int:
         help="also build the last N UTC days up to and including today (archive); never future. Bare flag = 7.",
     )
     ap.add_argument("--force", action="store_true", help="regenerate even if the dated file already exists")
+    ap.add_argument(
+        "--story", action="store_true",
+        help="emit story-first master(s) to datasets/ (corpus-driven matrix) instead of the daily bank",
+    )
+    ap.add_argument("--variant", type=int, default=1, help="story variant number (with --story); default 1")
     args = ap.parse_args(argv)
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     anchor = today if args.date == "today" else args.date
     tiers = [t.strip() for t in args.tiers.split(",") if t.strip()]
+    if args.story:
+        for tier in tiers:
+            r = write_story_master(anchor, tier, args.variant)
+            print(f"{r['file']} D={r['D']}")
+        return 0
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
     # Backfill ends at `anchor` but never past today (no spoiling an unreleased date).
     dates = backfill_dates(min(anchor, today), args.backfill) if args.backfill > 0 else [anchor]

@@ -36,7 +36,7 @@ def test_manifest_fixture_validates() -> None:
 
 
 def test_story_first_sample_manifests_validate() -> None:
-    """Both hand-authored story-first goldens validate; new optional fields read."""
+    """Story-first samples validate + new optional fields read (standard = generated eq/neq matrix)."""
     for tier in ("standard", "easy"):
         p = DATASETS / "2026" / "07" / "01" / tier / "2026-07-01-001.json"
         m = PuzzleManifest.model_validate(_load_abs(p))
@@ -46,16 +46,16 @@ def test_story_first_sample_manifests_validate() -> None:
         assert all(c.kind is not None for c in m.categories.items)
         assert any(c.anchor for c in m.categories.items)
         assert any(v.phrase for c in m.categories.items for v in c.values)
-    # the standard golden adds a numeric axis (unit + magnitude) and a numDiff clue
+    # the standard sample carries a numeric axis (unit + magnitude as metadata)
     std = PuzzleManifest.model_validate(
         _load_abs(DATASETS / "2026" / "07" / "01" / "standard" / "2026-07-01-001.json")
     )
     numeric = [c for c in std.categories.items if c.kind == "numeric"]
     assert numeric and numeric[0].unit == "dollars"
     assert any(v.magnitude is not None for v in numeric[0].values)
-    # the numDiff clue fits the open constraint envelope (no schema change needed)
-    numdiff = [k for k in std.constraints if k.type == "numDiff"]
-    assert numdiff and numdiff[0].params["numericCat"] == "price"
+    # Row 3 generates the standard sample as an eq/neq matrix (numDiff/threshold land later)
+    assert {k.type for k in std.constraints} <= {"eq", "neq"}
+    assert any(k.type == "eq" for k in std.constraints)
 
 
 def test_pre_pivot_manifest_still_validates() -> None:
