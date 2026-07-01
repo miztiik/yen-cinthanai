@@ -15,6 +15,14 @@ def _load(name: str) -> dict:
     return json.loads((FIX / name).read_text(encoding="ascii"))
 
 
+DATASETS = ROOT / "datasets"
+PUZZLES = ROOT / "frontend" / "public" / "puzzles"
+
+
+def _load_abs(p: Path) -> dict:
+    return json.loads(p.read_text(encoding="ascii"))
+
+
 def test_manifest_fixture_validates() -> None:
     m = PuzzleManifest.model_validate(_load("manifest-4x3.json"))
     assert m.schemaVersion == 1
@@ -25,6 +33,43 @@ def test_manifest_fixture_validates() -> None:
             assert len(cat.values) == len(m.entities)
     for ent in m.entities:
         assert m.solution[ent].keys() == {"drink", "animal", "position"}
+
+
+def test_story_first_sample_manifests_validate() -> None:
+    """Both hand-authored story-first goldens validate; new optional fields read."""
+    for tier in ("standard", "easy"):
+        p = DATASETS / "2026" / "07" / "01" / tier / "2026-07-01-001.json"
+        m = PuzzleManifest.model_validate(_load_abs(p))
+        assert m.schemaVersion == 1
+        assert m.story and m.scenarioId and m.subjectNoun and m.variant == 1
+        # story-first categories all carry a kind; an anchor + phrase are present
+        assert all(c.kind is not None for c in m.categories.items)
+        assert any(c.anchor for c in m.categories.items)
+        assert any(v.phrase for c in m.categories.items for v in c.values)
+    # the standard golden adds a numeric axis (unit + magnitude) and a numDiff clue
+    std = PuzzleManifest.model_validate(
+        _load_abs(DATASETS / "2026" / "07" / "01" / "standard" / "2026-07-01-001.json")
+    )
+    numeric = [c for c in std.categories.items if c.kind == "numeric"]
+    assert numeric and numeric[0].unit == "dollars"
+    assert any(v.magnitude is not None for v in numeric[0].values)
+    # the numDiff clue fits the open constraint envelope (no schema change needed)
+    numdiff = [k for k in std.constraints if k.type == "numDiff"]
+    assert numdiff and numdiff[0].params["numericCat"] == "price"
+
+
+def test_pre_pivot_manifest_still_validates() -> None:
+    """Old-shape manifests (no story/kind; values id/glyph/label) still validate."""
+    m = PuzzleManifest.model_validate(_load("manifest-4x3.json"))
+    assert m.story is None and m.scenarioId is None and m.variant is None
+    for c in m.categories.items:
+        assert c.kind is None and c.anchor is None and c.unit is None
+        for v in c.values:
+            assert v.magnitude is None and v.phrase is None and v.refPhrase is None
+    # a real served pre-pivot bundle puzzle validates too (glob avoids a fixed date)
+    served = sorted(PUZZLES.glob("*-standard.json"))
+    assert served, "expected served pre-pivot puzzles in the bundle"
+    PuzzleManifest.model_validate(_load_abs(served[0]))
 
 
 def test_save_and_bank_fixtures_validate() -> None:

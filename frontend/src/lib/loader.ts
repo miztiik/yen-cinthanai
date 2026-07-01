@@ -22,7 +22,7 @@ function isBankIndex(b: unknown): b is BankIndex {
   return o.schemaVersion === 1 && Array.isArray(o.puzzles);
 }
 
-function isManifest(m: unknown): m is PuzzleManifest {
+export function isManifest(m: unknown): m is PuzzleManifest {
   if (typeof m !== "object" || m === null) return false;
   const o = m as Record<string, unknown>;
   return (

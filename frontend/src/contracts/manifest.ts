@@ -10,6 +10,10 @@ export interface AttributeValue {
   id: string;
   glyph: string;
   label: string;
+  // Story-first (Expand phase, all optional; schemaVersion stays 1):
+  magnitude?: number;
+  phrase?: string;
+  refPhrase?: string;
 }
 
 export interface AttributeCategory {
@@ -18,6 +22,11 @@ export interface AttributeCategory {
   ordinal: boolean;
   cardinality: Cardinality;
   values: AttributeValue[];
+  // Story-first (Expand phase, all optional; kind and ordinal coexist for now):
+  kind?: "nominal" | "ordinal" | "numeric";
+  unit?: string;
+  anchor?: boolean;
+  glyphPack?: string;
 }
 
 export interface Operand {
@@ -50,4 +59,9 @@ export interface PuzzleManifest {
   constraints: Constraint[];
   solution: Record<string, Record<string, string>>;
   hintTrace: HintStep[];
+  // Story-first (Expand phase, all optional; schemaVersion stays 1):
+  scenarioId?: string;
+  story?: string;
+  subjectNoun?: string;
+  variant?: number;
 }
