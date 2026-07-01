@@ -82,15 +82,15 @@
       "minTier": "standard",
       "variants": [
         "{a_ref}'s takings came to {delta} dollars more than {b_ref}'s.",
-        "The {a_ref} charged {delta} dollars more than the {b_ref}."
+        "{a_ref} charged {delta} dollars more than {b_ref}."
       ]
     },
     "threshold": {
       "appliesTo": "price",
       "minTier": "sharp",
       "variants": [
-        "The {a_ref} charged at least {bound} dollars.",
-        "Whoever {a_phrase} did not charge less than {bound} dollars."
+        "{a_ref} charged at least {bound} dollars.",
+        "{a_ref} did not charge less than {bound} dollars."
       ]
     },
     "oneOf": {

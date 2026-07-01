@@ -128,7 +128,7 @@
       "type": "eq"
     },
     {
-      "clueText": "The one who charged 15 dollars was Eli.",
+      "clueText": "Eli charged 5 dollars more than Cara.",
       "id": "c2",
       "operands": [
         {
@@ -136,13 +136,17 @@
           "value": "eli"
         },
         {
-          "cat": "price",
-          "value": "p15"
+          "cat": "name",
+          "value": "cara"
         }
       ],
-      "params": {},
-      "renderHint": "eq",
-      "type": "eq"
+      "params": {
+        "delta": 5,
+        "dir": "greater",
+        "numericCat": "price"
+      },
+      "renderHint": "numDiff",
+      "type": "numDiff"
     },
     {
       "clueText": "Jam was not Dev's work that week.",
@@ -162,25 +166,8 @@
       "type": "neq"
     },
     {
-      "clueText": "Whatever Candles brought, it was not the $10.",
+      "clueText": "Ana's table was the one that charged 5 dollars.",
       "id": "c4",
-      "operands": [
-        {
-          "cat": "craft",
-          "value": "candles"
-        },
-        {
-          "cat": "price",
-          "value": "p10"
-        }
-      ],
-      "params": {},
-      "renderHint": "neq",
-      "type": "neq"
-    },
-    {
-      "clueText": "The one who charged 5 dollars was Ana.",
-      "id": "c5",
       "operands": [
         {
           "cat": "name",
@@ -196,8 +183,8 @@
       "type": "eq"
     },
     {
-      "clueText": "Prints's table was the one that charged 15 dollars.",
-      "id": "c6",
+      "clueText": "The one who charged 15 dollars was Prints.",
+      "id": "c5",
       "operands": [
         {
           "cat": "craft",
@@ -247,7 +234,7 @@
         "value": "prints"
       },
       "fromClues": [
-        "c6"
+        "c5"
       ]
     },
     {
@@ -257,7 +244,7 @@
         "value": "candles"
       },
       "fromClues": [
-        "c4"
+        "c1"
       ]
     },
     {
@@ -267,7 +254,7 @@
         "value": "p5"
       },
       "fromClues": [
-        "c5"
+        "c4"
       ]
     },
     {
@@ -287,7 +274,7 @@
         "value": "p10"
       },
       "fromClues": [
-        "c4"
+        "c1"
       ]
     },
     {
@@ -297,8 +284,7 @@
         "value": "p15"
       },
       "fromClues": [
-        "c2",
-        "c6"
+        "c5"
       ]
     }
   ],

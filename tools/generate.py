@@ -25,6 +25,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from typing import get_args
 
 from ortools.sat.python import cp_model
 
@@ -56,7 +57,31 @@ LOGS_DIR = _ROOT / ".logs"
 
 DIRECT_TYPES = ("eq", "ends")
 INDIRECT_TYPES = ("neq", "adjacent", "distance", "before", "opposite", "between")
+NUMERIC_TYPES = ("numDiff", "threshold")  # integer-magnitude clues on a numeric category
 SOLVE_LIMIT_S = 10.0
+
+# Tier order is the single source of truth in the Tier type (models.py); no hardcoded tier list.
+TIER_ORDER = get_args(Tier)
+_STATUS_NAME = {
+    cp_model.OPTIMAL: "OPTIMAL", cp_model.FEASIBLE: "FEASIBLE", cp_model.INFEASIBLE: "INFEASIBLE",
+    cp_model.MODEL_INVALID: "MODEL_INVALID", cp_model.UNKNOWN: "UNKNOWN",
+}
+
+
+def tier_at_least(tier: str, min_tier: str) -> bool:
+    """True when `tier` is at or above `min_tier` in the canonical Tier order (easy<...<expert)."""
+    return TIER_ORDER.index(tier) >= TIER_ORDER.index(min_tier)
+
+
+def _definite(status: int) -> int:
+    """Fail fast on a non-DEFINITE CP-SAT status. A timeout (UNKNOWN) or MODEL_INVALID read
+    silently as feasible/infeasible would make generation nondeterministic, so raise instead."""
+    if status in (cp_model.UNKNOWN, cp_model.MODEL_INVALID):
+        raise RuntimeError(
+            f"non-definite CP-SAT status {_STATUS_NAME.get(status, status)}; "
+            "generation requires OPTIMAL/FEASIBLE/INFEASIBLE (deterministic)"
+        )
+    return status
 
 # Difficulty ENV dial weights (docs/concepts/difficulty-and-scoring.md). Keyed by
 # the config/tiers.json dial values; no magic numbers escape this table.
@@ -229,17 +254,54 @@ def story_seed(date: str, tier: Tier, variant: int) -> int:
 # --- CP-SAT model ---------------------------------------------------------------
 
 # A clue = (type, [(cat_id, value_id), ...], params). cat/value, never an entity.
-Clue = tuple[str, tuple[tuple[str, str], ...], tuple[tuple[str, int], ...]]
+Clue = tuple[str, tuple[tuple[str, str], ...], tuple[tuple[str, int | str], ...]]
 
 
-def _add_clue(m: cp_model.CpModel, x: dict, seat: dict, vid: dict, n: int, circular: bool, clue: Clue) -> None:
+def _mag_at_slot(m: cp_model.CpModel, x: dict, cat_id: str, mags: dict, slot: int):
+    """IntVar = the integer magnitude of the numeric value occupying the (constant) slot. One
+    reified bool per value (b_v <-> value v sits at slot), exactly one true, magnitude = the
+    weighted sum. The slot is a constant because numeric operands are anchor (identity) values."""
+    bvs, weights = [], []
+    for v, mg in mags.items():
+        b = m.NewBoolVar("")
+        m.Add(x[cat_id][v] == slot).OnlyEnforceIf(b)
+        m.Add(x[cat_id][v] != slot).OnlyEnforceIf(b.Not())
+        bvs.append(b)
+        weights.append(mg)
+    m.Add(sum(bvs) == 1)
+    mag_v = m.NewIntVar(min(weights), max(weights), "")
+    m.Add(mag_v == cp_model.LinearExpr.WeightedSum(bvs, weights))
+    return mag_v
+
+
+def _add_clue(
+    m: cp_model.CpModel, x: dict, seat: dict, vid: dict, n: int, circular: bool,
+    mag: dict, clue: Clue,
+) -> None:
     typ, ops, params = clue
     p = dict(params)
     ca, va = ops[0]
     if typ == "ends":
         m.Add(x[ca][va] == p["pos"])
         return
+    if typ == "threshold":  # single anchor operand: numeric magnitude at its fixed slot vs a bound
+        nc = p["numericCat"]
+        mag_a = _mag_at_slot(m, x, nc, mag[nc], vid[ca][va])
+        (m.Add(mag_a <= p["bound"]) if p.get("dir") == "atmost" else m.Add(mag_a >= p["bound"]))
+        return
     cb, vb = ops[1]
+    if typ == "numDiff":  # two anchor operands: magnitude gap of the numeric cat at their slots
+        nc = p["numericCat"]
+        mag_a = _mag_at_slot(m, x, nc, mag[nc], vid[ca][va])
+        mag_b = _mag_at_slot(m, x, nc, mag[nc], vid[cb][vb])
+        if p.get("dir") == "greater":  # directed: a is exactly delta more than b
+            m.Add(mag_a == mag_b + p["delta"])
+        else:  # undirected: absolute gap equals delta
+            span = max(mag[nc].values()) - min(mag[nc].values())
+            t = m.NewIntVar(0, span, "")
+            m.AddAbsEquality(t, mag_a - mag_b)
+            m.Add(t == p["delta"])
+        return
     if typ in ("eq", "neq"):
         # eq/neq across a bijective + a (possibly) shared cat: the shared value at the
         # bijective value's slot == that value. Pure-bijective pairs compare slots.
@@ -296,8 +358,11 @@ def build_model(cats: list[Cat], n: int, clues: list[Clue], circular: bool = Fal
     x: dict[str, dict[str, cp_model.IntVar]] = {}
     seat: dict[str, list[cp_model.IntVar]] = {}  # shared cats: slot -> value index
     vid: dict[str, dict[str, int]] = {}
+    mag: dict[str, dict[str, int]] = {}  # numeric cats: value_id -> integer magnitude
     for c in cats:
         vid[c.id] = {v: i for i, v in enumerate(c.value_ids)}
+        if getattr(c, "kind", None) == "numeric" and c.magnitudes:
+            mag[c.id] = {c.value_ids[i]: c.magnitudes[i] for i in range(len(c.value_ids))}
         if c.shared:  # repeats allowed: one value index per slot, no AllDifferent
             seat[c.id] = [m.NewIntVar(0, len(c.value_ids) - 1, "") for _ in range(n)]
             continue
@@ -307,7 +372,7 @@ def build_model(cats: list[Cat], n: int, clues: list[Clue], circular: bool = Fal
             for i, v in enumerate(c.value_ids):
                 m.Add(x[c.id][v] == i)
     for clue in clues:
-        _add_clue(m, x, seat, vid, n, circular, clue)
+        _add_clue(m, x, seat, vid, n, circular, mag, clue)
     return m, x, seat, vid
 
 
@@ -323,7 +388,7 @@ def is_unique(cats: list[Cat], n: int, clues: list[Clue], seed: int, circular: b
     """Solve; forbid that exact assignment via reified bools; re-solve INFEASIBLE."""
     m, x, seat, _ = build_model(cats, n, clues, circular)
     s = _solver(seed)
-    if s.Solve(m) not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+    if _definite(s.Solve(m)) not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         return False
     diff = []
     cells = [(var, s.Value(var)) for c in cats if c.id in x for var in x[c.id].values()]
@@ -334,7 +399,14 @@ def is_unique(cats: list[Cat], n: int, clues: list[Clue], seed: int, circular: b
         m.Add(var == val).OnlyEnforceIf(b.Not())
         diff.append(b)
     m.AddBoolOr(diff)
-    return _solver(seed).Solve(m) == cp_model.INFEASIBLE
+    return _definite(_solver(seed).Solve(m)) == cp_model.INFEASIBLE
+
+
+def uniqueness_status(cats: list[Cat], n: int, clues: list[Clue], seed: int, circular: bool = False) -> int:
+    """The first-solve CP-SAT status for a clue set, guarded DEFINITE. Exposed so tests can assert
+    a generated puzzle's solve is never UNKNOWN/MODEL_INVALID (a determinism precondition)."""
+    m, *_ = build_model(cats, n, clues, circular)
+    return _definite(_solver(seed).Solve(m))
 
 
 # --- enumerate clues true under the sampled solution ----------------------------
@@ -416,6 +488,41 @@ def enumerate_clues(
     return out if allowed is None else [c for c in out if c[0] in allowed]
 
 
+def enumerate_numeric_clues(cats: list[Cat], n: int, sol: dict[str, list[str]], tier: str, scenario) -> list[Clue]:
+    """numDiff (directed 'greater') + threshold ('atleast') candidates TRUE under the sampled
+    solution, for the first numeric category. Operands are anchor (identity) values so each slot
+    is a constant; magnitudes are read from the category. Gated per type by the scenario
+    clueTemplate minTier vs the tier (numDiff -> Standard+, threshold -> Sharp+). Empty when the
+    scenario has no numeric category."""
+    numcat = next((c for c in cats if getattr(c, "kind", None) == "numeric" and c.magnitudes), None)
+    if numcat is None:
+        return []
+    anchor = identity_cat(cats)
+    by_id = {v: i for i, v in enumerate(numcat.value_ids)}
+    mag_by_slot = [numcat.magnitudes[by_id[sol[numcat.id][s]]] for s in range(n)]
+
+    def mag_at(av: str) -> int:  # anchor value -> the magnitude sharing its (constant) slot
+        return mag_by_slot[_pos(sol, anchor.id, av)]
+
+    tmpl = scenario.clueTemplates
+    out: list[Clue] = []
+    if "numDiff" in tmpl and tier_at_least(tier, tmpl["numDiff"].minTier):
+        for a in anchor.value_ids:  # every ordered pair where a is the larger charger
+            for b in anchor.value_ids:
+                if a != b and mag_at(a) > mag_at(b):
+                    out.append(("numDiff", ((anchor.id, a), (anchor.id, b)),
+                                (("numericCat", numcat.id), ("delta", mag_at(a) - mag_at(b)), ("dir", "greater"))))
+    if "threshold" in tmpl and tier_at_least(tier, tmpl["threshold"].minTier):
+        floor = min(mag_by_slot)
+        bounds = sorted({mg for mg in mag_by_slot if mg > floor})  # non-trivial lower bounds
+        for a in anchor.value_ids:
+            for bound in bounds:
+                if bound <= mag_at(a):
+                    out.append(("threshold", ((anchor.id, a),),
+                                (("numericCat", numcat.id), ("bound", bound), ("dir", "atleast"))))
+    return out
+
+
 # --- select + prune -------------------------------------------------------------
 
 
@@ -460,7 +567,7 @@ def hint_trace(cats: list[Cat], n: int, clues: list[Clue], sol: dict, seed: int,
             for kc, kv, ks in known:
                 m.Add(x[kc][kv] == ks)
             m.Add(x[cat][val] != slot)
-            if _solver(seed).Solve(m) == cp_model.INFEASIBLE:
+            if _definite(_solver(seed).Solve(m)) == cp_model.INFEASIBLE:
                 ent = f"e{slot}"
                 steps.append(
                     HintStep(
@@ -574,17 +681,30 @@ def write_index(date: str, entries: list[dict], out_dir: Path = PUZZLES_DIR) -> 
 # --- story-first (corpus-driven matrix) -----------------------------------------
 
 
+def _numeric_types_for_tier(scenario, tier: str) -> tuple[str, ...]:
+    """The numeric clue types (numDiff/threshold) the scenario gates IN at this tier via minTier."""
+    tmpl = scenario.clueTemplates
+    return tuple(t for t in NUMERIC_TYPES if t in tmpl and tier_at_least(tier, tmpl[t].minTier))
+
+
 def _story_acceptable(
-    clues: list[Clue], hints: list[HintStep], d: int, band: tuple[int, int], share_cap: float
+    clues: list[Clue], hints: list[HintStep], d: int, band: tuple[int, int], share_cap: float,
+    numeric_types: tuple[str, ...], full_depth: int,
 ) -> bool:
-    """Accept a story puzzle only when it is in the tier band, keeps eq present with no clue
-    type past the share cap (variety), and has at least one single-clue eq opener (a clue that
-    alone forces a cell). Guarantees the Row-3 quality gates hold on the emitted manifest."""
+    """Accept a story puzzle only when it is in the tier band, is zero-guess (the forced trace
+    reaches every non-anchor cell), keeps eq present with no clue type past the share cap
+    (variety), carries at least one numeric clue when the tier gates one in, and has at least one
+    single-clue eq opener. Guarantees the quality gates (P1/P2/P4/P5) hold on the emitted manifest
+    even with numeric clues present."""
     lo, hi = band
     if not (lo <= d <= hi):
         return False
+    if len(hints) != full_depth:  # zero-guess: the trace forces every non-anchor bijective cell
+        return False
     types = [c[0] for c in clues]
     if not types or "eq" not in types:
+        return False
+    if numeric_types and not any(t in numeric_types for t in types):  # a numeric clue must appear
         return False
     if max(types.count(t) for t in set(types)) / len(types) > share_cap:
         return False
@@ -633,13 +753,32 @@ def to_story_manifest(date, tier, scenario, variant, cats, n, clues, sol, hints,
     )
 
 
-def generate_story(
+@dataclass(frozen=True)
+class StoryBuild:
+    """The accepted story-first attempt: the emitted manifest plus the solver-internal artifacts
+    (cats/clues/solution/seed) so tests can re-verify uniqueness, DEFINITE status, and numeric
+    facts without re-running the reseed loop."""
+
+    manifest: PuzzleManifest
+    d: int
+    log: list[dict]
+    cats: list[Cat]
+    clues: list[Clue]
+    sol: dict[str, list[str]]
+    hints: list[HintStep]
+    seed: int
+    entities: int
+    scenario: object
+
+
+def build_story(
     date: str, tier: Tier, variant: int = 1, config_dir: Path = CONFIG_DIR, scenario_path: Path | None = None
-) -> tuple[PuzzleManifest, int, list[dict]]:
-    """Corpus-driven story-first matrix (eq/neq only), reusing the CP-SAT pipeline: sample a
-    unique solution, enumerate eq/neq clues, weighted-select to a minimal set, verify
-    uniqueness, trace the forced deduction, and reseed until the puzzle is in band with the
-    quality gates (variety + single-eq opener). Deterministic for a given (date, tier, variant)."""
+) -> StoryBuild:
+    """Corpus-driven story-first matrix reusing the CP-SAT pipeline: sample a unique solution,
+    enumerate eq/neq + numeric (numDiff/threshold, tier-gated) clues TRUE under it, weighted-select
+    a minimal set, verify uniqueness, trace the forced deduction, and reseed until the puzzle is in
+    band + zero-guess + varied + carries a numeric clue when the tier gates one in. Deterministic
+    for a given (date, tier, variant). Returns the manifest plus the internals used to build it."""
     tiers = load_config("tiers", config_dir)[tier]
     dials = load_config("dials", config_dir)
     story = dials["story"]
@@ -647,6 +786,9 @@ def generate_story(
     entities = tiers["entities"]
     base = story_seed(date, tier, variant)
     cats = build_story_categories(scenario, entities, base)
+    anchor = identity_cat(cats)
+    full_depth = sum(1 for c in cats if c is not anchor and not c.shared) * entities
+    numeric_types = _numeric_types_for_tier(scenario, tier)
     band = (tiers["band"][0], tiers["band"][1])
     share_cap = story["share_cap"]
     log: list[dict] = []
@@ -655,17 +797,29 @@ def generate_story(
         rng = random.Random(seed)
         sol = sample_solution(cats, entities, rng)
         cand = enumerate_clues(cats, entities, sol, allowed=("eq", "neq"))
+        cand += enumerate_numeric_clues(cats, entities, sol, tier, scenario)
         clues = select_minimal(cats, entities, cand, story["weights"], seed, rng)
         hints = hint_trace(cats, entities, clues, sol, seed)
         indirect = sum(1 for c in clues if c[0] in INDIRECT_TYPES)
         d = difficulty(tiers, entities, len(cats), len(clues), indirect, len(hints))
         log.append({"attempt": attempt, "clues": len(clues), "indirect": indirect, "depth": len(hints), "D": d})
-        if _story_acceptable(clues, hints, d, band, share_cap):
+        if _story_acceptable(clues, hints, d, band, share_cap, numeric_types, full_depth):
             m = to_story_manifest(
                 date, tier, scenario, variant, cats, entities, clues, sol, hints, dials["template_rev"], seed
             )
-            return m, d, log
-    raise RuntimeError(f"no acceptable story puzzle for {date}/{tier} v{variant} after {dials['max_reseeds']} reseeds (band {band})")
+            return StoryBuild(m, d, log, cats, clues, sol, hints, seed, entities, scenario)
+    raise RuntimeError(
+        f"no acceptable story puzzle for {date}/{tier} v{variant} after {dials['max_reseeds']} reseeds "
+        f"(band {band}, numeric {numeric_types or 'none'})"
+    )
+
+
+def generate_story(
+    date: str, tier: Tier, variant: int = 1, config_dir: Path = CONFIG_DIR, scenario_path: Path | None = None
+) -> tuple[PuzzleManifest, int, list[dict]]:
+    """Public entry: the story-first manifest + difficulty + per-attempt log (see build_story)."""
+    b = build_story(date, tier, variant, config_dir, scenario_path)
+    return b.manifest, b.d, b.log
 
 
 def write_story_master(

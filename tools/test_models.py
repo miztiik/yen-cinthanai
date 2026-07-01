@@ -53,9 +53,10 @@ def test_story_first_sample_manifests_validate() -> None:
     numeric = [c for c in std.categories.items if c.kind == "numeric"]
     assert numeric and numeric[0].unit == "dollars"
     assert any(v.magnitude is not None for v in numeric[0].values)
-    # Row 3 generates the standard sample as an eq/neq matrix (numDiff/threshold land later)
-    assert {k.type for k in std.constraints} <= {"eq", "neq"}
+    # Row 5 restores numeric clues: the standard sample carries numDiff (Standard+) alongside eq/neq
+    assert {k.type for k in std.constraints} <= {"eq", "neq", "numDiff", "threshold"}
     assert any(k.type == "eq" for k in std.constraints)
+    assert any(k.type == "numDiff" for k in std.constraints)
 
 
 def test_pre_pivot_manifest_still_validates() -> None:
