@@ -58,6 +58,32 @@
         { "id": "p15", "label": "$15", "magnitude": 15, "phrase": "charged 15 dollars" },
         { "id": "p20", "label": "$20", "magnitude": 20, "phrase": "charged 20 dollars" }
       ]
+    },
+    {
+      "id": "produce",
+      "label": "Produce",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "bread", "label": "Bread", "phrase": "also brought the bread", "refPhrase": "bread seller" },
+        { "id": "cheese", "label": "Cheese", "phrase": "also brought the cheese", "refPhrase": "cheese seller" },
+        { "id": "apples", "label": "Apples", "phrase": "also brought the apples", "refPhrase": "apple seller" },
+        { "id": "eggs", "label": "Eggs", "phrase": "also brought the eggs", "refPhrase": "egg seller" },
+        { "id": "plums", "label": "Plums", "phrase": "also brought the plums", "refPhrase": "plum seller" },
+        { "id": "olives", "label": "Olives", "phrase": "also brought the olives", "refPhrase": "olive seller" }
+      ]
+    },
+    {
+      "id": "bloom",
+      "label": "Bloom",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "roses", "label": "Roses", "phrase": "displayed the roses", "refPhrase": "rose grower" },
+        { "id": "tulips", "label": "Tulips", "phrase": "displayed the tulips", "refPhrase": "tulip grower" },
+        { "id": "daisies", "label": "Daisies", "phrase": "displayed the daisies", "refPhrase": "daisy grower" },
+        { "id": "lilies", "label": "Lilies", "phrase": "displayed the lilies", "refPhrase": "lily grower" },
+        { "id": "irises", "label": "Irises", "phrase": "displayed the irises", "refPhrase": "iris grower" },
+        { "id": "poppies", "label": "Poppies", "phrase": "displayed the poppies", "refPhrase": "poppy grower" }
+      ]
     }
   ],
   "clueTemplates": {
@@ -105,14 +131,14 @@
       "minTier": "sharp",
       "note": "of two entities x and y, one satisfies fact A and the other fact B",
       "variants": [
-        "Of the {x_ref} and the {y_ref}, one {a_phrase} and the other {b_phrase}."
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
       ]
     },
     "ifThen": {
       "minTier": "expert",
       "note": "conditional / chained indirect reference",
       "variants": [
-        "If {a_ref} {a_phrase}, then the {b_ref} did not {b_phrase}."
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
       ]
     }
   }

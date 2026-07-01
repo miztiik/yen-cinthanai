@@ -6,7 +6,10 @@
       "eq": 2,
       "neq": 2,
       "numDiff": 2,
-      "threshold": 2
+      "threshold": 2,
+      "oneOf": 2,
+      "oneEachOf": 2,
+      "ifThen": 2
     },
     "share_cap": 0.8
   },
