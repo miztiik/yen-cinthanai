@@ -24,7 +24,7 @@ import random
 import sys
 import tomllib
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from ortools.sat.python import cp_model
@@ -568,24 +568,41 @@ def _entry_for(date: str, tier: Tier, out_dir: Path, config_dir: Path, force: bo
     return e
 
 
+def backfill_dates(end: str, n: int) -> list[str]:
+    """The n calendar dates ending at `end` (inclusive), oldest-first. Deterministic;
+    callers pass end <= today so a backfill never spoils a future (unreleased) date."""
+    end_dt = datetime.strptime(end, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    return [(end_dt - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(n - 1, -1, -1)]
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Build the daily puzzle bank (add-only; existing files frozen).")
     ap.add_argument("--date", default="today", help="YYYY-MM-DD or 'today' (UTC)")
     ap.add_argument("--tiers", default="easy,standard,sharp,expert")
+    ap.add_argument(
+        "--backfill", type=int, nargs="?", const=7, default=0, metavar="N",
+        help="also build the last N UTC days up to and including today (archive); never future. Bare flag = 7.",
+    )
     ap.add_argument("--force", action="store_true", help="regenerate even if the dated file already exists")
     args = ap.parse_args(argv)
-    date = datetime.now(timezone.utc).strftime("%Y-%m-%d") if args.date == "today" else args.date
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    anchor = today if args.date == "today" else args.date
     tiers = [t.strip() for t in args.tiers.split(",") if t.strip()]
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
-    entries, lines = [], []
-    for tier in tiers:
-        e = _entry_for(date, tier, PUZZLES_DIR, CONFIG_DIR, args.force)
-        entries.append(e)
-        lines.append(json.dumps({"date": date, **e}, sort_keys=True))
-        print(f"{e['file']} " + ("frozen" if e["frozen"] else f"sha={e['sha'][:12]} D={e['D']}"))
-    write_index(date, entries)
-    (LOGS_DIR / f"build-{date}.jsonl").write_text("\n".join(lines) + "\n", encoding="ascii")
-    print(f"index.json ({len(entries)} puzzles)")
+    # Backfill ends at `anchor` but never past today (no spoiling an unreleased date).
+    dates = backfill_dates(min(anchor, today), args.backfill) if args.backfill > 0 else [anchor]
+    all_entries: list[dict] = []
+    for date in dates:
+        entries, lines = [], []
+        for tier in tiers:
+            e = _entry_for(date, tier, PUZZLES_DIR, CONFIG_DIR, args.force)
+            entries.append(e)
+            lines.append(json.dumps({"date": date, **e}, sort_keys=True))
+            print(f"{e['file']} " + ("frozen" if e["frozen"] else f"sha={e['sha'][:12]} D={e['D']}"))
+        (LOGS_DIR / f"build-{date}.jsonl").write_text("\n".join(lines) + "\n", encoding="ascii")
+        all_entries.extend(entries)
+    write_index(dates[-1], all_entries)  # dates[-1] == newest (today) -> generatedSeed served for play
+    print(f"index.json ({len(all_entries)} puzzles across {len(dates)} day(s))")
     return 0
 
 

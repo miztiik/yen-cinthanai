@@ -3,6 +3,174 @@
   "generatedSeed": "2026-07-01",
   "puzzles": [
     {
+      "date": "2026-06-25",
+      "file": "2026-06-25-easy.json",
+      "sha": "614400505d2c59ae63cb10b136ef6c28aa87f57e72aab66674fb68f7a08eaf54",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-25",
+      "file": "2026-06-25-standard.json",
+      "sha": "1c4e4c669a7134e50c733dd99198c9f1c21258f024b32b222d93818fd9db862a",
+      "shapeId": "seating-row",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-25",
+      "file": "2026-06-25-sharp.json",
+      "sha": "278c9f99002b739186e389d610c211614f13350d1042276c944aeeff5d9a937f",
+      "shapeId": "seating-row",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-25",
+      "file": "2026-06-25-expert.json",
+      "sha": "ef1940394fb7d4ebee34022be5d4a4444c48a8972b0cd616bfb822598216864a",
+      "shapeId": "round-table",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-06-26",
+      "file": "2026-06-26-easy.json",
+      "sha": "6c7c75eed8cddf7327936009f2b7c93498071dfb6ff5fd71b72770b1e78fb252",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-26",
+      "file": "2026-06-26-standard.json",
+      "sha": "9a22719ab37f76dac752209403ed6cfc92c36b9976cf8d705935b0d594085653",
+      "shapeId": "seating-row",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-26",
+      "file": "2026-06-26-sharp.json",
+      "sha": "69e70f9414e00e78270b2a9688c6fde2112834124f24af174fc34be3e942a745",
+      "shapeId": "seating-row",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-26",
+      "file": "2026-06-26-expert.json",
+      "sha": "baa3119af7d5dbd1f0b957d93614193307e7705b6e40067ff9bb2038265abcf0",
+      "shapeId": "round-table",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-06-27",
+      "file": "2026-06-27-easy.json",
+      "sha": "08c89944ebd6d0e9767f6bf8cdb5cac76e6177ff6a2e673b0d652eba21851b73",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-27",
+      "file": "2026-06-27-standard.json",
+      "sha": "ed2b25ea4f9c3a96012da6d033a6eaace796ad300354412b02cb0d220f361d7f",
+      "shapeId": "seating-row",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-27",
+      "file": "2026-06-27-sharp.json",
+      "sha": "4c2d24369934caf6846e4ed247853a78e93419356a9dd8af805a91df5f206bf5",
+      "shapeId": "seating-row",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-27",
+      "file": "2026-06-27-expert.json",
+      "sha": "4d3ee6943376f515d6bf0e50004fc82a650bbe44ddd028734f3ac5218737da60",
+      "shapeId": "round-table",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-06-28",
+      "file": "2026-06-28-easy.json",
+      "sha": "0ffd7dc20538737131745b301b600cd719b1f8a2e46b8c950e4944a44111140f",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-28",
+      "file": "2026-06-28-standard.json",
+      "sha": "4249a0eed0668aa0dddca3dfd71452846f74f99a0488f67550af8ec51663fc4f",
+      "shapeId": "seating-row",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-28",
+      "file": "2026-06-28-sharp.json",
+      "sha": "6723e242f9eac8e838b21d40fa72a49d272f445ad1703d29fcd12faf5fe7149a",
+      "shapeId": "seating-row",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-28",
+      "file": "2026-06-28-expert.json",
+      "sha": "382e214df16f21281152c6d4e84aa80f3a3a1cf66be7bbb04f28bbc86315ab3a",
+      "shapeId": "round-table",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-06-29",
+      "file": "2026-06-29-easy.json",
+      "sha": "c9bcbeae20cdbfc2900ecd027501e919471b297a68afdf95cad7683e63a1a88a",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-29",
+      "file": "2026-06-29-standard.json",
+      "sha": "3e13f33a08f70c656fff08ab57b61a29641a8ef82673b06b2301ff289b3e63cf",
+      "shapeId": "seating-row",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-29",
+      "file": "2026-06-29-sharp.json",
+      "sha": "2afa8abe745a1dff25a3eac4fa87230d28f4e1c547a8e6877b847ed0b09b5c09",
+      "shapeId": "seating-row",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-29",
+      "file": "2026-06-29-expert.json",
+      "sha": "8da2fa3f52267a48b8fd082f6ec601a2a0c0521a308e22f8c2945d0873316ed1",
+      "shapeId": "round-table",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-06-30",
+      "file": "2026-06-30-easy.json",
+      "sha": "c5ced434c10056857c19a702cbbcb23e603f977a5265f497d7dce3ccdf032fa5",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-30",
+      "file": "2026-06-30-standard.json",
+      "sha": "c4898ab0b92f861749ebea45fbc6bf2d99c64fd764c28be88f5a3d9b3c5c602e",
+      "shapeId": "seating-row",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-30",
+      "file": "2026-06-30-sharp.json",
+      "sha": "6802851df43ba34c319c4b3018271873057345dd2287c24542674a082c3fec95",
+      "shapeId": "seating-row",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-30",
+      "file": "2026-06-30-expert.json",
+      "sha": "6c19fe051e288ff7a804c48bf287315179312ec8cb7b23e317f231301a542420",
+      "shapeId": "round-table",
+      "tier": "expert"
+    },
+    {
       "date": "2026-07-01",
       "file": "2026-07-01-easy.json",
       "sha": "bc0fd1b6758ab3baba0c25e273e1fbe7a443927cf0916752be38f6f98537ad35",

@@ -17,7 +17,7 @@
   import { configureAudio, play } from "../lib/audio";
   import { applyMotion } from "../lib/motion";
   import { Game, saveProgress, toDayState } from "../state/play.svelte";
-  import { loadSave } from "../state/save.svelte";
+  import { loadSave, dayKey } from "../state/save.svelte";
   import type { Tier } from "../contracts/save";
 
   const TODAY = new Date().toISOString().slice(0, 10);
@@ -63,7 +63,7 @@
       pace = await loadPace();
       shape = shapeOf(await loadShapes(), m.shapeId);
       const sv = loadSave();
-      const prior = sv.days[m.puzzleId];
+      const prior = sv.days[dayKey(m.puzzleId, m.tier, m.shapeId)];
       heroBaseline = { ...sv.hero };
       configureAudio(sv.settings.sound, sv.settings.volume);
       applyMotion(sv.settings.reducedMotion);

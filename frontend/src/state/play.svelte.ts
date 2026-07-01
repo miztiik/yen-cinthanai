@@ -10,7 +10,7 @@ import { buildBoard, type BoardModel } from "../lib/board";
 import { evaluate, type PuzzleEval } from "../lib/validate";
 import { type Feedback, type TierDial } from "../lib/config";
 import { computeStars } from "../lib/scoring";
-import { loadSave, persistSave, recordWin } from "./save.svelte";
+import { loadSave, persistSave, recordWin, dayKey } from "./save.svelte";
 
 export interface Selection {
   cat: string;
@@ -184,8 +184,9 @@ export function toDayState(g: Game): DayState {
 export function saveProgress(g: Game): Save {
   const save = loadSave();
   const day = toDayState(g);
-  const fresh = day.status === "won" && save.days[g.m.puzzleId]?.status !== "won";
-  save.days[g.m.puzzleId] = day;
+  const key = dayKey(day.date, day.tier, day.shapeId);
+  const fresh = day.status === "won" && save.days[key]?.status !== "won";
+  save.days[key] = day;
   if (fresh) recordWin(save, day);
   persistSave(save, g.m.puzzleId);
   return save;

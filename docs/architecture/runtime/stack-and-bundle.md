@@ -18,7 +18,7 @@ autoUpdate; base /yen-cinthanai/; precache shell + today; runtimeCaching Network
 
 ## Repo tree (P0-P3)
 
-```
+```text
 config/  tiers shapes glyphpacks copy budgets retention dials ui .toml     build
 tools/   generator solver uniqueness prune templates emit models bake      build
 public/  assets/glyphs/<pack>/*.svg + index.json (baked by bake_glyphs)     runtime
@@ -26,6 +26,7 @@ public/  index.html 404.html manifest.webmanifest config/*.json puzzles/*   runt
 src/     main.ts App.svelte lib/glyphs.ts Glyph.svelte state/ contracts/    runtime
 tests/   fixtures unit contract integration e2e
 ```
+
 Modules created when code lands, not pre-stubbed.
 
 ## Glyphs (centralized assets, no inline SVG)
@@ -37,6 +38,7 @@ All SVG/icons live under `public/assets/glyphs/<pack>/*.svg`, indexed by `glyphs
 4x CPU + Slow 4G; input-to-photon <50ms; 60fps; first-interaction <2s; zero new error/404. No byte cap.
 
 ## See also
+
 - [../contracts/schemas.md](../contracts/schemas.md) - runtime readers.
 - [../generator/pipeline.md](../generator/pipeline.md) - bank input.
 - [../../concepts/ui-shell.md](../../concepts/ui-shell.md) - components.

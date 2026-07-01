@@ -1,6 +1,6 @@
 # Persisted Schemas
 
-**Last Updated**: 2026-06-30
+**Last Updated**: 2026-07-01
 
 Typed, versioned contracts. Save is the only migrating surface (installed-player consequence); manifest/bank/share are bundle-shipped (rewrite-in-place). Pydantic source of truth at build; TS readers at runtime. See CLAUDE.md sec 11.
 
@@ -16,19 +16,23 @@ Auto-discovering: every `<pack>/` dir is a puzzle DIMENSION, every `<name>.svg` 
 
 ## Save v1
 
-```
-{ schemaVersion, days{date->DayState}, hero{bestMs,date}, streak{count,lastDate,skipsLeft}, settings{sound,volume,theme,palette,reducedMotion,puckSize} }
+```text
+{ schemaVersion, days{dayKey->DayState}, hero{bestMs,date}, streak{count,lastDate,skipsLeft}, settings{sound,volume,theme,palette,reducedMotion,puckSize} }
 DayState = { date, tier, shapeId, status, placements, attempts, solveMs, hintsUsed, stars }
 ```
-PAR thresholds live in config/tiers; stars computed from solveMs/hints/wrong. `settings.puckSize` (small|medium|large; scales the Puck via config/ui.toml) is additive - absent in older saves, it defaults to `medium` on read (minor migration via the settings spread-merge). Read path: parse -> on throw seed fresh -> version<1 migrate chain -> validate (bad day dropped, hero/streak survive) -> prune only on QuotaExceededError oldest-first, today never pruned -> hand to runes. Streak forgiveness on new day.
+
+`dayKey = "date|tier|shapeId"` (save.svelte `dayKey()`), so playing several tiers/shapes the same calendar day keeps a slot each instead of overwriting one. The map key is DERIVED from each DayState's own date/tier/shapeId on read, so an older date-only save (key == date) normalizes transparently to the composite key with NO version bump (schemaVersion stays 1; the value fields are the source of truth, the incoming key is never trusted). PAR thresholds live in config/tiers; stars computed from solveMs/hints/wrong. `settings.puckSize` (small|medium|large; scales the Puck via config/ui.toml) is additive - absent in older saves, it defaults to `medium` on read (minor migration via the settings spread-merge). Read path: parse -> on throw seed fresh -> version<1 migrate chain -> validate (rebuild days by derived dayKey, bad day dropped, hero/streak survive) -> prune only on QuotaExceededError oldest-first by DATE portion, today never pruned -> hand to runes. Streak stays per calendar date (recordWin keys on day.date). Streak forgiveness on new day.
 
 ## BankIndex v1
+
 `{ schemaVersion, generatedSeed, builtAt, puzzles:[{date,tier,shapeId,file,sha}] }` at public/puzzles/index.json. sha = canonical-JSON sha256; rebuild must match (determinism gate).
 
 ## ShareCard v1
+
 `{ schemaVersion, date, tier, shapeGlyph, status, moves, wrong, solveMs, hintsUsed, streak }`. No placements/solution/entities; contract test asserts no leak; shape-agnostic bar.
 
 ## See also
+
 - [../generator/pipeline.md](../generator/pipeline.md) - emits manifest+bank.
 - [../../concepts/difficulty-and-scoring.md](../../concepts/difficulty-and-scoring.md) - stars/par.
 - [../runtime/stack-and-bundle.md](../runtime/stack-and-bundle.md) - readers + repo.

@@ -63,7 +63,8 @@ export function updateStreak(streak: Streak, today: string): Streak {
   return { count: 1, lastDate: today, skipsLeft: skips };
 }
 
-/** Last-N solve times for the sparkline, oldest->newest (won days only). */
+/** Last-N solve times for the sparkline, oldest->newest (won days only). Days are keyed
+ *  by date|tier|shape; the date prefix keeps the key sort chronological. */
 export function recentSolveMs(days: Record<string, DayState>, window: number): number[] {
   return Object.keys(days)
     .sort()
@@ -71,4 +72,10 @@ export function recentSolveMs(days: Record<string, DayState>, window: number): n
     .filter((d) => d.status === "won" && d.solveMs > 0)
     .slice(-window)
     .map((d) => d.solveMs);
+}
+
+/** Did any saved slot for this calendar date end won? Days are keyed by date|tier|shape,
+ *  so a date can hold several slots; a day counts as won if any of them won. */
+export function wonOnDate(days: Record<string, DayState>, date: string): boolean {
+  return Object.values(days).some((d) => d.date === date && d.status === "won");
 }

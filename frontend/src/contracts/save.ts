@@ -45,6 +45,8 @@ export interface Settings {
 
 export interface Save {
   schemaVersion: 1;
+  /** Keyed by dayKey(date, tier, shapeId) = `date|tier|shapeId` (save.svelte). Older
+   *  date-only saves normalize to this on read; the value's own fields are the truth. */
   days: Record<string, DayState>;
   hero: Hero;
   streak: Streak;

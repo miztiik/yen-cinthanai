@@ -6,7 +6,7 @@ import { describe, it, expect } from "vitest";
 import type { TierDial } from "../../src/lib/config";
 import type { Streak, Hero, DayState } from "../../src/contracts/save";
 import {
-  computeStars, parMs, dayGap, updateStreak, updateHero, isHero, recentSolveMs,
+  computeStars, parMs, dayGap, updateStreak, updateHero, isHero, recentSolveMs, wonOnDate,
 } from "../../src/lib/scoring";
 
 const STD: TierDial = { par_s: 240, hints: 2, attempts: 3, feedback: "count-wrong" };
@@ -54,5 +54,22 @@ describe("sparkline window", () => {
     for (let i = 0; i < 5; i++)
       days[`2026-06-0${i + 1}`] = { date: `2026-06-0${i + 1}`, tier: "easy", shapeId: "grid", status: "won", placements: {}, attempts: 0, solveMs: (i + 1) * 1000, hintsUsed: 0, stars: 3 };
     expect(recentSolveMs(days, 3)).toEqual([3000, 4000, 5000]);
+  });
+});
+
+describe("wonOnDate (7-day dots)", () => {
+  const day = (date: string, tier: string, shapeId: string, status: string): DayState => ({
+    date, tier: tier as DayState["tier"], shapeId: shapeId as DayState["shapeId"],
+    status: status as DayState["status"], placements: {}, attempts: 0, solveMs: 1, hintsUsed: 0, stars: 1,
+  });
+  it("true when ANY composite slot for that date won, ignoring the map key", () => {
+    const days: Record<string, DayState> = {
+      "2026-07-01|easy|grid": day("2026-07-01", "easy", "grid", "playing"),
+      "2026-07-01|standard|seating-row": day("2026-07-01", "standard", "seating-row", "won"),
+      "2026-06-30|easy|grid": day("2026-06-30", "easy", "grid", "lost"),
+    };
+    expect(wonOnDate(days, "2026-07-01")).toBe(true); // one of the day's slots won
+    expect(wonOnDate(days, "2026-06-30")).toBe(false); // only a loss that day
+    expect(wonOnDate(days, "2026-06-29")).toBe(false); // no slot at all
   });
 });
