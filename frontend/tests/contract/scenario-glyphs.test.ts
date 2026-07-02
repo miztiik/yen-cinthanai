@@ -21,12 +21,12 @@ const tiers = JSON.parse(readFileSync(resolve(root, "config/tiers.json"), "utf8"
 >;
 const maxEntities = Math.max(...Object.values(tiers).map((t) => t.entities));
 
-type TemplateValue = { id: string; label: string };
+type TemplateValue = { id: string; label: string; glyph?: string };
 type TemplateCategory = { id: string; glyphPack?: string; valuePool: TemplateValue[] };
 type Template = { id: string; categories: TemplateCategory[] };
 
 const templates = readdirSync(templatesDir)
-  .filter((f) => f.endsWith(".json"))
+  .filter((f) => f.endsWith(".json") && f !== "manifest.json") // the catalog index is not a template
   .map((f) => JSON.parse(readFileSync(resolve(templatesDir, f), "utf8")) as Template);
 
 describe("scenario catalog", () => {
@@ -54,4 +54,23 @@ for (const t of templates) {
       });
     });
   }
+}
+
+// Per-value glyph overrides: a value may carry its own non-empty `glyph` ref independent of the
+// category glyphPack (used when a pack is only partly backfilled - e.g. weekend-market bloom wires
+// jasmine + sunflower while the rest of the column stays text). Every such override must resolve.
+for (const t of templates) {
+  const overrides = t.categories.flatMap((c) =>
+    c.valuePool.filter((v) => v.glyph).map((v) => ({ cat: c.id, id: v.id, glyph: v.glyph as string })),
+  );
+  if (!overrides.length) continue;
+  describe(`${t.id} per-value glyph overrides resolve`, () => {
+    for (const o of overrides) {
+      it(`${o.cat}/${o.id} -> ${o.glyph}`, () => {
+        expect(() => glyphPath(o.glyph), o.glyph).not.toThrow();
+        const file = glyphPath(o.glyph).replace("/assets/glyphs/", "");
+        expect(existsSync(resolve(assetsDir, file)), file).toBe(true);
+      });
+    }
+  });
 }

@@ -7,7 +7,7 @@
   "ordinalAxis": false,
   "minTier": "easy",
   "maxTier": "expert",
-  "note": "SAMPLE authoring template (original, invented sci-fi setting). Anchor = crew member. role -> occupation glyph pack (a PARTIAL reuse: the ids are real occupation-pack slugs standing in for crew roles, e.g. astronomer -> Navigator); shift is the numeric axis (the watch stood); deck and cargo are TEXT-ONLY (no sci-fi glyph pack exists yet - see docs/concepts/glyph-roadmap.md). Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "note": "SAMPLE authoring template (original, invented sci-fi setting). Anchor = crew member. role -> occupation glyph pack (a PARTIAL reuse: the ids are real occupation-pack slugs standing in for crew roles, e.g. astronomer -> Navigator); shift is the numeric axis (the watch stood), glyph-backed by the abstract numerals num1..num6 (magnitudes already 1..6, so each numeral matches its watch); vessel (repurposed from the old text-only deck) -> spaceship glyph pack, the small craft each crew member flies; cargo stays TEXT-ONLY. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
   "narrativeTemplate": "Three days out from the {port} relay, the long-haul starliner {ship} runs on {n} rotating crew, and overnight the duty computer scrambled the roster - so the quartermaster is quietly piecing it back together from memory before anyone up top notices.",
   "flavorPools": {
     "ship": ["Meridian", "Halcyon", "Far Lantern", "Blue Ibis"],
@@ -51,26 +51,28 @@
       "label": "Shift",
       "kind": "numeric",
       "unit": "watch",
+      "glyphPack": "abstract",
       "valuePool": [
-        { "id": "watch1", "label": "Watch 1", "magnitude": 1, "phrase": "stood watch 1" },
-        { "id": "watch2", "label": "Watch 2", "magnitude": 2, "phrase": "stood watch 2" },
-        { "id": "watch3", "label": "Watch 3", "magnitude": 3, "phrase": "stood watch 3" },
-        { "id": "watch4", "label": "Watch 4", "magnitude": 4, "phrase": "stood watch 4" },
-        { "id": "watch5", "label": "Watch 5", "magnitude": 5, "phrase": "stood watch 5" },
-        { "id": "watch6", "label": "Watch 6", "magnitude": 6, "phrase": "stood watch 6" }
+        { "id": "num1", "label": "Watch 1", "magnitude": 1, "phrase": "stood watch 1" },
+        { "id": "num2", "label": "Watch 2", "magnitude": 2, "phrase": "stood watch 2" },
+        { "id": "num3", "label": "Watch 3", "magnitude": 3, "phrase": "stood watch 3" },
+        { "id": "num4", "label": "Watch 4", "magnitude": 4, "phrase": "stood watch 4" },
+        { "id": "num5", "label": "Watch 5", "magnitude": 5, "phrase": "stood watch 5" },
+        { "id": "num6", "label": "Watch 6", "magnitude": 6, "phrase": "stood watch 6" }
       ]
     },
     {
-      "id": "deck",
-      "label": "Deck",
+      "id": "vessel",
+      "label": "Vessel",
       "kind": "nominal",
+      "glyphPack": "spaceship",
       "valuePool": [
-        { "id": "fore", "label": "Fore Deck", "phrase": "was stationed fore", "refPhrase": "fore-deck crew" },
-        { "id": "aft", "label": "Aft Deck", "phrase": "was stationed aft", "refPhrase": "aft-deck crew" },
-        { "id": "core", "label": "Core Deck", "phrase": "was stationed at the core", "refPhrase": "core-deck crew" },
-        { "id": "ring", "label": "Ring Deck", "phrase": "was stationed on the ring", "refPhrase": "ring-deck crew" },
-        { "id": "dorsal", "label": "Dorsal Deck", "phrase": "was stationed dorsal", "refPhrase": "dorsal-deck crew" },
-        { "id": "keel", "label": "Keel Deck", "phrase": "was stationed on the keel", "refPhrase": "keel-deck crew" }
+        { "id": "enterprise", "label": "Cruiser", "phrase": "flew the cruiser", "refPhrase": "cruiser pilot" },
+        { "id": "greenship", "label": "Green Runner", "phrase": "flew the green runner", "refPhrase": "green-runner pilot" },
+        { "id": "orangeship", "label": "Orange Runner", "phrase": "flew the orange runner", "refPhrase": "orange-runner pilot" },
+        { "id": "saucer", "label": "Saucer", "phrase": "flew the saucer", "refPhrase": "saucer pilot" },
+        { "id": "spacerover", "label": "Rover", "phrase": "took the rover", "refPhrase": "rover pilot" },
+        { "id": "spaceshuttle", "label": "Shuttle", "phrase": "took the shuttle", "refPhrase": "shuttle pilot" }
       ]
     },
     {

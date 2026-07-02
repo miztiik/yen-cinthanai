@@ -47,7 +47,7 @@ from models import (  # noqa: E402
     PuzzleManifest,
     Tier,
 )
-from corpus import load_scenario_template, scenario_path_for_date  # noqa: E402
+from corpus import load_scenario_template, scenario_path_by_id, scenario_path_for_date  # noqa: E402
 from translator import render_clue, render_story  # noqa: E402
 
 _ROOT = Path(__file__).resolve().parent.parent
@@ -136,6 +136,17 @@ class Cat:
 _STORY_SALT = 0x85EBCA6B  # decorrelate the story value-pick PRNG (corpus-driven matrix)
 
 
+def _value_glyph(glyph_pack: str | None, value) -> str:
+    """The glyph ref for one template value. An explicit per-value `glyph` wins (a '<pack>.<id>'
+    ref, or '' to force text-only even under a pack); else the category glyphPack decorates it as
+    '<pack>.<id>'; else '' (text-only). Lets a partly-backfilled pack decorate the values it covers
+    while the rest of the column stays text - no all-or-nothing per column."""
+    g = getattr(value, "glyph", None)
+    if g is not None:
+        return g
+    return f"{glyph_pack}.{value.id}" if glyph_pack else ""
+
+
 def build_story_categories(scenario, entities: int, seed: int) -> list[Cat]:
     """Build one bijective Cat per scenario category (subject first == the anchor). Every Cat
     keeps ordinal=False so identity_cat() anchors on the subject; the emitted manifest derives
@@ -151,7 +162,7 @@ def build_story_categories(scenario, entities: int, seed: int) -> list[Cat]:
             Cat(
                 id=tc.id, label=tc.label, ordinal=False,
                 value_ids=[v.id for v in picked],
-                glyphs=[f"{gp}.{v.id}" if gp else "" for v in picked],
+                glyphs=[_value_glyph(gp, v) for v in picked],
                 labels=[v.label for v in picked],
                 cardinality="bijective",
                 phrases=[v.phrase for v in picked],
@@ -775,16 +786,15 @@ def backfill_dates(end: str, n: int) -> list[str]:
 
 
 def resolve_scenario_arg(arg: str) -> Path:
-    """Map a --scenario value (a scenario id like 'weekend-market' or a path to a template) to a
-    template Path. Used to pin a reference golden master to one scenario instead of the per-date
-    pick."""
+    """Map a --scenario value (a scenario id, or a path to a template file) to a template Path. A
+    bare id resolves through the manifest via scenario_path_by_id, so ANY catalogued scenario -
+    including a staged 'build' scenario kept out of the live daily rotation - can be forced for
+    authoring/testing. Used to pin a reference golden master to one scenario instead of the
+    per-date pick."""
     p = Path(arg)
     if p.exists():
         return p
-    cand = DATASETS_DIR / "templates" / (arg if arg.endswith(".json") else f"{arg}.json")
-    if not cand.exists():
-        raise FileNotFoundError(f"unknown scenario {arg!r} (looked for {cand.as_posix()})")
-    return cand
+    return scenario_path_by_id(arg[:-5] if arg.endswith(".json") else arg)
 
 
 def main(argv: list[str] | None = None) -> int:

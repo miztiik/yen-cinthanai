@@ -10,6 +10,12 @@
       "date": "2026-07-01",
       "change": "Initial ScenarioTemplate v1: schemaVersion, id, title, subjectNoun, subjectCategory, ordinalAxis, minTier, maxTier, narrativeTemplate, flavorPools{ <slot> -> string[] }, indirection{byTier{tier->naming},note?}, categories[TemplateCategory], clueTemplates{ <type> -> ClueTemplate{minTier,variants[],appliesTo?,note?} }, note?.",
       "why": "Story-first pivot needs original, versioned narrative templates that drive verified-unique compound puzzles; typed before logic (CLAUDE.md sec 11)."
+    },
+    {
+      "version": 1,
+      "date": "2026-07-03",
+      "change": "Additive (backwards-compatible, schemaVersion stays 1): TemplateValue gains an optional `glyph` override - a value may carry its own '<pack>.<id>' ref, or '' to force text-only even under a category glyphPack. Old templates without it still validate.",
+      "why": "The flowers pack backfilled only 2 of 6 blooms; a per-value override wires the covered blooms (jasmine/sunflower) without a broken ref on the uncovered ones, so a partly-backfilled pack can decorate the values it covers while the rest of the column stays text."
     }
   ],
   "$defs": {
@@ -22,7 +28,8 @@
         "label": { "type": "string" },
         "magnitude": { "type": "integer" },
         "phrase": { "type": "string" },
-        "refPhrase": { "type": "string" }
+        "refPhrase": { "type": "string" },
+        "glyph": { "type": "string" }
       },
       "required": ["id", "label"],
       "additionalProperties": false

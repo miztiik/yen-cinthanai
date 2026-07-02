@@ -7,7 +7,7 @@
   "ordinalAxis": false,
   "minTier": "easy",
   "maxTier": "expert",
-  "note": "SAMPLE authoring template (original content). Cozy allotment judging morning. Anchor = grower. vegetable -> vegetables glyph pack, ribbon -> color glyph pack (the rosette colour); plot is the numeric axis (the allotment plot number); bloom is a text-only flower. narrativeTemplate is setting flavor only. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "note": "SAMPLE authoring template (original content). Cozy allotment judging morning. Anchor = grower. vegetable -> vegetables glyph pack, ribbon -> color glyph pack (the rosette colour); plot is the numeric axis (the allotment plot number), glyph-backed by the abstract numerals num1..num6 (renumbered 1..6 so each numeral matches its plot); bloom is a text-only flower. narrativeTemplate is setting flavor only. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
   "narrativeTemplate": "It is judging morning at the {place} community garden, where {n} growers have tended their allotments right through the season, and old {steward}, who has chaired the committee since before the greenhouse was built, is squinting at a rain-smudged results card trying to remember who won what.",
   "flavorPools": {
     "steward": ["Mr. Ogilvy", "Mrs. Baptiste", "Auntie Fen", "Old Hollis"],
@@ -51,13 +51,14 @@
       "label": "Plot",
       "kind": "numeric",
       "unit": "plot",
+      "glyphPack": "abstract",
       "valuePool": [
-        { "id": "plot2", "label": "Plot 2", "magnitude": 2, "phrase": "tended plot 2" },
-        { "id": "plot4", "label": "Plot 4", "magnitude": 4, "phrase": "tended plot 4" },
-        { "id": "plot6", "label": "Plot 6", "magnitude": 6, "phrase": "tended plot 6" },
-        { "id": "plot8", "label": "Plot 8", "magnitude": 8, "phrase": "tended plot 8" },
-        { "id": "plot10", "label": "Plot 10", "magnitude": 10, "phrase": "tended plot 10" },
-        { "id": "plot12", "label": "Plot 12", "magnitude": 12, "phrase": "tended plot 12" }
+        { "id": "num1", "label": "Plot 1", "magnitude": 1, "phrase": "tended plot 1" },
+        { "id": "num2", "label": "Plot 2", "magnitude": 2, "phrase": "tended plot 2" },
+        { "id": "num3", "label": "Plot 3", "magnitude": 3, "phrase": "tended plot 3" },
+        { "id": "num4", "label": "Plot 4", "magnitude": 4, "phrase": "tended plot 4" },
+        { "id": "num5", "label": "Plot 5", "magnitude": 5, "phrase": "tended plot 5" },
+        { "id": "num6", "label": "Plot 6", "magnitude": 6, "phrase": "tended plot 6" }
       ]
     },
     {
