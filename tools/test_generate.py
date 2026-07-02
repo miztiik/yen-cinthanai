@@ -1,6 +1,7 @@
 """Generator gates: uniqueness, determinism, minimal prune, D-in-band, manifest
 validates, hintTrace solves. Real solver, real config, no mocks (CLAUDE.md #7)."""
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -215,4 +216,59 @@ def test_backfill_index_lists_all_days_seed_is_newest(tmp_path: Path) -> None:
     again = [g._entry_for(d, t, tmp_path, CONFIG_DIR, False) for d in dates for t in tiers]
     assert [e["sha"] for e in again] == [e["sha"] for e in entries]
     assert all(e["frozen"] for e in again)  # second pass reads the frozen files
+
+
+# --- story-first served bank (row 9b: the served bank IS the story-first master) -----------------
+
+PUZZLES_DIR = ROOT / "frontend" / "public" / "puzzles"
+
+
+def _served_puzzles() -> list[Path]:
+    return sorted(p for p in PUZZLES_DIR.glob("*.json") if p.name != "index.json")
+
+
+def test_served_bank_is_story_first_zero_guess() -> None:
+    # Every served puzzle is a story-first schemaVersion-1 grid master with no null optionals, and
+    # P1 (zero-guess) holds: the hint trace visits every non-anchor bijective cell - incl. EASY.
+    files = _served_puzzles()
+    assert files, "no served puzzles found"
+    for p in files:
+        raw = p.read_text("ascii")
+        assert "null" not in raw, f"{p.name}: exclude_none emit must carry no null optional"
+        m = PuzzleManifest.model_validate_json(raw)
+        assert m.schemaVersion == 1 and m.shapeId == "grid"
+        assert m.story and m.scenarioId and m.subjectNoun and m.variant == 1  # story-first
+        anchor = next(c.id for c in m.categories.items if c.anchor)
+        non_anchor_bij = [c for c in m.categories.items if c.id != anchor and c.cardinality == "bijective"]
+        assert len(m.hintTrace) == len(non_anchor_bij) * len(m.entities), p.name  # P1 zero-guess
+
+
+def test_served_bank_covers_four_tiers_each_date() -> None:
+    by_date: dict[str, set[str]] = {}
+    for p in _served_puzzles():
+        date, tier = p.stem.rsplit("-", 1)
+        by_date.setdefault(date, set()).add(tier)
+    assert by_date, "no served dates"
+    for date, served_tiers in by_date.items():
+        assert set(TIERS) <= served_tiers, (date, sorted(served_tiers))
+
+
+def test_served_index_shas_match_files() -> None:
+    # The BankIndex sha for each puzzle == sha256 of the file's canonical JSON (written as the
+    # canonical text plus a trailing newline) - the determinism contract for the served bank.
+    idx = json.loads((PUZZLES_DIR / "index.json").read_text("ascii"))
+    assert idx["schemaVersion"] == 1 and idx["puzzles"]
+    for e in idx["puzzles"]:
+        assert e["shapeId"] == "grid"  # story-first served bank is grid-only
+        text = (PUZZLES_DIR / e["file"]).read_text("ascii").rstrip("\n")
+        assert hashlib.sha256(text.encode("ascii")).hexdigest() == e["sha"], e["file"]
+
+
+def test_served_bank_rebuild_is_byte_identical(tmp_path: Path) -> None:
+    # A rebuild of a committed served puzzle is byte-identical (num_search_workers=1, canonical
+    # sha, exclude_none) - the served master is a deterministic function of (date, tier).
+    for tier in TIERS:
+        committed = (PUZZLES_DIR / f"2026-07-02-{tier}.json").read_text("ascii")
+        e = g.write_puzzle("2026-07-02", tier, tmp_path, CONFIG_DIR)
+        assert (tmp_path / e["file"]).read_text("ascii") == committed, tier
 

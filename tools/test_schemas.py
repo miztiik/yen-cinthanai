@@ -13,6 +13,7 @@ and a v1 save. No schemaVersion is bumped here - this row formalizes the CURRENT
 
 from __future__ import annotations
 
+import copy
 import json
 from datetime import datetime
 from pathlib import Path
@@ -189,15 +190,41 @@ def test_real_json_complies(case: tuple) -> None:
 
 
 def test_manifest_schema_accepts_prepivot_and_story() -> None:
-    """The manifest schema is tolerant: a pre-pivot v1 (served) AND a story-first
-    (datasets) manifest both validate against the single puzzle-manifest schema."""
+    """The manifest schema stays tolerant: a story-first manifest (all story optionals present)
+    AND a pre-pivot manifest (every story optional OMITTED - absent, not null) both validate. The
+    served bank is now story-first, so the pre-pivot shape is derived by stripping the optional
+    fields from a served story manifest, proving the schema accepts their absence."""
     schema = _schema("puzzle-manifest.schema.json")
     validator = Draft202012Validator(schema)
-    prepivot = _read(PUZZLES / "2026-07-01-standard.json")
-    story = _read(DATASETS / "2026" / "07" / "01" / "standard" / "2026-07-01-001.json")
-    validator.validate(prepivot)  # no story-first fields
+    story = _read(PUZZLES / "2026-07-01-standard.json")
     validator.validate(story)  # scenarioId/story/subjectNoun/variant + kind/anchor/magnitude/phrase
-    assert "story" not in prepivot and "story" in story
+    assert "story" in story and "scenarioId" in story
+
+    prepivot = copy.deepcopy(story)  # strip every story-first optional -> a bare pre-pivot manifest
+    for key in ("scenarioId", "story", "subjectNoun", "variant"):
+        prepivot.pop(key, None)
+    for cat in prepivot["categories"]["list"]:
+        for key in ("kind", "unit", "anchor", "glyphPack"):
+            cat.pop(key, None)
+        for val in cat["values"]:
+            for key in ("magnitude", "phrase", "refPhrase"):
+                val.pop(key, None)
+    validator.validate(prepivot)  # optionals absent (not null) -> still valid
+    assert "story" not in prepivot and all("kind" not in c for c in prepivot["categories"]["list"])
+
+
+def test_manifest_schema_rejects_present_null_optionals() -> None:
+    """The tightened schema forbids present-null optionals. The served/daily emit uses exclude_none,
+    so an optional is OMITTED when unset; a null now signals a real emit bug and must be rejected."""
+    schema = _schema("puzzle-manifest.schema.json")
+    validator = Draft202012Validator(schema)
+    base = _read(PUZZLES / "2026-07-01-standard.json")
+    for key in ("story", "scenarioId", "subjectNoun", "variant"):
+        assert list(validator.iter_errors({**base, key: None})), f"{key}:null must be rejected"
+    # a per-category null optional is rejected too
+    cat_null = copy.deepcopy(base)
+    cat_null["categories"]["list"][0]["unit"] = None
+    assert list(validator.iter_errors(cat_null)), "category unit:null must be rejected"
 
 
 def test_save_schema_accepts_v0_and_v1() -> None:

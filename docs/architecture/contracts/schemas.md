@@ -39,7 +39,7 @@ Every surface above also has a formal JSON Schema (Draft 2020-12) under `schemas
 - Authoring inputs: `schemas/categories.schema.json`, `scenario-template.schema.json`.
 - Config: `schemas/config/<name>.schema.json` for each of tiers, dials, budgets, copy, ui, shapes, glyphpacks, palettes, retention.
 
-Tolerance (faithful but forgiving): the manifest schema accepts a pre-pivot v1 manifest, a story-first manifest, AND the daily emit that serializes the optional story fields as `null`; the save schema accepts a v0 (pre-versioned, date-keyed, no `puckSize`) and a v1 save. Formalizing the schemas bumps NO schemaVersion.
+Tolerance (faithful but forgiving): the manifest schema accepts BOTH a pre-pivot v1 manifest (story fields absent) and a story-first manifest (the served bank, all tiers). Every story-first optional is OMITTED when unset - the served/daily emit uses `exclude_none`, so a present-null is now REJECTED (a null signals a real emit bug). The save schema accepts a v0 (pre-versioned, date-keyed, no `puckSize`) and a v1 save. Formalizing + tightening the schemas bumps NO schemaVersion.
 
 Evolution log (why-changed-what, kept inside each schema): every schema carries a top-level `evolution` array - an ignored custom keyword, so the schema stays valid - shaped `[ { version, date, change, why } ]` tracking the surface's history (e.g. Save's `puckSize` + `notes` additions, GlyphManifest v1 -> v2). The gate asserts it is present and its versions are non-decreasing. When a future row bumps a `schemaVersion` (e.g. the manifest 1 -> 2) it appends an entry here in the same commit.
 

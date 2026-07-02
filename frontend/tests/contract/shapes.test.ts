@@ -55,16 +55,25 @@ describe("shape registry", () => {
   });
 
   it("every bank manifest stays within its shape's rules and cap", () => {
+    // Story-first grid manifests carry narrative clue types (numeric/compound) beyond the shape
+    // registry's base seat rules; a pre-pivot manifest uses only its shape's slot_rules.
+    const STORY_CLUES = new Set(["numDiff", "threshold", "oneOf", "oneEachOf", "ifThen"]);
     expect(manifests.length).toBeGreaterThan(0);
     for (const m of manifests) {
       const shape = reg[m.shapeId];
       expect(shape).toBeDefined();
       expect(m.entities.length).toBeLessThanOrEqual(shape.max_entities);
-      for (const k of m.constraints) expect(shape.slot_rules).toContain(k.type);
+      const allowed = new Set([...shape.slot_rules, ...(m.story ? STORY_CLUES : [])]);
+      for (const k of m.constraints) expect(allowed.has(k.type)).toBe(true);
     }
   });
 
-  it("the bank ships a round-table puzzle so the drawer chip is enabled (not greyed)", () => {
-    expect(manifests.some((m) => m.shapeId === "round-table")).toBe(true);
+  it("the story-first served bank is grid-only (seating-row + round-table stay engine seams)", () => {
+    // The served bank is derived from the story-first matrix generator, which emits a grid; the
+    // seating-row + round-table shapes remain in the registry for the engine + a later frontend row.
+    expect(manifests.length).toBeGreaterThan(0);
+    expect(manifests.every((m) => m.shapeId === "grid")).toBe(true);
+    expect(reg["round-table"]).toBeDefined();
+    expect(reg["seating-row"]).toBeDefined();
   });
 });

@@ -37,7 +37,7 @@ describe("loader", () => {
     const bank = await loadBank();
     expect(bank.schemaVersion).toBe(1);
     const e = pickEntry(bank, bank.generatedSeed, "standard");
-    expect(e.shapeId).toBe("seating-row");
+    expect(e.shapeId).toBe("grid"); // story-first served bank is grid-only
   });
 
   it("loads the manifest for the picked entry", async () => {
