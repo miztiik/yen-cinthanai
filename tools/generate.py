@@ -1,18 +1,19 @@
 """Build-time daily-bank generator: pipes and filters, no in-browser solver.
 
-  config/tiers.json + config/dials.json + date
-    -> seed (PRNG + CP-SAT random_seed)
-    -> sample full bijective solution
-    -> enumerate clues true under solution
+  config/tiers.json + config/dials.json + datasets/ scenario + date
+    -> story seed (PRNG + CP-SAT random_seed)
+    -> subject-anchored matrix: sample a full bijective solution
+    -> enumerate eq/neq + numeric + compound clues true under it (tier-gated by minTier)
     -> weighted-select a subset, verify uniqueness, prune to minimal
-    -> template clueText -> compute D (reject + reseed if out of band)
-    -> emit PuzzleManifest (validated by tools.models) + canonical-JSON sha
+    -> render full-sentence clueText -> compute D (reject + reseed if out of band / not zero-guess)
+    -> emit story-first PuzzleManifest v2 (validated by tools.models) + canonical-JSON sha
     -> append BankIndex; JSONL log to .logs/build-<date>.jsonl
 
-Determinism: num_search_workers=1, fixed random_seed; canonical JSON (sort_keys,
-ASCII) sha -> a rebuild of the same date is byte-identical. No hardcoding: every
-tunable comes from config/. ASCII + POSIX only. See docs/architecture/generator/
-pipeline.md, docs/concepts/difficulty-and-scoring.md, docs/architecture/contracts.
+Matrix-only (F1): the seating-row/round-table positional engine is retired (Row 9d contract
+close), so every puzzle is a grid narrated by a scenario. Determinism: num_search_workers=1,
+fixed random_seed; canonical JSON (sort_keys, ASCII) sha -> a rebuild of the same (date, tier,
+variant) is byte-identical. No hardcoding: every tunable comes from config/. ASCII + POSIX only.
+See docs/architecture/generator/pipeline.md, docs/concepts/difficulty-and-scoring.md.
 """
 
 from __future__ import annotations
@@ -32,7 +33,8 @@ from ortools.sat.python import cp_model
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # sibling models on path
 
 from models import (  # noqa: E402
-    SCHEMA_VERSION,
+    BANK_SCHEMA_VERSION,
+    PUZZLE_SCHEMA_VERSION,
     AttributeCategory,
     AttributeValue,
     BankEntry,
@@ -46,20 +48,19 @@ from models import (  # noqa: E402
     Tier,
 )
 from corpus import load_scenario_template  # noqa: E402
-from translator import clue_text, render_clue, render_story  # noqa: E402
+from translator import render_clue, render_story  # noqa: E402
 
 _ROOT = Path(__file__).resolve().parent.parent
 CONFIG_DIR = _ROOT / "config"
 PUZZLES_DIR = _ROOT / "frontend" / "public" / "puzzles"
 DATASETS_DIR = _ROOT / "datasets"
-GLYPHS_INDEX = _ROOT / "frontend" / "public" / "assets" / "glyphs" / "index.json"
 LOGS_DIR = _ROOT / ".logs"
 
-DIRECT_TYPES = ("eq", "ends")
+# Matrix-only clue vocabulary (the seating-row/round-table positional engine is retired, Row 9d).
 # Compound reified clues are INDIRECT reasoning: they weaken any single cell, so they lift the
 # indirection score (and the tier band) the same way neq does. Only the story path emits them.
 COMPOUND_TYPES = ("oneOf", "oneEachOf", "ifThen")  # oneOf/oneEachOf Sharp+, ifThen Expert-only
-INDIRECT_TYPES = ("neq", "adjacent", "distance", "before", "opposite", "between", *COMPOUND_TYPES)
+INDIRECT_TYPES = ("neq", *COMPOUND_TYPES)
 NUMERIC_TYPES = ("numDiff", "threshold")  # integer-magnitude clues on a numeric category
 SOLVE_LIMIT_S = 10.0
 STORY_SERVED_VARIANT = 1  # the canonical daily variant served in the bank (one puzzle per date x tier)
@@ -102,32 +103,6 @@ def load_config(name: str, config_dir: Path) -> dict:
 
 
 @dataclass(frozen=True)
-class Shape:
-    """A resolved shape-registry entry (config/shapes.json). The engine reads shapeId."""
-
-    id: str
-    topology: str
-    ordinal_axis: bool
-    max_entities: int
-    slot_rules: tuple[str, ...]
-
-
-def resolve_shape(shape_id: str, config_dir: Path) -> Shape:
-    """Look up a shapeId in the registry; raise on unknown (fail fast, no bespoke code)."""
-    reg = load_config("shapes", config_dir)
-    if shape_id not in reg:
-        raise KeyError(f"unknown shapeId '{shape_id}' (registry: {sorted(reg)})")
-    s = reg[shape_id]
-    return Shape(shape_id, s["topology"], s["ordinal_axis"], s["max_entities"], tuple(s["slot_rules"]))
-
-
-def shape_for(tier: Tier, config_dir: Path) -> str:
-    """Tier -> shapeId (config/dials.json tier table). The only place tier picks shape."""
-    return load_config("dials", config_dir)["tier"][tier]["shape"]
-
-
-
-@dataclass(frozen=True)
 class Cat:
     """A resolved category: glyph-backed values in solution order, ordinal or not.
 
@@ -142,8 +117,9 @@ class Cat:
     glyphs: list[str]
     labels: list[str]
     cardinality: str = "bijective"
-    # Story-first (corpus-driven matrix) parallel metadata; all optional so the existing
-    # glyph-manifest Cat construction (build_categories/_value_cat) is unaffected.
+    # Story-first (corpus-driven matrix) parallel metadata; all optional. `anchor` marks the
+    # identity axis (the subject); the retired `ordinal` field is kept only as an internal flag
+    # (always False for story cats) so identity_cat can fall back to cats[0] when no anchor is set.
     phrases: list[str | None] | None = None
     ref_phrases: list[str | None] | None = None
     magnitudes: list[int | None] | None = None
@@ -157,60 +133,7 @@ class Cat:
         return self.cardinality == "shared"
 
 
-# Packs that are NOT puzzle value dimensions: 'abstract' holds the ordinal seat numerals
-# (num1..numN) plus the clue/UI glyphs (grid, opposite, between, ...).
-_STRUCTURAL_PACKS = ("abstract",)
-_CAT_SALT = 0x9E3779B9  # decorrelate the dimension-pick PRNG from the per-attempt solution PRNG
 _STORY_SALT = 0x85EBCA6B  # decorrelate the story value-pick PRNG (corpus-driven matrix)
-
-
-def _manifest_packs(config_dir: Path) -> dict:
-    """pack -> {slug: {file,label}} from the generated glyph manifest (tools/bake_glyphs.py)."""
-    return json.loads(GLYPHS_INDEX.read_text(encoding="ascii"))["packs"]
-
-
-def _value_cat(pack: str, manifest: dict, value_ids: list[str], cardinality: str) -> Cat:
-    """A nominal value dimension: the folder is the category, its files are the values."""
-    return Cat(
-        id=pack,
-        label=pack[:1].upper() + pack[1:],
-        ordinal=False,
-        value_ids=value_ids,
-        glyphs=[f"{pack}.{v}" for v in value_ids],
-        labels=[manifest[pack][v]["label"] for v in value_ids],
-        cardinality=cardinality,
-    )
-
-
-def build_categories(tier: Tier, entities: int, config_dir: Path, date: str) -> list[Cat]:
-    """Derive the puzzle's dimensions FROM THE GLYPH MANIFEST (auto-discovering: a new pack
-    folder becomes selectable with zero code change). Date-seeded, so each day draws a
-    different slice of folders + values from the FULL pool (that is the diversity), while a
-    rebuild of the same date is identical. The solver is glyph-agnostic, so which packs and
-    values get picked never changes uniqueness or difficulty - only the visual skin.
-
-    Structure comes from config (dials [tier.<tier>]): `nominal` bijective value packs and
-    `shared` binary packs, plus the ordinal seat axis when the shape has one."""
-    manifest = _manifest_packs(config_dir)
-    shape = resolve_shape(shape_for(tier, config_dir), config_dir)
-    spec = load_config("dials", config_dir)["tier"][tier]
-    n_nominal, n_shared = spec["nominal"], spec.get("shared", 0)
-    rng = random.Random(seed_int(date, tier, config_dir) ^ _CAT_SALT)
-
-    cats: list[Cat] = []
-    if shape.ordinal_axis:  # seat axis: value i sits at seat i (abstract numerals)
-        nums = [f"num{i + 1}" for i in range(entities)]
-        cats.append(Cat("position", "Seat", True, nums, [f"abstract.{v}" for v in nums],
-                        [str(i + 1) for i in range(entities)], "bijective"))
-
-    # eligible value packs: every folder (except structural) with enough glyphs to fill a seat
-    pool = sorted(p for p in manifest if p not in _STRUCTURAL_PACKS and len(manifest[p]) >= entities)
-    picks = rng.sample(pool, min(n_nominal + n_shared, len(pool)))
-    for pack in picks[:n_nominal]:  # bijective: one distinct value per seat
-        cats.append(_value_cat(pack, manifest, sorted(rng.sample(sorted(manifest[pack]), entities)), "bijective"))
-    for pack in picks[n_nominal:n_nominal + n_shared]:  # shared: 2 values repeat across seats
-        cats.append(_value_cat(pack, manifest, sorted(rng.sample(sorted(manifest[pack]), 2)), "shared"))
-    return cats
 
 
 def build_story_categories(scenario, entities: int, seed: int) -> list[Cat]:
@@ -241,12 +164,6 @@ def build_story_categories(scenario, entities: int, seed: int) -> list[Cat]:
 
 
 # --- seed -----------------------------------------------------------------------
-
-
-def seed_int(date: str, tier: Tier, config_dir: Path) -> int:
-    salt = load_config("dials", config_dir)["seed_salt"]
-    digest = hashlib.sha256(f"{salt}:{date}:{tier}".encode("ascii")).hexdigest()
-    return int(digest[:8], 16)
 
 
 def story_seed(date: str, tier: Tier, variant: int) -> int:
@@ -288,15 +205,11 @@ def _reify_at(m: cp_model.CpModel, var, slot: int):
 
 
 def _add_clue(
-    m: cp_model.CpModel, x: dict, seat: dict, vid: dict, n: int, circular: bool,
-    mag: dict, clue: Clue,
+    m: cp_model.CpModel, x: dict, seat: dict, vid: dict, n: int, mag: dict, clue: Clue,
 ) -> None:
     typ, ops, params = clue
     p = dict(params)
     ca, va = ops[0]
-    if typ == "ends":
-        m.Add(x[ca][va] == p["pos"])
-        return
     if typ == "threshold":  # single anchor operand: numeric magnitude at its fixed slot vs a bound
         nc = p["numericCat"]
         mag_a = _mag_at_slot(m, x, nc, mag[nc], vid[ca][va])
@@ -354,45 +267,18 @@ def _add_clue(
         else:
             (m.Add(x[ca][va] == x[cb][vb]) if typ == "eq" else m.Add(x[ca][va] != x[cb][vb]))
         return
-    if typ == "before":
-        m.Add(x[ca][va] < x[cb][vb])
-        return
-    if typ == "opposite":  # half the table apart (circular, n even)
-        t = m.NewIntVar(0, n - 1, "")
-        m.AddAbsEquality(t, x[ca][va] - x[cb][vb])
-        m.Add(t == n // 2)
-        return
-    if typ == "between":  # a is flanked by b and c (adjacent to both, wraps)
-        _wrap_adjacent(m, x[ops[0][0]][ops[0][1]], x[ops[1][0]][ops[1][1]], n, circular)
-        _wrap_adjacent(m, x[ops[0][0]][ops[0][1]], x[ops[2][0]][ops[2][1]], n, circular)
-        return
-    if typ == "adjacent":
-        _wrap_adjacent(m, x[ca][va], x[cb][vb], n, circular)
-        return
-    t = m.NewIntVar(0, n - 1, "")  # distance:k
-    m.AddAbsEquality(t, x[ca][va] - x[cb][vb])
-    m.Add(t == p["k"])
-
-
-def _wrap_adjacent(m: cp_model.CpModel, a, b, n: int, circular: bool) -> None:
-    """|a-b| == 1, or == n-1 too when the table wraps (round table has no ends)."""
-    t = m.NewIntVar(0, n - 1, "")
-    m.AddAbsEquality(t, a - b)
-    if circular:
-        one, wrap = m.NewBoolVar(""), m.NewBoolVar("")
-        m.Add(t == 1).OnlyEnforceIf(one)
-        m.Add(t == n - 1).OnlyEnforceIf(wrap)
-        m.AddBoolOr(one, wrap)
-    else:
-        m.Add(t == 1)
+    raise ValueError(
+        f"unsupported clue type {typ!r} "
+        "(matrix-only vocabulary: eq/neq/numDiff/threshold/oneOf/oneEachOf/ifThen)"
+    )
 
 
 def identity_cat(cats: list[Cat]) -> Cat:
-    """The anchor: value i occupies slot i. Ordinal axis if present, else the first."""
-    return next((c for c in cats if c.ordinal), cats[0])
+    """The identity axis: value i occupies slot i. The category flagged anchor, else the first."""
+    return next((c for c in cats if c.anchor), cats[0])
 
 
-def build_model(cats: list[Cat], n: int, clues: list[Clue], circular: bool = False) -> tuple:
+def build_model(cats: list[Cat], n: int, clues: list[Clue]) -> tuple:
     m = cp_model.CpModel()
     anchor = identity_cat(cats)
     x: dict[str, dict[str, cp_model.IntVar]] = {}
@@ -412,7 +298,7 @@ def build_model(cats: list[Cat], n: int, clues: list[Clue], circular: bool = Fal
             for i, v in enumerate(c.value_ids):
                 m.Add(x[c.id][v] == i)
     for clue in clues:
-        _add_clue(m, x, seat, vid, n, circular, mag, clue)
+        _add_clue(m, x, seat, vid, n, mag, clue)
     return m, x, seat, vid
 
 
@@ -424,9 +310,9 @@ def _solver(seed: int) -> cp_model.CpSolver:
     return s
 
 
-def is_unique(cats: list[Cat], n: int, clues: list[Clue], seed: int, circular: bool = False) -> bool:
+def is_unique(cats: list[Cat], n: int, clues: list[Clue], seed: int) -> bool:
     """Solve; forbid that exact assignment via reified bools; re-solve INFEASIBLE."""
-    m, x, seat, _ = build_model(cats, n, clues, circular)
+    m, x, seat, _ = build_model(cats, n, clues)
     s = _solver(seed)
     if _definite(s.Solve(m)) not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         return False
@@ -442,10 +328,10 @@ def is_unique(cats: list[Cat], n: int, clues: list[Clue], seed: int, circular: b
     return _definite(_solver(seed).Solve(m)) == cp_model.INFEASIBLE
 
 
-def uniqueness_status(cats: list[Cat], n: int, clues: list[Clue], seed: int, circular: bool = False) -> int:
+def uniqueness_status(cats: list[Cat], n: int, clues: list[Clue], seed: int) -> int:
     """The first-solve CP-SAT status for a clue set, guarded DEFINITE. Exposed so tests can assert
     a generated puzzle's solve is never UNKNOWN/MODEL_INVALID (a determinism precondition)."""
-    m, *_ = build_model(cats, n, clues, circular)
+    m, *_ = build_model(cats, n, clues)
     return _definite(_solver(seed).Solve(m))
 
 
@@ -474,15 +360,12 @@ def _pos(sol: dict[str, list[str]], cat: str, val: str) -> int:
     return sol[cat].index(val)
 
 
-def enumerate_clues(
-    cats: list[Cat], n: int, sol: dict[str, list[str]], allowed: tuple[str, ...] | None = None,
-    circular: bool = False
-) -> list[Clue]:
-    """Every clue true under sol, drawn from the v1/v2 catalog, kept only if the shape's
-    slot_rules allow the type (registry-gated, no per-shape code). cat/value operands.
-    Shared cats compare via the bijective slot; circular tables wrap + gain opposite."""
+def enumerate_clues(cats: list[Cat], n: int, sol: dict[str, list[str]]) -> list[Clue]:
+    """Every eq/neq clue true under sol, across category pairs (matrix-only, shared-shared
+    skipped). A shared cat compares via its partner's bijective slot; pure-bijective pairs
+    compare slots directly. Numeric (numDiff/threshold) and compound (oneOf/oneEachOf/ifThen)
+    candidates come from enumerate_numeric_clues + enumerate_compound_clues."""
     out: list[Clue] = []
-    ordinal = [c for c in cats if c.ordinal]
     for ci, a in enumerate(cats):  # eq/neq across category pairs (skip shared-shared)
         for b in cats[ci + 1 :]:
             if a.shared and b.shared:
@@ -493,39 +376,7 @@ def enumerate_clues(
                 for bv in rhs.value_ids:
                     same = sol[rhs.id][slot] == bv if rhs.shared else _pos(sol, rhs.id, bv) == slot
                     out.append(("eq" if same else "neq", ((lhs.id, av), (rhs.id, bv)), ()))
-    if circular:  # ring relations across ALL bijective values (tea opposite cat, etc.)
-        bij = [(c.id, v) for c in cats if not c.shared for v in c.value_ids]
-        for i, (ca, va) in enumerate(bij):
-            for cb, vb in bij[i + 1 :]:
-                if ca == cb and va == vb:
-                    continue
-                d = abs(_pos(sol, ca, va) - _pos(sol, cb, vb))
-                dmin = min(d, n - d)
-                if dmin == 1:
-                    out.append(("adjacent", ((ca, va), (cb, vb)), ()))
-                if n % 2 == 0 and dmin == n // 2:
-                    out.append(("opposite", ((ca, va), (cb, vb)), ()))
-        for oc in ordinal:  # between: a seat flanked by its two ring neighbours
-            vs, order = oc.value_ids, [_pos(sol, oc.id, w) for w in oc.value_ids]
-            for mid in vs:
-                pm = _pos(sol, oc.id, mid)
-                lo, hi = vs[order.index((pm - 1) % n)], vs[order.index((pm + 1) % n)]
-                out.append(("between", ((oc.id, mid), (oc.id, lo), (oc.id, hi)), ()))
-    else:
-        for oc in ordinal:  # linear seat row: ends + ordinal seat relations
-            vs = oc.value_ids
-            for v in vs:
-                p = _pos(sol, oc.id, v)
-                if p in (0, n - 1):
-                    out.append(("ends", ((oc.id, v),), (("pos", p),)))
-            for i, av in enumerate(vs):
-                for bv in vs[i + 1 :]:
-                    pa, pb = _pos(sol, oc.id, av), _pos(sol, oc.id, bv)
-                    d = abs(pa - pb)
-                    out.append(("adjacent" if d == 1 else "distance", ((oc.id, av), (oc.id, bv)), () if d == 1 else (("k", d),)))
-                    lo, hi = (av, bv) if pa < pb else (bv, av)
-                    out.append(("before", ((oc.id, lo), (oc.id, hi)), ()))
-    return out if allowed is None else [c for c in out if c[0] in allowed]
+    return out
 
 
 def enumerate_numeric_clues(cats: list[Cat], n: int, sol: dict[str, list[str]], tier: str, scenario) -> list[Clue]:
@@ -613,20 +464,19 @@ def enumerate_compound_clues(cats: list[Cat], n: int, sol: dict[str, list[str]],
 
 def select_minimal(
     cats: list[Cat], n: int, candidates: list[Clue], weights: dict, seed: int, rng: random.Random,
-    circular: bool = False
 ) -> list[Clue]:
     """Weighted greedy add to uniqueness, then shuffle-and-drop to a minimal set."""
     pool = sorted(candidates, key=lambda c: -weights.get(c[0], 1) + rng.random() / 1000)
     chosen: list[Clue] = []
     for clue in pool:
-        if is_unique(cats, n, chosen, seed, circular):
+        if is_unique(cats, n, chosen, seed):
             break
         chosen.append(clue)
     order = list(chosen)
     rng.shuffle(order)
     for clue in order:
         trial = [c for c in chosen if c != clue]
-        if is_unique(cats, n, trial, seed, circular):
+        if is_unique(cats, n, trial, seed):
             chosen = trial
     return chosen
 
@@ -634,7 +484,7 @@ def select_minimal(
 # --- hint trace (forced deduction order) ----------------------------------------
 
 
-def hint_trace(cats: list[Cat], n: int, clues: list[Clue], sol: dict, seed: int, circular: bool = False) -> list[HintStep]:
+def hint_trace(cats: list[Cat], n: int, clues: list[Clue], sol: dict, seed: int) -> list[HintStep]:
     """Bijective cells forced in order: a cell is forced when no other value is feasible.
     Shared cells are not anchored to one entity, so the trace reveals bijective steps."""
     anchor = identity_cat(cats)
@@ -648,7 +498,7 @@ def hint_trace(cats: list[Cat], n: int, clues: list[Clue], sol: dict, seed: int,
             if any(k[0] == cat and k[1] == val for k in known):
                 continue
             slot = _pos(sol, cat, val)
-            m, x, _, _ = build_model(cats, n, clues, circular)
+            m, x, _, _ = build_model(cats, n, clues)
             for kc, kv, ks in known:
                 m.Add(x[kc][kv] == ks)
             m.Add(x[cat][val] != slot)
@@ -686,29 +536,6 @@ def difficulty(tier_dial: dict, entities: int, n_cats: int, n_clues: int, indire
 # --- emit manifest --------------------------------------------------------------
 
 
-def to_manifest(date, tier, shape, rev, cats, n, clues, sol, hints) -> PuzzleManifest:
-    cat_models = [
-        AttributeCategory(
-            id=c.id, label=c.label, ordinal=c.ordinal, cardinality=c.cardinality,
-            values=[AttributeValue(id=v, glyph=g, label=lb) for v, g, lb in zip(c.value_ids, c.glyphs, c.labels)],
-        )
-        for c in cats
-    ]
-    constraints = [
-        Constraint(
-            id=f"c{i + 1}", type=cl[0], operands=[Operand(cat=o[0], value=o[1]) for o in cl[1]],
-            params={k: v for k, v in cl[2]}, clueText=clue_text(cats, n, cl), renderHint=cl[0],
-        )
-        for i, cl in enumerate(clues)
-    ]
-    solution = {f"e{i}": {c.id: sol[c.id][i] for c in cats} for i in range(n)}
-    return PuzzleManifest(
-        schemaVersion=SCHEMA_VERSION, puzzleId=date, tier=tier, shapeId=shape, templateRev=rev,
-        entities=[f"e{i}" for i in range(n)], categories=Categories.model_validate({"n": len(cats), "list": cat_models}),
-        constraints=constraints, solution=solution, hintTrace=hints,
-    )
-
-
 def canonical_sha(manifest: PuzzleManifest) -> tuple[str, str]:
     """Canonical one-line JSON + its sha256. exclude_none drops unset optionals so a served
     manifest carries NO null-valued fields (the manifest schema forbids present-null); a rebuild
@@ -719,31 +546,6 @@ def canonical_sha(manifest: PuzzleManifest) -> tuple[str, str]:
 
 
 # --- pipeline -------------------------------------------------------------------
-
-
-def generate(date: str, tier: Tier, config_dir: Path = CONFIG_DIR) -> tuple[PuzzleManifest, int, list[dict]]:
-    tiers = load_config("tiers", config_dir)[tier]
-    dials = load_config("dials", config_dir)
-    shape = resolve_shape(shape_for(tier, config_dir), config_dir)
-    entities = min(tiers["entities"], shape.max_entities)  # registry caps the seat count
-    n_cats = tiers["categories"]
-    cats = build_categories(tier, entities, config_dir, date)
-    lo, hi = tiers["band"]
-    log: list[dict] = []
-    for attempt in range(dials["max_reseeds"]):
-        seed = seed_int(date, tier, config_dir) + attempt
-        rng = random.Random(seed)
-        sol = sample_solution(cats, entities, rng)
-        circular = shape.topology == "circular"
-        cand = enumerate_clues(cats, entities, sol, shape.slot_rules, circular)
-        clues = select_minimal(cats, entities, cand, dials["weights"], seed, rng, circular)
-        hints = hint_trace(cats, entities, clues, sol, seed, circular)
-        indirect = sum(1 for c in clues if c[0] in INDIRECT_TYPES)
-        d = difficulty(tiers, entities, n_cats, len(clues), indirect, len(hints))
-        log.append({"attempt": attempt, "clues": len(clues), "indirect": indirect, "depth": len(hints), "D": d})
-        if lo <= d <= hi:
-            return to_manifest(date, tier, shape.id, dials["template_rev"], cats, entities, clues, sol, hints), d, log
-    raise RuntimeError(f"no in-band puzzle for {date}/{tier} after {dials['max_reseeds']} reseeds (band {lo}-{hi})")
 
 
 def write_puzzle(date: str, tier: Tier, out_dir: Path = PUZZLES_DIR, config_dir: Path = CONFIG_DIR) -> dict:
@@ -762,7 +564,7 @@ def write_puzzle(date: str, tier: Tier, out_dir: Path = PUZZLES_DIR, config_dir:
 
 def write_index(date: str, entries: list[dict], out_dir: Path = PUZZLES_DIR) -> Path:
     index = BankIndex(
-        schemaVersion=SCHEMA_VERSION, generatedSeed=date, builtAt=f"{date}T00:00:00Z",
+        schemaVersion=BANK_SCHEMA_VERSION, generatedSeed=date, builtAt=f"{date}T00:00:00Z",
         puzzles=[BankEntry(date=e["date"], tier=e["tier"], shapeId=e["shapeId"], file=e["file"], sha=e["sha"]) for e in entries],
     )
     text = json.dumps(index.model_dump(), sort_keys=True, ensure_ascii=True, indent=2) + "\n"
@@ -817,10 +619,10 @@ def _story_acceptable(
 
 
 def to_story_manifest(date, tier, scenario, variant, cats, n, clues, sol, hints, rev, seed) -> PuzzleManifest:
-    """Story-first manifest: subject-anchored grid with narrative + full-sentence eq/neq clues.
-    Emits kind/anchor/unit/glyphPack per category and magnitude/phrase/refPhrase per value; the
-    solver-internal ordinal stays False (the subject is the identity) while the emitted ordinal
-    follows kind (a numeric price reads as ordinal for the UI). schemaVersion stays 1."""
+    """Story-first PuzzleManifest v2: subject-anchored grid with narrative + full-sentence clues.
+    Emits kind (required) + anchor (required, the subject) + optional unit/glyphPack per category
+    and optional magnitude/phrase/refPhrase per value. The retired boolean `ordinal` field is not
+    emitted; kind carries the ordinal/numeric distinction. schemaVersion is 2 (the contract close)."""
     cat_models = []
     for c in cats:
         values = [
@@ -834,8 +636,8 @@ def to_story_manifest(date, tier, scenario, variant, cats, n, clues, sol, hints,
         ]
         cat_models.append(
             AttributeCategory(
-                id=c.id, label=c.label, ordinal=(c.kind != "nominal"), cardinality=c.cardinality,
-                values=values, kind=c.kind, unit=c.unit, anchor=c.anchor, glyphPack=c.glyph_pack,
+                id=c.id, label=c.label, kind=c.kind, anchor=bool(c.anchor),
+                cardinality=c.cardinality, values=values, unit=c.unit, glyphPack=c.glyph_pack,
             )
         )
     constraints = [
@@ -848,7 +650,7 @@ def to_story_manifest(date, tier, scenario, variant, cats, n, clues, sol, hints,
     ]
     solution = {f"e{i}": {c.id: sol[c.id][i] for c in cats} for i in range(n)}
     return PuzzleManifest(
-        schemaVersion=SCHEMA_VERSION, puzzleId=date, tier=tier, shapeId="grid", templateRev=rev,
+        schemaVersion=PUZZLE_SCHEMA_VERSION, puzzleId=date, tier=tier, shapeId="grid", templateRev=rev,
         entities=[f"e{i}" for i in range(n)],
         categories=Categories.model_validate({"n": len(cats), "list": cat_models}),
         constraints=constraints, solution=solution, hintTrace=hints,
@@ -905,7 +707,7 @@ def build_story(
         seed = base + attempt
         rng = random.Random(seed)
         sol = sample_solution(cats, entities, rng)
-        cand = enumerate_clues(cats, entities, sol, allowed=("eq", "neq"))
+        cand = enumerate_clues(cats, entities, sol)
         cand += enumerate_numeric_clues(cats, entities, sol, tier, scenario)
         cand += enumerate_compound_clues(cats, entities, sol, tier, scenario)
         clues = select_minimal(cats, entities, cand, story["weights"], seed, rng)

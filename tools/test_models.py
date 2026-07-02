@@ -25,9 +25,12 @@ def _load_abs(p: Path) -> dict:
 
 def test_manifest_fixture_validates() -> None:
     m = PuzzleManifest.model_validate(_load("manifest-4x3.json"))
-    assert m.schemaVersion == 1
+    assert m.schemaVersion == 2 and m.shapeId == "grid"
     assert len(m.entities) == 4
     assert m.categories.n == 3 == len(m.categories.items)
+    assert m.story and m.scenarioId and m.subjectNoun and m.variant == 1  # story-first required at v2
+    assert all(c.kind for c in m.categories.items)  # kind required on every category
+    assert sum(1 for c in m.categories.items if c.anchor) == 1  # exactly one anchor axis
     for cat in m.categories.items:
         if cat.cardinality == "bijective":
             assert len(cat.values) == len(m.entities)
@@ -40,7 +43,7 @@ def test_story_first_sample_manifests_validate() -> None:
     for tier in ("standard", "easy"):
         p = DATASETS / "2026" / "07" / "01" / tier / "2026-07-01-001.json"
         m = PuzzleManifest.model_validate(_load_abs(p))
-        assert m.schemaVersion == 1
+        assert m.schemaVersion == 2
         assert m.story and m.scenarioId and m.subjectNoun and m.variant == 1
         # story-first categories all carry a kind; an anchor + phrase are present
         assert all(c.kind is not None for c in m.categories.items)
@@ -57,20 +60,6 @@ def test_story_first_sample_manifests_validate() -> None:
     assert {k.type for k in std.constraints} <= {"eq", "neq", "numDiff", "threshold"}
     assert any(k.type == "eq" for k in std.constraints)
     assert any(k.type == "numDiff" for k in std.constraints)
-
-
-def test_pre_pivot_manifest_still_validates() -> None:
-    """Old-shape manifests (no story/kind; values id/glyph/label) still validate."""
-    m = PuzzleManifest.model_validate(_load("manifest-4x3.json"))
-    assert m.story is None and m.scenarioId is None and m.variant is None
-    for c in m.categories.items:
-        assert c.kind is None and c.anchor is None and c.unit is None
-        for v in c.values:
-            assert v.magnitude is None and v.phrase is None and v.refPhrase is None
-    # a real served bundle puzzle validates too (now story-first; glob avoids a fixed date)
-    served = sorted(PUZZLES.glob("*-standard.json"))
-    assert served, "expected served puzzles in the bundle"
-    PuzzleManifest.model_validate(_load_abs(served[0]))
 
 
 def test_save_and_bank_fixtures_validate() -> None:

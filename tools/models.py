@@ -17,12 +17,17 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 Tier = Literal["easy", "standard", "sharp", "expert"]
-ShapeId = Literal["grid", "seating-row", "round-table"]
+# Matrix-only at v2: the seating-row/round-table engine is retired (Row 9d contract close).
+ShapeId = Literal["grid"]
+# Save is the migrating surface, so a day persisted before the retirement may still carry a
+# retired shapeId - it stays readable (back-compat) even though new days are always grid.
+SaveShapeId = Literal["grid", "seating-row", "round-table"]
 Cardinality = Literal["bijective", "shared"]
 DayStatus = Literal["unplayed", "playing", "won", "lost"]
 PuckSize = Literal["small", "medium", "large"]
 
-SCHEMA_VERSION = 1
+PUZZLE_SCHEMA_VERSION = 2  # PuzzleManifest, bumped at the story-first contract close (Row 9d)
+BANK_SCHEMA_VERSION = 1    # BankIndex - the bundle index shape is unchanged
 
 
 class _Strict(BaseModel):
@@ -38,7 +43,7 @@ class AttributeValue(_Strict):
     id: str
     glyph: str
     label: str
-    # Story-first (Expand phase, all optional; schemaVersion stays 1):
+    # Story-first metadata (all optional; OMITTED when unset via exclude_none, never null):
     magnitude: int | None = None
     phrase: str | None = None
     refPhrase: str | None = None
@@ -47,13 +52,14 @@ class AttributeValue(_Strict):
 class AttributeCategory(_Strict):
     id: str
     label: str
-    ordinal: bool
+    # Required at v2: `kind` replaces the old boolean `ordinal` flag, and exactly one category
+    # is flagged `anchor` (the identity axis). The retired `ordinal` field is dropped entirely.
+    kind: Literal["nominal", "ordinal", "numeric"]
+    anchor: bool
     cardinality: Cardinality
     values: list[AttributeValue]
-    # Story-first (Expand phase, all optional; kind and ordinal coexist for now):
-    kind: Literal["nominal", "ordinal", "numeric"] | None = None
+    # Optional metadata (present only where meaningful; absent when unset, never null):
     unit: str | None = None
-    anchor: bool | None = None
     glyphPack: str | None = None
 
 
@@ -88,7 +94,7 @@ class Categories(_Strict):
 
 
 class PuzzleManifest(_Strict):
-    schemaVersion: Literal[1]
+    schemaVersion: Literal[2]
     puzzleId: str
     tier: Tier
     shapeId: ShapeId
@@ -98,11 +104,11 @@ class PuzzleManifest(_Strict):
     constraints: list[Constraint]
     solution: dict[str, dict[str, str]]
     hintTrace: list[HintStep]
-    # Story-first (Expand phase, all optional; schemaVersion stays 1):
-    scenarioId: str | None = None
-    story: str | None = None
-    subjectNoun: str | None = None
-    variant: int | None = None
+    # Story-first is REQUIRED at v2: every served manifest narrates a matrix puzzle.
+    scenarioId: str
+    story: str
+    subjectNoun: str
+    variant: int
 
 
 # --- BankIndex ------------------------------------------------------------------
@@ -117,7 +123,7 @@ class BankEntry(_Strict):
 
 
 class BankIndex(_Strict):
-    schemaVersion: Literal[1]
+    schemaVersion: Literal[1]  # bundle index shape unchanged (only PuzzleManifest bumped to 2)
     generatedSeed: str
     builtAt: str
     puzzles: list[BankEntry]
@@ -129,7 +135,7 @@ class BankIndex(_Strict):
 class DayState(_Strict):
     date: str
     tier: Tier
-    shapeId: ShapeId
+    shapeId: SaveShapeId  # tolerant: a pre-retirement day may still carry a legacy shapeId
     status: DayStatus
     placements: dict[str, dict[str, str]]
     attempts: int

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "puzzleId": "2026-01-01",
   "tier": "standard",
   "shapeId": "grid",
@@ -11,7 +11,6 @@
       {
         "id": "name",
         "label": "Name",
-        "ordinal": false,
         "cardinality": "bijective",
         "kind": "nominal",
         "anchor": true,
@@ -25,9 +24,9 @@
       {
         "id": "craft",
         "label": "Craft",
-        "ordinal": false,
         "cardinality": "bijective",
         "kind": "nominal",
+        "anchor": false,
         "values": [
           { "id": "c_a", "glyph": "", "label": "Alpha" },
           { "id": "c_b", "glyph": "", "label": "Bravo" },
@@ -38,9 +37,9 @@
       {
         "id": "price",
         "label": "Price",
-        "ordinal": true,
         "cardinality": "bijective",
         "kind": "numeric",
+        "anchor": false,
         "unit": "dollars",
         "values": [
           { "id": "p5", "glyph": "", "label": "5", "magnitude": 5 },

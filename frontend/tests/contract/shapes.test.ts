@@ -1,7 +1,7 @@
-// Contract: the shape registry (config/shapes.toml -> baked shapes.json) is the only
-// per-shape knowledge; the engine reads shapeId and skins by it. v1 ships exactly two
-// entries (grid + seating-row) to prove the seam. Cross-check: every bank manifest's
-// clue types are a subset of its shape's slot_rules, and entity count <= max_entities.
+// Contract: the shape registry (config/shapes.json -> baked shapes.json) is the only
+// per-shape knowledge; the engine reads shapeId and skins by it. Matrix-only after the
+// contract close: it ships exactly one entry (grid). Cross-check: every bank manifest's
+// clue types are within grid's rules (plus the story clue vocabulary), entity count <= cap.
 
 import { describe, it, expect } from "vitest";
 import { readFileSync, readdirSync } from "node:fs";
@@ -20,25 +20,17 @@ const manifests = readdirSync(PUZZLES)
   .map((f) => JSON.parse(readFileSync(resolve(PUZZLES, f), "utf8")) as PuzzleManifest);
 
 describe("shape registry", () => {
-  it("ships grid + seating-row + round-table, three topologies", () => {
-    expect(Object.keys(reg).sort()).toEqual(["grid", "round-table", "seating-row"]);
+  it("ships grid only (matrix-only after the seating/round-table retirement)", () => {
+    expect(Object.keys(reg)).toEqual(["grid"]);
   });
 
-  it("grid matrix, seating linear, round-table circular; ordinal axes set", () => {
+  it("grid is a matrix with no ordinal axis and eq/neq rules", () => {
     expect(reg.grid.topology).toBe("matrix");
     expect(reg.grid.ordinal_axis).toBe(false);
-    expect(reg["seating-row"].topology).toBe("linear");
-    expect(reg["seating-row"].ordinal_axis).toBe(true);
-    expect(reg["round-table"].topology).toBe("circular");
-    expect(reg["round-table"].ordinal_axis).toBe(true);
+    expect(reg.grid.slot_rules).toEqual(["eq", "neq"]);
   });
 
-  it("round-table wraps: opposite/between unlocked, ends excluded (no first/last)", () => {
-    expect(reg["round-table"].slot_rules).toEqual(expect.arrayContaining(["opposite", "between", "adjacent"]));
-    expect(reg["round-table"].slot_rules).not.toContain("ends");
-  });
-
-  it("each entry carries every registry field with a pack.id glyph and cap", () => {
+  it("the grid entry carries every registry field with a pack.id glyph and cap", () => {
     for (const s of Object.values(reg)) {
       expect(s.glyph).toMatch(/^[a-z]+\.[a-z0-9]+$/);
       expect(s.max_entities).toBeGreaterThanOrEqual(6);
@@ -47,16 +39,9 @@ describe("shape registry", () => {
     }
   });
 
-  it("ordinal clue types unlock only for the ordinal axis", () => {
-    expect(reg.grid.slot_rules).toEqual(["eq", "neq"]);
-    for (const t of ["ends", "adjacent", "distance", "before"]) {
-      expect(reg["seating-row"].slot_rules).toContain(t);
-    }
-  });
-
   it("every bank manifest stays within its shape's rules and cap", () => {
-    // Story-first grid manifests carry narrative clue types (numeric/compound) beyond the shape
-    // registry's base seat rules; a pre-pivot manifest uses only its shape's slot_rules.
+    // Story-first grid manifests carry narrative clue types (numeric/compound) beyond the grid
+    // registry's base eq/neq rules.
     const STORY_CLUES = new Set(["numDiff", "threshold", "oneOf", "oneEachOf", "ifThen"]);
     expect(manifests.length).toBeGreaterThan(0);
     for (const m of manifests) {
@@ -68,12 +53,10 @@ describe("shape registry", () => {
     }
   });
 
-  it("the story-first served bank is grid-only (seating-row + round-table stay engine seams)", () => {
-    // The served bank is derived from the story-first matrix generator, which emits a grid; the
-    // seating-row + round-table shapes remain in the registry for the engine + a later frontend row.
+  it("the served bank is grid-only (matrix-only contract close, seating/round-table retired)", () => {
     expect(manifests.length).toBeGreaterThan(0);
     expect(manifests.every((m) => m.shapeId === "grid")).toBe(true);
-    expect(reg["round-table"]).toBeDefined();
-    expect(reg["seating-row"]).toBeDefined();
+    expect(reg["seating-row"]).toBeUndefined();
+    expect(reg["round-table"]).toBeUndefined();
   });
 });

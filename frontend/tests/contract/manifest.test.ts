@@ -14,18 +14,18 @@ const here = fileURLToPath(new URL(".", import.meta.url));
 const fixture = resolve(here, "../fixtures/manifest-4x3.json");
 const m = JSON.parse(readFileSync(fixture, "utf8")) as PuzzleManifest;
 
-// A hand-authored story-first golden (Expand phase: story/scenarioId/kind/magnitude/
-// phrase present, schemaVersion still 1). Lives under datasets/ (build-time source).
+// A generated story-first golden (schemaVersion 2: story/scenarioId/kind/anchor/magnitude/
+// phrase present). Lives under datasets/ (build-time source).
 const storyFirst = JSON.parse(
   readFileSync(resolve(here, "../../../datasets/2026/07/01/standard/2026-07-01-001.json"), "utf8"),
 ) as PuzzleManifest;
 
-describe("PuzzleManifest v1 (4x3 fixture)", () => {
-  it("is version 1 with date puzzleId and known tier/shape", () => {
-    expect(m.schemaVersion).toBe(1);
+describe("PuzzleManifest v2 (4x3 grid fixture)", () => {
+  it("is version 2 with date puzzleId and grid shape", () => {
+    expect(m.schemaVersion).toBe(2);
     expect(m.puzzleId).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(["easy", "standard", "sharp", "expert"]).toContain(m.tier);
-    expect(["grid", "seating-row"]).toContain(m.shapeId);
+    expect(m.shapeId).toBe("grid");
   });
 
   it("declares 4 entities x 3 categories (categories.n matches list)", () => {
@@ -66,11 +66,12 @@ describe("PuzzleManifest v1 (4x3 fixture)", () => {
   });
 });
 
-describe("tolerant reader accepts both pre-pivot and story-first manifests", () => {
-  it("accepts the pre-pivot 4x3 fixture (no kind/story; values id/glyph/label)", () => {
+describe("v2 reader accepts story-first manifests", () => {
+  it("accepts the v2 4x3 grid fixture (story + kind + one anchor)", () => {
     expect(isManifest(m)).toBe(true);
-    expect(m.story).toBeUndefined();
-    for (const c of m.categories.list) expect(c.kind).toBeUndefined();
+    expect(typeof m.story).toBe("string");
+    expect(m.categories.list.every((c) => typeof c.kind === "string")).toBe(true);
+    expect(m.categories.list.filter((c) => c.anchor)).toHaveLength(1);
   });
 
   it("accepts a story-first manifest and exposes story/scenarioId/kind/magnitude/phrase", () => {

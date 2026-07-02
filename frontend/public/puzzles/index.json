@@ -5,224 +5,224 @@
     {
       "date": "2026-06-25",
       "file": "2026-06-25-easy.json",
-      "sha": "a722da67979c9f663d12d7886ed2d7b55848a536552725f0a857b5ec0e895644",
+      "sha": "a8d2cd8e624980a399ed142a0f5295f7d98e077ba2d769c1aa8370cde7b18bba",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-06-25",
       "file": "2026-06-25-standard.json",
-      "sha": "af8abade5623c9e564a66634207e731adc58eab11e2f6f395d07527ff94eb5fe",
+      "sha": "af122cd43bdb83e502b2b4529df7abf6b18ac38f5363f0c9f9c9e69af9171557",
       "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-06-25",
       "file": "2026-06-25-sharp.json",
-      "sha": "ca897d77804d78321724e416b74a031aba7ad96bceac6b5014b9eebd99410451",
+      "sha": "0a2dfd8e02fcf93aa0a31b706287e2ecedad9d1753cac735f74e8071e6f98495",
       "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-06-25",
       "file": "2026-06-25-expert.json",
-      "sha": "785da1fcc53ea6f609aafe3e1f10a3c19e51ee3c811284fd61724304d05677ef",
+      "sha": "80cd21c554f8b43830d663e59c19cb7ea715e4fc612e7b323e42e5f7fc8aac93",
       "shapeId": "grid",
       "tier": "expert"
     },
     {
       "date": "2026-06-26",
       "file": "2026-06-26-easy.json",
-      "sha": "bc56b76848a05d01ae260ebb8a43d9a80cdaf7b3a9cf716cf9d6fa3ad913dd71",
+      "sha": "aa87dd18d74d20c3a1e31b0a16aaafccae57a5d37b540ae4933d381d65793efa",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-06-26",
       "file": "2026-06-26-standard.json",
-      "sha": "f06ff8ba44c7f7525d7dd42db6825e4e94d1c2e680befdd809dba325d0ad3de3",
+      "sha": "aa5b64ae07d6655cc0e11bfdcfd0f3118ddbda735ab1306ae88dd63e95537cbd",
       "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-06-26",
       "file": "2026-06-26-sharp.json",
-      "sha": "b64546b805ad8fe78bc2bdd4d7797daec376fd799043930689f6bdb641c3d47f",
+      "sha": "17d732433d1d38732f81c9543554b9fe2485961254c0976459852734665dbf24",
       "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-06-26",
       "file": "2026-06-26-expert.json",
-      "sha": "04fdae6b0dc3ecd9b7ce8d6db3ac9929b5d8a9537feb78213c0c4465a6798913",
+      "sha": "5eee058c3bd9f34790f619e9531368498a213744e7abbec1ce901b2b9fdca42f",
       "shapeId": "grid",
       "tier": "expert"
     },
     {
       "date": "2026-06-27",
       "file": "2026-06-27-easy.json",
-      "sha": "cea69a63a1f14b06774fbc13d2782a9b7099962831ffa841d1f9735b8daa43bf",
+      "sha": "661a9c6ada64ed68a2a514fa11fcaf2d39ac61d6536388a0d07300c08cf2e725",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-06-27",
       "file": "2026-06-27-standard.json",
-      "sha": "a3e9e7ac48f301dcbea600be6b525d67ad28f9b191af1d0bc0ce054150a9ad15",
+      "sha": "ca6f933a8b6267d6ce26ef75964c73577ba569c6ef23a139794810bd572ad035",
       "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-06-27",
       "file": "2026-06-27-sharp.json",
-      "sha": "72ae200247c429c8c64c1e095f7f43505cec95f5d6c0c81ed9b15af4c5d7b13a",
+      "sha": "90b6cd6dfab55b3e140e64fd20abb2dab4b0a6da02e3fe933a0e1742658fd790",
       "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-06-27",
       "file": "2026-06-27-expert.json",
-      "sha": "3c70a2e0402c9aeb14caddd136ab8e4a61b03189747ed766c639f96dd511f515",
+      "sha": "adc82f22fdbcf2bba35ed0ed10497e4514924403b1c18f68bf3cd7f757d68fd5",
       "shapeId": "grid",
       "tier": "expert"
     },
     {
       "date": "2026-06-28",
       "file": "2026-06-28-easy.json",
-      "sha": "70b2abfce0a5932956c0fbeca4489a1b97b023d12c81239ad141cac17b460845",
+      "sha": "3842e99a026d90276f50a64692a4b0034a8e140b82b0bef948fe74c1855ef1e5",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-06-28",
       "file": "2026-06-28-standard.json",
-      "sha": "31699735a974801b7dfa8bcaa8943d8bd6a95027c17335b34d5b1423132f08b3",
+      "sha": "d1d4df46e6ec990f9b48c89ad95d292316834b5b84f59f2ba70617c2cee3f44d",
       "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-06-28",
       "file": "2026-06-28-sharp.json",
-      "sha": "6c483caa0700e1b0dd125533cec0860d1bf4047f68b5c75ee96a830808a437b4",
+      "sha": "3ac7a5fe0e141823151911a4d1ae5982dcd49752e89f41cbf1c402f522982c37",
       "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-06-28",
       "file": "2026-06-28-expert.json",
-      "sha": "2f59299b448e5325f60bd9e24cde2917ace55e10925da57b47f18d660e7785a8",
+      "sha": "29cf3807c67855ab0db94bc43782981ffcbb30e1f5c5e2e71bbf71190cc1d0d5",
       "shapeId": "grid",
       "tier": "expert"
     },
     {
       "date": "2026-06-29",
       "file": "2026-06-29-easy.json",
-      "sha": "8e67be061a6b66a3da79fa8116114b73b85cbd7f9cf8b6c6ba4c9731ed1f820c",
+      "sha": "a18ef638cd9f3d8c66903df65bd71b6d95b1e029450c50cd038f9b949c43da03",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-06-29",
       "file": "2026-06-29-standard.json",
-      "sha": "cd164518d0836b5adea620d45d254e0db370669f6c5d5f52c410b0a3e98ecb68",
+      "sha": "d14c2e2256164ab880af588639e912be31a5696bbf5888ca8b6ed684c3f2473b",
       "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-06-29",
       "file": "2026-06-29-sharp.json",
-      "sha": "76f64f7dd7bedff10441e195a863f8cc8559349f7976658cdfbbf40475a4aeaa",
+      "sha": "f03e001b85a654ae5ee12d3d53dcf8b164c803113e3872a20a72e2ef6c9ee4c5",
       "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-06-29",
       "file": "2026-06-29-expert.json",
-      "sha": "42f63f2376652a4489e395876b2d7a2db757811c5c0f006132e11599b2e64626",
+      "sha": "970db141d59b4319f1128c5ada579b685734d02e944634f6ea2acd746c559ced",
       "shapeId": "grid",
       "tier": "expert"
     },
     {
       "date": "2026-06-30",
       "file": "2026-06-30-easy.json",
-      "sha": "3bcd33d0119c9c0a220c63277d7b0f863fec093e72f16f21312113a252dee0b8",
+      "sha": "c9be775c604c707dae975abeaec93160ac40451f99ca083efaf25433b23abfa2",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-06-30",
       "file": "2026-06-30-standard.json",
-      "sha": "d85b98b2c2b7e9d8d2320acb011d4e8d179610ca227faee580f2f96fce7c87fd",
+      "sha": "56fd9b1ce148664aff4e07d37fb24a97a6033092b49c84b5f08bbb0e116d1334",
       "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-06-30",
       "file": "2026-06-30-sharp.json",
-      "sha": "48f455fb7531fb1104912bbec7c2d65bf8518b5c0976ac098a771c116d56c191",
+      "sha": "2889d92587ccf50ad84b2d197f9ff7a0dc9ae8043d6e5b872a0580245f066a6d",
       "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-06-30",
       "file": "2026-06-30-expert.json",
-      "sha": "21352c8fb2b4e629d97c60918ca5c2393de253e4cb51aeaf3aa489364e52fe5d",
+      "sha": "8e1d3eacebe1fd90a8e91d61cda4c04e002ffb93ec5c5938b1a1be23372653b6",
       "shapeId": "grid",
       "tier": "expert"
     },
     {
       "date": "2026-07-01",
       "file": "2026-07-01-easy.json",
-      "sha": "847b18feac1eb335b255858bf64c13932a750763e70c0a88801c4c969fe06930",
+      "sha": "5b7f351b124835efe1a3121bdbfed1988ffd900232d9e6b076b31a4ae0cd2887",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-07-01",
       "file": "2026-07-01-standard.json",
-      "sha": "3b61009d9f5f9e72de54a4e59e885c0f4fc8b36ed08753772e1f019fa6641bb8",
+      "sha": "d1095130fb6fb1458ac8bd0bcd3294baa60676b71d4ac10e243b52c85f761d3a",
       "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-07-01",
       "file": "2026-07-01-sharp.json",
-      "sha": "c3ac80b4dec3693dec85970e3f46e90849cc07a0393437f4108555a03cf51e4c",
+      "sha": "489557b52391e696725170c1265dae6851d33a9e7cb6459ecab8be1cf9673eab",
       "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-07-01",
       "file": "2026-07-01-expert.json",
-      "sha": "5c18c253c060998fd696e4a6e787c924327a6114a3d74966a320e6ee667f6f47",
+      "sha": "6ff1680d8162e6dcd24647527ac731373b53ff384d52143c92170ab2eb4e0379",
       "shapeId": "grid",
       "tier": "expert"
     },
     {
       "date": "2026-07-02",
       "file": "2026-07-02-easy.json",
-      "sha": "bba82834efaf7a54f33939e6a6e2e0225f6b397e1c182981b85e432cc12236a3",
+      "sha": "ac6a1ba8759d12d5017fe40daf46fa02b19edf84c26a0efff386c62da8d8cf75",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-07-02",
       "file": "2026-07-02-standard.json",
-      "sha": "326f589bbff37015865f30e0b7e2d32f3aac127d49fa250e201a357281900837",
+      "sha": "33be8a64e9b343a6154a9ad89bc4507562ea49295bf4ba92987a3daab48be944",
       "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-07-02",
       "file": "2026-07-02-sharp.json",
-      "sha": "a4dfe31f7dd0edda2541e861bd9c9c62e5b56cafd98a1bd540a67b5ec9afd0dd",
+      "sha": "011c41ff7913721b36dc0b706aedd32e2a042900cb07394714db8055abc76e0c",
       "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-07-02",
       "file": "2026-07-02-expert.json",
-      "sha": "9cd3e881a41ec9e516feed432aa1ca409c47c3f3f7da74273a72d0fba8461dd7",
+      "sha": "3f22a90cc8b0d4e8884cee5ee423b9193b4ee8e4f260ff7f32748906ada5984d",
       "shapeId": "grid",
       "tier": "expert"
     }

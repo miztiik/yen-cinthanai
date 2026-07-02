@@ -2,7 +2,11 @@
 // and TODO/2026-06-29-system-design.md sec 5.3. Types only; no logic here.
 
 export type Tier = "easy" | "standard" | "sharp" | "expert";
-export type ShapeId = "grid" | "seating-row" | "round-table";
+// Matrix-only at v2: a manifest/bank entry is always grid (seating-row/round-table retired).
+export type ShapeId = "grid";
+// The save surface is the migrating one, so a day persisted before the retirement may still
+// carry a legacy shapeId - accepted on read (back-compat) though new days are always grid.
+export type SaveShapeId = "grid" | "seating-row" | "round-table";
 export type DayStatus = "unplayed" | "playing" | "won" | "lost";
 
 /** Puck (token/slot circle) size preset; a player setting, scaled from config/ui.toml. */
@@ -25,7 +29,7 @@ export interface DayNotes {
 export interface DayState {
   date: string;
   tier: Tier;
-  shapeId: ShapeId;
+  shapeId: SaveShapeId;
   status: DayStatus;
   placements: Placements;
   attempts: number;

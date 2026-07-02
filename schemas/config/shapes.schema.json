@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "config/shapes.schema.json",
   "title": "ShapesConfig",
-  "description": "config/shapes.json - the puzzle layout catalog: one entry per shapeId (grid, seating-row, round-table) naming its glyph, entity ceiling, ordinal-axis flag, allowed slot rules, and topology. Human-edited (CLAUDE.md #6).",
+  "description": "config/shapes.json - the puzzle layout catalog. Matrix-only after the Row 9d contract close: the single entry is grid (the seating-row/round-table positional engine is retired). Each entry names its glyph, entity ceiling, ordinal-axis flag, allowed slot rules, and topology. Human-edited (CLAUDE.md #6).",
   "type": "object",
   "evolution": [
     {
@@ -10,6 +10,12 @@
       "date": "2026-07-02",
       "change": "Initial machine-checkable formalization of config/shapes.json: each shapeId -> {glyph,max_entities,ordinal_axis,slot_rules[],topology,v}.",
       "why": "The layout catalog must be schema-validated so a shape with a bad topology or missing slot_rules fails fast at build (CLAUDE.md #6)."
+    },
+    {
+      "version": 2,
+      "date": "2026-07-02",
+      "change": "Retired the seating-row + round-table entries (matrix-only, Row 9d). The catalog now requires exactly the grid entry.",
+      "why": "The generator + frontend are matrix-only after the legacy positional engine retirement, so the layout catalog carries only grid."
     }
   ],
   "$defs": {
@@ -28,10 +34,8 @@
     }
   },
   "properties": {
-    "grid": { "$ref": "#/$defs/shapeEntry" },
-    "seating-row": { "$ref": "#/$defs/shapeEntry" },
-    "round-table": { "$ref": "#/$defs/shapeEntry" }
+    "grid": { "$ref": "#/$defs/shapeEntry" }
   },
-  "required": ["grid", "seating-row", "round-table"],
+  "required": ["grid"],
   "additionalProperties": false
 }

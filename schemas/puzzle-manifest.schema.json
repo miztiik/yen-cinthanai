@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "puzzle-manifest.schema.json",
   "title": "PuzzleManifest",
-  "description": "Bundle-shipped daily puzzle (rewrite-in-place, no migration). Mirrors tools/models.py PuzzleManifest and frontend/src/contracts/manifest.ts. The served bank is story-first (derived from generate_story for all four tiers) emitted with exclude_none. Accepts BOTH a pre-pivot v1 manifest (story fields absent) and a story-first manifest (optional scenarioId/story/subjectNoun/variant + category kind/unit/anchor/glyphPack + value magnitude/phrase/refPhrase). Every optional is OMITTED when unset - a present-null is rejected. schemaVersion stays 1 in this row.",
+  "description": "Bundle-shipped daily puzzle (rewrite-in-place, no migration) at schemaVersion 2. Mirrors tools/models.py PuzzleManifest and frontend/src/contracts/manifest.ts. Matrix-only (grid) and story-first: scenarioId/story/subjectNoun/variant are REQUIRED and every AttributeCategory carries kind + anchor (the retired boolean `ordinal` field is dropped; the seating-row/round-table shapes are retired). Optional category unit/glyphPack and value magnitude/phrase/refPhrase are OMITTED when unset (exclude_none emit) - a present-null is rejected.",
   "type": "object",
   "evolution": [
     {
@@ -22,11 +22,17 @@
       "date": "2026-07-02",
       "change": "Tightened the story-first optionals to reject present-null: manifest scenarioId/story/subjectNoun/variant, AttributeCategory kind/unit/anchor/glyphPack, and AttributeValue magnitude/phrase/refPhrase are now typed T (not [T, null]). They stay OPTIONAL (absent when unset). The served bank is now derived from the story-first matrix generator (generate_story) for all four tiers and emitted with exclude_none, so no served/datasets manifest carries a null field.",
       "why": "The daily/served emit now drops unset optionals (exclude_none), matching the datasets masters, so a null-valued optional can no longer be produced - a null therefore signals a real emit bug and the schema forbids it. schemaVersion stays 1 (the story-first fields remain additive and optional-absent)."
+    },
+    {
+      "version": 2,
+      "date": "2026-07-02",
+      "change": "story-first required; ordinal dropped for kind; seating/round-table retired (F1 matrix-only)",
+      "why": "contract close after the story-first pivot Expand->Contract"
     }
   ],
   "$defs": {
     "tier": { "type": "string", "enum": ["easy", "standard", "sharp", "expert"] },
-    "shapeId": { "type": "string", "enum": ["grid", "seating-row", "round-table"] },
+    "shapeId": { "type": "string", "enum": ["grid"] },
     "attributeValue": {
       "type": "object",
       "properties": {
@@ -45,15 +51,14 @@
       "properties": {
         "id": { "type": "string" },
         "label": { "type": "string" },
-        "ordinal": { "type": "boolean" },
+        "kind": { "type": "string", "enum": ["nominal", "ordinal", "numeric"] },
+        "anchor": { "type": "boolean" },
         "cardinality": { "type": "string", "enum": ["bijective", "shared"] },
         "values": { "type": "array", "items": { "$ref": "#/$defs/attributeValue" } },
-        "kind": { "type": "string", "enum": ["nominal", "ordinal", "numeric"] },
         "unit": { "type": "string" },
-        "anchor": { "type": "boolean" },
         "glyphPack": { "type": "string" }
       },
-      "required": ["id", "label", "ordinal", "cardinality", "values"],
+      "required": ["id", "label", "kind", "anchor", "cardinality", "values"],
       "additionalProperties": false
     },
     "operand": {
@@ -101,7 +106,7 @@
     }
   },
   "properties": {
-    "schemaVersion": { "const": 1 },
+    "schemaVersion": { "const": 2 },
     "puzzleId": { "type": "string" },
     "tier": { "$ref": "#/$defs/tier" },
     "shapeId": { "$ref": "#/$defs/shapeId" },
@@ -140,7 +145,11 @@
     "categories",
     "constraints",
     "solution",
-    "hintTrace"
+    "hintTrace",
+    "scenarioId",
+    "story",
+    "subjectNoun",
+    "variant"
   ],
   "additionalProperties": false
 }

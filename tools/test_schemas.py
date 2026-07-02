@@ -6,9 +6,10 @@ PASSES; we assert each schema is itself a valid Draft 2020-12 schema; and we ass
 embedded `evolution` log is present + well-formed (non-decreasing versions). Real
 fixtures, no mocks (CLAUDE.md Holy Law #7). ASCII + POSIX (loads decode as ASCII).
 
-The tolerance contract: the puzzle-manifest schema accepts BOTH a pre-pivot v1 manifest
-and a story-first manifest; the save schema accepts BOTH a v0 (pre-versioned, date-keyed)
-and a v1 save. No schemaVersion is bumped here - this row formalizes the CURRENT shapes.
+The contract at v2: the puzzle-manifest schema is STRICT story-first + matrix-only - it requires
+scenarioId/story/subjectNoun/variant and per-category kind/anchor, forbids the retired `ordinal`
+field, and allows only shapeId grid. The save schema stays tolerant (a v0 pre-versioned save AND a
+v1 save both validate, and a retired shapeId stays readable). Only PuzzleManifest is bumped to 2.
 """
 
 from __future__ import annotations
@@ -189,39 +190,42 @@ def test_real_json_complies(case: tuple) -> None:
     )
 
 
-def test_manifest_schema_accepts_prepivot_and_story() -> None:
-    """The manifest schema stays tolerant: a story-first manifest (all story optionals present)
-    AND a pre-pivot manifest (every story optional OMITTED - absent, not null) both validate. The
-    served bank is now story-first, so the pre-pivot shape is derived by stripping the optional
-    fields from a served story manifest, proving the schema accepts their absence."""
+def test_manifest_schema_requires_story_and_kind_anchor() -> None:
+    """The v2 manifest schema is STRICT: a served story-first manifest validates, but a pre-pivot
+    shape (a required story field stripped, or a category's kind/anchor stripped, or the retired
+    `ordinal` field present, or a non-grid shapeId) is REJECTED. story-first + matrix-only is the
+    contract at v2, not a tolerance."""
     schema = _schema("puzzle-manifest.schema.json")
     validator = Draft202012Validator(schema)
     story = _read(PUZZLES / "2026-07-01-standard.json")
-    validator.validate(story)  # scenarioId/story/subjectNoun/variant + kind/anchor/magnitude/phrase
-    assert "story" in story and "scenarioId" in story
+    validator.validate(story)  # required scenarioId/story/subjectNoun/variant + per-cat kind/anchor
+    assert story["schemaVersion"] == 2 and story["shapeId"] == "grid"
 
-    prepivot = copy.deepcopy(story)  # strip every story-first optional -> a bare pre-pivot manifest
-    for key in ("scenarioId", "story", "subjectNoun", "variant"):
-        prepivot.pop(key, None)
-    for cat in prepivot["categories"]["list"]:
-        for key in ("kind", "unit", "anchor", "glyphPack"):
-            cat.pop(key, None)
-        for val in cat["values"]:
-            for key in ("magnitude", "phrase", "refPhrase"):
-                val.pop(key, None)
-    validator.validate(prepivot)  # optionals absent (not null) -> still valid
-    assert "story" not in prepivot and all("kind" not in c for c in prepivot["categories"]["list"])
+    for key in ("scenarioId", "story", "subjectNoun", "variant"):  # a missing story field is rejected
+        missing = {k: v for k, v in story.items() if k != key}
+        assert list(validator.iter_errors(missing)), f"missing {key} must be rejected"
+
+    for key in ("kind", "anchor"):  # a category missing its required kind/anchor is rejected
+        stripped = copy.deepcopy(story)
+        stripped["categories"]["list"][0].pop(key, None)
+        assert list(validator.iter_errors(stripped)), f"category missing {key} must be rejected"
+
+    with_ordinal = copy.deepcopy(story)  # the retired boolean `ordinal` field is no longer allowed
+    with_ordinal["categories"]["list"][0]["ordinal"] = False
+    assert list(validator.iter_errors(with_ordinal)), "retired category ordinal must be rejected"
+
+    assert list(validator.iter_errors({**story, "shapeId": "seating-row"})), "non-grid shape rejected"
 
 
 def test_manifest_schema_rejects_present_null_optionals() -> None:
-    """The tightened schema forbids present-null optionals. The served/daily emit uses exclude_none,
-    so an optional is OMITTED when unset; a null now signals a real emit bug and must be rejected."""
+    """The v2 schema forbids present-null. The served/daily emit uses exclude_none, so an optional
+    is OMITTED when unset; a null (required OR optional) signals a real emit bug and is rejected."""
     schema = _schema("puzzle-manifest.schema.json")
     validator = Draft202012Validator(schema)
     base = _read(PUZZLES / "2026-07-01-standard.json")
     for key in ("story", "scenarioId", "subjectNoun", "variant"):
         assert list(validator.iter_errors({**base, key: None})), f"{key}:null must be rejected"
-    # a per-category null optional is rejected too
+    # a per-category null optional is rejected too (unit stays optional at v2)
     cat_null = copy.deepcopy(base)
     cat_null["categories"]["list"][0]["unit"] = None
     assert list(validator.iter_errors(cat_null)), "category unit:null must be rejected"

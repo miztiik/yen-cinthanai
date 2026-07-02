@@ -1,5 +1,7 @@
-"""Generator gates: uniqueness, determinism, minimal prune, D-in-band, manifest
-validates, hintTrace solves. Real solver, real config, no mocks (CLAUDE.md #7)."""
+"""Generator gates (matrix-only, story-first): uniqueness, determinism, minimal prune,
+D-in-band, manifest validates at v2, hintTrace solves, and the served-bank contract. Real
+solver, real config, no mocks (CLAUDE.md #7). The legacy seating/round-table engine is
+retired (Row 9d), so every gate runs against generate_story / build_story."""
 
 import hashlib
 import json
@@ -16,47 +18,33 @@ DATE = "2026-06-29"
 TIERS = ("easy", "standard", "sharp", "expert")
 
 
-def _clues_from(m: PuzzleManifest) -> list[g.Clue]:
-    return [
-        (c.type, tuple((o.cat, o.value) for o in c.operands), tuple(c.params.items()))
-        for c in m.constraints
-    ]
+@pytest.fixture(scope="module", params=TIERS)
+def built(request: pytest.FixtureRequest) -> g.StoryBuild:
+    # One accepted story build per tier, reused across the gates so a tier - especially the
+    # slow expert - is generated once, not once per gate. Keeps the suite fast + deterministic.
+    return g.build_story(DATE, request.param, 1, CONFIG_DIR)
 
 
-def _cats(tier: str) -> list[g.Cat]:
-    ent = g.load_config("tiers", CONFIG_DIR)[tier]["entities"]
-    return g.build_categories(tier, ent, CONFIG_DIR, DATE)
+def test_manifest_validates(built: g.StoryBuild) -> None:
+    m = built.manifest
+    assert isinstance(m, PuzzleManifest) and m.puzzleId == DATE
+    assert m.schemaVersion == 2 and m.shapeId == "grid"
+    assert m.story and m.scenarioId and m.subjectNoun and m.variant == 1
 
 
-@pytest.mark.parametrize("tier", TIERS)
-def test_manifest_validates(tier: str) -> None:
-    m, _, _ = g.generate(DATE, tier, CONFIG_DIR)
-    assert isinstance(m, PuzzleManifest) and m.tier == tier and m.puzzleId == DATE
+def test_uniqueness_holds(built: g.StoryBuild) -> None:
+    assert g.is_unique(built.cats, built.entities, built.clues, built.seed)
 
 
-@pytest.mark.parametrize("tier", TIERS)
-def test_uniqueness_holds(tier: str) -> None:
-    m, _, _ = g.generate(DATE, tier, CONFIG_DIR)
-    n = len(m.entities)
-    seed = g.seed_int(DATE, tier, CONFIG_DIR)
-    assert g.is_unique(_cats(tier), n, _clues_from(m), seed)
+def test_prune_minimal(built: g.StoryBuild) -> None:
+    # Dropping any single clue breaks uniqueness (the set is truly minimal).
+    for i in range(len(built.clues)):
+        assert not g.is_unique(built.cats, built.entities, built.clues[:i] + built.clues[i + 1 :], built.seed)
 
 
-@pytest.mark.parametrize("tier", TIERS)
-def test_prune_minimal(tier: str) -> None:
-    m, _, _ = g.generate(DATE, tier, CONFIG_DIR)
-    n, cats = len(m.entities), _cats(tier)
-    seed = g.seed_int(DATE, tier, CONFIG_DIR)
-    clues = _clues_from(m)
-    for i in range(len(clues)):
-        assert not g.is_unique(cats, n, clues[:i] + clues[i + 1 :], seed)
-
-
-@pytest.mark.parametrize("tier", TIERS)
-def test_difficulty_in_band(tier: str) -> None:
-    lo, hi = g.load_config("tiers", CONFIG_DIR)[tier]["band"]
-    _, d, _ = g.generate(DATE, tier, CONFIG_DIR)
-    assert lo <= d <= hi
+def test_difficulty_in_band(built: g.StoryBuild) -> None:
+    lo, hi = g.load_config("tiers", CONFIG_DIR)[built.manifest.tier]["band"]
+    assert lo <= built.d <= hi
 
 
 def test_determinism_same_sha(tmp_path: Path) -> None:
@@ -66,17 +54,15 @@ def test_determinism_same_sha(tmp_path: Path) -> None:
     assert (tmp_path / "a" / a["file"]).read_text("ascii") == (tmp_path / "b" / b["file"]).read_text("ascii")
 
 
-@pytest.mark.parametrize("tier", TIERS)
-def test_hinttrace_solves(tier: str) -> None:
-    m, _, _ = g.generate(DATE, tier, CONFIG_DIR)
-    cats = _cats(tier)
-    anchor = g.identity_cat(cats)
-    shared = {c.id for c in cats if c.shared}  # shared cells are not forced to one seat
+def test_hinttrace_solves(built: g.StoryBuild) -> None:
+    # The forced trace, applied over the anchor identity, reconstructs the full solution
+    # (zero-guess): every non-anchor bijective cell is forced (story cats are all bijective).
+    m = built.manifest
+    anchor = g.identity_cat(built.cats)
     placed = {f"e{i}": {anchor.id: anchor.value_ids[i]} for i in range(len(m.entities))}
     for step in m.hintTrace:
         placed[step.forces.entity][step.forces.cat] = step.forces.value
-    expect = {e: {k: v for k, v in cells.items() if k not in shared} for e, cells in m.solution.items()}
-    assert placed == expect
+    assert placed == {e: dict(cells) for e, cells in m.solution.items()}
 
 
 def test_index_and_log(tmp_path: Path) -> None:
@@ -84,103 +70,6 @@ def test_index_and_log(tmp_path: Path) -> None:
     out = g.write_index(DATE, [e], tmp_path)
     idx = json.loads(out.read_text("ascii"))
     assert idx["schemaVersion"] == 1 and idx["puzzles"][0]["sha"] == e["sha"]
-
-
-# --- shape registry seam (grid + seating-row) -----------------------------------
-
-
-def test_registry_has_three_entries() -> None:
-    reg = g.load_config("shapes", CONFIG_DIR)
-    assert set(reg) == {"grid", "seating-row", "round-table"}
-    assert reg["grid"]["topology"] == "matrix" and reg["grid"]["ordinal_axis"] is False
-    assert reg["seating-row"]["topology"] == "linear" and reg["seating-row"]["ordinal_axis"] is True
-    assert reg["round-table"]["topology"] == "circular" and reg["round-table"]["ordinal_axis"] is True
-
-
-def test_resolve_shape_rejects_unknown() -> None:
-    with pytest.raises(KeyError):
-        g.resolve_shape("hex-spiral", CONFIG_DIR)
-
-
-@pytest.mark.parametrize("tier", TIERS)
-def test_clues_stay_within_shape_rules(tier: str) -> None:
-    m, _, _ = g.generate(DATE, tier, CONFIG_DIR)
-    shape = g.resolve_shape(m.shapeId, CONFIG_DIR)
-    assert len(m.entities) <= shape.max_entities
-    assert {k.type for k in m.constraints} <= set(shape.slot_rules)
-
-
-def test_seating_uses_an_ordinal_clue_grid_does_not() -> None:
-    grid, _, _ = g.generate(DATE, "easy", CONFIG_DIR)
-    assert {k.type for k in grid.constraints} <= {"eq", "neq"} and grid.shapeId == "grid"
-    seat_rules = set(g.resolve_shape("seating-row", CONFIG_DIR).slot_rules)
-    assert {"ends", "adjacent", "distance", "before"} <= seat_rules  # ordinal unlocked
-    for tier in ("standard", "sharp"):
-        m, _, _ = g.generate(DATE, tier, CONFIG_DIR)
-        assert m.shapeId == "seating-row" and {k.type for k in m.constraints} <= seat_rules
-
-
-# --- round-table (v2: circular topology, wrap clue types) -----------------------
-
-
-def test_expert_is_round_table_with_wrap_clues() -> None:
-    m, _, _ = g.generate(DATE, "expert", CONFIG_DIR)
-    assert m.shapeId == "round-table"
-    rules = set(g.resolve_shape("round-table", CONFIG_DIR).slot_rules)
-    assert "ends" not in rules  # a ring has no first/last
-    assert {k.type for k in m.constraints} <= rules
-    assert {k.type for k in m.constraints} & {"opposite", "between", "adjacent"}  # wraps used
-
-
-def test_round_table_unique_and_minimal() -> None:
-    m, _, _ = g.generate(DATE, "expert", CONFIG_DIR)
-    cats, n = _cats("expert"), len(m.entities)
-    seed = g.seed_int(DATE, "expert", CONFIG_DIR)
-    clues = _clues_from(m)
-    assert g.is_unique(cats, n, clues, seed, circular=True)
-    for i in range(len(clues)):
-        assert not g.is_unique(cats, n, clues[:i] + clues[i + 1 :], seed, circular=True)
-
-
-# --- shared cardinality (binary team on standard) -------------------------------
-
-
-def test_standard_has_one_shared_category() -> None:
-    m, _, _ = g.generate(DATE, "standard", CONFIG_DIR)
-    shared = [c for c in m.categories.items if c.cardinality == "shared"]
-    assert len(shared) == 1 and len(shared[0].values) < len(m.entities)  # repeats
-    counts = {}
-    for cells in m.solution.values():
-        counts[cells[shared[0].id]] = counts.get(cells[shared[0].id], 0) + 1
-    assert max(counts.values()) > 1  # a value really repeats across seats
-
-
-# --- bigger grids (sharp 5x4, expert 6x5; D17) ----------------------------------
-
-
-def test_sharp_is_five_by_four() -> None:
-    m, _, _ = g.generate(DATE, "sharp", CONFIG_DIR)
-    assert m.shapeId == "seating-row" and len(m.entities) == 5
-    bij = [c for c in m.categories.items if c.cardinality != "shared"]
-    assert len(bij) == 4  # 5x4: four bijective categories
-    for c in bij:
-        assert len(c.values) == 5  # each value pack supplies one value per seat
-
-
-def test_expert_is_six_by_five() -> None:
-    m, _, _ = g.generate(DATE, "expert", CONFIG_DIR)
-    assert m.shapeId == "round-table" and len(m.entities) == 6
-    cats = m.categories.items
-    assert len(cats) == 5  # 6x5: five categories on the ring
-    for c in cats:
-        assert len(c.values) == 6  # six seats -> six distinct values per category
-
-
-def test_bigger_grids_stay_in_band() -> None:
-    for tier in ("sharp", "expert"):
-        lo, hi = g.load_config("tiers", CONFIG_DIR)[tier]["band"]
-        _, d, _ = g.generate(DATE, tier, CONFIG_DIR)
-        assert lo <= d <= hi
 
 
 # --- past-archive backfill (never future) ---------------------------------------
@@ -228,7 +117,7 @@ def _served_puzzles() -> list[Path]:
 
 
 def test_served_bank_is_story_first_zero_guess() -> None:
-    # Every served puzzle is a story-first schemaVersion-1 grid master with no null optionals, and
+    # Every served puzzle is a story-first schemaVersion-2 grid master with no null optionals, and
     # P1 (zero-guess) holds: the hint trace visits every non-anchor bijective cell - incl. EASY.
     files = _served_puzzles()
     assert files, "no served puzzles found"
@@ -236,7 +125,7 @@ def test_served_bank_is_story_first_zero_guess() -> None:
         raw = p.read_text("ascii")
         assert "null" not in raw, f"{p.name}: exclude_none emit must carry no null optional"
         m = PuzzleManifest.model_validate_json(raw)
-        assert m.schemaVersion == 1 and m.shapeId == "grid"
+        assert m.schemaVersion == 2 and m.shapeId == "grid"
         assert m.story and m.scenarioId and m.subjectNoun and m.variant == 1  # story-first
         anchor = next(c.id for c in m.categories.items if c.anchor)
         non_anchor_bij = [c for c in m.categories.items if c.id != anchor and c.cardinality == "bijective"]

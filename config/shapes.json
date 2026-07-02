@@ -9,34 +9,5 @@
     ],
     "topology": "matrix",
     "v": 1
-  },
-  "round-table": {
-    "glyph": "abstract.roundtable",
-    "max_entities": 6,
-    "ordinal_axis": true,
-    "slot_rules": [
-      "eq",
-      "neq",
-      "adjacent",
-      "opposite",
-      "between"
-    ],
-    "topology": "circular",
-    "v": 1
-  },
-  "seating-row": {
-    "glyph": "abstract.seating",
-    "max_entities": 6,
-    "ordinal_axis": true,
-    "slot_rules": [
-      "eq",
-      "neq",
-      "ends",
-      "adjacent",
-      "distance",
-      "before"
-    ],
-    "topology": "linear",
-    "v": 1
   }
 }
