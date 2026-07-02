@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "puzzle-manifest.schema.json",
+  "title": "PuzzleManifest",
+  "description": "Bundle-shipped daily puzzle (rewrite-in-place, no migration). Mirrors tools/models.py PuzzleManifest and frontend/src/contracts/manifest.ts. Accepts BOTH a pre-pivot v1 manifest (no story fields) and a story-first manifest (optional scenarioId/story/subjectNoun/variant + category kind/unit/anchor/glyphPack + value magnitude/phrase/refPhrase). schemaVersion stays 1 in this row.",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-06-29",
+      "change": "Initial PuzzleManifest v1: schemaVersion, puzzleId (UTC date = the seed), tier, shapeId, templateRev, entities[], categories{n,list[AttributeCategory]}, constraints[Constraint], solution, hintTrace[HintStep]. Operands never name an entity directly, so clues stay shape-agnostic.",
+      "why": "Bundle-shipped puzzle contract typed before logic (CLAUDE.md sec 11); the solver is glyph-agnostic so which packs/values are picked never changes uniqueness."
+    },
+    {
+      "version": 1,
+      "date": "2026-07-01",
+      "change": "Additive story-first fields (schemaVersion unchanged at 1): manifest scenarioId/story/subjectNoun/variant; AttributeCategory kind/unit/anchor/glyphPack; AttributeValue magnitude/phrase/refPhrase. Each optional field may be OMITTED (clean datasets emit, exclude_none) or present-as-null (served daily emit) - both accepted.",
+      "why": "Story-first pivot narrates puzzles; every new field is OPTIONAL (str|None in the model) so a pre-pivot v1 manifest, a null-valued daily manifest, and an omitted-field datasets manifest all validate - no persisted-contract break."
+    }
+  ],
+  "$defs": {
+    "tier": { "type": "string", "enum": ["easy", "standard", "sharp", "expert"] },
+    "shapeId": { "type": "string", "enum": ["grid", "seating-row", "round-table"] },
+    "attributeValue": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "glyph": { "type": "string" },
+        "label": { "type": "string" },
+        "magnitude": { "type": ["integer", "null"] },
+        "phrase": { "type": ["string", "null"] },
+        "refPhrase": { "type": ["string", "null"] }
+      },
+      "required": ["id", "glyph", "label"],
+      "additionalProperties": false
+    },
+    "attributeCategory": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "ordinal": { "type": "boolean" },
+        "cardinality": { "type": "string", "enum": ["bijective", "shared"] },
+        "values": { "type": "array", "items": { "$ref": "#/$defs/attributeValue" } },
+        "kind": { "type": ["string", "null"], "enum": ["nominal", "ordinal", "numeric", null] },
+        "unit": { "type": ["string", "null"] },
+        "anchor": { "type": ["boolean", "null"] },
+        "glyphPack": { "type": ["string", "null"] }
+      },
+      "required": ["id", "label", "ordinal", "cardinality", "values"],
+      "additionalProperties": false
+    },
+    "operand": {
+      "type": "object",
+      "properties": {
+        "cat": { "type": "string" },
+        "value": { "type": "string" }
+      },
+      "required": ["cat", "value"],
+      "additionalProperties": false
+    },
+    "constraint": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "operands": { "type": "array", "items": { "$ref": "#/$defs/operand" } },
+        "params": {
+          "type": "object",
+          "additionalProperties": { "type": ["integer", "string"] }
+        },
+        "clueText": { "type": "string" },
+        "renderHint": { "type": "string" }
+      },
+      "required": ["id", "type", "operands", "params", "clueText", "renderHint"],
+      "additionalProperties": false
+    },
+    "hintStep": {
+      "type": "object",
+      "properties": {
+        "fromClues": { "type": "array", "items": { "type": "string" } },
+        "forces": {
+          "type": "object",
+          "properties": {
+            "entity": { "type": "string" },
+            "cat": { "type": "string" },
+            "value": { "type": "string" }
+          },
+          "required": ["entity", "cat", "value"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["fromClues", "forces"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "puzzleId": { "type": "string" },
+    "tier": { "$ref": "#/$defs/tier" },
+    "shapeId": { "$ref": "#/$defs/shapeId" },
+    "templateRev": { "type": "integer" },
+    "entities": { "type": "array", "items": { "type": "string" } },
+    "categories": {
+      "type": "object",
+      "properties": {
+        "n": { "type": "integer" },
+        "list": { "type": "array", "items": { "$ref": "#/$defs/attributeCategory" } }
+      },
+      "required": ["n", "list"],
+      "additionalProperties": false
+    },
+    "constraints": { "type": "array", "items": { "$ref": "#/$defs/constraint" } },
+    "solution": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": { "type": "string" }
+      }
+    },
+    "hintTrace": { "type": "array", "items": { "$ref": "#/$defs/hintStep" } },
+    "scenarioId": { "type": ["string", "null"] },
+    "story": { "type": ["string", "null"] },
+    "subjectNoun": { "type": ["string", "null"] },
+    "variant": { "type": ["integer", "null"] }
+  },
+  "required": [
+    "schemaVersion",
+    "puzzleId",
+    "tier",
+    "shapeId",
+    "templateRev",
+    "entities",
+    "categories",
+    "constraints",
+    "solution",
+    "hintTrace"
+  ],
+  "additionalProperties": false
+}

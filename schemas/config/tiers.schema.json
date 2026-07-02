@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "config/tiers.schema.json",
+  "title": "TiersConfig",
+  "description": "config/tiers.json - the per-tier difficulty knobs (bands, counts, feedback, PAR). Human-edited, schema-validated (CLAUDE.md #6). par_s feeds PAR/stars; band gates generation; feedback drives the UI. One entry per tier.",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-07-02",
+      "change": "Initial machine-checkable formalization of config/tiers.json: each tier -> {attempts,band[min,max],cardinality,categories,clue_count[min,max],entities,feedback,hints,indir[min,max],par_s}.",
+      "why": "Tunable difficulty knobs must be schema-validated so a malformed band or missing par_s fails fast at build (CLAUDE.md #6)."
+    }
+  ],
+  "$defs": {
+    "intPair": {
+      "type": "array",
+      "items": { "type": "integer" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "numberPair": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "tierEntry": {
+      "type": "object",
+      "properties": {
+        "attempts": { "type": "integer" },
+        "band": { "$ref": "#/$defs/intPair" },
+        "cardinality": { "type": "string", "enum": ["bijective", "shared"] },
+        "categories": { "type": "integer" },
+        "clue_count": { "$ref": "#/$defs/intPair" },
+        "entities": { "type": "integer" },
+        "feedback": {
+          "type": "string",
+          "enum": ["realtime-names", "count-wrong", "binary-check", "submit-binary"]
+        },
+        "hints": { "type": "integer" },
+        "indir": { "$ref": "#/$defs/numberPair" },
+        "par_s": { "type": "integer" }
+      },
+      "required": [
+        "attempts",
+        "band",
+        "cardinality",
+        "categories",
+        "clue_count",
+        "entities",
+        "feedback",
+        "hints",
+        "indir",
+        "par_s"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "easy": { "$ref": "#/$defs/tierEntry" },
+    "standard": { "$ref": "#/$defs/tierEntry" },
+    "sharp": { "$ref": "#/$defs/tierEntry" },
+    "expert": { "$ref": "#/$defs/tierEntry" }
+  },
+  "required": ["easy", "standard", "sharp", "expert"],
+  "additionalProperties": false
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "config/budgets.schema.json",
+  "title": "BudgetsConfig",
+  "description": "config/budgets.json - performance + asset budgets measured against the target device (mid-tier Android). Human-edited (CLAUDE.md #6). glyphs.max_svg_bytes is enforced fail-fast by tools/bake_glyphs.py. Top-level additionalProperties is open because budget blocks are added as new surfaces earn a budget.",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-07-02",
+      "change": "Initial machine-checkable formalization of config/budgets.json: device{cpu_throttle,network,profile}, glyphs{max_svg_bytes,note?}, targets{byte_cap,first_interaction_ms,fps,input_to_photon_ms}.",
+      "why": "The frame/asset budgets must be schema-validated so a malformed ceiling fails fast at build (CLAUDE.md #6); glyphs.max_svg_bytes was added when the flags pack shipped (Row 8)."
+    }
+  ],
+  "properties": {
+    "device": {
+      "type": "object",
+      "properties": {
+        "cpu_throttle": { "type": "integer" },
+        "network": { "type": "string" },
+        "profile": { "type": "string" }
+      },
+      "required": ["cpu_throttle", "network", "profile"],
+      "additionalProperties": false
+    },
+    "glyphs": {
+      "type": "object",
+      "properties": {
+        "max_svg_bytes": { "type": "integer" },
+        "note": { "type": "string" }
+      },
+      "required": ["max_svg_bytes"],
+      "additionalProperties": true
+    },
+    "targets": {
+      "type": "object",
+      "properties": {
+        "byte_cap": { "type": "boolean" },
+        "first_interaction_ms": { "type": "integer" },
+        "fps": { "type": "integer" },
+        "input_to_photon_ms": { "type": "integer" }
+      },
+      "required": ["byte_cap", "first_interaction_ms", "fps", "input_to_photon_ms"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["device", "glyphs", "targets"],
+  "additionalProperties": true
+}

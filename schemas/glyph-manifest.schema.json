@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "glyph-manifest.schema.json",
+  "title": "GlyphManifest",
+  "description": "The generated glyph registry at frontend/public/assets/glyphs/index.json (v2). Bundle-shipped, rewrite-in-place, no migration. GENERATED every build by tools/bake_glyphs.py from the asset tree - never hand-kept. Each pack is a puzzle DIMENSION, each slug a value; slug = [a-z0-9]+ (kebab hyphens dropped), file = the real lowercase-kebab filename, label = derived. generatedAt is provenance only (excluded from any determinism hash).",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-06-29",
+      "change": "Initial GlyphManifest v1: a hand-kept list mapping pack.slug -> file/label.",
+      "why": "First registry of the theme assets so the frontend + generator reference glyphs by id, never by inline SVG (CLAUDE.md #6, #10)."
+    },
+    {
+      "version": 2,
+      "date": "2026-07-01",
+      "change": "GlyphManifest v2 (schemaVersion 2): { schemaVersion:2, generatedAt, packs:{ <pack>:{ <slug>:{ file, label } } } }, auto-discovered from the asset tree by tools/bake_glyphs.py. Bake fails on a non-kebab filename, a slug collision, or an SVG over config/budgets.json glyphs.max_svg_bytes.",
+      "why": "The v1 hand list had gone stale with dangling refs (deleted color/violet.svg, household/cola.svg); generating the manifest keeps it honest and lets a new collection folder join the next build with no code change."
+    }
+  ],
+  "$defs": {
+    "glyph": {
+      "type": "object",
+      "properties": {
+        "file": { "type": "string" },
+        "label": { "type": "string" }
+      },
+      "required": ["file", "label"],
+      "additionalProperties": false
+    },
+    "pack": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/glyph" }
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "generatedAt": { "type": "string" },
+    "packs": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/pack" }
+    }
+  },
+  "required": ["schemaVersion", "generatedAt", "packs"],
+  "additionalProperties": false
+}

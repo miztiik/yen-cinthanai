@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "config/retention.schema.json",
+  "title": "RetentionConfig",
+  "description": "config/retention.json - pacing, save-pruning, and streak-forgiveness knobs. Human-edited (CLAUDE.md #6). Drives idle animations, the QuotaExceeded prune policy, and weekly streak skips.",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-07-02",
+      "change": "Initial machine-checkable formalization of config/retention.json: pace{idle_glow_s,idle_pulse_s,stats_window}, prune{oldest_first,protect_today,trigger}, streak{refill_weekday,reset_utc_hour,skips_per_week}.",
+      "why": "Retention knobs govern the prune policy and streak forgiveness, so a malformed value must fail fast at build (CLAUDE.md #6)."
+    }
+  ],
+  "properties": {
+    "pace": {
+      "type": "object",
+      "properties": {
+        "idle_glow_s": { "type": "integer" },
+        "idle_pulse_s": { "type": "integer" },
+        "stats_window": { "type": "integer" }
+      },
+      "required": ["idle_glow_s", "idle_pulse_s", "stats_window"],
+      "additionalProperties": false
+    },
+    "prune": {
+      "type": "object",
+      "properties": {
+        "oldest_first": { "type": "boolean" },
+        "protect_today": { "type": "boolean" },
+        "trigger": { "type": "string" }
+      },
+      "required": ["oldest_first", "protect_today", "trigger"],
+      "additionalProperties": false
+    },
+    "streak": {
+      "type": "object",
+      "properties": {
+        "refill_weekday": { "type": "string" },
+        "reset_utc_hour": { "type": "integer" },
+        "skips_per_week": { "type": "integer" }
+      },
+      "required": ["refill_weekday", "reset_utc_hour", "skips_per_week"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["pace", "prune", "streak"],
+  "additionalProperties": false
+}

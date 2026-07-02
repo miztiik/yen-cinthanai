@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bank-index.schema.json",
+  "title": "BankIndex",
+  "description": "The served puzzle bank index at frontend/public/puzzles/index.json. Bundle-shipped, rewrite-in-place, no migration. Mirrors tools/models.py BankIndex and frontend/src/contracts/bank.ts. sha = canonical-JSON sha256 of the referenced manifest (determinism gate). builtAt is provenance only (excluded from any determinism hash).",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-06-29",
+      "change": "Initial BankIndex v1: schemaVersion, generatedSeed (the date write_index ran for), builtAt, puzzles[BankEntry{date,tier,shapeId,file,sha}].",
+      "why": "A single served index of the day's puzzles + their content hashes; typed before logic (CLAUDE.md sec 11). The daily bot rewrites it in place with only the run's dates."
+    }
+  ],
+  "$defs": {
+    "tier": { "type": "string", "enum": ["easy", "standard", "sharp", "expert"] },
+    "shapeId": { "type": "string", "enum": ["grid", "seating-row", "round-table"] },
+    "bankEntry": {
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "tier": { "$ref": "#/$defs/tier" },
+        "shapeId": { "$ref": "#/$defs/shapeId" },
+        "file": { "type": "string" },
+        "sha": { "type": "string" }
+      },
+      "required": ["date", "tier", "shapeId", "file", "sha"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "generatedSeed": { "type": "string" },
+    "builtAt": { "type": "string" },
+    "puzzles": { "type": "array", "items": { "$ref": "#/$defs/bankEntry" } }
+  },
+  "required": ["schemaVersion", "generatedSeed", "builtAt", "puzzles"],
+  "additionalProperties": false
+}

@@ -1,6 +1,6 @@
 # Persisted Schemas
 
-**Last Updated**: 2026-07-01
+**Last Updated**: 2026-07-02
 
 Typed, versioned contracts. Save is the only migrating surface (installed-player consequence); manifest/bank/share are bundle-shipped (rewrite-in-place). Pydantic source of truth at build; TS readers at runtime. See CLAUDE.md sec 11.
 
@@ -31,8 +31,21 @@ DayState = { date, tier, shapeId, status, placements, attempts, solveMs, hintsUs
 
 `{ schemaVersion, date, tier, shapeGlyph, status, moves, wrong, solveMs, hintsUsed, streak }`. No placements/solution/entities; contract test asserts no leak; shape-agnostic bar.
 
+## Machine-checkable schemas
+
+Every surface above also has a formal JSON Schema (Draft 2020-12) under `schemas/`, and a compliance gate (`tools/test_schemas.py`) validates every real config + persisted/bundle JSON against it on each `pytest tools` run. The Pydantic models (build-time) and the TS interfaces (runtime) stay the authored source of truth; the schemas are the language-agnostic, machine-checkable mirror. `jsonschema` is a build-time-only dep (not shipped, 0 bundle cost).
+
+- Persisted / bundle: `schemas/puzzle-manifest.schema.json`, `bank-index.schema.json`, `save.schema.json`, `glyph-manifest.schema.json`, `share-card.schema.json`.
+- Authoring inputs: `schemas/categories.schema.json`, `scenario-template.schema.json`.
+- Config: `schemas/config/<name>.schema.json` for each of tiers, dials, budgets, copy, ui, shapes, glyphpacks, palettes, retention.
+
+Tolerance (faithful but forgiving): the manifest schema accepts a pre-pivot v1 manifest, a story-first manifest, AND the daily emit that serializes the optional story fields as `null`; the save schema accepts a v0 (pre-versioned, date-keyed, no `puckSize`) and a v1 save. Formalizing the schemas bumps NO schemaVersion.
+
+Evolution log (why-changed-what, kept inside each schema): every schema carries a top-level `evolution` array - an ignored custom keyword, so the schema stays valid - shaped `[ { version, date, change, why } ]` tracking the surface's history (e.g. Save's `puckSize` + `notes` additions, GlyphManifest v1 -> v2). The gate asserts it is present and its versions are non-decreasing. When a future row bumps a `schemaVersion` (e.g. the manifest 1 -> 2) it appends an entry here in the same commit.
+
 ## See also
 
 - [../generator/pipeline.md](../generator/pipeline.md) - emits manifest+bank.
 - [../../concepts/difficulty-and-scoring.md](../../concepts/difficulty-and-scoring.md) - stars/par.
 - [../runtime/stack-and-bundle.md](../runtime/stack-and-bundle.md) - readers + repo.
+- `schemas/` + `tools/test_schemas.py` - the formal JSON Schemas + compliance gate.

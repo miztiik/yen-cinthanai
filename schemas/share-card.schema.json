@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "share-card.schema.json",
+  "title": "ShareCard",
+  "description": "The spoiler-free share surface, built ONLY from DayState stats. Mirrors tools/models.py ShareCard and frontend/src/contracts/share.ts. NO placements, solution, or entity values reach this surface (shape-agnostic; the share-noleak contract test asserts no leak). Bundle/runtime, no migration.",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-06-29",
+      "change": "Initial ShareCard v1: schemaVersion, date, tier, shapeGlyph, status, moves, wrong, solveMs, hintsUsed, streak.",
+      "why": "A stats-only, spoiler-safe card for sharing a result; shapeGlyph is a glyph ref not a layout, so no value id or placement can leak (CLAUDE.md sec 11)."
+    }
+  ],
+  "$defs": {
+    "tier": { "type": "string", "enum": ["easy", "standard", "sharp", "expert"] },
+    "dayStatus": { "type": "string", "enum": ["unplayed", "playing", "won", "lost"] }
+  },
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "date": { "type": "string" },
+    "tier": { "$ref": "#/$defs/tier" },
+    "shapeGlyph": { "type": "string" },
+    "status": { "$ref": "#/$defs/dayStatus" },
+    "moves": { "type": "integer" },
+    "wrong": { "type": "integer" },
+    "solveMs": { "type": "integer" },
+    "hintsUsed": { "type": "integer" },
+    "streak": { "type": "integer" }
+  },
+  "required": [
+    "schemaVersion",
+    "date",
+    "tier",
+    "shapeGlyph",
+    "status",
+    "moves",
+    "wrong",
+    "solveMs",
+    "hintsUsed",
+    "streak"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "config/palettes.schema.json",
+  "title": "PalettesConfig",
+  "description": "config/palettes.json - the color palettes: a default palette id, each named palette's light + dark token maps, the theme list, and the canonical token list. Every color is a 6-digit hex. Human-edited (CLAUDE.md #6).",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-07-02",
+      "change": "Initial machine-checkable formalization of config/palettes.json: default, palette{ <name> -> {label,light{tokens},dark{tokens}} }, themes[], tokens[]. Tokens: bg,surface,ink,accent,satisfy,violate,near,gold.",
+      "why": "Palette colors are baked and themed at runtime, so a malformed hex or a palette missing a token must fail fast at build (CLAUDE.md #6)."
+    }
+  ],
+  "$defs": {
+    "hexColor": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+    "paletteColors": {
+      "type": "object",
+      "properties": {
+        "bg": { "$ref": "#/$defs/hexColor" },
+        "surface": { "$ref": "#/$defs/hexColor" },
+        "ink": { "$ref": "#/$defs/hexColor" },
+        "accent": { "$ref": "#/$defs/hexColor" },
+        "satisfy": { "$ref": "#/$defs/hexColor" },
+        "violate": { "$ref": "#/$defs/hexColor" },
+        "near": { "$ref": "#/$defs/hexColor" },
+        "gold": { "$ref": "#/$defs/hexColor" }
+      },
+      "required": ["bg", "surface", "ink", "accent", "satisfy", "violate", "near", "gold"],
+      "additionalProperties": { "$ref": "#/$defs/hexColor" }
+    },
+    "palette": {
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "light": { "$ref": "#/$defs/paletteColors" },
+        "dark": { "$ref": "#/$defs/paletteColors" }
+      },
+      "required": ["label", "light", "dark"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "default": { "type": "string" },
+    "palette": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/palette" }
+    },
+    "themes": { "type": "array", "items": { "type": "string" } },
+    "tokens": { "type": "array", "items": { "type": "string" } }
+  },
+  "required": ["default", "palette", "themes", "tokens"],
+  "additionalProperties": false
+}

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "scenario-template.schema.json",
+  "title": "ScenarioTemplate",
+  "description": "A human-authored scenario template (narrative + clue templates) at datasets/templates/<scenario>.json. Build-time authoring input. Mirrors tools/corpus.py ScenarioTemplate. The generator picks N values per category, samples a unique solution, emits clues from clueTemplates honoring the tier's indirection + compound gates, verifies uniqueness, then renders story + numbered clues.",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-07-01",
+      "change": "Initial ScenarioTemplate v1: schemaVersion, id, title, subjectNoun, subjectCategory, ordinalAxis, minTier, maxTier, narrativeTemplate, flavorPools{ <slot> -> string[] }, indirection{byTier{tier->naming},note?}, categories[TemplateCategory], clueTemplates{ <type> -> ClueTemplate{minTier,variants[],appliesTo?,note?} }, note?.",
+      "why": "Story-first pivot needs original, versioned narrative templates that drive verified-unique compound puzzles; typed before logic (CLAUDE.md sec 11)."
+    }
+  ],
+  "$defs": {
+    "tier": { "type": "string", "enum": ["easy", "standard", "sharp", "expert"] },
+    "kind": { "type": "string", "enum": ["nominal", "ordinal", "numeric"] },
+    "templateValue": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "magnitude": { "type": "integer" },
+        "phrase": { "type": "string" },
+        "refPhrase": { "type": "string" }
+      },
+      "required": ["id", "label"],
+      "additionalProperties": false
+    },
+    "templateCategory": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "kind": { "$ref": "#/$defs/kind" },
+        "valuePool": { "type": "array", "items": { "$ref": "#/$defs/templateValue" } },
+        "anchor": { "type": "boolean" },
+        "unit": { "type": "string" },
+        "glyphPack": { "type": "string" }
+      },
+      "required": ["id", "label", "kind", "valuePool"],
+      "additionalProperties": false
+    },
+    "clueTemplate": {
+      "type": "object",
+      "properties": {
+        "minTier": { "$ref": "#/$defs/tier" },
+        "variants": { "type": "array", "items": { "type": "string" } },
+        "appliesTo": { "type": "string" },
+        "note": { "type": "string" }
+      },
+      "required": ["minTier", "variants"],
+      "additionalProperties": false
+    },
+    "indirection": {
+      "type": "object",
+      "properties": {
+        "byTier": {
+          "type": "object",
+          "propertyNames": { "enum": ["easy", "standard", "sharp", "expert"] },
+          "additionalProperties": { "type": "string" }
+        },
+        "note": { "type": "string" }
+      },
+      "required": ["byTier"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schemaVersion": { "type": "integer" },
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "subjectNoun": { "type": "string" },
+    "subjectCategory": { "type": "string" },
+    "ordinalAxis": { "type": "boolean" },
+    "minTier": { "$ref": "#/$defs/tier" },
+    "maxTier": { "$ref": "#/$defs/tier" },
+    "narrativeTemplate": { "type": "string" },
+    "flavorPools": {
+      "type": "object",
+      "additionalProperties": { "type": "array", "items": { "type": "string" } }
+    },
+    "indirection": { "$ref": "#/$defs/indirection" },
+    "categories": { "type": "array", "items": { "$ref": "#/$defs/templateCategory" } },
+    "clueTemplates": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/clueTemplate" }
+    },
+    "note": { "type": "string" }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "title",
+    "subjectNoun",
+    "subjectCategory",
+    "ordinalAxis",
+    "minTier",
+    "maxTier",
+    "narrativeTemplate",
+    "flavorPools",
+    "indirection",
+    "categories",
+    "clueTemplates"
+  ],
+  "additionalProperties": false
+}

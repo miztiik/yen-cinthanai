@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "config/dials.schema.json",
+  "title": "DialsConfig",
+  "description": "config/dials.json - build-only generator tunables (NOT baked into the bundle). Reseed budget, seed salt, per-tier grid shape, clue-type weights, and story weights. Human-edited (CLAUDE.md #6). Top-level additionalProperties is open because dials accumulates knobs as clue types are added.",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-07-02",
+      "change": "Initial machine-checkable formalization of config/dials.json: max_reseeds, seed_salt, story{weights{<clueType>->int},share_cap}, template_rev, tier{<tier>->{nominal,shape,shared}}, weights{<slotRule>->int}.",
+      "why": "The generator's build-only knobs must be schema-validated so a malformed weight or missing salt fails fast (CLAUDE.md #6); dials is not baked, so extra keys stay tolerant."
+    }
+  ],
+  "$defs": {
+    "intWeights": {
+      "type": "object",
+      "additionalProperties": { "type": "integer" }
+    },
+    "tierShape": {
+      "type": "object",
+      "properties": {
+        "nominal": { "type": "integer" },
+        "shape": { "type": "string" },
+        "shared": { "type": "integer" }
+      },
+      "required": ["nominal", "shape", "shared"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "max_reseeds": { "type": "integer" },
+    "seed_salt": { "type": "string" },
+    "story": {
+      "type": "object",
+      "properties": {
+        "weights": { "$ref": "#/$defs/intWeights" },
+        "share_cap": { "type": "number" }
+      },
+      "required": ["weights", "share_cap"],
+      "additionalProperties": true
+    },
+    "template_rev": { "type": "integer" },
+    "tier": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/tierShape" }
+    },
+    "weights": { "$ref": "#/$defs/intWeights" }
+  },
+  "required": ["max_reseeds", "seed_salt", "template_rev", "tier", "weights"],
+  "additionalProperties": true
+}
