@@ -7,7 +7,7 @@
   "ordinalAxis": false,
   "minTier": "easy",
   "maxTier": "expert",
-  "note": "SAMPLE authoring template (original content). Witty riverside food-truck rally. Anchor = vendor (the cook). dish -> food glyph pack, drink -> drinks glyph pack (non-alcoholic, wholesome); price is the numeric axis (dollars); pitch is a text-only stall label. narrativeTemplate is setting flavor only; the renderer appends the premise + match-line from the categories present at each tier. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "note": "SAMPLE authoring template (original content). Witty riverside food-truck rally. Anchor = vendor (the cook). dish -> food glyph pack, drink -> drinks glyph pack (non-alcoholic, wholesome); price is the numeric axis (dollars); pitch -> abstract numerals num1..num6 (the stall number). narrativeTemplate is setting flavor only; the renderer appends the premise + match-line from the categories present at each tier. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
   "narrativeTemplate": "The riverside car park has been taken over for the day by {n} rival food trucks, and {judge} - the festival organiser who runs the whole rally off a single battered clipboard - is trying to reconstruct the running order after a gust of wind scattered the sign-up sheets across the {surface}.",
   "flavorPools": {
     "judge": ["Marisol", "Deacon", "Yusuf", "Winnie"],
@@ -78,13 +78,14 @@
       "id": "pitch",
       "label": "Pitch",
       "kind": "nominal",
+      "glyphPack": "abstract",
       "valuePool": [
-        { "id": "pitch1", "label": "Pitch 1", "phrase": "parked at pitch 1", "refPhrase": "pitch-1 truck" },
-        { "id": "pitch2", "label": "Pitch 2", "phrase": "parked at pitch 2", "refPhrase": "pitch-2 truck" },
-        { "id": "pitch3", "label": "Pitch 3", "phrase": "parked at pitch 3", "refPhrase": "pitch-3 truck" },
-        { "id": "pitch4", "label": "Pitch 4", "phrase": "parked at pitch 4", "refPhrase": "pitch-4 truck" },
-        { "id": "pitch5", "label": "Pitch 5", "phrase": "parked at pitch 5", "refPhrase": "pitch-5 truck" },
-        { "id": "pitch6", "label": "Pitch 6", "phrase": "parked at pitch 6", "refPhrase": "pitch-6 truck" }
+        { "id": "num1", "label": "Pitch 1", "phrase": "parked at pitch 1", "refPhrase": "pitch-1 truck" },
+        { "id": "num2", "label": "Pitch 2", "phrase": "parked at pitch 2", "refPhrase": "pitch-2 truck" },
+        { "id": "num3", "label": "Pitch 3", "phrase": "parked at pitch 3", "refPhrase": "pitch-3 truck" },
+        { "id": "num4", "label": "Pitch 4", "phrase": "parked at pitch 4", "refPhrase": "pitch-4 truck" },
+        { "id": "num5", "label": "Pitch 5", "phrase": "parked at pitch 5", "refPhrase": "pitch-5 truck" },
+        { "id": "num6", "label": "Pitch 6", "phrase": "parked at pitch 6", "refPhrase": "pitch-6 truck" }
       ]
     }
   ],

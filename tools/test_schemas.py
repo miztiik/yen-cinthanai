@@ -71,7 +71,10 @@ def _instance_cases() -> list:
 
     # datasets authoring inputs
     cases.append((DATASETS / "categories.json", "categories.schema.json"))
-    template_files = sorted((DATASETS / "templates").glob("*.json"))
+    cases.append((DATASETS / "templates" / "manifest.json", "scenario-manifest.schema.json"))
+    template_files = sorted(
+        p for p in (DATASETS / "templates").glob("*.json") if p.name != "manifest.json"
+    )
     assert template_files, "no datasets/templates/*.json found - path bug"
     for p in template_files:
         cases.append((p, "scenario-template.schema.json"))
@@ -121,6 +124,7 @@ def test_schemas_discovered() -> None:
         "share-card.schema.json",
         "categories.schema.json",
         "scenario-template.schema.json",
+        "scenario-manifest.schema.json",
         "config/tiers.schema.json",
         "config/dials.schema.json",
         "config/budgets.schema.json",

@@ -33,36 +33,37 @@
       {
         "anchor": false,
         "cardinality": "bijective",
+        "glyphPack": "crafts",
         "id": "craft",
         "kind": "nominal",
         "label": "Craft",
         "values": [
           {
-            "glyph": "",
-            "id": "pottery",
-            "label": "Pottery",
-            "phrase": "threw the pottery",
-            "refPhrase": "potter"
+            "glyph": "crafts.gardening",
+            "id": "gardening",
+            "label": "Gardening",
+            "phrase": "did the gardening",
+            "refPhrase": "gardener"
           },
           {
-            "glyph": "",
-            "id": "jam",
-            "label": "Jam",
-            "phrase": "made the jam",
-            "refPhrase": "jam-maker"
+            "glyph": "crafts.carpentry",
+            "id": "carpentry",
+            "label": "Carpentry",
+            "phrase": "did the carpentry",
+            "refPhrase": "carpenter"
           },
           {
-            "glyph": "",
-            "id": "prints",
-            "label": "Prints",
-            "phrase": "sold the prints",
-            "refPhrase": "printer"
+            "glyph": "crafts.soapmaking",
+            "id": "soapmaking",
+            "label": "Soap-making",
+            "phrase": "did the soap-making",
+            "refPhrase": "soap-maker"
           },
           {
-            "glyph": "",
-            "id": "candles",
-            "label": "Candles",
-            "phrase": "made the candles",
+            "glyph": "crafts.candlemaking",
+            "id": "candlemaking",
+            "label": "Candle-making",
+            "phrase": "did the candle-making",
             "refPhrase": "candle-maker"
           }
         ]
@@ -110,7 +111,7 @@
   },
   "constraints": [
     {
-      "clueText": "Ana's table was the one that threw the pottery.",
+      "clueText": "Ana's table was the one that did the gardening.",
       "id": "c1",
       "operands": [
         {
@@ -119,7 +120,7 @@
         },
         {
           "cat": "craft",
-          "value": "pottery"
+          "value": "gardening"
         }
       ],
       "params": {},
@@ -148,7 +149,7 @@
       "type": "numDiff"
     },
     {
-      "clueText": "Jam was not Dev's work that week.",
+      "clueText": "The one who did the carpentry was not Dev.",
       "id": "c3",
       "operands": [
         {
@@ -157,7 +158,7 @@
         },
         {
           "cat": "craft",
-          "value": "jam"
+          "value": "carpentry"
         }
       ],
       "params": {},
@@ -182,12 +183,12 @@
       "type": "eq"
     },
     {
-      "clueText": "The one who charged 15 dollars was Prints.",
+      "clueText": "The one who charged 15 dollars was Soap-making.",
       "id": "c5",
       "operands": [
         {
           "cat": "craft",
-          "value": "prints"
+          "value": "soapmaking"
         },
         {
           "cat": "price",
@@ -210,7 +211,7 @@
       "forces": {
         "cat": "craft",
         "entity": "e2",
-        "value": "pottery"
+        "value": "gardening"
       },
       "fromClues": [
         "c1"
@@ -220,7 +221,7 @@
       "forces": {
         "cat": "craft",
         "entity": "e3",
-        "value": "jam"
+        "value": "carpentry"
       },
       "fromClues": [
         "c3"
@@ -230,7 +231,7 @@
       "forces": {
         "cat": "craft",
         "entity": "e1",
-        "value": "prints"
+        "value": "soapmaking"
       },
       "fromClues": [
         "c5"
@@ -240,7 +241,7 @@
       "forces": {
         "cat": "craft",
         "entity": "e0",
-        "value": "candles"
+        "value": "candlemaking"
       },
       "fromClues": [
         "c1"
@@ -293,22 +294,22 @@
   "shapeId": "grid",
   "solution": {
     "e0": {
-      "craft": "candles",
+      "craft": "candlemaking",
       "name": "dev",
       "price": "p12"
     },
     "e1": {
-      "craft": "prints",
+      "craft": "soapmaking",
       "name": "eli",
       "price": "p15"
     },
     "e2": {
-      "craft": "pottery",
+      "craft": "gardening",
       "name": "ana",
       "price": "p5"
     },
     "e3": {
-      "craft": "jam",
+      "craft": "carpentry",
       "name": "cara",
       "price": "p10"
     }

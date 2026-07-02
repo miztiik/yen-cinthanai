@@ -36,13 +36,14 @@
       "id": "craft",
       "label": "Craft",
       "kind": "nominal",
+      "glyphPack": "crafts",
       "valuePool": [
-        { "id": "candles", "label": "Candles", "phrase": "made the candles", "refPhrase": "candle-maker" },
-        { "id": "jam", "label": "Jam", "phrase": "made the jam", "refPhrase": "jam-maker" },
+        { "id": "candlemaking", "label": "Candle-making", "phrase": "did the candle-making", "refPhrase": "candle-maker" },
+        { "id": "carpentry", "label": "Carpentry", "phrase": "did the carpentry", "refPhrase": "carpenter" },
+        { "id": "gardening", "label": "Gardening", "phrase": "did the gardening", "refPhrase": "gardener" },
+        { "id": "painting", "label": "Painting", "phrase": "did the painting", "refPhrase": "painter" },
         { "id": "pottery", "label": "Pottery", "phrase": "threw the pottery", "refPhrase": "potter" },
-        { "id": "soap", "label": "Soap", "phrase": "made the soap", "refPhrase": "soap-maker" },
-        { "id": "honey", "label": "Honey", "phrase": "jarred the honey", "refPhrase": "beekeeper" },
-        { "id": "prints", "label": "Prints", "phrase": "sold the prints", "refPhrase": "printer" }
+        { "id": "soapmaking", "label": "Soap-making", "phrase": "did the soap-making", "refPhrase": "soap-maker" }
       ]
     },
     {
@@ -63,13 +64,14 @@
       "id": "produce",
       "label": "Produce",
       "kind": "nominal",
+      "glyphPack": "food",
       "valuePool": [
         { "id": "bread", "label": "Bread", "phrase": "also brought the bread", "refPhrase": "bread seller" },
         { "id": "cheese", "label": "Cheese", "phrase": "also brought the cheese", "refPhrase": "cheese seller" },
-        { "id": "apples", "label": "Apples", "phrase": "also brought the apples", "refPhrase": "apple seller" },
-        { "id": "eggs", "label": "Eggs", "phrase": "also brought the eggs", "refPhrase": "egg seller" },
-        { "id": "plums", "label": "Plums", "phrase": "also brought the plums", "refPhrase": "plum seller" },
-        { "id": "olives", "label": "Olives", "phrase": "also brought the olives", "refPhrase": "olive seller" }
+        { "id": "egg", "label": "Eggs", "phrase": "also brought the eggs", "refPhrase": "egg seller" },
+        { "id": "baguette", "label": "Baguette", "phrase": "also brought the baguette", "refPhrase": "baguette seller" },
+        { "id": "cookie", "label": "Cookies", "phrase": "also brought the cookies", "refPhrase": "cookie seller" },
+        { "id": "donut", "label": "Donuts", "phrase": "also brought the donuts", "refPhrase": "donut seller" }
       ]
     },
     {
@@ -77,11 +79,11 @@
       "label": "Bloom",
       "kind": "nominal",
       "valuePool": [
-        { "id": "roses", "label": "Roses", "phrase": "displayed the roses", "refPhrase": "rose grower" },
+        { "id": "jasmine", "label": "Jasmine", "phrase": "displayed the jasmine", "refPhrase": "jasmine grower", "glyph": "flowers.jasmine" },
+        { "id": "sunflower", "label": "Sunflowers", "phrase": "displayed the sunflowers", "refPhrase": "sunflower grower", "glyph": "flowers.sunflower" },
         { "id": "tulips", "label": "Tulips", "phrase": "displayed the tulips", "refPhrase": "tulip grower" },
         { "id": "daisies", "label": "Daisies", "phrase": "displayed the daisies", "refPhrase": "daisy grower" },
         { "id": "lilies", "label": "Lilies", "phrase": "displayed the lilies", "refPhrase": "lily grower" },
-        { "id": "irises", "label": "Irises", "phrase": "displayed the irises", "refPhrase": "iris grower" },
         { "id": "poppies", "label": "Poppies", "phrase": "displayed the poppies", "refPhrase": "poppy grower" }
       ]
     }
@@ -98,9 +100,9 @@
     "neq": {
       "minTier": "easy",
       "variants": [
-        "{a_ref} did not bring the {b_label}.",
-        "{b_label} was not {a_ref}'s work that week.",
-        "Whatever {a_ref} brought, it was not the {b_label}."
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
       ]
     },
     "numDiff": {

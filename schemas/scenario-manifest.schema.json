@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "scenario-manifest.schema.json",
+  "title": "ScenarioManifest",
+  "description": "The scenario CATALOG index = the human-authored staging list at datasets/templates/manifest.json. Build-time authoring input consumed by the generator. Mirrors tools/corpus.py ScenarioManifest. The generator rotates the daily bank over status=='live' scenarios only (a stable hash of the date over the sorted live ids); a 'build' scenario is authorable + testable via `generate.py --scenario <id>` but stays OUT of the live rotation. tone/kind are free-form editorial tags; file == '<id>.json'; the loader additionally checks every listed file exists and every template on disk (except this manifest) is listed.",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-07-03",
+      "change": "Initial ScenarioManifest v1: schemaVersion, scenarios[ScenarioManifestEntry{id,file,title,tone,kind,status(live|build)}], note?. Replaces the directory-scan scenario picker with a metadata-carrying manifest that gates the daily rotation on status=='live' and enables build/live staging.",
+      "why": "Story-first pivot needs a staged, tone/kind-tagged catalog so new scenario templates can be authored + tested via --scenario without touching the served daily bank; typed before logic (CLAUDE.md sec 11)."
+    }
+  ],
+  "$defs": {
+    "status": { "type": "string", "enum": ["live", "build"] },
+    "scenarioManifestEntry": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "file": { "type": "string" },
+        "title": { "type": "string" },
+        "tone": { "type": "string" },
+        "kind": { "type": "string" },
+        "status": { "$ref": "#/$defs/status" }
+      },
+      "required": ["id", "file", "title", "tone", "kind", "status"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schemaVersion": { "type": "integer" },
+    "scenarios": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/scenarioManifestEntry" }
+    },
+    "note": { "type": "string" }
+  },
+  "required": ["schemaVersion", "scenarios"],
+  "additionalProperties": false
+}

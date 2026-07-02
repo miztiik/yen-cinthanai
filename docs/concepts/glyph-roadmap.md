@@ -1,20 +1,27 @@
 # Glyph Roadmap
 
-**Last Updated**: 2026-07-02
+**Last Updated**: 2026-07-03
 
 Which glyph pack backs each scenario CATEGORY, what is reused today, and what art is still a GAP to backfill. The generator is glyph-agnostic (the solver never reads a glyph), so this is a CONTENT map, not an engine dependency: a scenario category with a `glyphPack` renders its values as art; a category without one is text-only and reads perfectly well. See [../architecture/generator/pipeline.md](../architecture/generator/pipeline.md) (scenario catalog) and [ui-shell.md](ui-shell.md).
 
 ## How a category becomes glyph-backed
 
 - Set `glyphPack: "<pack>"` on the template category. Each `value.id` MUST be a real slug in that pack; the generator emits `value.glyph = "<pack>.<id>"`.
-- The slug is the SVG filename stem with kebab hyphens dropped (`bell-pepper.svg` -> `bellpepper`), so a value id is the hyphen-free stem. `glyphPath` throws on an unknown ref, and `tests/contract/scenario-glyphs.test.ts` fails the build if any glyph-backed value does not resolve to a shipped file - the guard for this whole map.
-- TEXT-ONLY BY DESIGN (never a gap): the ANCHOR (a person name) and every NUMERIC axis (a price / plot / watch number) read as text. Only nominal ATTRIBUTE categories are glyph candidates.
+- The slug is the SVG filename stem with kebab hyphens dropped (`bell-pepper.svg` -> `bellpepper`, `candle-making.svg` -> `candlemaking`), so a value id is the hyphen-free stem. `glyphPath` throws on an unknown ref, and `tests/contract/scenario-glyphs.test.ts` fails the build if any glyph-backed value does not resolve to a shipped file - the guard for this whole map.
+- PARTIAL packs: a single value may carry its own optional `glyph` override (a `"<pack>.<id>"` ref, or `""` to stay text) independent of the category `glyphPack`. This wires the values a partly-backfilled pack DOES cover while the rest of the column reads as text - `weekend-market.bloom` does exactly this with the 2-of-6 `flowers` pack. The contract test resolves these overrides too.
+- TEXT-ONLY BY DESIGN: the ANCHOR (a person name) reads as text. A NUMERIC axis reads as text UNLESS its magnitudes are the sequential run 1..6, in which case the `abstract` numerals (`num1`..`num6`) back it (community-garden.plot, starliner-crew.shift); a non-sequential numeric axis like a dollar price stays text.
 
-## Packs reused today (EXISTING - no backfill needed)
+## Packs backing scenarios today
+
+Backfilled 2026-07-03: `crafts`, `flowers` (partial), `spaceship`, plus the `abstract` numerals now wired to numbered/position categories and sequential numeric axes.
 
 | Pack | Backs (scenario.category) | Notes |
 | --- | --- | --- |
-| `food` | food-truck-festival.dish | pizza, burger, sushi, fries, toast, seafood |
+| `crafts` | weekend-market.craft | BACKFILLED: candlemaking, carpentry, gardening, painting, pottery, soapmaking (6/6) |
+| `food` | food-truck-festival.dish, weekend-market.produce | dish = pizza/burger/sushi/fries/toast/seafood; produce = bread/cheese/egg/baguette/cookie/donut (2 scenarios) |
+| `flowers` | weekend-market.bloom (PARTIAL, per-value) | BACKFILLED but only 2/6: jasmine + sunflower wired via per-value `glyph`; tulips/daisies/lilies/poppies stay text until 4 more flowers land |
+| `spaceship` | starliner-crew.vessel | BACKFILLED: enterprise/greenship/orangeship/saucer/spacerover/spaceshuttle (6/6). The old text-only `deck` was repurposed into a `vessel` category (the spaceship glyphs are VESSEL types, not decks) |
+| `abstract` | food-truck-festival.pitch, community-garden.plot, starliner-crew.shift | numerals num1..num6 back numbered positions AND sequential numeric axes (plot/shift aligned to 1..6) |
 | `drinks` | food-truck-festival.drink | non-alcoholic subset (coffee/juice/soda/tea/milk/water) - wholesome |
 | `vegetables` | community-garden.vegetable | carrot, potato, corn, cabbage, spinach, beet |
 | `color` | community-garden.ribbon | the rosette colour (blue/red/green/yellow/purple/orange) |
@@ -23,40 +30,37 @@ Which glyph pack backs each scenario CATEGORY, what is reused today, and what ar
 
 ## Per-scenario category map
 
-Legend: EXISTING = renders today from a shipped pack; TEXT = text-only by design (anchor / numeric); GAP = a nominal category that would benefit from art once a pack exists.
+Legend: GLYPH = renders from a shipped pack; TEXT = text-only (anchor, or a non-sequential numeric axis); PARTIAL = some values glyph-backed, the rest text.
 
 | Scenario | Category | kind | glyphPack | Status |
 | --- | --- | --- | --- | --- |
 | weekend-market | name (anchor) | nominal | - | TEXT (person) |
-| weekend-market | craft | nominal | - | GAP -> `crafts` |
-| weekend-market | price | numeric | - | TEXT (numeric) |
-| weekend-market | produce | nominal | - | GAP -> `produce` |
-| weekend-market | bloom | nominal | - | GAP -> `flowers` |
+| weekend-market | craft | nominal | `crafts` | GLYPH |
+| weekend-market | price | numeric | - | TEXT (dollars, non-sequential) |
+| weekend-market | produce | nominal | `food` | GLYPH |
+| weekend-market | bloom | nominal | per-value | PARTIAL (`flowers`: jasmine + sunflower; 4 blooms text) |
 | food-truck-festival | vendor (anchor) | nominal | - | TEXT (person) |
-| food-truck-festival | dish | nominal | `food` | EXISTING |
-| food-truck-festival | price | numeric | - | TEXT (numeric) |
-| food-truck-festival | drink | nominal | `drinks` | EXISTING |
-| food-truck-festival | pitch | nominal | - | GAP -> `markers` (low) |
+| food-truck-festival | dish | nominal | `food` | GLYPH |
+| food-truck-festival | price | numeric | - | TEXT (dollars, non-sequential) |
+| food-truck-festival | drink | nominal | `drinks` | GLYPH |
+| food-truck-festival | pitch | nominal | `abstract` | GLYPH (numerals num1..num6) |
 | community-garden | grower (anchor) | nominal | - | TEXT (person) |
-| community-garden | vegetable | nominal | `vegetables` | EXISTING |
-| community-garden | plot | numeric | - | TEXT (numeric) |
-| community-garden | bloom | nominal | - | GAP -> `flowers` |
-| community-garden | ribbon | nominal | `color` | EXISTING |
+| community-garden | vegetable | nominal | `vegetables` | GLYPH |
+| community-garden | plot | numeric | `abstract` | GLYPH (numerals 1..6) |
+| community-garden | bloom | nominal | - | TEXT (dahlias/marigolds/... - flowers pack too small) |
+| community-garden | ribbon | nominal | `color` | GLYPH |
 | starliner-crew | crew (anchor) | nominal | - | TEXT (person) |
-| starliner-crew | role | nominal | `occupation` | EXISTING (partial) |
-| starliner-crew | shift | numeric | - | TEXT (numeric) |
-| starliner-crew | deck | nominal | - | GAP -> `spaceship` |
-| starliner-crew | cargo | nominal | - | GAP -> `spaceship` (or `cargo`) |
+| starliner-crew | role | nominal | `occupation` | GLYPH (partial reuse) |
+| starliner-crew | shift | numeric | `abstract` | GLYPH (numerals 1..6) |
+| starliner-crew | vessel | nominal | `spaceship` | GLYPH (repurposed from deck) |
+| starliner-crew | cargo | nominal | - | TEXT (no cargo pack yet) |
 
-## Gap backlog (packs to backfill, highest value first)
+## Gap backlog (remaining art to backfill)
 
-1. `flowers` - backs weekend-market.bloom AND community-garden.bloom (TWO scenarios). Needs >= 6 slugs to cover the largest tier: roses, tulips, daisies, lilies, irises, poppies, dahlias, marigolds, zinnias, asters, peonies, cosmos. Highest ROI.
-2. `crafts` - weekend-market.craft: candles, pottery, jam, soap, honey, prints.
-3. `produce` - weekend-market.produce (grocery-stall goods): bread, cheese, eggs, apples, plums, olives. Partly overlaps `food`/`vegetables` but the set is distinct enough to warrant its own pack.
-4. `spaceship` - starliner-crew.deck + .cargo (the sci-fi gap): deck zones (fore/aft/core/ring/dorsal/keel) and cargo types (ore/ice/grain/alloy/relics/spores), or a generic space pack (rocket, planet, satellite, robot, alien, ...) that could also enrich role beyond the occupation-pack stand-ins.
-5. `markers` (low) - the small numbered/ordinal labels (pitch, and optionally plot/shift badges). Text already reads fine; a numerals/marker pack is polish, not need.
+1. `flowers` (SHORT: 2/6) - has only jasmine + sunflower, so weekend-market.bloom wires those two per-value and community-garden.bloom stays fully text. Add ~4 more (e.g. rose, tulip, daisy, lily, poppy, marigold) for a full 6-value column, then flip both blooms to a category `glyphPack`. Highest ROI.
+2. `cargo` (or a generic sci-fi pack) - starliner-crew.cargo (ore/ice/grain/alloy/relics/spores) is the last text-only ATTRIBUTE in the batch. A space pack could also enrich role beyond the occupation-pack stand-ins.
 
-Backfill order is `flowers` first (unblocks the most categories). Until a pack lands, the category stays text-only - fully playable, just unillustrated.
+Everything else in the batch is now glyph-backed. Numbered/position categories (pitch) and sequential numeric axes (plot, shift) are covered by the `abstract` numerals (num1..num6) - there is no separate "markers" pack to build. Until a pack lands, a category stays text-only - fully playable, just unillustrated.
 
 ## Rendering note
 

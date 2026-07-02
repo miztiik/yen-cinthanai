@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "note": "The scenario CATALOG index (build-time authoring input). The generator rotates the daily bank over status=='live' scenarios only (a stable hash of the date over the sorted live ids), so a 'build' scenario can be authored + tested via `generate.py --scenario <id>` WITHOUT entering the live daily rotation - stage new templates here as 'build', promote to 'live' when ready. tone/kind are free-form editorial tags. id == template filename stem; file == '<id>.json'. Every listed file must exist and every datasets/templates/*.json (except this manifest) must be listed - the loader fails fast otherwise. See docs/architecture/generator/pipeline.md.",
+  "scenarios": [
+    {
+      "id": "weekend-market",
+      "file": "weekend-market.json",
+      "title": "The Saturday Market",
+      "tone": "cozy",
+      "kind": "village",
+      "status": "live"
+    },
+    {
+      "id": "food-truck-festival",
+      "file": "food-truck-festival.json",
+      "title": "The Food Truck Festival",
+      "tone": "witty",
+      "kind": "city",
+      "status": "live"
+    },
+    {
+      "id": "community-garden",
+      "file": "community-garden.json",
+      "title": "The Community Garden",
+      "tone": "cozy",
+      "kind": "garden",
+      "status": "live"
+    },
+    {
+      "id": "starliner-crew",
+      "file": "starliner-crew.json",
+      "title": "The Starliner Roster",
+      "tone": "light-mystery",
+      "kind": "sci-fi",
+      "status": "live"
+    }
+  ]
+}

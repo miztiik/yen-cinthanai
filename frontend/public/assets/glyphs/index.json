@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T18:41:42Z",
+  "generatedAt": "2026-07-02T23:06:21Z",
   "packs": {
     "abstract": {
       "between": {
@@ -185,6 +185,32 @@
       "yellow": {
         "file": "color/yellow.svg",
         "label": "Yellow"
+      }
+    },
+    "crafts": {
+      "candlemaking": {
+        "file": "crafts/candle-making.svg",
+        "label": "Candle making"
+      },
+      "carpentry": {
+        "file": "crafts/carpentry.svg",
+        "label": "Carpentry"
+      },
+      "gardening": {
+        "file": "crafts/gardening.svg",
+        "label": "Gardening"
+      },
+      "painting": {
+        "file": "crafts/painting.svg",
+        "label": "Painting"
+      },
+      "pottery": {
+        "file": "crafts/pottery.svg",
+        "label": "Pottery"
+      },
+      "soapmaking": {
+        "file": "crafts/soap-making.svg",
+        "label": "Soap making"
       }
     },
     "creatures": {
@@ -1427,6 +1453,16 @@
         "label": "Zimbabwe"
       }
     },
+    "flowers": {
+      "jasmine": {
+        "file": "flowers/jasmine.svg",
+        "label": "Jasmine"
+      },
+      "sunflower": {
+        "file": "flowers/sunflower.svg",
+        "label": "Sunflower"
+      }
+    },
     "food": {
       "baguette": {
         "file": "food/baguette.svg",
@@ -1819,6 +1855,32 @@
       "triangle": {
         "file": "shapes/triangle.svg",
         "label": "Triangle"
+      }
+    },
+    "spaceship": {
+      "enterprise": {
+        "file": "spaceship/enterprise.svg",
+        "label": "Enterprise"
+      },
+      "greenship": {
+        "file": "spaceship/green-ship.svg",
+        "label": "Green ship"
+      },
+      "orangeship": {
+        "file": "spaceship/orange-ship.svg",
+        "label": "Orange ship"
+      },
+      "saucer": {
+        "file": "spaceship/saucer.svg",
+        "label": "Saucer"
+      },
+      "spacerover": {
+        "file": "spaceship/spacerover.svg",
+        "label": "Spacerover"
+      },
+      "spaceshuttle": {
+        "file": "spaceship/spaceshuttle.svg",
+        "label": "Spaceshuttle"
       }
     },
     "sports": {
