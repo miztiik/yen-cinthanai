@@ -1,11 +1,14 @@
 // Validator: evaluate the player's placements against the constraints, never the
-// solution (no leak, core-loop.md). Every constraint type ships with a legible glyph
-// (ui-shell.md): eq, neq, ends, adjacent, distance, before. Operands name a
-// (category, value), never an entity, so the same evaluator serves grid + seating.
-// Anchor value i lives in entity i, so position is just that ordinal. Win = every
-// fillable slot filled, zero violations, all constraints satisfied. See schemas.md.
+// solution (no leak, core-loop.md). Positional types (eq, neq, ends, adjacent, distance,
+// before) plus the story-first types (numDiff, threshold, oneOf, oneEachOf, ifThen) all
+// resolve here, mirroring the generator's _add_clue semantics (tools/generate.py) so a
+// full correct board wins. Operands name a (category, value), never an entity, so the same
+// evaluator serves grid + seating. Anchor value i lives in entity i, so position is just
+// that ordinal. Each clue is satisfy / violate / unknown - unknown when too few cells are
+// placed to decide. Win = every fillable slot filled, zero violations, all satisfied. See
+// docs/architecture/contracts/schemas.md, docs/concepts/difficulty-and-scoring.md.
 
-import type { PuzzleManifest, Constraint, AttributeCategory } from "../contracts/manifest";
+import type { PuzzleManifest, Constraint, AttributeCategory, Operand } from "../contracts/manifest";
 import type { BoardModel } from "./board";
 import type { Placements } from "../contracts/save";
 
@@ -47,6 +50,56 @@ function span(b: BoardModel, a: string, c: string): number {
   return b.wrap ? Math.min(d, n - d) : d;
 }
 
+// --- story-first clue helpers (mirror tools/generate.py _add_clue) ---------------
+
+/** The entity an anchor value names (identity: value i -> entity i), or null if unknown. */
+function anchorEntity(b: BoardModel, anchor: AttributeCategory, value: string): string | null {
+  const i = anchor.values.findIndex((v) => v.id === value);
+  return i >= 0 ? b.entities[i] : null;
+}
+
+/** The value id currently at (entity, cat): the anchor's fixed identity value, or a placed
+ *  token, or undefined when that cell is still empty. */
+function valueAt(b: BoardModel, anchor: AttributeCategory, place: Placements, entity: string, cat: string): string | undefined {
+  if (cat === anchor.id) {
+    const i = b.entities.indexOf(entity);
+    return i >= 0 ? anchor.values[i]?.id : undefined;
+  }
+  return place[entity]?.[cat];
+}
+
+/** Tri-state of "entity holds value in cat" read from the CURRENT board: yes, no, or maybe
+ *  (the cell is unplaced, so it is not yet decidable). Bijective cats hold one value, so a
+ *  placed-but-different value is a definite no. */
+type Tri = "yes" | "no" | "maybe";
+function fact(b: BoardModel, anchor: AttributeCategory, place: Placements, entity: string, cat: string, value: string): Tri {
+  const cur = valueAt(b, anchor, place, entity, cat);
+  if (cur === undefined) return "maybe";
+  return cur === value ? "yes" : "no";
+}
+function andTri(a: Tri, c: Tri): Tri {
+  if (a === "no" || c === "no") return "no";
+  return a === "yes" && c === "yes" ? "yes" : "maybe";
+}
+function orTri(a: Tri, c: Tri): Tri {
+  if (a === "yes" || c === "yes") return "yes";
+  return a === "no" && c === "no" ? "no" : "maybe";
+}
+function triState(t: Tri): ClueState {
+  return t === "yes" ? "satisfy" : t === "no" ? "violate" : "unknown";
+}
+
+/** Magnitude of the numeric category at the entity an operand names, or null when that
+ *  entity has no numeric token placed yet (so the comparison is not decidable). */
+function magAt(b: BoardModel, anchor: AttributeCategory, place: Placements, numericCat: string, o: Operand): number | null {
+  const e = holder(b, anchor, place, o.cat, o.value);
+  if (e === null) return null;
+  const vid = place[e]?.[numericCat];
+  if (vid === undefined) return null;
+  const v = b.values[numericCat]?.find((x) => x.id === vid);
+  return v?.magnitude ?? null;
+}
+
 function evalConstraint(b: BoardModel, anchor: AttributeCategory, place: Placements, k: Constraint): ClueState {
   if (k.type === "eq" || k.type === "neq") {
     const sa = new Set(holders(b, anchor, place, k.operands[0].cat, k.operands[0].value));
@@ -54,6 +107,53 @@ function evalConstraint(b: BoardModel, anchor: AttributeCategory, place: Placeme
     if (sa.size === 0 || sb.length === 0) return "unknown";
     const overlap = sb.some((e) => sa.has(e));
     return (k.type === "eq" ? overlap : !overlap) ? "satisfy" : "violate";
+  }
+  // Numeric: compare magnitudes of the numeric category at the operands' entities.
+  if (k.type === "numDiff") {
+    const nc = String(k.params.numericCat);
+    const ma = magAt(b, anchor, place, nc, k.operands[0]);
+    const mb = magAt(b, anchor, place, nc, k.operands[1]);
+    if (ma === null || mb === null) return "unknown";
+    const delta = Number(k.params.delta);
+    const ok = k.params.dir === "greater" ? ma === mb + delta : Math.abs(ma - mb) === delta;
+    return ok ? "satisfy" : "violate";
+  }
+  if (k.type === "threshold") {
+    const nc = String(k.params.numericCat);
+    const ma = magAt(b, anchor, place, nc, k.operands[0]);
+    if (ma === null) return "unknown";
+    const bound = Number(k.params.bound);
+    const ok = k.params.dir === "atmost" ? ma <= bound : ma >= bound;
+    return ok ? "satisfy" : "violate";
+  }
+  // Compound: the first operand is an anchor value (its entity is always known); the rest
+  // name (cat, value) facts at those entities.
+  if (k.type === "oneOf") {
+    const ea = anchorEntity(b, anchor, k.operands[0].value);
+    if (ea === null) return "unknown";
+    const fx = fact(b, anchor, place, ea, k.operands[1].cat, k.operands[1].value);
+    const fy = fact(b, anchor, place, ea, k.operands[2].cat, k.operands[2].value);
+    return triState(orTri(fx, fy));
+  }
+  if (k.type === "oneEachOf") {
+    const ex = anchorEntity(b, anchor, k.operands[0].value);
+    const ey = anchorEntity(b, anchor, k.operands[1].value);
+    if (ex === null || ey === null) return "unknown";
+    const a2 = k.operands[2];
+    const b2 = k.operands[3];
+    const branch1 = andTri(fact(b, anchor, place, ex, a2.cat, a2.value), fact(b, anchor, place, ey, b2.cat, b2.value));
+    const branch2 = andTri(fact(b, anchor, place, ey, a2.cat, a2.value), fact(b, anchor, place, ex, b2.cat, b2.value));
+    return triState(orTri(branch1, branch2));
+  }
+  if (k.type === "ifThen") {
+    const ea = anchorEntity(b, anchor, k.operands[0].value);
+    const eb = anchorEntity(b, anchor, k.operands[2].value);
+    if (ea === null || eb === null) return "unknown";
+    const bp = fact(b, anchor, place, ea, k.operands[1].cat, k.operands[1].value);
+    const bq = fact(b, anchor, place, eb, k.operands[3].cat, k.operands[3].value);
+    // Material implication (a holds P) => not (b holds Q): violated only when BOTH hold.
+    const conj = andTri(bp, bq);
+    return conj === "yes" ? "violate" : conj === "no" ? "satisfy" : "unknown";
   }
   const ents = k.operands.map((o) => holder(b, anchor, place, o.cat, o.value));
   if (ents.some((e) => e === null)) return "unknown";

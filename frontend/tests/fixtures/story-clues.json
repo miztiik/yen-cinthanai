@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "puzzleId": "2026-01-01",
+  "tier": "standard",
+  "shapeId": "grid",
+  "templateRev": 1,
+  "entities": ["e0", "e1", "e2", "e3"],
+  "categories": {
+    "n": 3,
+    "list": [
+      {
+        "id": "name",
+        "label": "Name",
+        "ordinal": false,
+        "cardinality": "bijective",
+        "kind": "nominal",
+        "anchor": true,
+        "values": [
+          { "id": "n0", "glyph": "", "label": "N0" },
+          { "id": "n1", "glyph": "", "label": "N1" },
+          { "id": "n2", "glyph": "", "label": "N2" },
+          { "id": "n3", "glyph": "", "label": "N3" }
+        ]
+      },
+      {
+        "id": "craft",
+        "label": "Craft",
+        "ordinal": false,
+        "cardinality": "bijective",
+        "kind": "nominal",
+        "values": [
+          { "id": "c_a", "glyph": "", "label": "Alpha" },
+          { "id": "c_b", "glyph": "", "label": "Bravo" },
+          { "id": "c_c", "glyph": "", "label": "Charlie" },
+          { "id": "c_d", "glyph": "", "label": "Delta" }
+        ]
+      },
+      {
+        "id": "price",
+        "label": "Price",
+        "ordinal": true,
+        "cardinality": "bijective",
+        "kind": "numeric",
+        "unit": "dollars",
+        "values": [
+          { "id": "p5", "glyph": "", "label": "5", "magnitude": 5 },
+          { "id": "p10", "glyph": "", "label": "10", "magnitude": 10 },
+          { "id": "p20", "glyph": "", "label": "20", "magnitude": 20 },
+          { "id": "p30", "glyph": "", "label": "30", "magnitude": 30 }
+        ]
+      }
+    ]
+  },
+  "constraints": [
+    {
+      "id": "nd_g",
+      "type": "numDiff",
+      "operands": [{ "cat": "name", "value": "n2" }, { "cat": "name", "value": "n1" }],
+      "params": { "delta": 10, "dir": "greater", "numericCat": "price" },
+      "clueText": "N2 charged 10 dollars more than N1.",
+      "renderHint": "numDiff"
+    },
+    {
+      "id": "nd_u",
+      "type": "numDiff",
+      "operands": [{ "cat": "name", "value": "n0" }, { "cat": "name", "value": "n1" }],
+      "params": { "delta": 5, "numericCat": "price" },
+      "clueText": "N0 and N1 are 5 dollars apart.",
+      "renderHint": "numDiff"
+    },
+    {
+      "id": "th_al",
+      "type": "threshold",
+      "operands": [{ "cat": "name", "value": "n2" }],
+      "params": { "bound": 20, "dir": "atleast", "numericCat": "price" },
+      "clueText": "N2 charged at least 20 dollars.",
+      "renderHint": "threshold"
+    },
+    {
+      "id": "th_am",
+      "type": "threshold",
+      "operands": [{ "cat": "name", "value": "n0" }],
+      "params": { "bound": 10, "dir": "atmost", "numericCat": "price" },
+      "clueText": "N0 charged at most 10 dollars.",
+      "renderHint": "threshold"
+    },
+    {
+      "id": "one_of",
+      "type": "oneOf",
+      "operands": [
+        { "cat": "name", "value": "n0" },
+        { "cat": "craft", "value": "c_a" },
+        { "cat": "craft", "value": "c_b" }
+      ],
+      "params": {},
+      "clueText": "N0 made Alpha or Bravo.",
+      "renderHint": "oneOf"
+    },
+    {
+      "id": "one_each",
+      "type": "oneEachOf",
+      "operands": [
+        { "cat": "name", "value": "n0" },
+        { "cat": "name", "value": "n1" },
+        { "cat": "craft", "value": "c_a" },
+        { "cat": "craft", "value": "c_b" }
+      ],
+      "params": {},
+      "clueText": "Of N0 and N1, one made Alpha and the other Bravo.",
+      "renderHint": "oneEachOf"
+    },
+    {
+      "id": "if_then",
+      "type": "ifThen",
+      "operands": [
+        { "cat": "name", "value": "n0" },
+        { "cat": "craft", "value": "c_a" },
+        { "cat": "name", "value": "n1" },
+        { "cat": "craft", "value": "c_c" }
+      ],
+      "params": {},
+      "clueText": "If N0 made Alpha then N1 did not make Charlie.",
+      "renderHint": "ifThen"
+    }
+  ],
+  "solution": {
+    "e0": { "name": "n0", "craft": "c_a", "price": "p5" },
+    "e1": { "name": "n1", "craft": "c_b", "price": "p10" },
+    "e2": { "name": "n2", "craft": "c_c", "price": "p20" },
+    "e3": { "name": "n3", "craft": "c_d", "price": "p30" }
+  },
+  "hintTrace": [],
+  "scenarioId": "unit-story",
+  "story": "A tiny worked story used only by the validator unit tests.",
+  "subjectNoun": "name",
+  "variant": 1
+}

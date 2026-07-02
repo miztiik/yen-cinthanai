@@ -14,8 +14,9 @@
   import ResultCard from "./ResultCard.svelte";
   import { route, homeHref, navigate } from "../lib/router.svelte";
   import { loadBank, loadManifest, pickEntry } from "../lib/loader";
-  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, gridCellPx, gridUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type GridCopy } from "../lib/config";
+  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, gridCellPx, gridUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, ANSWER_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type GridCopy } from "../lib/config";
   import { gridBlocks, gridCategories } from "../lib/grid";
+  import { answerGrid } from "../lib/answer";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { isHero } from "../lib/scoring";
   import { buildShareCard, shareText, type ShareCopy } from "../contracts/share";
@@ -225,6 +226,9 @@
         streak={loadSave().streak.count}
         shapeGlyph={shape?.glyph ?? "abstract.grid"}
         {share}
+        answer={answerGrid(game.board, game.m.solution)}
+        answerHeading={copy.answer?.heading ?? ANSWER_COPY_FALLBACK.heading}
+        answerCaption={copy.answer?.caption ?? ANSWER_COPY_FALLBACK.caption}
         onhome={() => navigate("")}
         onstats={() => navigate("stats")}
       />
