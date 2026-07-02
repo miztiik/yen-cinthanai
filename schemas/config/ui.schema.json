@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "config/ui.schema.json",
+  "title": "UiConfig",
+  "description": "config/ui.json - UI geometry knobs (baked into the bundle): puck sizes, snap radii/easing, grid cell sizes, clue auto-dim feedback list. Human-edited (CLAUDE.md #6). puck + snap are the contract blocks the frontend ui test pins; clue + grid are additive. Top-level additionalProperties is open because UI blocks are added per feature.",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-07-02",
+      "change": "Initial machine-checkable formalization of config/ui.json: puck{default,small,medium,large{diameter,glyph}}, snap{ease,radius_factor}, plus additive clue{autoDimFeedback[]} and grid{cell,snap} blocks.",
+      "why": "UI geometry is baked and shipped, so a malformed puck diameter or snap radius must fail fast (CLAUDE.md #6); feature rows add UI blocks, so extra keys stay tolerant."
+    }
+  ],
+  "$defs": {
+    "puckSizeSpec": {
+      "type": "object",
+      "properties": {
+        "diameter": { "type": "integer" },
+        "glyph": { "type": "number" }
+      },
+      "required": ["diameter", "glyph"],
+      "additionalProperties": false
+    },
+    "snapSpec": {
+      "type": "object",
+      "properties": {
+        "ease": { "type": "number" },
+        "radius_factor": { "type": "number" }
+      },
+      "required": ["ease", "radius_factor"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "puck": {
+      "type": "object",
+      "properties": {
+        "default": { "type": "string", "enum": ["small", "medium", "large"] },
+        "small": { "$ref": "#/$defs/puckSizeSpec" },
+        "medium": { "$ref": "#/$defs/puckSizeSpec" },
+        "large": { "$ref": "#/$defs/puckSizeSpec" }
+      },
+      "required": ["default", "small", "medium", "large"],
+      "additionalProperties": false
+    },
+    "snap": { "$ref": "#/$defs/snapSpec" },
+    "clue": {
+      "type": "object",
+      "properties": {
+        "autoDimFeedback": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "grid": {
+      "type": "object",
+      "properties": {
+        "cell": {
+          "type": "object",
+          "additionalProperties": { "type": "integer" }
+        },
+        "snap": { "$ref": "#/$defs/snapSpec" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "required": ["puck", "snap"],
+  "additionalProperties": true
+}

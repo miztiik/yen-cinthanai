@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "save.schema.json",
+  "title": "Save",
+  "description": "The only migrating persisted surface (localStorage). Mirrors tools/models.py Save and frontend/src/contracts/save.ts. Tolerant of the read path: a pre-versioned v0 save (no schemaVersion, key == date) AND a v1 save both validate; settings.puckSize and DayState.notes are additive/optional so older saves still load. schemaVersion stays 1 in this row.",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-06-29",
+      "change": "Initial Save v1: schemaVersion, days{dayKey -> DayState{date,tier,shapeId,status,placements,attempts,solveMs,hintsUsed,stars}}, hero{bestMs,date}, streak{count,lastDate,skipsLeft}, settings{sound,volume,theme,palette,reducedMotion}. dayKey = 'date|tier|shapeId'; older date-only saves (v0, no schemaVersion) normalize on read.",
+      "why": "The one installed-player surface (CLAUDE.md sec 11); the value fields are the source of truth so the incoming key is never trusted and v0 saves migrate transparently."
+    },
+    {
+      "version": 1,
+      "date": "2026-07-01",
+      "change": "Additive settings.puckSize (small|medium|large; schemaVersion unchanged). Absent in older saves; defaults to 'medium' on read via the settings spread-merge.",
+      "why": "A puck-size player setting scaled from config/ui.json; backward-compatible so no version bump and old saves keep loading."
+    },
+    {
+      "version": 1,
+      "date": "2026-07-02",
+      "change": "Additive DayState.notes{manualX,scratchTicks,struckClues} (cross-out grid + clue-strip bookkeeping; schemaVersion unchanged). Omitted when empty.",
+      "why": "Row 7 grid bookkeeping; endpoint-keyed scratch state is OPTIONAL so saves without it still validate and load."
+    }
+  ],
+  "$defs": {
+    "tier": { "type": "string", "enum": ["easy", "standard", "sharp", "expert"] },
+    "shapeId": { "type": "string", "enum": ["grid", "seating-row", "round-table"] },
+    "dayStatus": { "type": "string", "enum": ["unplayed", "playing", "won", "lost"] },
+    "puckSize": { "type": "string", "enum": ["small", "medium", "large"] },
+    "stringList": { "type": "array", "items": { "type": "string" } },
+    "dayNotes": {
+      "type": "object",
+      "properties": {
+        "manualX": { "$ref": "#/$defs/stringList" },
+        "scratchTicks": { "$ref": "#/$defs/stringList" },
+        "struckClues": { "$ref": "#/$defs/stringList" }
+      },
+      "additionalProperties": false
+    },
+    "dayState": {
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "tier": { "$ref": "#/$defs/tier" },
+        "shapeId": { "$ref": "#/$defs/shapeId" },
+        "status": { "$ref": "#/$defs/dayStatus" },
+        "placements": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          }
+        },
+        "attempts": { "type": "integer" },
+        "solveMs": { "type": "integer" },
+        "hintsUsed": { "type": "integer" },
+        "stars": { "type": "integer" },
+        "notes": { "$ref": "#/$defs/dayNotes" }
+      },
+      "required": [
+        "date",
+        "tier",
+        "shapeId",
+        "status",
+        "placements",
+        "attempts",
+        "solveMs",
+        "hintsUsed",
+        "stars"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schemaVersion": { "type": "integer", "minimum": 0 },
+    "days": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/dayState" }
+    },
+    "hero": {
+      "type": "object",
+      "properties": {
+        "bestMs": { "type": "integer" },
+        "date": { "type": "string" }
+      },
+      "required": ["bestMs", "date"],
+      "additionalProperties": false
+    },
+    "streak": {
+      "type": "object",
+      "properties": {
+        "count": { "type": "integer" },
+        "lastDate": { "type": "string" },
+        "skipsLeft": { "type": "integer" }
+      },
+      "required": ["count", "lastDate", "skipsLeft"],
+      "additionalProperties": false
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "sound": { "type": "boolean" },
+        "volume": { "type": "integer" },
+        "theme": { "type": "string" },
+        "palette": { "type": "string" },
+        "reducedMotion": { "type": "boolean" },
+        "puckSize": { "$ref": "#/$defs/puckSize" }
+      },
+      "required": ["sound", "volume", "theme", "palette", "reducedMotion"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["days", "hero", "streak", "settings"],
+  "additionalProperties": false
+}

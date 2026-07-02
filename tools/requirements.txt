@@ -2,3 +2,6 @@
 ortools==9.15.6755
 pydantic==2.11
 pytest==8.3
+# Build-time only (NOT shipped, 0 bundle cost). Beneficiary: the schema compliance
+# gate tools/test_schemas.py validates every config + persisted JSON against schemas/.
+jsonschema==4.26

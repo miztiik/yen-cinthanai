@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "categories.schema.json",
+  "title": "CategoriesFile",
+  "description": "The human-authored category value pools = the DIMENSION SOURCE at datasets/categories.json. Build-time authoring input consumed by the generator. Mirrors tools/corpus.py CategoriesFile. An optional glyphPack makes a category glyph-backed (each value id must be a slug in that pack); absent glyphPack = text-only.",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-07-01",
+      "change": "Initial CategoriesFile v1: schemaVersion, categories{ <id> -> CategoryPool{label,kind(nominal|ordinal|numeric),values[CategoryValue{id,label,magnitude?}],glyphPack?,unit?,note?} }, note?.",
+      "why": "Story-first pivot needs an original, versioned dimension source the generator date-seeds a pick from; typed before logic (CLAUDE.md sec 11)."
+    }
+  ],
+  "$defs": {
+    "kind": { "type": "string", "enum": ["nominal", "ordinal", "numeric"] },
+    "categoryValue": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "magnitude": { "type": "integer" }
+      },
+      "required": ["id", "label"],
+      "additionalProperties": false
+    },
+    "categoryPool": {
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "kind": { "$ref": "#/$defs/kind" },
+        "values": { "type": "array", "items": { "$ref": "#/$defs/categoryValue" } },
+        "glyphPack": { "type": "string" },
+        "unit": { "type": "string" },
+        "note": { "type": "string" }
+      },
+      "required": ["label", "kind", "values"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "schemaVersion": { "type": "integer" },
+    "categories": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/categoryPool" }
+    },
+    "note": { "type": "string" }
+  },
+  "required": ["schemaVersion", "categories"],
+  "additionalProperties": false
+}

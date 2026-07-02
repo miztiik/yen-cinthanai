@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "config/shapes.schema.json",
+  "title": "ShapesConfig",
+  "description": "config/shapes.json - the puzzle layout catalog: one entry per shapeId (grid, seating-row, round-table) naming its glyph, entity ceiling, ordinal-axis flag, allowed slot rules, and topology. Human-edited (CLAUDE.md #6).",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-07-02",
+      "change": "Initial machine-checkable formalization of config/shapes.json: each shapeId -> {glyph,max_entities,ordinal_axis,slot_rules[],topology,v}.",
+      "why": "The layout catalog must be schema-validated so a shape with a bad topology or missing slot_rules fails fast at build (CLAUDE.md #6)."
+    }
+  ],
+  "$defs": {
+    "shapeEntry": {
+      "type": "object",
+      "properties": {
+        "glyph": { "type": "string" },
+        "max_entities": { "type": "integer" },
+        "ordinal_axis": { "type": "boolean" },
+        "slot_rules": { "type": "array", "items": { "type": "string" } },
+        "topology": { "type": "string", "enum": ["matrix", "circular", "linear"] },
+        "v": { "type": "integer" }
+      },
+      "required": ["glyph", "max_entities", "ordinal_axis", "slot_rules", "topology", "v"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "grid": { "$ref": "#/$defs/shapeEntry" },
+    "seating-row": { "$ref": "#/$defs/shapeEntry" },
+    "round-table": { "$ref": "#/$defs/shapeEntry" }
+  },
+  "required": ["grid", "seating-row", "round-table"],
+  "additionalProperties": false
+}

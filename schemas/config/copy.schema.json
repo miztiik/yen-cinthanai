@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "config/copy.schema.json",
+  "title": "CopyConfig",
+  "description": "config/copy.json - all user-facing copy bags (baked into the bundle). Human-edited (CLAUDE.md #6). success/encourage/hero/share/credits are the contract blocks the frontend copy test pins; clues + grid copy are additive UI blocks. Top-level additionalProperties is open because copy blocks are added per feature.",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-07-02",
+      "change": "Initial machine-checkable formalization of config/copy.json: success[], encourage[], hero[] (short lines), share{title,line,streak}, credits{intro,license}, plus additive clues{} and grid{} UI copy blocks.",
+      "why": "Copy is baked and shipped, so a missing share template or credits block must fail fast (CLAUDE.md #6); feature rows add copy blocks, so extra keys stay tolerant."
+    }
+  ],
+  "$defs": {
+    "lines": { "type": "array", "items": { "type": "string" } },
+    "stringMap": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "properties": {
+    "success": { "$ref": "#/$defs/lines" },
+    "encourage": { "$ref": "#/$defs/lines" },
+    "hero": { "$ref": "#/$defs/lines" },
+    "share": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "line": { "type": "string" },
+        "streak": { "type": "string" }
+      },
+      "required": ["title", "line", "streak"],
+      "additionalProperties": false
+    },
+    "credits": {
+      "type": "object",
+      "properties": {
+        "intro": { "type": "string" },
+        "license": { "type": "string" }
+      },
+      "required": ["intro", "license"],
+      "additionalProperties": false
+    },
+    "clues": { "$ref": "#/$defs/stringMap" },
+    "grid": {
+      "type": "object",
+      "properties": {
+        "state": { "$ref": "#/$defs/stringMap" }
+      },
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "required": ["success", "encourage", "hero", "share", "credits"],
+  "additionalProperties": true
+}

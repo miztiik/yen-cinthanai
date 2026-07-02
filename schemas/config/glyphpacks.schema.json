@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "config/glyphpacks.schema.json",
+  "title": "GlyphPacksConfig",
+  "description": "config/glyphpacks.json - human-authored labels for glyph pack values (labels only; the file/slug wiring is the generated GlyphManifest at frontend/public/assets/glyphs/index.json). Each pack maps a slug to its display label. Packs and slugs are open-ended (drop a new pack folder + a label row). Human-edited (CLAUDE.md #6).",
+  "type": "object",
+  "evolution": [
+    {
+      "version": 1,
+      "date": "2026-07-02",
+      "change": "Initial machine-checkable formalization of config/glyphpacks.json: { <pack> -> { <slug> -> { label } } }.",
+      "why": "The pack label source must be schema-validated so a malformed or label-less entry fails fast (CLAUDE.md #6); packs/slugs stay open so a new collection needs only a label row."
+    }
+  ],
+  "$defs": {
+    "glyphLabel": {
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" }
+      },
+      "required": ["label"],
+      "additionalProperties": false
+    },
+    "pack": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/glyphLabel" }
+    }
+  },
+  "additionalProperties": { "$ref": "#/$defs/pack" }
+}
