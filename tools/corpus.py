@@ -11,6 +11,7 @@ datasets/templates/weekend-market.json.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 from typing import Literal
@@ -122,3 +123,24 @@ def load_scenario_template(
 ) -> ScenarioTemplate:
     """Parse + validate a scenario template. Raises on malformed input."""
     return ScenarioTemplate.model_validate(_read_json(path))
+
+
+# --- scenario catalog (per-date selection) --------------------------------------
+
+
+def list_scenario_paths(templates_dir: Path = _DATASETS_DIR / "templates") -> list[Path]:
+    """Every authored scenario template, sorted by filename - the stable catalog order the
+    per-date picker indexes into. Filename == scenario id (weekend-market.json -> weekend-market)."""
+    return sorted(Path(templates_dir).glob("*.json"))
+
+
+def scenario_path_for_date(date: str, templates_dir: Path = _DATASETS_DIR / "templates") -> Path:
+    """Pick one scenario for a date deterministically from the sorted catalog: a stable hash of
+    the date modulo the catalog size. Consecutive dates therefore vary while the same date always
+    resolves to the same scenario, so all four tiers of a date share one scenario (sliced per
+    tier) and a rebuild is byte-identical. No hardcoding - the catalog is whatever is on disk."""
+    paths = list_scenario_paths(templates_dir)
+    if not paths:
+        raise FileNotFoundError(f"no scenario templates under {Path(templates_dir).as_posix()}")
+    idx = int(hashlib.sha256(date.encode("ascii")).hexdigest()[:8], 16) % len(paths)
+    return paths[idx]

@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "food-truck-festival",
+  "title": "The Food Truck Festival",
+  "subjectNoun": "cook",
+  "subjectCategory": "vendor",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content). Witty riverside food-truck rally. Anchor = vendor (the cook). dish -> food glyph pack, drink -> drinks glyph pack (non-alcoholic, wholesome); price is the numeric axis (dollars); pitch is a text-only stall label. narrativeTemplate is setting flavor only; the renderer appends the premise + match-line from the categories present at each tier. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "The riverside car park has been taken over for the day by {n} rival food trucks, and {judge} - the festival organiser who runs the whole rally off a single battered clipboard - is trying to reconstruct the running order after a gust of wind scattered the sign-up sheets across the {surface}.",
+  "flavorPools": {
+    "judge": ["Marisol", "Deacon", "Yusuf", "Winnie"],
+    "surface": ["gravel", "picnic lawn", "boardwalk"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Nadia'; 'attribute' -> 'the taco cook' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "vendor",
+      "label": "Cook",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "nadia", "label": "Nadia" },
+        { "id": "theo", "label": "Theo" },
+        { "id": "rosa", "label": "Rosa" },
+        { "id": "omar", "label": "Omar" },
+        { "id": "belle", "label": "Belle" },
+        { "id": "leon", "label": "Leon" }
+      ]
+    },
+    {
+      "id": "dish",
+      "label": "Dish",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "pizza", "label": "Pizza", "phrase": "fired up the pizza", "refPhrase": "pizza cook" },
+        { "id": "burger", "label": "Burger", "phrase": "flipped the burgers", "refPhrase": "burger flipper" },
+        { "id": "sushi", "label": "Sushi", "phrase": "rolled the sushi", "refPhrase": "sushi roller" },
+        { "id": "fries", "label": "Fries", "phrase": "salted the fries", "refPhrase": "fries stall" },
+        { "id": "toast", "label": "Toast", "phrase": "griddled the toast", "refPhrase": "toast stall" },
+        { "id": "seafood", "label": "Seafood", "phrase": "grilled the seafood", "refPhrase": "seafood griller" }
+      ]
+    },
+    {
+      "id": "price",
+      "label": "Price",
+      "kind": "numeric",
+      "unit": "dollars",
+      "valuePool": [
+        { "id": "p6", "label": "$6", "magnitude": 6, "phrase": "charged 6 dollars a plate" },
+        { "id": "p7", "label": "$7", "magnitude": 7, "phrase": "charged 7 dollars a plate" },
+        { "id": "p9", "label": "$9", "magnitude": 9, "phrase": "charged 9 dollars a plate" },
+        { "id": "p11", "label": "$11", "magnitude": 11, "phrase": "charged 11 dollars a plate" },
+        { "id": "p13", "label": "$13", "magnitude": 13, "phrase": "charged 13 dollars a plate" },
+        { "id": "p16", "label": "$16", "magnitude": 16, "phrase": "charged 16 dollars a plate" }
+      ]
+    },
+    {
+      "id": "drink",
+      "label": "Drink",
+      "kind": "nominal",
+      "glyphPack": "drinks",
+      "valuePool": [
+        { "id": "coffee", "label": "Coffee", "phrase": "poured the coffee", "refPhrase": "coffee pourer" },
+        { "id": "juice", "label": "Juice", "phrase": "pressed the juice", "refPhrase": "juice presser" },
+        { "id": "soda", "label": "Soda", "phrase": "iced the soda", "refPhrase": "soda stall" },
+        { "id": "tea", "label": "Tea", "phrase": "brewed the tea", "refPhrase": "tea brewer" },
+        { "id": "milk", "label": "Milkshake", "phrase": "blended the milkshakes", "refPhrase": "milkshake blender" },
+        { "id": "water", "label": "Water", "phrase": "chilled the water", "refPhrase": "water stall" }
+      ]
+    },
+    {
+      "id": "pitch",
+      "label": "Pitch",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "pitch1", "label": "Pitch 1", "phrase": "parked at pitch 1", "refPhrase": "pitch-1 truck" },
+        { "id": "pitch2", "label": "Pitch 2", "phrase": "parked at pitch 2", "refPhrase": "pitch-2 truck" },
+        { "id": "pitch3", "label": "Pitch 3", "phrase": "parked at pitch 3", "refPhrase": "pitch-3 truck" },
+        { "id": "pitch4", "label": "Pitch 4", "phrase": "parked at pitch 4", "refPhrase": "pitch-4 truck" },
+        { "id": "pitch5", "label": "Pitch 5", "phrase": "parked at pitch 5", "refPhrase": "pitch-5 truck" },
+        { "id": "pitch6", "label": "Pitch 6", "phrase": "parked at pitch 6", "refPhrase": "pitch-6 truck" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The truck that {b_phrase} belonged to {a_ref}.",
+        "{a_ref} was the one who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one with the {b_label}.",
+        "The {b_label} was not {a_ref}'s.",
+        "{a_ref} did not end up with the {b_label}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "price",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} charged {delta} dollars more a plate than {b_ref}.",
+        "{a_ref}'s plate cost {delta} dollars more than {b_ref}'s."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "price",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} charged at least {bound} dollars a plate.",
+        "{a_ref} did not sell a plate for under {bound} dollars."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} could not decide between the {x_label} and the {y_label}, and ran with just one.",
+        "{a_ref} went with either the {x_label} or the {y_label}, not both."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

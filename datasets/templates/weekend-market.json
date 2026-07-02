@@ -7,8 +7,8 @@
   "ordinalAxis": false,
   "minTier": "easy",
   "maxTier": "expert",
-  "note": "SAMPLE authoring template (original content, not transcribed from any source). The generator picks N values per category, samples a unique solution, emits clues from clueTemplates honoring the tier's indirection + compound gates, verifies uniqueness (is_unique), then renders story + numbered clues. Rich COMPOUND puzzles are GENERATED and verified-unique, never hand-authored - see plan sec 19.",
-  "narrativeTemplate": "Every Saturday, {n} friends run neighbouring stalls at the riverside craft market, watched over by old {mentor}, who has kept the market ledger for forty years and still records every sale in {ink} ink. This week each friend brought a different handmade craft and settled on a different price. {mentor} has misplaced the ledger page - match every friend to the craft they made and the price they charged.",
+  "note": "SAMPLE authoring template (original content, not transcribed from any source). The narrativeTemplate is SETTING FLAVOR ONLY - it never names a category, so the renderer can append a premise + match-line built from the categories actually present at a tier (easy no longer says 'price'). The generator picks N values per category, samples a unique solution, emits clues from clueTemplates honoring the tier's indirection + compound gates, verifies uniqueness (is_unique), then renders story + numbered clues. Rich COMPOUND puzzles are GENERATED and verified-unique, never hand-authored - see plan sec 19.",
+  "narrativeTemplate": "Every Saturday, {n} friends run neighbouring stalls at the riverside market, watched over by old {mentor}, who has kept the market ledger for forty years and still records every sale in {ink} ink. This morning {mentor} misplaced the ledger page, and the stalls all need sorting out before the gates open.",
   "flavorPools": {
     "mentor": ["Mr. Pemberton", "Mrs. Alvarez", "Tomas", "Miss Okafor"],
     "ink": ["green", "violet", "sepia"]

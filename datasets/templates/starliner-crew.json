@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "starliner-crew",
+  "title": "The Starliner Roster",
+  "subjectNoun": "crew member",
+  "subjectCategory": "crew",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original, invented sci-fi setting). Anchor = crew member. role -> occupation glyph pack (a PARTIAL reuse: the ids are real occupation-pack slugs standing in for crew roles, e.g. astronomer -> Navigator); shift is the numeric axis (the watch stood); deck and cargo are TEXT-ONLY (no sci-fi glyph pack exists yet - see docs/concepts/glyph-roadmap.md). Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "Three days out from the {port} relay, the long-haul starliner {ship} runs on {n} rotating crew, and overnight the duty computer scrambled the roster - so the quartermaster is quietly piecing it back together from memory before anyone up top notices.",
+  "flavorPools": {
+    "ship": ["Meridian", "Halcyon", "Far Lantern", "Blue Ibis"],
+    "port": ["Ceres", "Tethys", "Kestrel"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Vega'; 'attribute' -> 'the navigator' (the value's refPhrase). Gated up by tier.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "crew",
+      "label": "Crew",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "vega", "label": "Vega" },
+        { "id": "juno", "label": "Juno" },
+        { "id": "rhea", "label": "Rhea" },
+        { "id": "kato", "label": "Kato" },
+        { "id": "mira", "label": "Mira" },
+        { "id": "zane", "label": "Zane" }
+      ]
+    },
+    {
+      "id": "role",
+      "label": "Role",
+      "kind": "nominal",
+      "glyphPack": "occupation",
+      "valuePool": [
+        { "id": "captain", "label": "Captain", "phrase": "held the captain's chair", "refPhrase": "captain" },
+        { "id": "engineer", "label": "Engineer", "phrase": "ran the engine room", "refPhrase": "engineer" },
+        { "id": "astronomer", "label": "Navigator", "phrase": "plotted the jumps", "refPhrase": "navigator" },
+        { "id": "surgeon", "label": "Medic", "phrase": "staffed the sick bay", "refPhrase": "medic" },
+        { "id": "biologist", "label": "Botanist", "phrase": "kept the seed vault", "refPhrase": "botanist" },
+        { "id": "scientist", "label": "Science Officer", "phrase": "logged the sensor readings", "refPhrase": "science officer" }
+      ]
+    },
+    {
+      "id": "shift",
+      "label": "Shift",
+      "kind": "numeric",
+      "unit": "watch",
+      "valuePool": [
+        { "id": "watch1", "label": "Watch 1", "magnitude": 1, "phrase": "stood watch 1" },
+        { "id": "watch2", "label": "Watch 2", "magnitude": 2, "phrase": "stood watch 2" },
+        { "id": "watch3", "label": "Watch 3", "magnitude": 3, "phrase": "stood watch 3" },
+        { "id": "watch4", "label": "Watch 4", "magnitude": 4, "phrase": "stood watch 4" },
+        { "id": "watch5", "label": "Watch 5", "magnitude": 5, "phrase": "stood watch 5" },
+        { "id": "watch6", "label": "Watch 6", "magnitude": 6, "phrase": "stood watch 6" }
+      ]
+    },
+    {
+      "id": "deck",
+      "label": "Deck",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "fore", "label": "Fore Deck", "phrase": "was stationed fore", "refPhrase": "fore-deck crew" },
+        { "id": "aft", "label": "Aft Deck", "phrase": "was stationed aft", "refPhrase": "aft-deck crew" },
+        { "id": "core", "label": "Core Deck", "phrase": "was stationed at the core", "refPhrase": "core-deck crew" },
+        { "id": "ring", "label": "Ring Deck", "phrase": "was stationed on the ring", "refPhrase": "ring-deck crew" },
+        { "id": "dorsal", "label": "Dorsal Deck", "phrase": "was stationed dorsal", "refPhrase": "dorsal-deck crew" },
+        { "id": "keel", "label": "Keel Deck", "phrase": "was stationed on the keel", "refPhrase": "keel-deck crew" }
+      ]
+    },
+    {
+      "id": "cargo",
+      "label": "Cargo",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "ore", "label": "Ore", "phrase": "hauled the ore", "refPhrase": "ore hauler" },
+        { "id": "ice", "label": "Ice", "phrase": "hauled the ice", "refPhrase": "ice hauler" },
+        { "id": "grain", "label": "Grain", "phrase": "hauled the grain", "refPhrase": "grain hauler" },
+        { "id": "alloy", "label": "Alloy", "phrase": "hauled the alloy", "refPhrase": "alloy hauler" },
+        { "id": "relics", "label": "Relics", "phrase": "hauled the relics", "refPhrase": "relic hauler" },
+        { "id": "spores", "label": "Spores", "phrase": "hauled the spores", "refPhrase": "spore hauler" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "The {b_label} was not {a_ref}'s.",
+        "{a_ref} was not the one with the {b_label}.",
+        "{a_ref} did not draw the {b_label}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "shift",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} stood a watch {delta} later than {b_ref}.",
+        "{a_ref}'s watch number was {delta} above {b_ref}'s."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "shift",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} stood watch number {bound} or later.",
+        "{a_ref} took no watch earlier than number {bound}."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down for either the {x_label} or the {y_label}, not both.",
+        "{a_ref} could not be pinned to both the {x_label} and the {y_label} - just one."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

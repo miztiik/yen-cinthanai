@@ -12,6 +12,13 @@ Per-tier dimension budget comes from `config/tiers.json` (`categories`, subject 
 
 The legacy seating-row/round-table positional CP-SAT engine (`generate` -> `to_manifest`, the shape registry, and the ends/adjacent/distance/before/opposite/between clue branches) is RETIRED at v2 - matrix-only (F1): one engine (`generate_story` -> `to_story_manifest`), one skin (`grid`). The daily bot is add-only: an existing dated file is FROZEN (re-hashed, never regenerated) unless `--force`; the v2 contract close reseeded the whole served range with `--force`.
 
+## Scenario catalog (per-date variety + per-tier coherence)
+
+The narrative comes from a CATALOG of authored scenario templates under `datasets/templates/*.json` (weekend-market plus the food-truck-festival / community-garden / starliner-crew batch). Each template is self-contained: `subjectNoun` + anchor `subjectCategory`, five categories (the anchor person first, then four attributes - one of them a `numeric` axis positioned at index <= 2 so the standard 3-category slice still carries it), per-value `phrase`/`refPhrase`, and the full `clueTemplates` set (eq/neq/numDiff/threshold/oneOf/oneEachOf/ifThen). An optional per-category `glyphPack` makes a category glyph-backed (value id == the hyphen-dropped pack slug -> `value.glyph = "<pack>.<id>"`); a category with no `glyphPack` is text-only.
+
+- **Per-date selection** (`corpus.scenario_path_for_date`): a stable hash of the date over the sorted catalog picks ONE scenario per date - `catalog[sha256(date)[:8] % len(catalog)]`. Consecutive dates vary while the same date always resolves to the same scenario, so all four tiers of a date share one scenario (sliced per tier) and a rebuild stays byte-identical. No hardcoding: the catalog is whatever is on disk.
+- **Per-tier narrative coherence** (`translator.render_story`): the template `narrativeTemplate` is SETTING FLAVOR ONLY - it never names a category. The renderer fills the flavor (`{n}` + one date-seeded pick per flavor pool) and then APPENDS a premise + match-line generated from the non-anchor categories actually PRESENT at that tier ("Each cook has a different dish and price. Using the clues, match every cook to their dish and price."). So easy (2 cats) never reads a clue to match a dimension it does not have, and expert (5 cats) lists them all. The reference golden masters under `datasets/**` are pinned to weekend-market via `generate.py --story --scenario weekend-market`.
+
 ## Stages
 
 ```text
@@ -48,4 +55,5 @@ cron `0 0 * * *` + dispatch -> setup-python -> backfill the last 7 days easy/sta
 
 - [../contracts/schemas.md](../contracts/schemas.md) - manifest/bank output.
 - [../../concepts/difficulty-and-scoring.md](../../concepts/difficulty-and-scoring.md) - reject-if-out-of-band.
+- [../../concepts/glyph-roadmap.md](../../concepts/glyph-roadmap.md) - scenario category -> glyph pack map + backfill gaps.
 - [../../how-to/ship-to-github-pages.md](../../how-to/ship-to-github-pages.md) - deploy.
