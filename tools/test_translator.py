@@ -11,13 +11,15 @@ from translator import render_clue, render_story
 
 @dataclass(frozen=True)
 class _Cat:
-    """Minimal stand-in exposing only the attributes render_clue reads."""
+    """Minimal stand-in exposing only the attributes render_clue + render_story read."""
 
     id: str
     value_ids: list[str]
     labels: list[str]
     phrases: list[str] | None = None
     ref_phrases: list[str] | None = None
+    label: str = ""
+    anchor: bool = False
 
 
 @dataclass(frozen=True)
@@ -41,10 +43,11 @@ class _Scenario:
 
 
 CATS = [
-    _Cat("name", ["ana", "ben"], ["Ana", "Ben"]),
+    _Cat("name", ["ana", "ben"], ["Ana", "Ben"], label="Friend", anchor=True),
     _Cat(
         "craft", ["pottery", "jam"], ["Pottery", "Jam"],
         phrases=["threw the pottery", "made the jam"], ref_phrases=["potter", "jam-maker"],
+        label="Craft",
     ),
 ]
 
@@ -61,8 +64,23 @@ SCENARIO = _Scenario(
 
 
 def test_render_story_fills_count_and_flavor() -> None:
-    # {n} -> the entity count as a word; {mentor} -> the single-item pool; deterministic.
-    assert render_story(SCENARIO, 2, seed=7) == "two friends run stalls, watched by Sam."
+    # {n} -> the entity count as a word; {mentor} -> the single-item pool; deterministic. The
+    # renderer then appends a premise + match-line built from the NON-anchor categories present
+    # (here just craft), so a tier that slices a dimension out never names it in the story.
+    assert render_story(SCENARIO, 2, seed=7, cats=CATS) == (
+        "two friends run stalls, watched by Sam. "
+        "Each friend has a different craft. "
+        "Using the clues, match every friend to their craft."
+    )
+
+
+def test_render_story_match_line_lists_present_categories() -> None:
+    # With two non-anchor categories present the match-line lists both (Oxford-free 'a and b'),
+    # and never names the anchor (the subject the player is matching FROM).
+    cats = CATS + [_Cat("price", ["p5"], ["$5"], phrases=["charged 5"], label="Price")]
+    story = render_story(SCENARIO, 2, seed=7, cats=cats)
+    assert "match every friend to their craft and price." in story
+    assert "Friend" not in story.split("watched by Sam.")[1]  # anchor label never in the tail
 
 
 def test_render_clue_name_mode_uses_labels() -> None:

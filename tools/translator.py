@@ -24,14 +24,35 @@ def _num_word(n: int) -> str:
     return _NUM_WORDS[n] if 0 <= n < len(_NUM_WORDS) else str(n)
 
 
-def render_story(scenario, entities: int, seed: int) -> str:
-    """Fill the scenario narrativeTemplate: {n} = entity count as a word, plus one date-seeded
-    pick per flavor pool (e.g. {mentor}, {ink}). Deterministic for a given seed."""
+def _join_labels(labels: list[str]) -> str:
+    """Human list join: [] -> '', [a] -> 'a', [a, b] -> 'a and b', [a, b, c] -> 'a, b and c'."""
+    if not labels:
+        return ""
+    if len(labels) == 1:
+        return labels[0]
+    return ", ".join(labels[:-1]) + " and " + labels[-1]
+
+
+def render_story(scenario, entities: int, seed: int, cats: list) -> str:
+    """Fill the scenario narrativeTemplate with SETTING flavor only ({n} = entity count as a word,
+    plus one date-seeded pick per flavor pool like {mentor}/{ink}), then append a premise + a
+    match-line GENERATED from the non-anchor categories actually present at this tier. The template
+    itself never names a category, so a lower tier that slices a dimension out never reads a premise
+    that mentions a dimension it does not have (e.g. easy no longer says 'price'). Deterministic for
+    a given seed + the tier's category slice."""
     rng = random.Random(seed ^ _FLAVOR_SALT)
     slots = {"n": _num_word(entities)}
     for slot, pool in sorted(scenario.flavorPools.items()):
         slots[slot] = pool[rng.randrange(len(pool))]
-    return scenario.narrativeTemplate.format(**slots)
+    setting = scenario.narrativeTemplate.format(**slots)
+    anchor = next((c for c in cats if getattr(c, "anchor", None)), cats[0])
+    joined = _join_labels([c.label.lower() for c in cats if c is not anchor])
+    subject = scenario.subjectNoun
+    tail = (
+        f"Each {subject} has a different {joined}. "
+        f"Using the clues, match every {subject} to their {joined}."
+    )
+    return f"{setting} {tail}"
 
 
 def _clue_slots(cats: list, cat_id: str, val_id: str, mode: str, prefix: str) -> dict:

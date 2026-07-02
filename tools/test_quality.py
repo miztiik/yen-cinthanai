@@ -14,11 +14,18 @@ from pathlib import Path
 import pytest
 from ortools.sat.python import cp_model
 
+import corpus
 import generate as g
 from models import PuzzleManifest
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_DIR = ROOT / "config"
+# The compound/numeric/indirection gates below assert behaviour that is a function of a SPECIFIC
+# scenario's clue templates + values, so they pin the reference scenario (weekend-market) instead
+# of the per-date catalog pick. The story_seed is scenario-independent, so this reproduces exactly
+# the puzzles these gates were written against (sharp v1 keeps a oneOf, expert v2 keeps an ifThen).
+# Per-date scenario VARIETY is covered separately by the property sweep + the selection tests.
+WEEKEND_MARKET = ROOT / "datasets" / "templates" / "weekend-market.json"
 DATE, TIER, VARIANT = "2026-07-01", "standard", 1
 # Compound tiers pinned to deterministic variants that keep the compound spice in their minimal
 # set: Sharp v1 retains a oneOf, Expert v2 retains an ifThen (both in band + full-depth zero-guess).
@@ -27,7 +34,7 @@ SHARP_VARIANT, EXPERT_VARIANT = 1, 2
 
 @pytest.fixture(scope="module")
 def story() -> tuple:
-    m, d, _ = g.generate_story(DATE, TIER, VARIANT, CONFIG_DIR)
+    m, d, _ = g.generate_story(DATE, TIER, VARIANT, CONFIG_DIR, scenario_path=WEEKEND_MARKET)
     return m, d
 
 
@@ -35,19 +42,19 @@ def story() -> tuple:
 def build() -> g.StoryBuild:
     # The full accepted attempt, exposing the solver-internal cats/clues/solution/seed so the
     # numeric + DEFINITE-status gates can re-verify without re-running the reseed loop.
-    return g.build_story(DATE, TIER, VARIANT, CONFIG_DIR)
+    return g.build_story(DATE, TIER, VARIANT, CONFIG_DIR, scenario_path=WEEKEND_MARKET)
 
 
 @pytest.fixture(scope="module")
 def sharp_build() -> g.StoryBuild:
     # Sharp gates in oneOf + oneEachOf (Sharp+); the pinned variant keeps a oneOf in the minimal set.
-    return g.build_story(DATE, "sharp", SHARP_VARIANT, CONFIG_DIR)
+    return g.build_story(DATE, "sharp", SHARP_VARIANT, CONFIG_DIR, scenario_path=WEEKEND_MARKET)
 
 
 @pytest.fixture(scope="module")
 def expert_build() -> g.StoryBuild:
     # Expert additionally gates in ifThen (Expert-only, <= 1); the pinned variant keeps an ifThen.
-    return g.build_story(DATE, "expert", EXPERT_VARIANT, CONFIG_DIR)
+    return g.build_story(DATE, "expert", EXPERT_VARIANT, CONFIG_DIR, scenario_path=WEEKEND_MARKET)
 
 
 def _mag_by_anchor(m) -> tuple:
@@ -122,8 +129,8 @@ def test_t1_cluetext_is_ascii_without_slots(story: tuple) -> None:
 def test_rebuild_is_byte_identical() -> None:
     # Determinism: same (date, tier, variant) -> identical manifest (num_search_workers=1,
     # fixed seed, fixed clue order, date-seeded narrative + variants).
-    a = g.generate_story(DATE, TIER, VARIANT, CONFIG_DIR)[0]
-    b = g.generate_story(DATE, TIER, VARIANT, CONFIG_DIR)[0]
+    a = g.generate_story(DATE, TIER, VARIANT, CONFIG_DIR, scenario_path=WEEKEND_MARKET)[0]
+    b = g.generate_story(DATE, TIER, VARIANT, CONFIG_DIR, scenario_path=WEEKEND_MARKET)[0]
     assert a.model_dump(by_alias=True) == b.model_dump(by_alias=True)
 
 
@@ -281,13 +288,13 @@ def test_p1_compound_expert_ifthen_full_depth(expert_build: g.StoryBuild) -> Non
 
 def test_rebuild_is_byte_identical_sharp(sharp_build: g.StoryBuild) -> None:
     # Determinism holds with oneOf/oneEachOf present: same (date, tier, variant) -> identical manifest.
-    rebuilt = g.generate_story(DATE, "sharp", SHARP_VARIANT, CONFIG_DIR)[0]
+    rebuilt = g.generate_story(DATE, "sharp", SHARP_VARIANT, CONFIG_DIR, scenario_path=WEEKEND_MARKET)[0]
     assert rebuilt.model_dump(by_alias=True) == sharp_build.manifest.model_dump(by_alias=True)
 
 
 def test_rebuild_is_byte_identical_expert(expert_build: g.StoryBuild) -> None:
     # Determinism holds with an ifThen present: same (date, tier, variant) -> identical manifest.
-    rebuilt = g.generate_story(DATE, "expert", EXPERT_VARIANT, CONFIG_DIR)[0]
+    rebuilt = g.generate_story(DATE, "expert", EXPERT_VARIANT, CONFIG_DIR, scenario_path=WEEKEND_MARKET)[0]
     assert rebuilt.model_dump(by_alias=True) == expert_build.manifest.model_dump(by_alias=True)
 
 
@@ -300,7 +307,7 @@ EASY_DATE = "2026-07-02"
 def easy_build() -> g.StoryBuild:
     # Easy is the all-direct tutorial: tiers.json indir == [0, 0], so the variety/share cap is
     # exempt and an all-eq grid is exactly the intended shape (the fix that unblocked easy).
-    return g.build_story(EASY_DATE, "easy", 1, CONFIG_DIR)
+    return g.build_story(EASY_DATE, "easy", 1, CONFIG_DIR, scenario_path=WEEKEND_MARKET)
 
 
 def test_easy_is_all_direct_story_first(easy_build: g.StoryBuild) -> None:
@@ -329,7 +336,7 @@ def test_p4_easy_in_band(easy_build: g.StoryBuild) -> None:
 
 def test_rebuild_is_byte_identical_easy(easy_build: g.StoryBuild) -> None:
     # Determinism holds for the all-direct easy grid too: same (date, tier, variant) -> identical.
-    rebuilt = g.generate_story(EASY_DATE, "easy", 1, CONFIG_DIR)[0]
+    rebuilt = g.generate_story(EASY_DATE, "easy", 1, CONFIG_DIR, scenario_path=WEEKEND_MARKET)[0]
     assert rebuilt.model_dump(by_alias=True) == easy_build.manifest.model_dump(by_alias=True)
 
 
@@ -362,3 +369,56 @@ def test_property_sweep_p1_band_variety(date: str, tier: str) -> None:
         assert max(types.count(t) for t in set(types)) / len(types) <= cap
     else:  # the all-direct easy tutorial: no indirect clue at all
         assert all(t not in g.INDIRECT_TYPES for t in types)
+
+
+# --- Row 9e: per-tier narrative coherence + scenario-per-date selection --------------------------
+
+TEMPLATES_DIR = ROOT / "datasets" / "templates"
+CATALOG = corpus.list_scenario_paths(TEMPLATES_DIR)
+PUZZLES_DIR = ROOT / "frontend" / "public" / "puzzles"
+
+
+def test_catalog_has_a_diverse_batch() -> None:
+    # The scenario catalog is a batch, not a single template (the row-9e deliverable).
+    ids = [p.stem for p in CATALOG]
+    assert "weekend-market" in ids
+    assert len(ids) >= 4, ids  # weekend-market + >= 3 authored scenarios
+
+
+@pytest.mark.parametrize("scenario_path", CATALOG, ids=lambda p: p.stem)
+def test_narrative_coherence_per_tier(scenario_path: Path) -> None:
+    # The story never names a category a tier sliced out. Build easy (2 cats) + expert (all cats)
+    # for each catalogued scenario: the easy narrative must OMIT every sliced-out non-anchor label
+    # (the row-9e fix - easy no longer says 'price' when it has no price column), while the expert
+    # narrative NAMES every non-anchor dimension in its generated match-line.
+    easy = g.build_story("2026-07-01", "easy", 1, CONFIG_DIR, scenario_path=scenario_path).manifest
+    expert = g.build_story("2026-07-01", "expert", 1, CONFIG_DIR, scenario_path=scenario_path).manifest
+    scenario = corpus.load_scenario_template(scenario_path)
+    present_easy = {c.id for c in easy.categories.items}
+    sliced = [c for c in scenario.categories if c.id != scenario.subjectCategory and c.id not in present_easy]
+    assert sliced, ("expected easy to slice out a category", scenario.id)
+    easy_low = easy.story.lower()
+    for c in sliced:
+        assert c.label.lower() not in easy_low, (scenario.id, "leaked sliced label", c.label)
+    expert_low = expert.story.lower()
+    for c in scenario.categories:
+        if c.id != scenario.subjectCategory:
+            assert c.label.lower() in expert_low, (scenario.id, "expert omits present label", c.label)
+
+
+def test_scenario_per_date_is_deterministic_and_varies() -> None:
+    # Same date -> same scenario (a stable hash of the date over the sorted catalog); a second
+    # resolution is identical, and the served window spreads over more than one scenario.
+    picks = [corpus.scenario_path_for_date(d, TEMPLATES_DIR).stem for d in SWEEP_DATES]
+    assert picks == [corpus.scenario_path_for_date(d, TEMPLATES_DIR).stem for d in SWEEP_DATES]
+    assert len(set(picks)) >= 2, picks  # variety: not one scenario for the whole window
+
+
+def test_served_bank_matches_per_date_scenario_all_tiers() -> None:
+    # Every served puzzle uses the date's per-date scenario, and all four tiers of a date share it
+    # (sliced per tier) - the selection contract, verified against the actual shipped bank.
+    for date in SWEEP_DATES:
+        expected = corpus.scenario_path_for_date(date, TEMPLATES_DIR).stem
+        for tier in ("easy", "standard", "sharp", "expert"):
+            m = PuzzleManifest.model_validate_json((PUZZLES_DIR / f"{date}-{tier}.json").read_text("ascii"))
+            assert m.scenarioId == expected, (date, tier, m.scenarioId)
