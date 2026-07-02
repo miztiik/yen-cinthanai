@@ -1,9 +1,10 @@
 // Board model: derive the playable grid from a manifest, nothing hardcoded. One
 // engine, many skins (core-loop.md): entities are rows, categories are columns,
-// values are the draggable tokens. The anchor (ordinal if present, else cats[0]) is
-// the row identity - value i sits in slot i - so it renders as a fixed header, not a
-// fillable column. Every other category is a pool the player drains. No solution is
-// ever read here, so nothing leaks. See docs/concepts/core-loop.md, ui-shell.md.
+// values are the draggable tokens. The anchor (the anchor:true axis if the manifest
+// flags one, else an ordinal axis, else cats[0]) is the row identity - value i sits in
+// slot i - so it renders as a fixed header, not a fillable column. Every other category
+// is a pool the player drains. No solution is ever read here, so nothing leaks. The
+// private post-win reveal lives in lib/answer.ts. See core-loop.md, ui-shell.md.
 
 import type { PuzzleManifest, AttributeCategory, AttributeValue } from "../contracts/manifest";
 
@@ -15,9 +16,14 @@ export interface BoardModel {
   wrap: boolean; // circular table: adjacency wraps end-to-end (round-table)
 }
 
-/** Pick the anchor: the ordinal category if any, else the first category. */
+/** Pick the anchor: the flagged `anchor:true` axis if any (story-first identity, e.g. the
+ *  name), else the ordinal axis (legacy pre-pivot puzzles), else the first category. */
 export function anchorCategory(m: PuzzleManifest): AttributeCategory {
-  return m.categories.list.find((c) => c.ordinal) ?? m.categories.list[0];
+  return (
+    m.categories.list.find((c) => c.anchor) ??
+    m.categories.list.find((c) => c.ordinal) ??
+    m.categories.list[0]
+  );
 }
 
 /** Anchor value for a row index (value i -> slot i). */

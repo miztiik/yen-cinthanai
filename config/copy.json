@@ -1,4 +1,8 @@
 {
+  "answer": {
+    "heading": "Solution",
+    "caption": "The solved grid: each row and its attributes."
+  },
   "clues": {
     "heading": "Clues",
     "show": "Clues",

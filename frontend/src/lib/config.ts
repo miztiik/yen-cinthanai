@@ -21,6 +21,7 @@ export interface CopyBags {
   credits?: { intro: string; license: string };
   clues?: CluesCopy;
   grid?: GridCopy;
+  answer?: AnswerCopy;
 }
 
 /** Chrome copy for the story-first clue list (config/copy.json [clues]). `{n}` = number. */
@@ -68,6 +69,19 @@ export const GRID_COPY_FALLBACK: GridCopy = {
   prevBlock: "Previous block",
   nextBlock: "Next block",
   openBlock: "Open {row} vs {col}",
+};
+
+/** Chrome copy for the private post-win answer reveal (config/copy.json [answer]). A private
+ *  reveal, never shared - the ShareCard stays stats-only. */
+export interface AnswerCopy {
+  heading: string;
+  caption: string;
+}
+
+/** Fail-soft answer-reveal copy so a missing copy.json still labels the win summary. */
+export const ANSWER_COPY_FALLBACK: AnswerCopy = {
+  heading: "Solution",
+  caption: "The solved grid: each row and its attributes.",
 };
 export interface Pace {
   idle_pulse_s: number;

@@ -5,6 +5,8 @@
   // SHARE copies the spoiler-free string and toasts. transform/opacity only; reduced
   // motion handled globally via app.css. See ui-shell.md, schemas.md (ShareCard).
   import Glyph from "../lib/Glyph.svelte";
+  import AnswerSummary from "./AnswerSummary.svelte";
+  import type { AnswerGrid } from "../lib/answer";
   import { play } from "../lib/audio";
 
   let {
@@ -18,6 +20,9 @@
     streak,
     shapeGlyph,
     share,
+    answer,
+    answerHeading = "Solution",
+    answerCaption,
     onhome,
     onstats,
     onretry,
@@ -32,6 +37,9 @@
     streak: number;
     shapeGlyph: string;
     share: string;
+    answer?: AnswerGrid;
+    answerHeading?: string;
+    answerCaption?: string;
     onhome: () => void;
     onstats: () => void;
     onretry?: () => void;
@@ -80,6 +88,12 @@
         <div class="h-2 flex-1 rounded-full" class:bg-accent={variant === "win" && stars >= s} class:bg-gold={hero && stars >= s} class:bg-bg={stars < s}></div>
       {/each}
     </div>
+
+    <!-- private answer reveal (win only): the solved grid, shown to the solver alone. Never
+         a share CTA - the shareable ShareCard stays stats-only (share-noleak.test.ts). -->
+    {#if variant === "win" && answer}
+      <AnswerSummary grid={answer} heading={answerHeading} caption={answerCaption} />
+    {/if}
 
     {#if variant === "win"}
       <button class="w-full rounded-2xl bg-accent px-6 py-3 font-bold text-black active:scale-95 transition-transform" onclick={copyShare}>{copied ? "copied" : "share"}</button>
