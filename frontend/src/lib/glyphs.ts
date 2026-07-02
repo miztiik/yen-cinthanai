@@ -50,3 +50,18 @@ export function glyphLabel(ref: string): string {
   if (!e) throw new Error(`unknown glyph ref: ${ref}`);
   return e.label;
 }
+
+/** Glyph packs whose art is landscape (e.g. national flags) and renders as a rounded-rect
+ *  CHIP rather than the square/circular Puck crop. Pack-level - never per value or country. */
+export const CHIP_PACKS = new Set<string>(["flags"]);
+
+/** The pack half of a "pack.slug" ref ("" when malformed). */
+export function packOf(ref: string): string {
+  const dot = ref.indexOf(".");
+  return dot < 0 ? "" : ref.slice(0, dot);
+}
+
+/** True when a ref belongs to a chip pack (rendered as a rounded-rect, e.g. flags). */
+export function isChipRef(ref: string): boolean {
+  return CHIP_PACKS.has(packOf(ref));
+}

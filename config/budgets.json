@@ -4,6 +4,10 @@
     "network": "slow-4g",
     "profile": "mid-tier-android"
   },
+  "glyphs": {
+    "max_svg_bytes": 73728,
+    "note": "Per-file byte ceiling for any public/assets/glyphs/<pack>/*.svg, enforced fail-fast by tools/bake_glyphs.py. Derived from the data: the heaviest flag after SVGO optimization (ascension-island) is 62906 bytes; 73728 (72 KiB) leaves ~17% headroom. Catches UI-glyph bloat before it ships. Raise deliberately only if a richer glyph genuinely earns it."
+  },
   "targets": {
     "byte_cap": false,
     "first_interaction_ms": 2000,

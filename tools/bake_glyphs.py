@@ -36,6 +36,7 @@ NAME_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")  # lowercase kebab-case filena
 _ROOT = Path(__file__).resolve().parent.parent
 GLYPHS_DIR = _ROOT / "frontend" / "public" / "assets" / "glyphs"
 OUT = GLYPHS_DIR / "index.json"
+BUDGETS = _ROOT / "config" / "budgets.json"
 
 
 def slug_of(stem: str) -> str:
@@ -54,9 +55,21 @@ def _stamp(now: datetime | None) -> str:
     return dt.isoformat().replace("+00:00", "Z")
 
 
-def build_manifest(glyphs_dir: Path = GLYPHS_DIR, now: datetime | None = None) -> dict:
+def _max_svg_bytes(budgets: Path = BUDGETS) -> int:
+    """Per-file SVG byte ceiling, read from config/budgets.json (config owns the knob,
+    CLAUDE.md #6 - no hardcoded number here). See config/budgets.json glyphs.max_svg_bytes."""
+    data = json.loads(budgets.read_text(encoding="ascii"))
+    return int(data["glyphs"]["max_svg_bytes"])
+
+
+def build_manifest(
+    glyphs_dir: Path = GLYPHS_DIR, now: datetime | None = None, max_svg_bytes: int | None = None
+) -> dict:
     """Walk glyphs_dir/<pack>/<name>.svg into a v2 manifest dict. Raises ValueError listing
-    every naming violation or slug collision (fail fast - never emit an unusable id)."""
+    every naming violation, slug collision, OR oversized glyph - any SVG heavier than the
+    config ceiling (config/budgets.json glyphs.max_svg_bytes) is UI-glyph bloat and fails the
+    bake (fail fast - never ship an unusable id or a bloated asset)."""
+    ceiling = _max_svg_bytes() if max_svg_bytes is None else max_svg_bytes
     packs: dict[str, dict] = {}
     violations: list[str] = []
     for pack_dir in sorted(p for p in glyphs_dir.iterdir() if p.is_dir()):
@@ -68,6 +81,12 @@ def build_manifest(glyphs_dir: Path = GLYPHS_DIR, now: datetime | None = None) -
             stem = svg.stem
             if not NAME_RE.match(stem):
                 violations.append(f"{pack}/{svg.name}: not lowercase kebab-case (no '_', spaces, caps, edge '-')")
+                continue
+            size = svg.stat().st_size
+            if size > ceiling:
+                violations.append(
+                    f"{pack}/{svg.name}: {size} bytes exceeds max_svg_bytes={ceiling} (SVGO-optimize it)"
+                )
                 continue
             slug = slug_of(stem)
             if slug in glyphs:
