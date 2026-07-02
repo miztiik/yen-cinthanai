@@ -35,4 +35,12 @@ describe.skipIf(!has)("PWA build artifacts", () => {
       readFileSync(resolve(dist, "index.html"), "utf8"),
     );
   });
+
+  it("does not precache the 271 country flags (they lazy-load on demand)", () => {
+    const sw = readFileSync(resolve(dist, "sw.js"), "utf8");
+    // no per-flag entry appears in the precache manifest ...
+    expect(sw).not.toMatch(/glyphs\/flags\/[a-z-]+\.svg/);
+    // ... but the CacheFirst runtime route for the flags dir is present
+    expect(sw).toMatch(/assets\/glyphs\/flags\//);
+  });
 });

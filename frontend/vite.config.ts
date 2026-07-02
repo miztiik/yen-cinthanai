@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { copyFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { FLAGS_CACHE, FLAGS_GLOB_IGNORE, isLazyFlagUrl } from "./src/lib/pwa";
 
 // Base path: '/' for local dev and preview; deploy sets GH_PAGES_BASE to the
 // project path (e.g. '/yen-cinthanai/'). See docs/how-to/ship-to-github-pages.md.
@@ -35,6 +36,9 @@ function pwa() {
     manifest: false,
     workbox: {
       globPatterns: ["**/*.{js,css,html,svg,json,webmanifest}"],
+      // The 271 country flags are kept OUT of the shell precache (it would balloon); they are
+      // fetched per file on demand via the CacheFirst "flags" rule below, then served offline.
+      globIgnores: [FLAGS_GLOB_IGNORE],
       navigateFallback: `${base}404.html`,
       runtimeCaching: [
         {
@@ -42,6 +46,17 @@ function pwa() {
           handler: "NetworkFirst",
           options: {
             cacheName: "puzzles",
+            expiration: { maxEntries: 64, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            cacheableResponse: { statuses: [0, 200] },
+          },
+        },
+        {
+          // Country flags: fetched per file on first render, cached, then served offline. A
+          // country puzzle pulls only its N entities' flags, never all 271 (not precached).
+          urlPattern: isLazyFlagUrl,
+          handler: "CacheFirst",
+          options: {
+            cacheName: FLAGS_CACHE,
             expiration: { maxEntries: 64, maxAgeSeconds: 60 * 60 * 24 * 30 },
             cacheableResponse: { statuses: [0, 200] },
           },

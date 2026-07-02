@@ -12,7 +12,15 @@ from pathlib import Path
 
 import pytest
 
-from bake_glyphs import SCHEMA_VERSION, build_manifest, label_of, slug_of, write_manifest
+from bake_glyphs import (
+    BUDGETS,
+    SCHEMA_VERSION,
+    _max_svg_bytes,
+    build_manifest,
+    label_of,
+    slug_of,
+    write_manifest,
+)
 
 FIXED = datetime(2026, 6, 29, tzinfo=timezone.utc)
 STAMP_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
@@ -80,3 +88,29 @@ def test_write_is_canonical(tmp_path: Path) -> None:
     second = write_manifest(build_manifest(g, now=FIXED), out).read_text("ascii")
     assert first == second and first.endswith("\n")
     assert first == json.dumps(m, sort_keys=True, ensure_ascii=True, indent=2) + "\n"
+
+
+def test_oversized_svg_fails(tmp_path: Path) -> None:
+    """A glyph heavier than max_svg_bytes fails the bake, naming the offender (byte guard)."""
+    g = _tree(tmp_path)
+    (g / "creatures" / "huge.svg").write_bytes(b"<svg>" + b"x" * 300 + b"</svg>")
+    with pytest.raises(ValueError, match=r"creatures/huge\.svg: \d+ bytes exceeds"):
+        build_manifest(g, now=FIXED, max_svg_bytes=100)
+
+
+def test_ceiling_read_from_config(tmp_path: Path) -> None:
+    """The guard reads its ceiling from config/budgets.json - no hardcoded number in code."""
+    budgets = tmp_path / "budgets.json"
+    budgets.write_text('{"glyphs": {"max_svg_bytes": 4242}}', encoding="ascii")
+    assert _max_svg_bytes(budgets) == 4242
+    # the committed config carries a real, positive ceiling that the default guard uses
+    committed = json.loads(BUDGETS.read_text(encoding="ascii"))["glyphs"]["max_svg_bytes"]
+    assert _max_svg_bytes() == committed
+    assert committed > 0
+
+
+def test_flags_pack_auto_discovered_and_within_ceiling() -> None:
+    """The real tree bakes clean: the flags pack is auto-discovered and every SVG (post-SVGO)
+    clears the config ceiling, so the default byte guard raises nothing."""
+    m = build_manifest()  # real dir + config ceiling, no override
+    assert len(m["packs"].get("flags", {})) > 0

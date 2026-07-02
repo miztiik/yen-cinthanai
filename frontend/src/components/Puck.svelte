@@ -7,6 +7,7 @@
   // border so it never reflows the grid. Glyph.svelte stays the only image renderer.
   import { getContext } from "svelte";
   import Glyph from "../lib/Glyph.svelte";
+  import { isChipRef } from "../lib/glyphs";
   import type { PuckPreset } from "../lib/config";
   import type { RowState } from "../lib/validate";
 
@@ -28,6 +29,11 @@
   const getSize = getContext<() => PuckPreset>("puckSize");
   const size = $derived(getSize?.() ?? FALLBACK);
   const glyphPx = $derived(Math.round(size.diameter * size.glyph));
+  // A flags-pack glyph is landscape (4:3): render it as a rounded-rect CHIP that hugs the
+  // flag edge-to-edge, not the circular crop that would letterbox it. Same width as a puck
+  // (keeps grid + pool alignment) but 3:4 as tall. Pack-driven - no per-country logic.
+  const chip = $derived(ref != null && isChipRef(ref));
+  const chipH = $derived(Math.round((size.diameter * 3) / 4));
 
   const ring = $derived.by(() => {
     if (selected) return "border-accent";
@@ -39,9 +45,18 @@
   });
 </script>
 
-<span
-  class={`inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border-2 ${ring} ${locked ? "bg-accent/20" : "bg-surface"}`}
-  style={`width:${size.diameter}px;height:${size.diameter}px`}
->
-  {#if ref}<Glyph {ref} {label} size={glyphPx} />{/if}
-</span>
+{#if chip}
+  <span
+    class={`inline-flex shrink-0 items-center justify-center overflow-hidden rounded-md border-2 ${ring} ${locked ? "bg-accent/20" : "bg-surface"}`}
+    style={`width:${size.diameter}px;height:${chipH}px`}
+  >
+    {#if ref}<Glyph {ref} {label} fill />{/if}
+  </span>
+{:else}
+  <span
+    class={`inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border-2 ${ring} ${locked ? "bg-accent/20" : "bg-surface"}`}
+    style={`width:${size.diameter}px;height:${size.diameter}px`}
+  >
+    {#if ref}<Glyph {ref} {label} size={glyphPx} />{/if}
+  </span>
+{/if}

@@ -129,6 +129,22 @@
         { "id": "gallery-show", "label": "Gallery show" }, { "id": "reunion", "label": "Reunion" }, { "id": "adoption", "label": "Pet adoption" },
         { "id": "promotion", "label": "Promotion" }, { "id": "sabbatical", "label": "Sabbatical" }
       ]
+    },
+    "country": {
+      "label": "Country",
+      "kind": "nominal",
+      "glyphPack": "flags",
+      "note": "GLYPH-BACKED: value ids are flags-pack slugs (the kebab filename with hyphens dropped, e.g. united-states-of-america -> unitedstatesofamerica); each renders as value.glyph = 'flags.<id>'. A curated, well-known subset of the 271-flag pack - more than enough entities for any tier.",
+      "values": [
+        { "id": "unitedstatesofamerica", "label": "United States" }, { "id": "unitedkingdom", "label": "United Kingdom" }, { "id": "france", "label": "France" },
+        { "id": "germany", "label": "Germany" }, { "id": "italy", "label": "Italy" }, { "id": "spain", "label": "Spain" },
+        { "id": "japan", "label": "Japan" }, { "id": "china", "label": "China" }, { "id": "india", "label": "India" },
+        { "id": "brazil", "label": "Brazil" }, { "id": "canada", "label": "Canada" }, { "id": "australia", "label": "Australia" },
+        { "id": "mexico", "label": "Mexico" }, { "id": "argentina", "label": "Argentina" }, { "id": "egypt", "label": "Egypt" },
+        { "id": "kenya", "label": "Kenya" }, { "id": "nigeria", "label": "Nigeria" }, { "id": "southafrica", "label": "South Africa" },
+        { "id": "southkorea", "label": "South Korea" }, { "id": "sweden", "label": "Sweden" }, { "id": "netherlands", "label": "Netherlands" },
+        { "id": "portugal", "label": "Portugal" }, { "id": "turkiye", "label": "Turkiye" }, { "id": "newzealand", "label": "New Zealand" }
+      ]
     }
   }
 }
