@@ -1,8 +1,10 @@
 name: daily
 
 # Once a day, backfill the last 7 days x four tiers (rolling archive, add-only, never
-# future) and commit the fresh bank back to master. The deploy workflow then publishes
-# it. See docs/architecture/generator/pipeline.md and docs/how-to/ship-to-github-pages.md.
+# future) and commit the fresh bank back to master. The served puzzles are STORY-FIRST
+# (the served-puzzle writer derives them from the story-first matrix generator, all tiers,
+# emitted with exclude_none). The deploy workflow then publishes it. See
+# docs/architecture/generator/pipeline.md and docs/how-to/ship-to-github-pages.md.
 on:
   schedule:
     - cron: "0 0 * * *"

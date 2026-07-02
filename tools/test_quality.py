@@ -289,3 +289,57 @@ def test_rebuild_is_byte_identical_expert(expert_build: g.StoryBuild) -> None:
     # Determinism holds with an ifThen present: same (date, tier, variant) -> identical manifest.
     rebuilt = g.generate_story(DATE, "expert", EXPERT_VARIANT, CONFIG_DIR)[0]
     assert rebuilt.model_dump(by_alias=True) == expert_build.manifest.model_dump(by_alias=True)
+
+
+# --- Row 9b: easy tier (all-direct tutorial) generates story-first, zero-guess -------------------
+
+EASY_DATE = "2026-07-02"
+
+
+@pytest.fixture(scope="module")
+def easy_build() -> g.StoryBuild:
+    # Easy is the all-direct tutorial: tiers.json indir == [0, 0], so the variety/share cap is
+    # exempt and an all-eq grid is exactly the intended shape (the fix that unblocked easy).
+    return g.build_story(EASY_DATE, "easy", 1, CONFIG_DIR)
+
+
+def test_easy_is_all_direct_story_first(easy_build: g.StoryBuild) -> None:
+    # Easy emits a story-first schemaVersion-1 grid with NO indirect clue (all-direct tutorial):
+    # eq present, and no neq/compound - matching the tier's declared indirection budget [0, 0].
+    m = easy_build.manifest
+    assert m.schemaVersion == 1 and m.shapeId == "grid" and m.story and m.scenarioId
+    types = [c.type for c in m.constraints]
+    assert types and "eq" in types
+    assert all(t not in g.INDIRECT_TYPES for t in types), [t for t in types if t in g.INDIRECT_TYPES]
+
+
+def test_p1_easy_zero_guess(easy_build: g.StoryBuild) -> None:
+    # P1 tripwire for EASY: the forced trace visits every non-anchor bijective cell and the clue
+    # set is genuinely unique (zero guesses). This is the row-9b fix that made easy generate.
+    m = easy_build.manifest
+    assert len(m.hintTrace) == _full_depth(m)
+    assert g.is_unique(easy_build.cats, easy_build.entities, easy_build.clues, easy_build.seed) is True
+
+
+def test_p4_easy_in_band(easy_build: g.StoryBuild) -> None:
+    tiers = g.load_config("tiers", CONFIG_DIR)["easy"]
+    lo, hi = tiers["band"]
+    assert lo <= easy_build.d <= hi
+
+
+def test_rebuild_is_byte_identical_easy(easy_build: g.StoryBuild) -> None:
+    # Determinism holds for the all-direct easy grid too: same (date, tier, variant) -> identical.
+    rebuilt = g.generate_story(EASY_DATE, "easy", 1, CONFIG_DIR)[0]
+    assert rebuilt.model_dump(by_alias=True) == easy_build.manifest.model_dump(by_alias=True)
+
+
+# Fast-generating dates (few reseeds) keep this cross-product property test cheap.
+@pytest.mark.parametrize("date", ["2026-06-30", "2026-07-01"])
+@pytest.mark.parametrize("tier", ["easy", "standard", "sharp", "expert"])
+def test_p1_zero_guess_holds_per_tier(date: str, tier: str) -> None:
+    # Property: P1 (zero-guess) holds for EVERY tier - including EASY - on multiple dates. The
+    # forced deduction trace visits every non-anchor bijective cell exactly once, and the emitted
+    # manifest is a story-first schemaVersion-1 grid served at variant 1.
+    m, _, _ = g.generate_story(date, tier, 1, CONFIG_DIR)
+    assert m.schemaVersion == 1 and m.shapeId == "grid" and m.story and m.scenarioId
+    assert len(m.hintTrace) == _full_depth(m)

@@ -3,199 +3,227 @@
   "generatedSeed": "2026-07-02",
   "puzzles": [
     {
+      "date": "2026-06-25",
+      "file": "2026-06-25-easy.json",
+      "sha": "a722da67979c9f663d12d7886ed2d7b55848a536552725f0a857b5ec0e895644",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-25",
+      "file": "2026-06-25-standard.json",
+      "sha": "af8abade5623c9e564a66634207e731adc58eab11e2f6f395d07527ff94eb5fe",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-25",
+      "file": "2026-06-25-sharp.json",
+      "sha": "ca897d77804d78321724e416b74a031aba7ad96bceac6b5014b9eebd99410451",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-25",
+      "file": "2026-06-25-expert.json",
+      "sha": "785da1fcc53ea6f609aafe3e1f10a3c19e51ee3c811284fd61724304d05677ef",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
       "date": "2026-06-26",
       "file": "2026-06-26-easy.json",
-      "sha": "df479cfd84746a5658107f6ae1ac2ee08e7796112e71b91e0f5d58e4283e91e7",
+      "sha": "bc56b76848a05d01ae260ebb8a43d9a80cdaf7b3a9cf716cf9d6fa3ad913dd71",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-06-26",
       "file": "2026-06-26-standard.json",
-      "sha": "689f90be98f0cff11f6b9a61e23307d1edc2c97a61a49fda06f2764a15bd81d7",
-      "shapeId": "seating-row",
+      "sha": "f06ff8ba44c7f7525d7dd42db6825e4e94d1c2e680befdd809dba325d0ad3de3",
+      "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-06-26",
       "file": "2026-06-26-sharp.json",
-      "sha": "f67a7a8904d82c40fba1422a9ab5c4d4f8ef9547bd8b38dcbd928b1858e08c04",
-      "shapeId": "seating-row",
+      "sha": "b64546b805ad8fe78bc2bdd4d7797daec376fd799043930689f6bdb641c3d47f",
+      "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-06-26",
       "file": "2026-06-26-expert.json",
-      "sha": "b22b86d5e7920a216d8f329365c7d44961707388b401a0c021e1fdb0b0c0fcfd",
-      "shapeId": "round-table",
+      "sha": "04fdae6b0dc3ecd9b7ce8d6db3ac9929b5d8a9537feb78213c0c4465a6798913",
+      "shapeId": "grid",
       "tier": "expert"
     },
     {
       "date": "2026-06-27",
       "file": "2026-06-27-easy.json",
-      "sha": "97e0c8127348c3d074ba790d77fec84ebc3e5d60dfc248b3029ac7d7247a1fed",
+      "sha": "cea69a63a1f14b06774fbc13d2782a9b7099962831ffa841d1f9735b8daa43bf",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-06-27",
       "file": "2026-06-27-standard.json",
-      "sha": "df3dde993b2d0fc102d43d08736a390a7da3cfb28c0d3132a02706ce5f4aa238",
-      "shapeId": "seating-row",
+      "sha": "a3e9e7ac48f301dcbea600be6b525d67ad28f9b191af1d0bc0ce054150a9ad15",
+      "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-06-27",
       "file": "2026-06-27-sharp.json",
-      "sha": "7ff2735acf304dd5027ee869cb73d667879c4ed01d4b955a229aa4cb8e1c1c54",
-      "shapeId": "seating-row",
+      "sha": "72ae200247c429c8c64c1e095f7f43505cec95f5d6c0c81ed9b15af4c5d7b13a",
+      "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-06-27",
       "file": "2026-06-27-expert.json",
-      "sha": "a59ec1a631bbf3584f96ca35dceb064caccd9b1079380357e7f4121e7a45edb2",
-      "shapeId": "round-table",
+      "sha": "3c70a2e0402c9aeb14caddd136ab8e4a61b03189747ed766c639f96dd511f515",
+      "shapeId": "grid",
       "tier": "expert"
     },
     {
       "date": "2026-06-28",
       "file": "2026-06-28-easy.json",
-      "sha": "4ba9688c2230bd3a079f1738733c7fe04ab0e1406a1a9eea2456f31f862c2333",
+      "sha": "70b2abfce0a5932956c0fbeca4489a1b97b023d12c81239ad141cac17b460845",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-06-28",
       "file": "2026-06-28-standard.json",
-      "sha": "f7dcf4d0c3a51da39004c4043bcd1ffffd0ec2543e0f20d2b805f08aa790858c",
-      "shapeId": "seating-row",
+      "sha": "31699735a974801b7dfa8bcaa8943d8bd6a95027c17335b34d5b1423132f08b3",
+      "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-06-28",
       "file": "2026-06-28-sharp.json",
-      "sha": "2a2217d5a1a7bcfa4ee7d0b2b7ef765f0abcc680418a3bc27b220da229a3ff7e",
-      "shapeId": "seating-row",
+      "sha": "6c483caa0700e1b0dd125533cec0860d1bf4047f68b5c75ee96a830808a437b4",
+      "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-06-28",
       "file": "2026-06-28-expert.json",
-      "sha": "9edfe4324da0d7a11ae7b4503c4ff9f6de9597cdb008698504ac42566c5e1410",
-      "shapeId": "round-table",
+      "sha": "2f59299b448e5325f60bd9e24cde2917ace55e10925da57b47f18d660e7785a8",
+      "shapeId": "grid",
       "tier": "expert"
     },
     {
       "date": "2026-06-29",
       "file": "2026-06-29-easy.json",
-      "sha": "25109269862d8ee5280debc13f3fef2abf2c55ec78486abc4a79d5ee6090e4a7",
+      "sha": "8e67be061a6b66a3da79fa8116114b73b85cbd7f9cf8b6c6ba4c9731ed1f820c",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-06-29",
       "file": "2026-06-29-standard.json",
-      "sha": "834c60b7ce071ac70d10da60d4f129cb8dbd387aa3a6870368a88ec37d70444d",
-      "shapeId": "seating-row",
+      "sha": "cd164518d0836b5adea620d45d254e0db370669f6c5d5f52c410b0a3e98ecb68",
+      "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-06-29",
       "file": "2026-06-29-sharp.json",
-      "sha": "daa7a395abd37a38cb415056aeb592e1257fc9b75bc7b5fd1cb672c861256c04",
-      "shapeId": "seating-row",
+      "sha": "76f64f7dd7bedff10441e195a863f8cc8559349f7976658cdfbbf40475a4aeaa",
+      "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-06-29",
       "file": "2026-06-29-expert.json",
-      "sha": "c8f90447e8c0151e6d88306106da6c05f4d529f0c8632d4aa6bec37e19e77b85",
-      "shapeId": "round-table",
+      "sha": "42f63f2376652a4489e395876b2d7a2db757811c5c0f006132e11599b2e64626",
+      "shapeId": "grid",
       "tier": "expert"
     },
     {
       "date": "2026-06-30",
       "file": "2026-06-30-easy.json",
-      "sha": "51583335fd61ba8f2559abc7d9562cc6d8a2836df94dc54f991ca2f142044987",
+      "sha": "3bcd33d0119c9c0a220c63277d7b0f863fec093e72f16f21312113a252dee0b8",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-06-30",
       "file": "2026-06-30-standard.json",
-      "sha": "97fb07cf2324ff8fa2cfd6d6763658711c32fcb1005414d6b8570dd46acba6be",
-      "shapeId": "seating-row",
+      "sha": "d85b98b2c2b7e9d8d2320acb011d4e8d179610ca227faee580f2f96fce7c87fd",
+      "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-06-30",
       "file": "2026-06-30-sharp.json",
-      "sha": "3dbb675e69176492fcf385829ea82d7c3bdbfe4c541c41032701e63ee4000367",
-      "shapeId": "seating-row",
+      "sha": "48f455fb7531fb1104912bbec7c2d65bf8518b5c0976ac098a771c116d56c191",
+      "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-06-30",
       "file": "2026-06-30-expert.json",
-      "sha": "ed666e9a2e46623632cff95b489a790473b54234375a99af1ef0a02cb7e70140",
-      "shapeId": "round-table",
+      "sha": "21352c8fb2b4e629d97c60918ca5c2393de253e4cb51aeaf3aa489364e52fe5d",
+      "shapeId": "grid",
       "tier": "expert"
     },
     {
       "date": "2026-07-01",
       "file": "2026-07-01-easy.json",
-      "sha": "1a75b8871eb67f998dd1a38bf89e855aea15a8ee6e0cf22d70a61a1f52fb3f8d",
+      "sha": "847b18feac1eb335b255858bf64c13932a750763e70c0a88801c4c969fe06930",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-07-01",
       "file": "2026-07-01-standard.json",
-      "sha": "c219aa374621da8904511c0435ac6cd128c24b495e646c60b00a40af53a04258",
-      "shapeId": "seating-row",
+      "sha": "3b61009d9f5f9e72de54a4e59e885c0f4fc8b36ed08753772e1f019fa6641bb8",
+      "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-07-01",
       "file": "2026-07-01-sharp.json",
-      "sha": "d6d0398cf4c9dfb4e46dc15e1d61c5444198db2445c54ef643740011d2d8f854",
-      "shapeId": "seating-row",
+      "sha": "c3ac80b4dec3693dec85970e3f46e90849cc07a0393437f4108555a03cf51e4c",
+      "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-07-01",
       "file": "2026-07-01-expert.json",
-      "sha": "8e481ec455630eb3b3fbbd33b51e092f628ab87f77e902b4c33adfcc61b150f5",
-      "shapeId": "round-table",
+      "sha": "5c18c253c060998fd696e4a6e787c924327a6114a3d74966a320e6ee667f6f47",
+      "shapeId": "grid",
       "tier": "expert"
     },
     {
       "date": "2026-07-02",
       "file": "2026-07-02-easy.json",
-      "sha": "2dc1ec7058b0d851881276456fc12b5b4c31e7d9931f29b9be97949056728371",
+      "sha": "bba82834efaf7a54f33939e6a6e2e0225f6b397e1c182981b85e432cc12236a3",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-07-02",
       "file": "2026-07-02-standard.json",
-      "sha": "8926928404da57e4d4ee8834a4bda2df9217609f7063460e538cfa38a0748a7e",
-      "shapeId": "seating-row",
+      "sha": "326f589bbff37015865f30e0b7e2d32f3aac127d49fa250e201a357281900837",
+      "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-07-02",
       "file": "2026-07-02-sharp.json",
-      "sha": "6ba220696eb20aeb1fa92728596f6b5d74ab719b024dacce86f9b3671c268baf",
-      "shapeId": "seating-row",
+      "sha": "a4dfe31f7dd0edda2541e861bd9c9c62e5b56cafd98a1bd540a67b5ec9afd0dd",
+      "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-07-02",
       "file": "2026-07-02-expert.json",
-      "sha": "212271ebcc336b90dd14bc27e0ee004ec60c3e4f70f6276924bcda20be18a5e0",
-      "shapeId": "round-table",
+      "sha": "9cd3e881a41ec9e516feed432aa1ca409c47c3f3f7da74273a72d0fba8461dd7",
+      "shapeId": "grid",
       "tier": "expert"
     }
   ],

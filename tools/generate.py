@@ -62,6 +62,7 @@ COMPOUND_TYPES = ("oneOf", "oneEachOf", "ifThen")  # oneOf/oneEachOf Sharp+, ifT
 INDIRECT_TYPES = ("neq", "adjacent", "distance", "before", "opposite", "between", *COMPOUND_TYPES)
 NUMERIC_TYPES = ("numDiff", "threshold")  # integer-magnitude clues on a numeric category
 SOLVE_LIMIT_S = 10.0
+STORY_SERVED_VARIANT = 1  # the canonical daily variant served in the bank (one puzzle per date x tier)
 
 # Tier order is the single source of truth in the Tier type (models.py); no hardcoded tier list.
 TIER_ORDER = get_args(Tier)
@@ -709,7 +710,11 @@ def to_manifest(date, tier, shape, rev, cats, n, clues, sol, hints) -> PuzzleMan
 
 
 def canonical_sha(manifest: PuzzleManifest) -> tuple[str, str]:
-    text = json.dumps(manifest.model_dump(by_alias=True), sort_keys=True, ensure_ascii=True, separators=(",", ":"))
+    """Canonical one-line JSON + its sha256. exclude_none drops unset optionals so a served
+    manifest carries NO null-valued fields (the manifest schema forbids present-null); a rebuild
+    of the same (date, tier) is byte-identical."""
+    payload = manifest.model_dump(by_alias=True, exclude_none=True)
+    text = json.dumps(payload, sort_keys=True, ensure_ascii=True, separators=(",", ":"))
     return text, hashlib.sha256(text.encode("ascii")).hexdigest()
 
 
@@ -742,7 +747,11 @@ def generate(date: str, tier: Tier, config_dir: Path = CONFIG_DIR) -> tuple[Puzz
 
 
 def write_puzzle(date: str, tier: Tier, out_dir: Path = PUZZLES_DIR, config_dir: Path = CONFIG_DIR) -> dict:
-    manifest, d, _ = generate(date, tier, config_dir)
+    """Write the served daily puzzle: a story-first master (canonical one-line JSON, no null
+    optionals) to frontend/public/puzzles/<date>-<tier>.json. The served bank IS the story-first
+    master - solutions ship in the manifest (design), variant 1 is the canonical daily. See
+    docs/architecture/generator/pipeline.md."""
+    manifest, d, _ = generate_story(date, tier, STORY_SERVED_VARIANT, config_dir)
     text, sha = canonical_sha(manifest)
     shape = manifest.shapeId
     fname = f"{date}-{tier}.json"
@@ -773,14 +782,19 @@ def _numeric_types_for_tier(scenario, tier: str) -> tuple[str, ...]:
 
 def _story_acceptable(
     clues: list[Clue], hints: list[HintStep], d: int, band: tuple[int, int], share_cap: float,
-    numeric_types: tuple[str, ...], full_depth: int,
+    numeric_types: tuple[str, ...], full_depth: int, indir_band: tuple[float, float],
 ) -> bool:
     """Accept a story puzzle only when it is in the tier band, is zero-guess (the forced trace
-    reaches every non-anchor cell), keeps eq present with no clue type past the share cap
-    (variety), carries at least one numeric clue when the tier gates one in, holds at most one
-    ifThen (the compound conditional is a rare spice), and has at least one single-clue eq opener.
-    Guarantees the quality gates (P1/P2/P4/P5) hold on the emitted manifest even with numeric and
-    compound clues present."""
+    reaches every non-anchor cell), keeps eq present, satisfies the tier's indirection contract
+    (config-driven from tiers.json `indir`), carries at least one numeric clue when the tier gates
+    one in, holds at most one ifThen (the compound conditional is a rare spice), and has at least
+    one single-clue eq opener. Guarantees the quality gates (P1/P2/P4/P5) hold on the emitted
+    manifest even with numeric and compound clues present.
+
+    Indirection contract: a tier whose `indir` upper bound is 0 (easy - the tutorial) is ALL-DIRECT
+    by design, so it forbids any indirect clue and the variety/share cap does not apply (an all-eq
+    easy grid is exactly what the tier wants, not a variety failure). Every other tier declares a
+    non-zero indirection budget, so the share cap keeps a single type from dominating."""
     lo, hi = band
     if not (lo <= d <= hi):
         return False
@@ -793,7 +807,10 @@ def _story_acceptable(
         return False
     if types.count("ifThen") > 1:  # at most one conditional per puzzle (the gate the tests assert)
         return False
-    if max(types.count(t) for t in set(types)) / len(types) > share_cap:
+    if indir_band[1] > 0.0:  # tier allows indirection -> variety cap keeps one type from dominating
+        if max(types.count(t) for t in set(types)) / len(types) > share_cap:
+            return False
+    elif any(t in INDIRECT_TYPES for t in types):  # all-direct tier: no indirect clues at all
         return False
     ctype = {f"c{i + 1}": clues[i][0] for i in range(len(clues))}
     return any(len(s.fromClues) == 1 and ctype.get(s.fromClues[0]) == "eq" for s in hints)
@@ -882,6 +899,7 @@ def build_story(
     numeric_types = _numeric_types_for_tier(scenario, tier)
     band = (tiers["band"][0], tiers["band"][1])
     share_cap = story["share_cap"]
+    indir_band = (tiers["indir"][0], tiers["indir"][1])  # tier's declared indirection budget (fraction)
     log: list[dict] = []
     for attempt in range(dials["max_reseeds"]):
         seed = base + attempt
@@ -895,7 +913,7 @@ def build_story(
         indirect = sum(1 for c in clues if c[0] in INDIRECT_TYPES)
         d = difficulty(tiers, entities, len(cats), len(clues), indirect, len(hints))
         log.append({"attempt": attempt, "clues": len(clues), "indirect": indirect, "depth": len(hints), "D": d})
-        if _story_acceptable(clues, hints, d, band, share_cap, numeric_types, full_depth):
+        if _story_acceptable(clues, hints, d, band, share_cap, numeric_types, full_depth, indir_band):
             m = to_story_manifest(
                 date, tier, scenario, variant, cats, entities, clues, sol, hints, dials["template_rev"], seed
             )

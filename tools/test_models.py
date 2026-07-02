@@ -67,9 +67,9 @@ def test_pre_pivot_manifest_still_validates() -> None:
         assert c.kind is None and c.anchor is None and c.unit is None
         for v in c.values:
             assert v.magnitude is None and v.phrase is None and v.refPhrase is None
-    # a real served pre-pivot bundle puzzle validates too (glob avoids a fixed date)
+    # a real served bundle puzzle validates too (now story-first; glob avoids a fixed date)
     served = sorted(PUZZLES.glob("*-standard.json"))
-    assert served, "expected served pre-pivot puzzles in the bundle"
+    assert served, "expected served puzzles in the bundle"
     PuzzleManifest.model_validate(_load_abs(served[0]))
 
 
