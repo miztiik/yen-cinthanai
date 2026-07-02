@@ -81,6 +81,21 @@
     "intro": "All glyphs original art.",
     "license": "CC0 - no third-party assets."
   },
+  "grid": {
+    "heading": "Grid",
+    "mapHeading": "All blocks",
+    "state": {
+      "blank": "unmarked",
+      "manualX": "crossed out",
+      "autoX": "eliminated",
+      "tick": "matched"
+    },
+    "cell": "{row} and {col}: {state}",
+    "cross": "Cross out {row} and {col}",
+    "prevBlock": "Previous block",
+    "nextBlock": "Next block",
+    "openBlock": "Open {row} vs {col}"
+  },
   "success": [
     "Case closed.",
     "Airtight.",

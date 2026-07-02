@@ -11,6 +11,17 @@ export type PuckSize = "small" | "medium" | "large";
 /** entity id -> category id -> value id. */
 export type Placements = Record<string, Record<string, string>>;
 
+/** Cross-out grid + clue-strip bookkeeping (Row 7). ADDITIVE + OPTIONAL: older saves
+ *  without it still load and schemaVersion stays 1. Keyed by order-normalized semantic
+ *  endpoints `catA:valA|catB:valB` (grid.ts cellKey); struckClues holds clue ids. The
+ *  positive grid ticks persist here as `scratchTicks`; those that name the anchor also
+ *  reconstruct into `placements` at eval time (grid.ts mergeGridPlacements). */
+export interface DayNotes {
+  manualX?: string[];
+  scratchTicks?: string[];
+  struckClues?: string[];
+}
+
 export interface DayState {
   date: string;
   tier: Tier;
@@ -21,6 +32,8 @@ export interface DayState {
   solveMs: number;
   hintsUsed: number;
   stars: number;
+  /** Grid + clue bookkeeping; omitted when empty (backward-compatible). */
+  notes?: DayNotes;
 }
 
 export interface Hero {

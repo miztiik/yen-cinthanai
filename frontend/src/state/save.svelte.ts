@@ -54,6 +54,16 @@ function migrate(raw: Record<string, unknown>): Record<string, unknown> {
   return cur;
 }
 
+/** Loose shape check for the optional day notes (Row 7): each field, when present, is an
+ *  array of strings. `undefined` passes so older saves without notes still validate. */
+function isNotes(v: unknown): boolean {
+  if (v === undefined) return true;
+  if (typeof v !== "object" || v === null) return false;
+  const o = v as Record<string, unknown>;
+  const arr = (x: unknown) => x === undefined || (Array.isArray(x) && x.every((s) => typeof s === "string"));
+  return arr(o.manualX) && arr(o.scratchTicks) && arr(o.struckClues);
+}
+
 function isDay(d: unknown): d is DayState {
   if (typeof d !== "object" || d === null) return false;
   const o = d as Record<string, unknown>;
@@ -67,7 +77,8 @@ function isDay(d: unknown): d is DayState {
     typeof o.attempts === "number" &&
     typeof o.solveMs === "number" &&
     typeof o.hintsUsed === "number" &&
-    typeof o.stars === "number"
+    typeof o.stars === "number" &&
+    isNotes(o.notes)
   );
 }
 
