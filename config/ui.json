@@ -2,6 +2,17 @@
   "clue": {
     "autoDimFeedback": ["realtime-names", "count-wrong"]
   },
+  "grid": {
+    "cell": {
+      "large": 48,
+      "medium": 40,
+      "small": 34
+    },
+    "snap": {
+      "ease": 0.6,
+      "radius_factor": 0.9
+    }
+  },
   "puck": {
     "default": "medium",
     "large": {

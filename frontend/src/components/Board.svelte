@@ -9,10 +9,13 @@
   import ClueChip from "./ClueChip.svelte";
   import StoryPanel from "./StoryPanel.svelte";
   import ClueList from "./ClueList.svelte";
+  import NotesGrid from "./NotesGrid.svelte";
+  import GridMap from "./GridMap.svelte";
   import ResultCard from "./ResultCard.svelte";
   import { route, homeHref, navigate } from "../lib/router.svelte";
   import { loadBank, loadManifest, pickEntry } from "../lib/loader";
-  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, CLUES_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback } from "../lib/config";
+  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, gridCellPx, gridUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type GridCopy } from "../lib/config";
+  import { gridBlocks, gridCategories } from "../lib/grid";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { isHero } from "../lib/scoring";
   import { buildShareCard, shareText, type ShareCopy } from "../contracts/share";
@@ -45,6 +48,12 @@
   setContext("puckSize", () => puck);
   setContext("snap", () => snap);
 
+  // Cross-out grid chrome (Row 7): cell edge + magnet + copy, and the open block index.
+  let gridCopy = $state<GridCopy>(GRID_COPY_FALLBACK);
+  let gridCell = $state(40);
+  let gridSnap = $state({ radius_factor: 0.9, ease: 0.6 });
+  let activeBlock = $state(0);
+
   /** Tier from /play/<tier>, default standard; resumes last if just /play. */
   function wantedTier(): Tier {
     const seg = route().split("/")[2] as Tier;
@@ -74,6 +83,9 @@
       puck = puckPreset(ui, sv.settings.puckSize);
       snap = ui.snap;
       soft = softFeedback(ui);
+      gridCopy = copy.grid ?? GRID_COPY_FALLBACK;
+      gridCell = gridCellPx(ui, sv.settings.puckSize);
+      gridSnap = gridUi(ui).snap;
       game = new Game(m, dial, prior);
       tick();
     } catch (e) {
@@ -124,6 +136,13 @@
   const glow = $derived(!!game && !game.locked && idleMs > pace.idle_glow_s * 1000);
   const submitLabel = $derived(game?.dial.feedback === "submit-binary" ? "submit" : "check");
   const storyMode = $derived(!!game?.m.story); // story-first: text ClueList replaces the glyph ClueChip strip
+  // Cross-out grid blocks (bijective category pairs) for story mode; empty otherwise, so
+  // a legacy manifest keeps the SlotBoard. activeBlock wraps via navBlock / GridMap taps.
+  const blocks = $derived(game && storyMode ? gridBlocks(gridCategories(game.board)) : []);
+  const activeBlockObj = $derived(blocks.length ? blocks[Math.min(activeBlock, blocks.length - 1)] : null);
+  function navBlock(dir: 1 | -1) {
+    if (blocks.length) activeBlock = (activeBlock + dir + blocks.length) % blocks.length;
+  }
   start();
 </script>
 
@@ -159,8 +178,16 @@
 
     <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-center">
       <div class="flex min-w-0 flex-col gap-4">
-        <section class="flex justify-center"><SlotBoard {game} topology={shape?.topology ?? "matrix"} revealed={game.revealed} {pulse} /></section>
-        <section class="flex justify-center"><Pool {game} /></section>
+        {#if storyMode && activeBlockObj}
+          <section><GridMap {game} {blocks} active={activeBlock} copy={gridCopy} onselect={(i) => (activeBlock = i)} /></section>
+          <section class="flex justify-center">
+            <NotesGrid {game} block={activeBlockObj} {blocks} index={activeBlock} copy={gridCopy} size={gridCell} snap={gridSnap} onnav={navBlock} />
+          </section>
+          <section class="flex justify-center"><Pool {game} only="shared" /></section>
+        {:else}
+          <section class="flex justify-center"><SlotBoard {game} topology={shape?.topology ?? "matrix"} revealed={game.revealed} {pulse} /></section>
+          <section class="flex justify-center"><Pool {game} /></section>
+        {/if}
       </div>
       {#if storyMode}
         <ClueList {game} copy={copy.clues ?? CLUES_COPY_FALLBACK} {soft} />

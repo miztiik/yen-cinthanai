@@ -5,9 +5,10 @@
 // is read except to apply a hint step (hintTrace), never to colour the board.
 
 import type { PuzzleManifest } from "../contracts/manifest";
-import type { DayState, Placements, Save } from "../contracts/save";
+import type { DayState, DayNotes, Placements, Save } from "../contracts/save";
 import { buildBoard, type BoardModel } from "../lib/board";
 import { evaluate, type PuzzleEval } from "../lib/validate";
+import { mergeGridPlacements } from "../lib/grid";
 import { type Feedback, type TierDial } from "../lib/config";
 import { computeStars } from "../lib/scoring";
 import { loadSave, persistSave, recordWin, dayKey } from "./save.svelte";
@@ -40,6 +41,13 @@ export class Game {
   // toDayState/save this row - Row 7 persists via DayState.notes.struckClues. See
   // lib/clues.ts + components/ClueList.svelte.
   struck = $state<Record<string, boolean>>({});
+  // Cross-out grid authored marks (Row 7): the only two states the player AUTHORS. The
+  // other two (auto-X, blank) are DERIVED per cell by grid.ts cellState - never stored,
+  // never auto-ticked. Plain objects act as sets so Svelte 5's deep proxy tracks add /
+  // delete. Both persist to DayState.notes; the anchor-naming ticks also reconstruct into
+  // placements at eval time (mergeGridPlacements) so the grid drives the win (Decision 7).
+  gridTicks = $state<Record<string, true>>({});
+  gridManualX = $state<Record<string, true>>({});
 
   constructor(m: PuzzleManifest, dial: TierDial, prior?: DayState) {
     this.m = m;
@@ -53,6 +61,11 @@ export class Game {
     this.stars = prior?.stars ?? 0;
     this.startedMs = Date.now();
     this.lastMoveMs = Date.now();
+    if (prior?.notes) {
+      for (const k of prior.notes.scratchTicks ?? []) this.gridTicks[k] = true;
+      for (const k of prior.notes.manualX ?? []) this.gridManualX[k] = true;
+      for (const id of prior.notes.struckClues ?? []) this.struck[id] = true;
+    }
   }
 
   /** Realtime tiers colour as you play; harder tiers stay neutral until CHECK. */
@@ -64,7 +77,14 @@ export class Game {
     return this.live || this.checked || this.locked;
   }
   get evalState(): PuzzleEval {
-    return evaluate(this.m, this.board, this.placements);
+    // The cross-out grid contributes to the win exactly like the token board: its ticks
+    // that name the anchor reconstruct into placements. When no cell is ticked the merge
+    // is skipped and this is byte-identical to the legacy token-only eval (no regression).
+    const tickKeys = Object.keys(this.gridTicks);
+    const place = tickKeys.length
+      ? mergeGridPlacements(this.board, this.placements, new Set(tickKeys))
+      : this.placements;
+    return evaluate(this.m, this.board, place);
   }
   /** Hints left (-1 unlimited); attempts left (-1 unlimited) per tier dial. */
   get hintsLeft(): number {
@@ -159,6 +179,30 @@ export class Game {
     this.struck[id] = !this.struck[id];
   }
 
+  /** Drop a glyph into a grid cell: TICK it (the positive) and clear any manual-X there.
+   *  Auto-X of the rest of the block's row/col is DERIVED (grid.ts), never stored, and we
+   *  NEVER auto-tick another cell - the last-cell-standing aha is the player's to find. */
+  gridDrop(key: string): void {
+    if (this.locked) return;
+    delete this.gridManualX[key];
+    this.gridTicks[key] = true;
+    this.selected = null;
+    this.lastMoveMs = Date.now();
+    this.checked = false;
+    this.settle();
+  }
+
+  /** Tap a grid cell: clear its tick if ticked, else toggle a manual-X. Removing a tick
+   *  reverts only the auto-X it implied (derived); a manual-X in the same row/col survives. */
+  gridTap(key: string): void {
+    if (this.locked) return;
+    if (this.gridTicks[key]) delete this.gridTicks[key];
+    else if (this.gridManualX[key]) delete this.gridManualX[key];
+    else this.gridManualX[key] = true;
+    this.lastMoveMs = Date.now();
+    this.checked = false;
+  }
+
   /** Lock + score on a complete correct board. Stars: brag-cost via hintsUsed. */
   private win(): boolean {
     if (this.locked || !this.evalState.won) return false;
@@ -176,7 +220,7 @@ export class Game {
 /** Snapshot a DayState for save. */
 export function toDayState(g: Game): DayState {
   const ev = g.evalState;
-  return {
+  const day: DayState = {
     date: g.m.puzzleId,
     tier: g.m.tier,
     shapeId: g.m.shapeId,
@@ -187,6 +231,23 @@ export function toDayState(g: Game): DayState {
     hintsUsed: g.hintsUsed,
     stars: g.stars,
   };
+  const notes = buildNotes(g);
+  if (notes) day.notes = notes;
+  return day;
+}
+
+/** Collect the grid + clue bookkeeping into notes, OMITTING it entirely when nothing is
+ *  marked so a legacy DayState stays byte-identical (backward-compatible - schemas.md). */
+function buildNotes(g: Game): DayNotes | undefined {
+  const manualX = Object.keys(g.gridManualX);
+  const scratchTicks = Object.keys(g.gridTicks);
+  const struckClues = Object.keys(g.struck).filter((id) => g.struck[id]);
+  if (!manualX.length && !scratchTicks.length && !struckClues.length) return undefined;
+  const notes: DayNotes = {};
+  if (manualX.length) notes.manualX = manualX;
+  if (scratchTicks.length) notes.scratchTicks = scratchTicks;
+  if (struckClues.length) notes.struckClues = struckClues;
+  return notes;
 }
 
 /** Persist the day; on a fresh win advance streak + best-time once (today never pruned). */

@@ -20,6 +20,7 @@ export interface CopyBags {
   share?: { title: string; line: string; streak: string };
   credits?: { intro: string; license: string };
   clues?: CluesCopy;
+  grid?: GridCopy;
 }
 
 /** Chrome copy for the story-first clue list (config/copy.json [clues]). `{n}` = number. */
@@ -42,6 +43,31 @@ export const CLUES_COPY_FALLBACK: CluesCopy = {
   unstrike: "Restore clue {n}",
   struck: "Clue {n} crossed out",
   restored: "Clue {n} restored",
+};
+
+/** Chrome copy for the cross-out grid (config/copy.json [grid]). `{row}`/`{col}` = the two
+ *  endpoint labels, `{state}` = the resolved state word. */
+export interface GridCopy {
+  heading: string;
+  mapHeading: string;
+  state: { blank: string; manualX: string; autoX: string; tick: string };
+  cell: string;
+  cross: string;
+  prevBlock: string;
+  nextBlock: string;
+  openBlock: string;
+}
+
+/** Fail-soft grid chrome so a missing copy.json never blanks the cell labels. */
+export const GRID_COPY_FALLBACK: GridCopy = {
+  heading: "Grid",
+  mapHeading: "All blocks",
+  state: { blank: "unmarked", manualX: "crossed out", autoX: "eliminated", tick: "matched" },
+  cell: "{row} and {col}: {state}",
+  cross: "Cross out {row} and {col}",
+  prevBlock: "Previous block",
+  nextBlock: "Next block",
+  openBlock: "Open {row} vs {col}",
 };
 export interface Pace {
   idle_pulse_s: number;
@@ -113,14 +139,27 @@ export interface PuckPreset {
 export interface ClueUi {
   autoDimFeedback: Feedback[];
 }
+/** Cross-out grid tunables (config/ui.json [grid]): square cell edge per puck size + the
+ *  cell magnet (capture radius scales with the cell edge). */
+export interface GridUi {
+  cell: { small: number; medium: number; large: number };
+  snap: { radius_factor: number; ease: number };
+}
 export interface UiConfig {
   puck: { default: PuckSize; small: PuckPreset; medium: PuckPreset; large: PuckPreset };
   snap: { radius_factor: number; ease: number };
   clue?: ClueUi;
+  grid?: GridUi;
 }
 
 /** Soft-feedback fallback: easy (realtime-names) + standard (count-wrong) auto-dim. */
 const SOFT_FEEDBACK_FALLBACK: Feedback[] = ["realtime-names", "count-wrong"];
+
+/** Fail-soft cross-out grid sizing + magnet. */
+const GRID_UI_FALLBACK: GridUi = {
+  cell: { small: 34, medium: 40, large: 48 },
+  snap: { radius_factor: 0.9, ease: 0.6 },
+};
 
 const UI_FALLBACK: UiConfig = {
   puck: {
@@ -131,6 +170,7 @@ const UI_FALLBACK: UiConfig = {
   },
   snap: { radius_factor: 1.4, ease: 0.55 },
   clue: { autoDimFeedback: SOFT_FEEDBACK_FALLBACK },
+  grid: GRID_UI_FALLBACK,
 };
 
 /** Puck sizing + drag-magnet tunables (config/ui.toml). Fail-soft to bootstrap sizes. */
@@ -147,6 +187,17 @@ export function puckPreset(ui: UiConfig, size: string): PuckPreset {
 /** The feedback dials that may auto-dim a satisfied clue (config-driven, fail-soft). */
 export function softFeedback(ui: UiConfig): Feedback[] {
   return ui.clue?.autoDimFeedback ?? SOFT_FEEDBACK_FALLBACK;
+}
+
+/** Cross-out grid tunables (config-driven, fail-soft). */
+export function gridUi(ui: UiConfig): GridUi {
+  return ui.grid ?? GRID_UI_FALLBACK;
+}
+
+/** Square cell edge (px) for the player's puck-size preset. */
+export function gridCellPx(ui: UiConfig, size: string): number {
+  const g = gridUi(ui);
+  return size === "small" || size === "medium" || size === "large" ? g.cell[size] : g.cell.medium;
 }
 
 /** Pick one line from a bag; empty bag yields "". */
