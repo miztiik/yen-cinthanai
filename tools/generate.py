@@ -47,7 +47,7 @@ from models import (  # noqa: E402
     PuzzleManifest,
     Tier,
 )
-from corpus import load_scenario_template  # noqa: E402
+from corpus import load_scenario_template, scenario_path_for_date  # noqa: E402
 from translator import render_clue, render_story  # noqa: E402
 
 _ROOT = Path(__file__).resolve().parent.parent
@@ -654,7 +654,7 @@ def to_story_manifest(date, tier, scenario, variant, cats, n, clues, sol, hints,
         entities=[f"e{i}" for i in range(n)],
         categories=Categories.model_validate({"n": len(cats), "list": cat_models}),
         constraints=constraints, solution=solution, hintTrace=hints,
-        scenarioId=scenario.id, story=render_story(scenario, n, seed),
+        scenarioId=scenario.id, story=render_story(scenario, n, seed, cats),
         subjectNoun=scenario.subjectNoun, variant=variant,
     )
 
@@ -690,7 +690,9 @@ def build_story(
     tiers = load_config("tiers", config_dir)[tier]
     dials = load_config("dials", config_dir)
     story = dials["story"]
-    scenario = load_scenario_template() if scenario_path is None else load_scenario_template(scenario_path)
+    if scenario_path is None:  # per-date pick from the catalog (same date -> same scenario, all tiers)
+        scenario_path = scenario_path_for_date(date)
+    scenario = load_scenario_template(scenario_path)
     entities = tiers["entities"]
     base = story_seed(date, tier, variant)
     cats = build_story_categories(scenario, entities, base)
@@ -772,6 +774,19 @@ def backfill_dates(end: str, n: int) -> list[str]:
     return [(end_dt - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(n - 1, -1, -1)]
 
 
+def resolve_scenario_arg(arg: str) -> Path:
+    """Map a --scenario value (a scenario id like 'weekend-market' or a path to a template) to a
+    template Path. Used to pin a reference golden master to one scenario instead of the per-date
+    pick."""
+    p = Path(arg)
+    if p.exists():
+        return p
+    cand = DATASETS_DIR / "templates" / (arg if arg.endswith(".json") else f"{arg}.json")
+    if not cand.exists():
+        raise FileNotFoundError(f"unknown scenario {arg!r} (looked for {cand.as_posix()})")
+    return cand
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Build the daily puzzle bank (add-only; existing files frozen).")
     ap.add_argument("--date", default="today", help="YYYY-MM-DD or 'today' (UTC)")
@@ -786,13 +801,18 @@ def main(argv: list[str] | None = None) -> int:
         help="emit story-first master(s) to datasets/ (corpus-driven matrix) instead of the daily bank",
     )
     ap.add_argument("--variant", type=int, default=1, help="story variant number (with --story); default 1")
+    ap.add_argument(
+        "--scenario", default=None,
+        help="with --story: force a scenario id or template path (else the per-date catalog pick)",
+    )
     args = ap.parse_args(argv)
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     anchor = today if args.date == "today" else args.date
     tiers = [t.strip() for t in args.tiers.split(",") if t.strip()]
     if args.story:
+        sp = resolve_scenario_arg(args.scenario) if args.scenario else None
         for tier in tiers:
-            r = write_story_master(anchor, tier, args.variant)
+            r = write_story_master(anchor, tier, args.variant, scenario_path=sp)
             print(f"{r['file']} D={r['D']}")
         return 0
     LOGS_DIR.mkdir(parents=True, exist_ok=True)

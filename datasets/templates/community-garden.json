@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "community-garden",
+  "title": "The Community Garden",
+  "subjectNoun": "grower",
+  "subjectCategory": "grower",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content). Cozy allotment judging morning. Anchor = grower. vegetable -> vegetables glyph pack, ribbon -> color glyph pack (the rosette colour); plot is the numeric axis (the allotment plot number); bloom is a text-only flower. narrativeTemplate is setting flavor only. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "It is judging morning at the {place} community garden, where {n} growers have tended their allotments right through the season, and old {steward}, who has chaired the committee since before the greenhouse was built, is squinting at a rain-smudged results card trying to remember who won what.",
+  "flavorPools": {
+    "steward": ["Mr. Ogilvy", "Mrs. Baptiste", "Auntie Fen", "Old Hollis"],
+    "place": ["Elmbrook", "Canal Lane", "Hillside"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Marta'; 'attribute' -> 'the carrot grower' (the value's refPhrase). Gated up by tier.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "grower",
+      "label": "Grower",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "marta", "label": "Marta" },
+        { "id": "gus", "label": "Gus" },
+        { "id": "ivy", "label": "Ivy" },
+        { "id": "raj", "label": "Raj" },
+        { "id": "nora", "label": "Nora" },
+        { "id": "cole", "label": "Cole" }
+      ]
+    },
+    {
+      "id": "vegetable",
+      "label": "Vegetable",
+      "kind": "nominal",
+      "glyphPack": "vegetables",
+      "valuePool": [
+        { "id": "carrot", "label": "Carrots", "phrase": "grew the carrots", "refPhrase": "carrot grower" },
+        { "id": "potato", "label": "Potatoes", "phrase": "grew the potatoes", "refPhrase": "potato grower" },
+        { "id": "corn", "label": "Corn", "phrase": "grew the corn", "refPhrase": "corn grower" },
+        { "id": "cabbage", "label": "Cabbage", "phrase": "grew the cabbage", "refPhrase": "cabbage grower" },
+        { "id": "spinach", "label": "Spinach", "phrase": "grew the spinach", "refPhrase": "spinach grower" },
+        { "id": "beet", "label": "Beetroot", "phrase": "grew the beetroot", "refPhrase": "beetroot grower" }
+      ]
+    },
+    {
+      "id": "plot",
+      "label": "Plot",
+      "kind": "numeric",
+      "unit": "plot",
+      "valuePool": [
+        { "id": "plot2", "label": "Plot 2", "magnitude": 2, "phrase": "tended plot 2" },
+        { "id": "plot4", "label": "Plot 4", "magnitude": 4, "phrase": "tended plot 4" },
+        { "id": "plot6", "label": "Plot 6", "magnitude": 6, "phrase": "tended plot 6" },
+        { "id": "plot8", "label": "Plot 8", "magnitude": 8, "phrase": "tended plot 8" },
+        { "id": "plot10", "label": "Plot 10", "magnitude": 10, "phrase": "tended plot 10" },
+        { "id": "plot12", "label": "Plot 12", "magnitude": 12, "phrase": "tended plot 12" }
+      ]
+    },
+    {
+      "id": "bloom",
+      "label": "Bloom",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "dahlias", "label": "Dahlias", "phrase": "showed the dahlias", "refPhrase": "dahlia grower" },
+        { "id": "marigolds", "label": "Marigolds", "phrase": "showed the marigolds", "refPhrase": "marigold grower" },
+        { "id": "zinnias", "label": "Zinnias", "phrase": "showed the zinnias", "refPhrase": "zinnia grower" },
+        { "id": "asters", "label": "Asters", "phrase": "showed the asters", "refPhrase": "aster grower" },
+        { "id": "peonies", "label": "Peonies", "phrase": "showed the peonies", "refPhrase": "peony grower" },
+        { "id": "cosmos", "label": "Cosmos", "phrase": "showed the cosmos", "refPhrase": "cosmos grower" }
+      ]
+    },
+    {
+      "id": "ribbon",
+      "label": "Ribbon",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "blue", "label": "Blue ribbon", "phrase": "took the blue ribbon", "refPhrase": "blue-ribbon winner" },
+        { "id": "red", "label": "Red ribbon", "phrase": "took the red ribbon", "refPhrase": "red-ribbon winner" },
+        { "id": "green", "label": "Green ribbon", "phrase": "took the green ribbon", "refPhrase": "green-ribbon winner" },
+        { "id": "yellow", "label": "Yellow ribbon", "phrase": "took the yellow ribbon", "refPhrase": "yellow-ribbon winner" },
+        { "id": "purple", "label": "Purple ribbon", "phrase": "took the purple ribbon", "refPhrase": "purple-ribbon winner" },
+        { "id": "orange", "label": "Orange ribbon", "phrase": "took the orange ribbon", "refPhrase": "orange-ribbon winner" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "{a_ref}'s row was the one that {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one with the {b_label}.",
+        "The {b_label} was not {a_ref}'s.",
+        "{a_ref} did not end up with the {b_label}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "plot",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref}'s plot number was {delta} higher than {b_ref}'s.",
+        "{a_ref} worked a plot {delta} numbers higher than {b_ref}'s."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "plot",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} worked a plot numbered at least {bound}.",
+        "{a_ref}'s plot was no lower than number {bound}."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} could not decide between the {x_label} and the {y_label}, and entered just one.",
+        "{a_ref} put in either the {x_label} or the {y_label}, not both."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
