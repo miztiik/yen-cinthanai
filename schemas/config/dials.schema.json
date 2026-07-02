@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "config/dials.schema.json",
   "title": "DialsConfig",
-  "description": "config/dials.json - build-only generator tunables (NOT baked into the bundle). Reseed budget, seed salt, per-tier grid shape, clue-type weights, and story weights. Human-edited (CLAUDE.md #6). Top-level additionalProperties is open because dials accumulates knobs as clue types are added.",
+  "description": "config/dials.json - build-only generator tunables (NOT baked into the bundle). Reseed budget, story clue-type weights + variety cap, and the template revision. Human-edited (CLAUDE.md #6). Top-level additionalProperties is open because dials accumulates knobs as clue types are added.",
   "type": "object",
   "evolution": [
     {
@@ -10,27 +10,22 @@
       "date": "2026-07-02",
       "change": "Initial machine-checkable formalization of config/dials.json: max_reseeds, seed_salt, story{weights{<clueType>->int},share_cap}, template_rev, tier{<tier>->{nominal,shape,shared}}, weights{<slotRule>->int}.",
       "why": "The generator's build-only knobs must be schema-validated so a malformed weight or missing salt fails fast (CLAUDE.md #6); dials is not baked, so extra keys stay tolerant."
+    },
+    {
+      "version": 2,
+      "date": "2026-07-02",
+      "change": "Retired the legacy seating-engine knobs: seed_salt, tier{nominal,shape,shared}, and the positional clue weights{}. Only max_reseeds, template_rev, and story{weights,share_cap} remain (the story-first matrix path).",
+      "why": "The seating-row/round-table engine + its glyph-manifest category builder are retired (Row 9d matrix-only), so their build-only knobs are dead config and are removed."
     }
   ],
   "$defs": {
     "intWeights": {
       "type": "object",
       "additionalProperties": { "type": "integer" }
-    },
-    "tierShape": {
-      "type": "object",
-      "properties": {
-        "nominal": { "type": "integer" },
-        "shape": { "type": "string" },
-        "shared": { "type": "integer" }
-      },
-      "required": ["nominal", "shape", "shared"],
-      "additionalProperties": false
     }
   },
   "properties": {
     "max_reseeds": { "type": "integer" },
-    "seed_salt": { "type": "string" },
     "story": {
       "type": "object",
       "properties": {
@@ -40,13 +35,8 @@
       "required": ["weights", "share_cap"],
       "additionalProperties": true
     },
-    "template_rev": { "type": "integer" },
-    "tier": {
-      "type": "object",
-      "additionalProperties": { "$ref": "#/$defs/tierShape" }
-    },
-    "weights": { "$ref": "#/$defs/intWeights" }
+    "template_rev": { "type": "integer" }
   },
-  "required": ["max_reseeds", "seed_salt", "template_rev", "tier", "weights"],
+  "required": ["max_reseeds", "template_rev", "story"],
   "additionalProperties": true
 }

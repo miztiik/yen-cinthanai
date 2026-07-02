@@ -10,11 +10,17 @@
       "date": "2026-06-29",
       "change": "Initial BankIndex v1: schemaVersion, generatedSeed (the date write_index ran for), builtAt, puzzles[BankEntry{date,tier,shapeId,file,sha}].",
       "why": "A single served index of the day's puzzles + their content hashes; typed before logic (CLAUDE.md sec 11). The daily bot rewrites it in place with only the run's dates."
+    },
+    {
+      "version": 1,
+      "date": "2026-07-02",
+      "change": "BankEntry.shapeId enum tightened to grid-only (seating-row/round-table retired, Row 9d matrix-only contract close). schemaVersion stays 1 - the index shape is unchanged, only the value set narrows.",
+      "why": "The served bank is matrix-only after the legacy engine retirement, so a non-grid entry can no longer be produced and the schema forbids it."
     }
   ],
   "$defs": {
     "tier": { "type": "string", "enum": ["easy", "standard", "sharp", "expert"] },
-    "shapeId": { "type": "string", "enum": ["grid", "seating-row", "round-table"] },
+    "shapeId": { "type": "string", "enum": ["grid"] },
     "bankEntry": {
       "type": "object",
       "properties": {

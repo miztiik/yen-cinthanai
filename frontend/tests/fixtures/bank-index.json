@@ -4,6 +4,6 @@
   "builtAt": "2026-06-29T00:00:00Z",
   "puzzles": [
     { "date": "2026-06-29", "tier": "easy", "shapeId": "grid", "file": "2026-06-29-easy.json", "sha": "0000000000000000000000000000000000000000000000000000000000000000" },
-    { "date": "2026-06-29", "tier": "standard", "shapeId": "seating-row", "file": "2026-06-29-standard.json", "sha": "abc123" }
+    { "date": "2026-06-29", "tier": "standard", "shapeId": "grid", "file": "2026-06-29-standard.json", "sha": "abc123" }
   ]
 }

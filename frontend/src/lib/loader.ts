@@ -26,11 +26,13 @@ export function isManifest(m: unknown): m is PuzzleManifest {
   if (typeof m !== "object" || m === null) return false;
   const o = m as Record<string, unknown>;
   return (
-    o.schemaVersion === 1 &&
+    o.schemaVersion === 2 &&
     typeof o.puzzleId === "string" &&
     Array.isArray(o.entities) &&
     typeof o.categories === "object" &&
-    Array.isArray(o.constraints)
+    Array.isArray(o.constraints) &&
+    typeof o.story === "string" &&
+    typeof o.scenarioId === "string"
   );
 }
 

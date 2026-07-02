@@ -7,7 +7,6 @@
         "id": "name",
         "kind": "nominal",
         "label": "Friend",
-        "ordinal": false,
         "values": [
           {
             "glyph": "",
@@ -32,11 +31,11 @@
         ]
       },
       {
+        "anchor": false,
         "cardinality": "bijective",
         "id": "craft",
         "kind": "nominal",
         "label": "Craft",
-        "ordinal": false,
         "values": [
           {
             "glyph": "",
@@ -69,11 +68,11 @@
         ]
       },
       {
+        "anchor": false,
         "cardinality": "bijective",
         "id": "price",
         "kind": "numeric",
         "label": "Price",
-        "ordinal": true,
         "unit": "dollars",
         "values": [
           {
@@ -290,7 +289,7 @@
   ],
   "puzzleId": "2026-07-01",
   "scenarioId": "weekend-market",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "shapeId": "grid",
   "solution": {
     "e0": {

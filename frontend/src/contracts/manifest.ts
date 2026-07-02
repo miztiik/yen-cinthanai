@@ -1,4 +1,5 @@
-// PuzzleManifest v1 - bundle-shipped (rewrite-in-place, no migration). See
+// PuzzleManifest v2 - bundle-shipped (rewrite-in-place, no migration). Matrix-only (grid) +
+// story-first: the seating/round-table engine is retired (Row 9d). See
 // docs/architecture/contracts/schemas.md and TODO/2026-06-29-system-design.md sec 5.
 // Types only; no logic here. BankIndex -> bank.ts, ShareCard -> share.ts.
 
@@ -10,7 +11,7 @@ export interface AttributeValue {
   id: string;
   glyph: string;
   label: string;
-  // Story-first (Expand phase, all optional; schemaVersion stays 1):
+  // Optional numeric/story metadata (present only where meaningful; absent when unset):
   magnitude?: number;
   phrase?: string;
   refPhrase?: string;
@@ -19,13 +20,14 @@ export interface AttributeValue {
 export interface AttributeCategory {
   id: string;
   label: string;
-  ordinal: boolean;
+  // Required at v2: `kind` replaces the retired boolean `ordinal` flag; exactly one
+  // category is the `anchor` (the identity axis).
+  kind: "nominal" | "ordinal" | "numeric";
+  anchor: boolean;
   cardinality: Cardinality;
   values: AttributeValue[];
-  // Story-first (Expand phase, all optional; kind and ordinal coexist for now):
-  kind?: "nominal" | "ordinal" | "numeric";
+  // Optional metadata:
   unit?: string;
-  anchor?: boolean;
   glyphPack?: string;
 }
 
@@ -49,7 +51,7 @@ export interface HintStep {
 }
 
 export interface PuzzleManifest {
-  schemaVersion: 1;
+  schemaVersion: 2;
   puzzleId: string;
   tier: Tier;
   shapeId: ShapeId;
@@ -59,9 +61,9 @@ export interface PuzzleManifest {
   constraints: Constraint[];
   solution: Record<string, Record<string, string>>;
   hintTrace: HintStep[];
-  // Story-first (Expand phase, all optional; schemaVersion stays 1):
-  scenarioId?: string;
-  story?: string;
-  subjectNoun?: string;
-  variant?: number;
+  // Story-first is REQUIRED at v2 (matrix-only, narrated grid):
+  scenarioId: string;
+  story: string;
+  subjectNoun: string;
+  variant: number;
 }

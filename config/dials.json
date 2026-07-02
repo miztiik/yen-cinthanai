@@ -1,6 +1,5 @@
 {
   "max_reseeds": 64,
-  "seed_salt": "yen-cinthanai-v1",
   "story": {
     "weights": {
       "eq": 2,
@@ -13,37 +12,5 @@
     },
     "share_cap": 0.8
   },
-  "template_rev": 1,
-  "tier": {
-    "easy": {
-      "nominal": 2,
-      "shape": "grid",
-      "shared": 0
-    },
-    "expert": {
-      "nominal": 4,
-      "shape": "round-table",
-      "shared": 0
-    },
-    "sharp": {
-      "nominal": 3,
-      "shape": "seating-row",
-      "shared": 0
-    },
-    "standard": {
-      "nominal": 2,
-      "shape": "seating-row",
-      "shared": 1
-    }
-  },
-  "weights": {
-    "adjacent": 4,
-    "before": 3,
-    "between": 4,
-    "distance": 2,
-    "ends": 4,
-    "eq": 4,
-    "neq": 2,
-    "opposite": 5
-  }
+  "template_rev": 1
 }

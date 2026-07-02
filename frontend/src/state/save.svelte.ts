@@ -4,20 +4,22 @@
 // hero/streak) -> caller. Write: prune oldest under QuotaExceededError, today
 // never pruned. ASCII, no game logic.
 
-import type { Save, DayState, Tier, ShapeId, DayStatus, Settings } from "../contracts/save";
+import type { Save, DayState, Tier, SaveShapeId, DayStatus, Settings } from "../contracts/save";
 import { updateHero, updateStreak } from "../lib/scoring";
 
 const SAVE_KEY = "yen-cinthanai/save";
 const TARGET_VERSION = 1;
 
 const TIERS: readonly Tier[] = ["easy", "standard", "sharp", "expert"];
-const SHAPES: readonly ShapeId[] = ["grid", "seating-row", "round-table"];
+// Matrix-only writes grid, but a day persisted before the retirement may carry a legacy
+// shapeId - accept them on READ so an old save is not dropped and its dayKey stays valid.
+const READABLE_SHAPES: readonly SaveShapeId[] = ["grid", "seating-row", "round-table"];
 const STATUSES: readonly DayStatus[] = ["unplayed", "playing", "won", "lost"];
 
 /** Composite day-slot key: one slot per (date, tier, shape) so multiple tiers/shapes
  *  the same calendar day coexist instead of overwriting one slot. Older date-only saves
  *  normalize to this on read (validateSave), so schemaVersion stays 1 (backward compat). */
-export function dayKey(date: string, tier: Tier, shapeId: ShapeId): string {
+export function dayKey(date: string, tier: Tier, shapeId: SaveShapeId): string {
   return `${date}|${tier}|${shapeId}`;
 }
 
@@ -70,7 +72,7 @@ function isDay(d: unknown): d is DayState {
   return (
     typeof o.date === "string" &&
     TIERS.includes(o.tier as Tier) &&
-    SHAPES.includes(o.shapeId as ShapeId) &&
+    READABLE_SHAPES.includes(o.shapeId as SaveShapeId) &&
     STATUSES.includes(o.status as DayStatus) &&
     typeof o.placements === "object" &&
     o.placements !== null &&

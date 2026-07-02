@@ -28,7 +28,7 @@ const mEasy = JSON.parse(
 
 // Dimensions are auto-discovered + date-seeded, so the test must not assume which packs were
 // picked. Derive a fillable bijective column (never the anchor identity) + sample values.
-const COL = m.categories.list.find((c) => !c.anchor && !c.ordinal && c.cardinality !== "shared")!.id;
+const COL = m.categories.list.find((c) => !c.anchor && c.cardinality !== "shared")!.id;
 const E0_VAL = m.solution["e0"][COL];
 const E1_VAL = m.solution["e1"][COL]; // belongs to another seat -> a wrong value on e0
 

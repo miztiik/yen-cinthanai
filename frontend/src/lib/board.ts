@@ -1,7 +1,7 @@
 // Board model: derive the playable grid from a manifest, nothing hardcoded. One
-// engine, many skins (core-loop.md): entities are rows, categories are columns,
-// values are the draggable tokens. The anchor (the anchor:true axis if the manifest
-// flags one, else an ordinal axis, else cats[0]) is the row identity - value i sits in
+// engine, one skin (core-loop.md): entities are rows, categories are columns,
+// values are the draggable tokens. The anchor (the anchor:true axis, else cats[0]) is
+// the row identity - value i sits in
 // slot i - so it renders as a fixed header, not a fillable column. Every other category
 // is a pool the player drains. No solution is ever read here, so nothing leaks. The
 // private post-win reveal lives in lib/answer.ts. See core-loop.md, ui-shell.md.
@@ -13,17 +13,13 @@ export interface BoardModel {
   anchor: AttributeCategory; // fixed identity column (header), value i -> entity i
   columns: AttributeCategory[]; // fillable categories, in manifest order
   values: Record<string, AttributeValue[]>; // catId -> token pool source
-  wrap: boolean; // circular table: adjacency wraps end-to-end (round-table)
+  wrap: boolean; // always false at v2 (matrix-only); retained for the inert board-skin seam
 }
 
-/** Pick the anchor: the flagged `anchor:true` axis if any (story-first identity, e.g. the
- *  name), else the ordinal axis (legacy pre-pivot puzzles), else the first category. */
+/** Pick the anchor: the flagged `anchor:true` axis (story-first identity, e.g. the name),
+ *  else the first category. Matrix-only at v2 - there is no ordinal seat axis. */
 export function anchorCategory(m: PuzzleManifest): AttributeCategory {
-  return (
-    m.categories.list.find((c) => c.anchor) ??
-    m.categories.list.find((c) => c.ordinal) ??
-    m.categories.list[0]
-  );
+  return m.categories.list.find((c) => c.anchor) ?? m.categories.list[0];
 }
 
 /** Anchor value for a row index (value i -> slot i). */
@@ -37,7 +33,7 @@ export function buildBoard(m: PuzzleManifest): BoardModel {
   const columns = m.categories.list.filter((c) => c.id !== anchor.id);
   const values: Record<string, AttributeValue[]> = {};
   for (const c of m.categories.list) values[c.id] = c.values;
-  return { entities: m.entities, anchor, columns, values, wrap: m.shapeId === "round-table" };
+  return { entities: m.entities, anchor, columns, values, wrap: false };
 }
 
 /** Total fillable slots = entities x fillable columns. */

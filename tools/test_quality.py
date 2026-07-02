@@ -304,10 +304,10 @@ def easy_build() -> g.StoryBuild:
 
 
 def test_easy_is_all_direct_story_first(easy_build: g.StoryBuild) -> None:
-    # Easy emits a story-first schemaVersion-1 grid with NO indirect clue (all-direct tutorial):
+    # Easy emits a story-first schemaVersion-2 grid with NO indirect clue (all-direct tutorial):
     # eq present, and no neq/compound - matching the tier's declared indirection budget [0, 0].
     m = easy_build.manifest
-    assert m.schemaVersion == 1 and m.shapeId == "grid" and m.story and m.scenarioId
+    assert m.schemaVersion == 2 and m.shapeId == "grid" and m.story and m.scenarioId
     types = [c.type for c in m.constraints]
     assert types and "eq" in types
     assert all(t not in g.INDIRECT_TYPES for t in types), [t for t in types if t in g.INDIRECT_TYPES]
@@ -333,13 +333,32 @@ def test_rebuild_is_byte_identical_easy(easy_build: g.StoryBuild) -> None:
     assert rebuilt.model_dump(by_alias=True) == easy_build.manifest.model_dump(by_alias=True)
 
 
-# Fast-generating dates (few reseeds) keep this cross-product property test cheap.
-@pytest.mark.parametrize("date", ["2026-06-30", "2026-07-01"])
+# The served archive dates (deterministic, known in-band) sweep the full 8 x 4 cross-product.
+SWEEP_DATES = [
+    "2026-06-25", "2026-06-26", "2026-06-27", "2026-06-28",
+    "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02",
+]
+
+
+@pytest.mark.parametrize("date", SWEEP_DATES)
 @pytest.mark.parametrize("tier", ["easy", "standard", "sharp", "expert"])
-def test_p1_zero_guess_holds_per_tier(date: str, tier: str) -> None:
-    # Property: P1 (zero-guess) holds for EVERY tier - including EASY - on multiple dates. The
-    # forced deduction trace visits every non-anchor bijective cell exactly once, and the emitted
-    # manifest is a story-first schemaVersion-1 grid served at variant 1.
-    m, _, _ = g.generate_story(date, tier, 1, CONFIG_DIR)
-    assert m.schemaVersion == 1 and m.shapeId == "grid" and m.story and m.scenarioId
-    assert len(m.hintTrace) == _full_depth(m)
+def test_property_sweep_p1_band_variety(date: str, tier: str) -> None:
+    # Property sweep over 8 dates x 4 tiers (32 cases): every generated manifest is a story-first
+    # schemaVersion-2 grid that holds P1 (zero-guess: len(hintTrace) == non-anchor bijective cells),
+    # sits in the tier band, and keeps variety - eq is always present, and a tier that budgets
+    # indirection (indir upper > 0) keeps no single clue type over the share cap; the all-direct
+    # easy tier (indir == [0, 0]) instead carries no indirect clue at all. Deterministic (the seed
+    # is a function of date/tier/variant), so a rebuild reproduces the same manifests.
+    tiers = g.load_config("tiers", CONFIG_DIR)[tier]
+    m, d, _ = g.generate_story(date, tier, 1, CONFIG_DIR)
+    assert m.schemaVersion == 2 and m.shapeId == "grid" and m.story and m.scenarioId
+    assert len(m.hintTrace) == _full_depth(m)                     # P1: zero-guess
+    lo, hi = tiers["band"]
+    assert lo <= d <= hi                                          # band
+    types = [c.type for c in m.constraints]
+    assert "eq" in types                                          # variety: an eq toehold always
+    if tiers["indir"][1] > 0.0:  # a tier that budgets indirection keeps one type from dominating
+        cap = g.load_config("dials", CONFIG_DIR)["story"]["share_cap"]
+        assert max(types.count(t) for t in set(types)) / len(types) <= cap
+    else:  # the all-direct easy tutorial: no indirect clue at all
+        assert all(t not in g.INDIRECT_TYPES for t in types)
