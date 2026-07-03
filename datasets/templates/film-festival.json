@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "id": "film-festival",
+  "title": "The Riverside Film Festival",
+  "subjectNoun": "director",
+  "subjectCategory": "director",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content). Light-mystery cinema festival. Anchor = director. genre + venue are text-only; award has no category glyphPack (the medals pack holds only gold/silver/bronze) but three of its values carry a per-value medal glyph override so the covered prizes decorate while the rest stay text; slot is the numeric axis (screening order). The narrativeTemplate is setting flavor only and never names a sliced category (slot/venue/award). Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "The little riverside film festival is winding into its final evening, and {n} directors are gathered in the lobby while {curator}, who programmes the whole event, tries to reconstruct the running order after the {mishap} shuffled the printed cards.",
+  "flavorPools": {
+    "curator": ["Ms. Alderton", "old Beaumont", "the festival curator"],
+    "mishap": ["projector glitch", "gust through the foyer", "sudden power cut"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Ingrid'; 'attribute' -> 'the thriller director' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "director",
+      "label": "Director",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "ingrid", "label": "Ingrid" },
+        { "id": "rafael", "label": "Rafael" },
+        { "id": "noor", "label": "Noor" },
+        { "id": "dev", "label": "Dev" },
+        { "id": "cleo", "label": "Cleo" },
+        { "id": "hugo", "label": "Hugo" }
+      ]
+    },
+    {
+      "id": "genre",
+      "label": "Genre",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "thriller", "label": "Thriller", "phrase": "screened the thriller", "refPhrase": "thriller director" },
+        { "id": "comedy", "label": "Comedy", "phrase": "screened the comedy", "refPhrase": "comedy director" },
+        { "id": "drama", "label": "Drama", "phrase": "screened the drama", "refPhrase": "drama director" },
+        { "id": "documentary", "label": "Documentary", "phrase": "screened the documentary", "refPhrase": "documentary maker" },
+        { "id": "fantasy", "label": "Fantasy", "phrase": "screened the fantasy", "refPhrase": "fantasy director" },
+        { "id": "western", "label": "Western", "phrase": "screened the western", "refPhrase": "western director" }
+      ]
+    },
+    {
+      "id": "slot",
+      "label": "Slot",
+      "kind": "numeric",
+      "valuePool": [
+        { "id": "slot1", "label": "Slot 1", "magnitude": 1, "phrase": "screened in slot 1" },
+        { "id": "slot2", "label": "Slot 2", "magnitude": 2, "phrase": "screened in slot 2" },
+        { "id": "slot3", "label": "Slot 3", "magnitude": 3, "phrase": "screened in slot 3" },
+        { "id": "slot4", "label": "Slot 4", "magnitude": 4, "phrase": "screened in slot 4" },
+        { "id": "slot5", "label": "Slot 5", "magnitude": 5, "phrase": "screened in slot 5" },
+        { "id": "slot6", "label": "Slot 6", "magnitude": 6, "phrase": "screened in slot 6" }
+      ]
+    },
+    {
+      "id": "venue",
+      "label": "Venue",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "grandhall", "label": "Grand Hall", "phrase": "premiered in the grand hall", "refPhrase": "grand-hall showing" },
+        { "id": "rooftop", "label": "Rooftop", "phrase": "premiered on the rooftop", "refPhrase": "rooftop showing" },
+        { "id": "lakeside", "label": "Lakeside", "phrase": "premiered by the lakeside", "refPhrase": "lakeside showing" },
+        { "id": "oldcinema", "label": "Old Cinema", "phrase": "premiered in the old cinema", "refPhrase": "old-cinema showing" },
+        { "id": "courtyard", "label": "Courtyard", "phrase": "premiered in the courtyard", "refPhrase": "courtyard showing" },
+        { "id": "studiob", "label": "Studio B", "phrase": "premiered in studio B", "refPhrase": "studio-B showing" }
+      ]
+    },
+    {
+      "id": "award",
+      "label": "Award",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "goldreel", "label": "Gold Reel", "phrase": "took the gold reel", "refPhrase": "gold-reel winner", "glyph": "medals.gold" },
+        { "id": "silverreel", "label": "Silver Reel", "phrase": "took the silver reel", "refPhrase": "silver-reel winner", "glyph": "medals.silver" },
+        { "id": "bronzereel", "label": "Bronze Reel", "phrase": "took the bronze reel", "refPhrase": "bronze-reel winner", "glyph": "medals.bronze" },
+        { "id": "audiencepick", "label": "Audience Pick", "phrase": "won the audience pick", "refPhrase": "audience favourite" },
+        { "id": "criticspick", "label": "Critics Pick", "phrase": "won the critics pick", "refPhrase": "critics favourite" },
+        { "id": "debutprize", "label": "Debut Prize", "phrase": "won the debut prize", "refPhrase": "debut winner" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "slot",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref}'s slot came {delta} later than {b_ref}'s.",
+        "{a_ref} was {delta} further down the running order than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "slot",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} screened no earlier than slot {bound}.",
+        "{a_ref} was slotted no sooner than {bound}."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was choosing between {x_label} and {y_label}, and kept just one.",
+        "For {a_ref} it was {x_label} or {y_label} - not both."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -340,10 +340,10 @@ def test_rebuild_is_byte_identical_easy(easy_build: g.StoryBuild) -> None:
     assert rebuilt.model_dump(by_alias=True) == easy_build.manifest.model_dump(by_alias=True)
 
 
-# The served archive dates (deterministic, known in-band) sweep the full 8 x 4 cross-product.
+# The served archive dates (deterministic, known in-band) sweep the full 9 x 4 cross-product.
 SWEEP_DATES = [
-    "2026-06-25", "2026-06-26", "2026-06-27", "2026-06-28",
-    "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02",
+    "2026-06-25", "2026-06-26", "2026-06-27", "2026-06-28", "2026-06-29",
+    "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03",
 ]
 
 
@@ -422,3 +422,38 @@ def test_served_bank_matches_per_date_scenario_all_tiers() -> None:
         for tier in ("easy", "standard", "sharp", "expert"):
             m = PuzzleManifest.model_validate_json((PUZZLES_DIR / f"{date}-{tier}.json").read_text("ascii"))
             assert m.scenarioId == expected, (date, tier, m.scenarioId)
+
+
+# --- Row 9g: the whole catalog generates across all four tiers (auto-covers new scenarios) -------
+
+
+@pytest.mark.parametrize("scenario_path", CATALOG, ids=lambda p: p.stem)
+@pytest.mark.parametrize("tier", ["easy", "standard", "sharp", "expert"])
+def test_scenario_generates_all_tiers_p1_in_band(scenario_path: Path, tier: str) -> None:
+    # Every catalogued scenario builds a valid story-first schemaVersion-2 grid at EVERY tier:
+    # zero-guess (P1: len(hintTrace) == non-anchor bijective cells), difficulty inside the tier
+    # band, an eq toehold present, and a numeric clue whenever the tier gates one in. Parametrized
+    # over the whole catalog x 4 tiers, so a newly authored scenario is auto-covered here (and by
+    # the coherence + selection tests above) without editing any test. Real solver, no mocks.
+    tiers = g.load_config("tiers", CONFIG_DIR)[tier]
+    b = g.build_story("2026-07-01", tier, 1, CONFIG_DIR, scenario_path=scenario_path)
+    m = b.manifest
+    assert m.schemaVersion == 2 and m.shapeId == "grid" and m.story
+    assert m.scenarioId == scenario_path.stem
+    assert len(m.hintTrace) == _full_depth(m)                        # P1: zero-guess
+    lo, hi = tiers["band"]
+    assert lo <= b.d <= hi, (scenario_path.stem, tier, b.d, (lo, hi))
+    types = [c.type for c in m.constraints]
+    assert "eq" in types                                             # an eq toehold always
+    numeric_types = g._numeric_types_for_tier(b.scenario, tier)
+    if numeric_types:  # a tier that gates a numeric clue in must carry at least one
+        assert any(t in numeric_types for t in types), (scenario_path.stem, tier, types)
+
+
+@pytest.mark.parametrize("scenario_path", CATALOG, ids=lambda p: p.stem)
+def test_scenario_rebuild_is_byte_identical(scenario_path: Path) -> None:
+    # Determinism per scenario: the same (date, tier, variant) rebuilds a byte-identical manifest
+    # (num_search_workers=1, fixed seed + clue order, date-seeded narrative + variant picks).
+    a = g.generate_story("2026-07-01", "standard", 1, CONFIG_DIR, scenario_path=scenario_path)[0]
+    b = g.generate_story("2026-07-01", "standard", 1, CONFIG_DIR, scenario_path=scenario_path)[0]
+    assert a.model_dump(by_alias=True) == b.model_dump(by_alias=True)

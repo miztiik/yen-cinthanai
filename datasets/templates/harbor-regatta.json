@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "harbor-regatta",
+  "title": "The Harbour Regatta",
+  "subjectNoun": "sailor",
+  "subjectCategory": "sailor",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content). Cozy coastal regatta. Anchor = sailor. boat is text-only (boat rigs); sailcolor -> color glyph pack; mascot -> creatures glyph pack; finish is the numeric axis (elapsed minutes, so a bigger magnitude means a slower boat). The narrativeTemplate is setting flavor only and never names a sliced category (finish/sail colour/mascot). Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "A light breeze is up over the bay for the summer regatta, and {n} sailors have drawn their boats up on the shingle while {harbourmaster}, who has run the race for years, sorts out the results from a soggy notebook after the {mishap}.",
+  "flavorPools": {
+    "harbourmaster": ["old Ferris", "Mrs. Colwyn", "Captain Reyes"],
+    "mishap": ["squall off the point", "wash from a passing ferry", "tangle at the first buoy"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Mira'; 'attribute' -> 'the sloop skipper' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "sailor",
+      "label": "Sailor",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "mira", "label": "Mira" },
+        { "id": "bjorn", "label": "Bjorn" },
+        { "id": "talia", "label": "Talia" },
+        { "id": "reuben", "label": "Reuben" },
+        { "id": "suki", "label": "Suki" },
+        { "id": "cole", "label": "Cole" }
+      ]
+    },
+    {
+      "id": "boat",
+      "label": "Boat",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "sloop", "label": "Sloop", "phrase": "skippered the sloop", "refPhrase": "sloop skipper" },
+        { "id": "ketch", "label": "Ketch", "phrase": "skippered the ketch", "refPhrase": "ketch skipper" },
+        { "id": "cutter", "label": "Cutter", "phrase": "skippered the cutter", "refPhrase": "cutter skipper" },
+        { "id": "yawl", "label": "Yawl", "phrase": "skippered the yawl", "refPhrase": "yawl skipper" },
+        { "id": "schooner", "label": "Schooner", "phrase": "skippered the schooner", "refPhrase": "schooner skipper" },
+        { "id": "dinghy", "label": "Dinghy", "phrase": "skippered the dinghy", "refPhrase": "dinghy skipper" }
+      ]
+    },
+    {
+      "id": "finish",
+      "label": "Finish",
+      "kind": "numeric",
+      "unit": "minutes",
+      "valuePool": [
+        { "id": "min12", "label": "12 min", "magnitude": 12, "phrase": "crossed the line in 12 minutes" },
+        { "id": "min14", "label": "14 min", "magnitude": 14, "phrase": "crossed the line in 14 minutes" },
+        { "id": "min17", "label": "17 min", "magnitude": 17, "phrase": "crossed the line in 17 minutes" },
+        { "id": "min19", "label": "19 min", "magnitude": 19, "phrase": "crossed the line in 19 minutes" },
+        { "id": "min22", "label": "22 min", "magnitude": 22, "phrase": "crossed the line in 22 minutes" },
+        { "id": "min25", "label": "25 min", "magnitude": 25, "phrase": "crossed the line in 25 minutes" }
+      ]
+    },
+    {
+      "id": "sailcolor",
+      "label": "Sail colour",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red", "phrase": "raised the red sail", "refPhrase": "red sail" },
+        { "id": "blue", "label": "Blue", "phrase": "raised the blue sail", "refPhrase": "blue sail" },
+        { "id": "green", "label": "Green", "phrase": "raised the green sail", "refPhrase": "green sail" },
+        { "id": "yellow", "label": "Yellow", "phrase": "raised the yellow sail", "refPhrase": "yellow sail" },
+        { "id": "orange", "label": "Orange", "phrase": "raised the orange sail", "refPhrase": "orange sail" },
+        { "id": "purple", "label": "Purple", "phrase": "raised the purple sail", "refPhrase": "purple sail" }
+      ]
+    },
+    {
+      "id": "mascot",
+      "label": "Mascot",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "crab", "label": "Crab", "phrase": "flew the crab flag", "refPhrase": "crab crew" },
+        { "id": "turtle", "label": "Turtle", "phrase": "flew the turtle flag", "refPhrase": "turtle crew" },
+        { "id": "penguin", "label": "Penguin", "phrase": "flew the penguin flag", "refPhrase": "penguin crew" },
+        { "id": "shark", "label": "Shark", "phrase": "flew the shark flag", "refPhrase": "shark crew" },
+        { "id": "fish", "label": "Fish", "phrase": "flew the fish flag", "refPhrase": "fish crew" },
+        { "id": "owl", "label": "Owl", "phrase": "flew the owl flag", "refPhrase": "owl crew" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "finish",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} crossed the line {delta} minutes after {b_ref}.",
+        "{a_ref} took {delta} minutes longer than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "finish",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} took at least {bound} minutes to finish.",
+        "{a_ref} did not finish in under {bound} minutes."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "It was {x_label} or {y_label} for {a_ref} - just the one.",
+        "{a_ref} rigged either {x_label} or {y_label}, not both."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

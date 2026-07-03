@@ -33,6 +33,70 @@
       "tone": "light-mystery",
       "kind": "sci-fi",
       "status": "live"
+    },
+    {
+      "id": "science-fair",
+      "file": "science-fair.json",
+      "title": "The Science Fair",
+      "tone": "witty",
+      "kind": "school",
+      "status": "live"
+    },
+    {
+      "id": "harbor-regatta",
+      "file": "harbor-regatta.json",
+      "title": "The Harbour Regatta",
+      "tone": "cozy",
+      "kind": "coast",
+      "status": "live"
+    },
+    {
+      "id": "film-festival",
+      "file": "film-festival.json",
+      "title": "The Riverside Film Festival",
+      "tone": "light-mystery",
+      "kind": "cinema",
+      "status": "live"
+    },
+    {
+      "id": "observatory-night",
+      "file": "observatory-night.json",
+      "title": "A Night at the Observatory",
+      "tone": "whimsical",
+      "kind": "night-sky",
+      "status": "live"
+    },
+    {
+      "id": "orchestra-tuning",
+      "file": "orchestra-tuning.json",
+      "title": "Before the Concert",
+      "tone": "cozy",
+      "kind": "concert",
+      "status": "live"
+    },
+    {
+      "id": "county-fair",
+      "file": "county-fair.json",
+      "title": "The County Fair",
+      "tone": "cozy",
+      "kind": "countryside",
+      "status": "live"
+    },
+    {
+      "id": "newsroom-deadline",
+      "file": "newsroom-deadline.json",
+      "title": "Twenty Minutes to Deadline",
+      "tone": "witty",
+      "kind": "newsroom",
+      "status": "live"
+    },
+    {
+      "id": "costume-parade",
+      "file": "costume-parade.json",
+      "title": "The Costume Parade",
+      "tone": "whimsical",
+      "kind": "carnival",
+      "status": "live"
     }
   ]
 }

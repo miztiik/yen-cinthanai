@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "newsroom-deadline",
+  "title": "Twenty Minutes to Deadline",
+  "subjectNoun": "reporter",
+  "subjectCategory": "reporter",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content). Witty newsroom deadline crunch. Anchor = reporter. beat + section are text-only; drink -> drinks glyph pack (non-alcoholic, wholesome); length is the numeric axis (word count filed). The narrativeTemplate is setting flavor only and never names a sliced category (length/section/drink). Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "It is twenty minutes to deadline and the newsroom is a wall of noise, with {n} reporters hammering out copy while {editor}, who has run the floor for decades, tries to work out whose story is whose before the {mishap}.",
+  "flavorPools": {
+    "editor": ["old Marlowe", "Ms. Kwan", "the night editor"],
+    "mishap": ["power flicker", "spilled mug across the layout", "jammed printer"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Gail'; 'attribute' -> 'the sports reporter' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "reporter",
+      "label": "Reporter",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "gail", "label": "Gail" },
+        { "id": "ravi", "label": "Ravi" },
+        { "id": "simone", "label": "Simone" },
+        { "id": "dexter", "label": "Dexter" },
+        { "id": "blythe", "label": "Blythe" },
+        { "id": "hank", "label": "Hank" }
+      ]
+    },
+    {
+      "id": "beat",
+      "label": "Beat",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "politics", "label": "Politics", "phrase": "covered the politics beat", "refPhrase": "politics reporter" },
+        { "id": "sports", "label": "Sports", "phrase": "covered the sports beat", "refPhrase": "sports reporter" },
+        { "id": "weather", "label": "Weather", "phrase": "covered the weather beat", "refPhrase": "weather reporter" },
+        { "id": "culture", "label": "Culture", "phrase": "covered the culture beat", "refPhrase": "culture reporter" },
+        { "id": "business", "label": "Business", "phrase": "covered the business beat", "refPhrase": "business reporter" },
+        { "id": "crime", "label": "Crime", "phrase": "covered the crime beat", "refPhrase": "crime reporter" }
+      ]
+    },
+    {
+      "id": "length",
+      "label": "Length",
+      "kind": "numeric",
+      "unit": "words",
+      "valuePool": [
+        { "id": "w300", "label": "300 words", "magnitude": 300, "phrase": "filed 300 words" },
+        { "id": "w450", "label": "450 words", "magnitude": 450, "phrase": "filed 450 words" },
+        { "id": "w600", "label": "600 words", "magnitude": 600, "phrase": "filed 600 words" },
+        { "id": "w750", "label": "750 words", "magnitude": 750, "phrase": "filed 750 words" },
+        { "id": "w900", "label": "900 words", "magnitude": 900, "phrase": "filed 900 words" },
+        { "id": "w1100", "label": "1100 words", "magnitude": 1100, "phrase": "filed 1100 words" }
+      ]
+    },
+    {
+      "id": "section",
+      "label": "Section",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "newsdesk", "label": "Newsdesk", "phrase": "worked the newsdesk", "refPhrase": "one on the newsdesk" },
+        { "id": "copydesk", "label": "Copydesk", "phrase": "worked the copydesk", "refPhrase": "one on the copydesk" },
+        { "id": "foreign", "label": "Foreign", "phrase": "worked the foreign section", "refPhrase": "one on foreign" },
+        { "id": "photo", "label": "Photo", "phrase": "worked the photo section", "refPhrase": "one on photo" },
+        { "id": "online", "label": "Online", "phrase": "worked the online section", "refPhrase": "one on online" },
+        { "id": "features", "label": "Features", "phrase": "worked the features section", "refPhrase": "one on features" }
+      ]
+    },
+    {
+      "id": "drink",
+      "label": "Drink",
+      "kind": "nominal",
+      "glyphPack": "drinks",
+      "valuePool": [
+        { "id": "coffee", "label": "Coffee", "phrase": "ran on coffee", "refPhrase": "coffee drinker" },
+        { "id": "tea", "label": "Tea", "phrase": "ran on tea", "refPhrase": "tea drinker" },
+        { "id": "soda", "label": "Soda", "phrase": "ran on soda", "refPhrase": "soda drinker" },
+        { "id": "juice", "label": "Juice", "phrase": "ran on juice", "refPhrase": "juice drinker" },
+        { "id": "water", "label": "Water", "phrase": "ran on water", "refPhrase": "water drinker" },
+        { "id": "milk", "label": "Milk", "phrase": "ran on milk", "refPhrase": "milk drinker" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "length",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} filed {delta} more words than {b_ref}.",
+        "{a_ref}'s story ran {delta} words longer than {b_ref}'s."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "length",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} filed at least {bound} words.",
+        "{a_ref} did not file fewer than {bound} words."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "It was {x_label} or {y_label} for {a_ref} - not both.",
+        "{a_ref} chased either {x_label} or {y_label}, and filed just one."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
