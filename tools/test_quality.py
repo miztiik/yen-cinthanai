@@ -16,7 +16,9 @@ from ortools.sat.python import cp_model
 
 import corpus
 import generate as g
+import verify_scenarios as vs
 from models import PuzzleManifest
+from verify_scenarios import anchor_id as _anchor_id, full_depth as _full_depth  # single source
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_DIR = ROOT / "config"
@@ -64,10 +66,6 @@ def _mag_by_anchor(m) -> tuple:
     anchor = next(c.id for c in m.categories.items if c.anchor)
     ent_of = {cells[anchor]: e for e, cells in m.solution.items()}
     return numcat.id, {av: mag[m.solution[ent_of[av]][numcat.id]] for av in ent_of}
-
-
-def _anchor_id(m) -> str:
-    return next(c.id for c in m.categories.items if c.anchor)
 
 
 def test_p1_zero_guess_full_depth(story: tuple) -> None:
@@ -221,13 +219,6 @@ def test_numeric_modeling_undirected_and_atmost() -> None:
 
 
 # --- Row 6: compound clue gates (oneOf/oneEachOf Sharp+, ifThen Expert-only) --------------------
-
-
-def _full_depth(m) -> int:
-    # Zero-guess target: one forced step per non-anchor bijective cell (non-anchor cats * entities).
-    anchor = _anchor_id(m)
-    non_anchor_bij = [c for c in m.categories.items if c.id != anchor and c.cardinality == "bijective"]
-    return len(non_anchor_bij) * len(m.entities)
 
 
 def _allowed_types(scenario, tier: str) -> set:
@@ -385,27 +376,6 @@ def test_catalog_has_a_diverse_batch() -> None:
     assert len(ids) >= 4, ids  # weekend-market + >= 3 authored scenarios
 
 
-@pytest.mark.parametrize("scenario_path", CATALOG, ids=lambda p: p.stem)
-def test_narrative_coherence_per_tier(scenario_path: Path) -> None:
-    # The story never names a category a tier sliced out. Build easy (2 cats) + expert (all cats)
-    # for each catalogued scenario: the easy narrative must OMIT every sliced-out non-anchor label
-    # (the row-9e fix - easy no longer says 'price' when it has no price column), while the expert
-    # narrative NAMES every non-anchor dimension in its generated match-line.
-    easy = g.build_story("2026-07-01", "easy", 1, CONFIG_DIR, scenario_path=scenario_path).manifest
-    expert = g.build_story("2026-07-01", "expert", 1, CONFIG_DIR, scenario_path=scenario_path).manifest
-    scenario = corpus.load_scenario_template(scenario_path)
-    present_easy = {c.id for c in easy.categories.items}
-    sliced = [c for c in scenario.categories if c.id != scenario.subjectCategory and c.id not in present_easy]
-    assert sliced, ("expected easy to slice out a category", scenario.id)
-    easy_low = easy.story.lower()
-    for c in sliced:
-        assert c.label.lower() not in easy_low, (scenario.id, "leaked sliced label", c.label)
-    expert_low = expert.story.lower()
-    for c in scenario.categories:
-        if c.id != scenario.subjectCategory:
-            assert c.label.lower() in expert_low, (scenario.id, "expert omits present label", c.label)
-
-
 def test_scenario_per_date_is_deterministic_and_varies() -> None:
     # Same date -> same scenario (a stable hash of the date over the sorted catalog); a second
     # resolution is identical, and the served window spreads over more than one scenario.
@@ -424,36 +394,23 @@ def test_served_bank_matches_per_date_scenario_all_tiers() -> None:
             assert m.scenarioId == expected, (date, tier, m.scenarioId)
 
 
-# --- Row 9g: the whole catalog generates across all four tiers (auto-covers new scenarios) -------
+# --- Incremental scenario verification (replaces the exhaustive catalog x tier sweeps) -----------
+# The whole-catalog verification - every scenario builds at every tier (P1 zero-guess, in band,
+# schemaVersion 2, eq toehold, numeric-when-gated), rebuilds byte-identically, and keeps its
+# narrative coherent per tier - is now INCREMENTAL and content-addressed. Each live scenario is
+# SKIPPED when its verifiedSha stamp matches its current fingerprint (unchanged since last verified)
+# and FULLY verified otherwise, so with the catalog stamped this no longer scales with catalog size.
+# A changed or newly authored scenario is auto-covered (its stamp goes stale) with no test edit. The
+# shared verify_one primitive lives in tools/verify_scenarios.py (also driven by its --check/--stamp
+# CLI); its mechanism is covered by tools/test_verify_scenarios.py.
+
+LIVE_ENTRIES = vs.live_entries(TEMPLATES_DIR)
 
 
-@pytest.mark.parametrize("scenario_path", CATALOG, ids=lambda p: p.stem)
-@pytest.mark.parametrize("tier", ["easy", "standard", "sharp", "expert"])
-def test_scenario_generates_all_tiers_p1_in_band(scenario_path: Path, tier: str) -> None:
-    # Every catalogued scenario builds a valid story-first schemaVersion-2 grid at EVERY tier:
-    # zero-guess (P1: len(hintTrace) == non-anchor bijective cells), difficulty inside the tier
-    # band, an eq toehold present, and a numeric clue whenever the tier gates one in. Parametrized
-    # over the whole catalog x 4 tiers, so a newly authored scenario is auto-covered here (and by
-    # the coherence + selection tests above) without editing any test. Real solver, no mocks.
-    tiers = g.load_config("tiers", CONFIG_DIR)[tier]
-    b = g.build_story("2026-07-01", tier, 1, CONFIG_DIR, scenario_path=scenario_path)
-    m = b.manifest
-    assert m.schemaVersion == 2 and m.shapeId == "grid" and m.story
-    assert m.scenarioId == scenario_path.stem
-    assert len(m.hintTrace) == _full_depth(m)                        # P1: zero-guess
-    lo, hi = tiers["band"]
-    assert lo <= b.d <= hi, (scenario_path.stem, tier, b.d, (lo, hi))
-    types = [c.type for c in m.constraints]
-    assert "eq" in types                                             # an eq toehold always
-    numeric_types = g._numeric_types_for_tier(b.scenario, tier)
-    if numeric_types:  # a tier that gates a numeric clue in must carry at least one
-        assert any(t in numeric_types for t in types), (scenario_path.stem, tier, types)
-
-
-@pytest.mark.parametrize("scenario_path", CATALOG, ids=lambda p: p.stem)
-def test_scenario_rebuild_is_byte_identical(scenario_path: Path) -> None:
-    # Determinism per scenario: the same (date, tier, variant) rebuilds a byte-identical manifest
-    # (num_search_workers=1, fixed seed + clue order, date-seeded narrative + variant picks).
-    a = g.generate_story("2026-07-01", "standard", 1, CONFIG_DIR, scenario_path=scenario_path)[0]
-    b = g.generate_story("2026-07-01", "standard", 1, CONFIG_DIR, scenario_path=scenario_path)[0]
-    assert a.model_dump(by_alias=True) == b.model_dump(by_alias=True)
+@pytest.mark.parametrize("entry", LIVE_ENTRIES, ids=[e.id for e in LIVE_ENTRIES])
+def test_scenario_incremental_verify(entry) -> None:
+    # Skip a scenario whose stamp is current (bounded regardless of catalog size); fully verify a
+    # stale or never-stamped one (all four tiers + determinism + narrative coherence, real solver).
+    if vs.stamped_current(entry, TEMPLATES_DIR):
+        pytest.skip(f"{entry.id}: verifiedSha current (unchanged since last verified)")
+    vs.verify_one(entry.id, TEMPLATES_DIR, CONFIG_DIR)

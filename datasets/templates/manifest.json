@@ -8,7 +8,8 @@
       "title": "The Saturday Market",
       "tone": "cozy",
       "kind": "village",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "96b3147a5979eddb443c66cbdde5eb1e9f1e3717a1ea5355d586e3a73e5b0d69"
     },
     {
       "id": "food-truck-festival",
@@ -16,7 +17,8 @@
       "title": "The Food Truck Festival",
       "tone": "witty",
       "kind": "city",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "4dbb2fb546122e259a855cf1b81c330c8124bb02a10feb260f5d20eda1b79a73"
     },
     {
       "id": "community-garden",
@@ -24,7 +26,8 @@
       "title": "The Community Garden",
       "tone": "cozy",
       "kind": "garden",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "46f30ce7c3351834fd97038566dcb22aad8592958a5ce914a2b9466b9b6958e7"
     },
     {
       "id": "starliner-crew",
@@ -32,7 +35,8 @@
       "title": "The Starliner Roster",
       "tone": "light-mystery",
       "kind": "sci-fi",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "bea1ada53c1b67454b21b1de032f2ed42d09ce9126f460937eec2884550a8f4b"
     },
     {
       "id": "science-fair",
@@ -40,7 +44,8 @@
       "title": "The Science Fair",
       "tone": "witty",
       "kind": "school",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "ce04006a0473de49246ce88e33ddc108bc71681040b7d14d821ac0d03a921b84"
     },
     {
       "id": "harbor-regatta",
@@ -48,7 +53,8 @@
       "title": "The Harbour Regatta",
       "tone": "cozy",
       "kind": "coast",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "5593e8f2c05560a1cc053a8a6f457aa808c881721dc87e3af9d81519be4059c6"
     },
     {
       "id": "film-festival",
@@ -56,7 +62,8 @@
       "title": "The Riverside Film Festival",
       "tone": "light-mystery",
       "kind": "cinema",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "9f0d03ac029cb42d096d7f43d2689aeedf9e5bf06d6a7d63df2a924dcbb7b285"
     },
     {
       "id": "observatory-night",
@@ -64,7 +71,8 @@
       "title": "A Night at the Observatory",
       "tone": "whimsical",
       "kind": "night-sky",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "9f50a3e94990428dfe5186870409410e36afb6619f9aaa809b0b0b1a1fb323ec"
     },
     {
       "id": "orchestra-tuning",
@@ -72,7 +80,8 @@
       "title": "Before the Concert",
       "tone": "cozy",
       "kind": "concert",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "843b138ab97fc719f01b960b11479e063f95713fc831a4005f04a9668912cceb"
     },
     {
       "id": "county-fair",
@@ -80,7 +89,8 @@
       "title": "The County Fair",
       "tone": "cozy",
       "kind": "countryside",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "f581680ba3b6590592f8df049e74f3fc29d78e8747d85e39bd368e35b94ba8cf"
     },
     {
       "id": "newsroom-deadline",
@@ -88,7 +98,8 @@
       "title": "Twenty Minutes to Deadline",
       "tone": "witty",
       "kind": "newsroom",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "f7fcd3cd2178aded25b1348084dcfb84fd6f23396ee313634d6e7e811af1943e"
     },
     {
       "id": "costume-parade",
@@ -96,7 +107,8 @@
       "title": "The Costume Parade",
       "tone": "whimsical",
       "kind": "carnival",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "3ff40dc565d5c82e9b24ec23091a70342ff71bd77b4180b4bb01ef29660b601a"
     },
     {
       "id": "detective-agency",
@@ -104,7 +116,8 @@
       "title": "The Detective Agency",
       "tone": "light-mystery",
       "kind": "noir",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "9f88d12105831e1436f4a96d83cb303aeadf957ec60d775b26a5aa57963a39b6"
     },
     {
       "id": "night-train",
@@ -112,7 +125,8 @@
       "title": "The Night Train",
       "tone": "light-mystery",
       "kind": "railway",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "10336fc54ab675997d774f58e30bf29e0df3bd08d74f20f61ad684359287f57d"
     },
     {
       "id": "sports-league",
@@ -120,7 +134,8 @@
       "title": "The Sunday League",
       "tone": "witty",
       "kind": "stadium",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "2bd368a0870f16a017b70a5ab56298a782e108d0c13385a41c9e6d441e17d9b2"
     },
     {
       "id": "museum-gala",
@@ -128,7 +143,8 @@
       "title": "The Museum Gala",
       "tone": "light-mystery",
       "kind": "museum",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "9a53d048a89b361d653f5fe844fe0591fa8024f41f1bd327986e791033422b22"
     },
     {
       "id": "startup-hackathon",
@@ -136,7 +152,8 @@
       "title": "The All-Night Hackathon",
       "tone": "witty",
       "kind": "tech",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "8899f7ab9141ec7cd86eaa5401f0fb9f4adaae7b51c4c00d8a80318b623a35ec"
     },
     {
       "id": "wildlife-safari",
@@ -144,7 +161,8 @@
       "title": "The Dawn Safari",
       "tone": "whimsical",
       "kind": "savanna",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "b8c09c686ec4250f686f55b952f6bc3a5dba1a4f2952e6bca30a3dd7b6dccd29"
     },
     {
       "id": "wizard-academy",
@@ -152,7 +170,8 @@
       "title": "The Wizard Academy",
       "tone": "whimsical",
       "kind": "fantasy",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "a4567ed618a141bbd858247043cd57b1c2c12ce37a0e9d2a63e2a791814b1223"
     },
     {
       "id": "circus-troupe",
@@ -160,7 +179,8 @@
       "title": "The Circus Troupe",
       "tone": "whimsical",
       "kind": "bigtop",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "97a3645f0c5374a3d002ca304e2d11d44d9cd6058bbc9de60001837b09df7f8a"
     },
     {
       "id": "aquarium-night",
@@ -168,7 +188,8 @@
       "title": "The Aquarium After Hours",
       "tone": "cozy",
       "kind": "aquarium",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "57a4c96bf1a8d5594731ca0bffe1b2b232c4afef2977e43688bb187deedc621a"
     },
     {
       "id": "library-hush",
@@ -176,7 +197,8 @@
       "title": "The Library at Closing",
       "tone": "light-mystery",
       "kind": "library",
-      "status": "live"
+      "status": "live",
+      "verifiedSha": "20d4d409ae92328f4467c095389567bd773fdb19dae58c05997ee886ba5421dc"
     }
   ]
 }

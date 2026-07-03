@@ -10,6 +10,12 @@
       "date": "2026-07-03",
       "change": "Initial ScenarioManifest v1: schemaVersion, scenarios[ScenarioManifestEntry{id,file,title,tone,kind,status(live|build)}], note?. Replaces the directory-scan scenario picker with a metadata-carrying manifest that gates the daily rotation on status=='live' and enables build/live staging.",
       "why": "Story-first pivot needs a staged, tone/kind-tagged catalog so new scenario templates can be authored + tested via --scenario without touching the served daily bank; typed before logic (CLAUDE.md sec 11)."
+    },
+    {
+      "version": 2,
+      "date": "2026-07-03",
+      "change": "Add optional per-entry `verifiedSha` (string): the content-address at which the scenario last passed full multi-tier verification, written by tools/verify_scenarios.py --stamp. Additive + backwards-compatible (absent == never verified); mirrored in tools/corpus.py ScenarioManifestEntry.",
+      "why": "Content-addressed build cache: the incremental verifier skips a scenario whose verifiedSha matches its current fingerprint, so CI verifies only CHANGED scenarios (bounded regardless of catalog size) - lets the catalog scale to ~100 scenarios without CI bloat."
     }
   ],
   "$defs": {
@@ -22,7 +28,11 @@
         "title": { "type": "string" },
         "tone": { "type": "string" },
         "kind": { "type": "string" },
-        "status": { "$ref": "#/$defs/status" }
+        "status": { "$ref": "#/$defs/status" },
+        "verifiedSha": {
+          "type": "string",
+          "description": "Optional build-cache stamp: the scenario_fingerprint (sha256 hex) at which this scenario last passed full multi-tier verification. Written by tools/verify_scenarios.py --stamp; when it matches the current fingerprint the incremental check skips re-verifying this scenario. Absent == never verified."
+        }
       },
       "required": ["id", "file", "title", "tone", "kind", "status"],
       "additionalProperties": false
