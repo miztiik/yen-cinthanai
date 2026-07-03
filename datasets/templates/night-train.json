@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "night-train",
+  "title": "The Night Train",
+  "subjectNoun": "passenger",
+  "subjectCategory": "passenger",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content, not transcribed from any source). Light-mystery railway. Anchor = passenger. cabin, destination and luggage are text-only (no pack fits); arrival is the numeric axis (hours into the journey). The narrativeTemplate is setting flavor only - it never names a sliced category (arrival/destination/luggage), so a lower tier that drops those axes never reads a premise it cannot fulfil. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "The night express idles at the platform as {n} passengers find their berths, and {guard} checks the manifest after a {mishap} sent the tickets fluttering down the corridor.",
+  "flavorPools": {
+    "guard": ["old Petrov", "Madame Leclerc", "the night guard"],
+    "mishap": ["lurch of the carriage", "flickering lamp", "sudden whistle"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Iris'; 'attribute' -> 'the one in the sleeper cabin' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "passenger",
+      "label": "Passenger",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "iris", "label": "Iris" },
+        { "id": "dmitri", "label": "Dmitri" },
+        { "id": "olive", "label": "Olive" },
+        { "id": "hugo", "label": "Hugo" },
+        { "id": "mira", "label": "Mira" },
+        { "id": "felix", "label": "Felix" }
+      ]
+    },
+    {
+      "id": "cabin",
+      "label": "Cabin",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "sleeper", "label": "Sleeper", "phrase": "booked the sleeper", "refPhrase": "one in the sleeper" },
+        { "id": "couchette", "label": "Couchette", "phrase": "booked the couchette", "refPhrase": "one in the couchette" },
+        { "id": "saloon", "label": "Saloon", "phrase": "booked the saloon", "refPhrase": "one in the saloon" },
+        { "id": "compartment", "label": "Compartment", "phrase": "booked the compartment", "refPhrase": "one in the compartment" },
+        { "id": "berth", "label": "Corner berth", "phrase": "booked the corner berth", "refPhrase": "one in the corner berth" },
+        { "id": "suite", "label": "Rail suite", "phrase": "booked the rail suite", "refPhrase": "one in the rail suite" }
+      ]
+    },
+    {
+      "id": "arrival",
+      "label": "Arrival",
+      "kind": "numeric",
+      "unit": "hours",
+      "valuePool": [
+        { "id": "arr1", "label": "1 h", "magnitude": 1, "phrase": "rode 1 hour" },
+        { "id": "arr2", "label": "2 h", "magnitude": 2, "phrase": "rode 2 hours" },
+        { "id": "arr3", "label": "3 h", "magnitude": 3, "phrase": "rode 3 hours" },
+        { "id": "arr4", "label": "4 h", "magnitude": 4, "phrase": "rode 4 hours" },
+        { "id": "arr5", "label": "5 h", "magnitude": 5, "phrase": "rode 5 hours" },
+        { "id": "arr6", "label": "6 h", "magnitude": 6, "phrase": "rode 6 hours" }
+      ]
+    },
+    {
+      "id": "destination",
+      "label": "Destination",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "vienna", "label": "Vienna", "phrase": "was bound for Vienna", "refPhrase": "one bound for Vienna" },
+        { "id": "trieste", "label": "Trieste", "phrase": "was bound for Trieste", "refPhrase": "one bound for Trieste" },
+        { "id": "zagreb", "label": "Zagreb", "phrase": "was bound for Zagreb", "refPhrase": "one bound for Zagreb" },
+        { "id": "krakow", "label": "Krakow", "phrase": "was bound for Krakow", "refPhrase": "one bound for Krakow" },
+        { "id": "bruges", "label": "Bruges", "phrase": "was bound for Bruges", "refPhrase": "one bound for Bruges" },
+        { "id": "porto", "label": "Porto", "phrase": "was bound for Porto", "refPhrase": "one bound for Porto" }
+      ]
+    },
+    {
+      "id": "luggage",
+      "label": "Luggage",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "hatbox", "label": "Hatbox", "phrase": "carried the hatbox", "refPhrase": "one with the hatbox" },
+        { "id": "steamer", "label": "Steamer trunk", "phrase": "carried the steamer trunk", "refPhrase": "one with the steamer trunk" },
+        { "id": "satchel", "label": "Satchel", "phrase": "carried the satchel", "refPhrase": "one with the satchel" },
+        { "id": "violincase", "label": "Violin case", "phrase": "carried the violin case", "refPhrase": "one with the violin case" },
+        { "id": "carpetbag", "label": "Carpet bag", "phrase": "carried the carpet bag", "refPhrase": "one with the carpet bag" },
+        { "id": "portmanteau", "label": "Portmanteau", "phrase": "carried the portmanteau", "refPhrase": "one with the portmanteau" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "arrival",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} pulled in {delta} hours after {b_ref}.",
+        "{a_ref} stayed aboard {delta} hours longer than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "arrival",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} was aboard at least {bound} hours.",
+        "{a_ref} did not step off before {bound} hours."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and settled on one.",
+        "For {a_ref} it was {x_label} or {y_label} - not both."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

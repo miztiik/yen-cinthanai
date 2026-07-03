@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "detective-agency",
+  "title": "The Detective Agency",
+  "subjectNoun": "sleuth",
+  "subjectCategory": "sleuth",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content, not transcribed from any source). Light-mystery noir. Anchor = sleuth. case, district and disguise are text-only (no pack fits); fee is the numeric axis (retainer in dollars). The narrativeTemplate is setting flavor only - it never names a sliced category (fee/district/disguise), so a lower tier that drops those axes never reads a premise it cannot fulfil. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "Rain drums on the office window as {n} private eyes gather in the back room, where {chief} chalks up the night's assignments after a {mishap} scattered the paperwork across the floor.",
+  "flavorPools": {
+    "chief": ["old Kowalski", "Madame Xiu", "the desk sergeant"],
+    "mishap": ["power cut", "sudden downpour", "gust through the transom"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Nora'; 'attribute' -> 'the one on the ruby case' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "sleuth",
+      "label": "Sleuth",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "nora", "label": "Nora" },
+        { "id": "sam", "label": "Sam" },
+        { "id": "vera", "label": "Vera" },
+        { "id": "cole", "label": "Cole" },
+        { "id": "ida", "label": "Ida" },
+        { "id": "reece", "label": "Reece" }
+      ]
+    },
+    {
+      "id": "case",
+      "label": "Case",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "ruby", "label": "Ruby theft", "phrase": "took the ruby case", "refPhrase": "one on the ruby case" },
+        { "id": "cipher", "label": "Cipher note", "phrase": "took the cipher case", "refPhrase": "one on the cipher case" },
+        { "id": "portrait", "label": "Missing portrait", "phrase": "took the portrait case", "refPhrase": "one on the portrait case" },
+        { "id": "locket", "label": "Silver locket", "phrase": "took the locket case", "refPhrase": "one on the locket case" },
+        { "id": "alibi", "label": "Broken alibi", "phrase": "took the alibi case", "refPhrase": "one on the alibi case" },
+        { "id": "vault", "label": "Empty vault", "phrase": "took the vault case", "refPhrase": "one on the vault case" }
+      ]
+    },
+    {
+      "id": "fee",
+      "label": "Fee",
+      "kind": "numeric",
+      "unit": "dollars",
+      "valuePool": [
+        { "id": "fee30", "label": "$30", "magnitude": 30, "phrase": "charged 30 dollars" },
+        { "id": "fee45", "label": "$45", "magnitude": 45, "phrase": "charged 45 dollars" },
+        { "id": "fee60", "label": "$60", "magnitude": 60, "phrase": "charged 60 dollars" },
+        { "id": "fee80", "label": "$80", "magnitude": 80, "phrase": "charged 80 dollars" },
+        { "id": "fee105", "label": "$105", "magnitude": 105, "phrase": "charged 105 dollars" },
+        { "id": "fee130", "label": "$130", "magnitude": 130, "phrase": "charged 130 dollars" }
+      ]
+    },
+    {
+      "id": "district",
+      "label": "District",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "dockside", "label": "Dockside", "phrase": "worked out of Dockside", "refPhrase": "Dockside operative" },
+        { "id": "uptown", "label": "Uptown", "phrase": "worked out of Uptown", "refPhrase": "Uptown operative" },
+        { "id": "oldquarter", "label": "Old Quarter", "phrase": "worked out of the Old Quarter", "refPhrase": "Old Quarter operative" },
+        { "id": "riverside", "label": "Riverside", "phrase": "worked out of Riverside", "refPhrase": "Riverside operative" },
+        { "id": "gaslight", "label": "Gaslight Row", "phrase": "worked out of Gaslight Row", "refPhrase": "Gaslight Row operative" },
+        { "id": "meadowend", "label": "Meadowend", "phrase": "worked out of Meadowend", "refPhrase": "Meadowend operative" }
+      ]
+    },
+    {
+      "id": "disguise",
+      "label": "Disguise",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "trenchcoat", "label": "Trench coat", "phrase": "slipped on the trench coat", "refPhrase": "one in the trench coat" },
+        { "id": "newsboy", "label": "Newsboy cap", "phrase": "slipped on the newsboy cap", "refPhrase": "one in the newsboy cap" },
+        { "id": "spectacles", "label": "Spectacles", "phrase": "slipped on the spectacles", "refPhrase": "one in the spectacles" },
+        { "id": "falsebeard", "label": "False beard", "phrase": "slipped on the false beard", "refPhrase": "one in the false beard" },
+        { "id": "apron", "label": "Waiter's apron", "phrase": "slipped on the waiter's apron", "refPhrase": "one in the waiter's apron" },
+        { "id": "cabbie", "label": "Cabbie cap", "phrase": "slipped on the cabbie cap", "refPhrase": "one in the cabbie cap" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "fee",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} charged {delta} dollars more than {b_ref}.",
+        "{a_ref}'s fee ran {delta} dollars over {b_ref}'s."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "fee",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} charged at least {bound} dollars.",
+        "{a_ref} would not take the job below {bound} dollars."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and took just one.",
+        "For {a_ref} it came to {x_label} or {y_label} - only one panned out."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

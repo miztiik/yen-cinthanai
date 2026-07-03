@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "startup-hackathon",
+  "title": "The All-Night Hackathon",
+  "subjectNoun": "coder",
+  "subjectCategory": "coder",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content, not transcribed from any source). Witty startup hackathon. Anchor = coder. snack -> food glyph pack; app and language are text-only; rank is the numeric axis (judges' placing, lower is better). The narrativeTemplate is setting flavor only - it never names a sliced category (rank/language/snack), so a lower tier that drops those axes never reads a premise it cannot fulfil. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "The garage hums with cooling fans and half-empty mugs as {n} coders hunker over their laptops, and {organizer} tallies the standings after a {mishap} knocked out the projector.",
+  "flavorPools": {
+    "organizer": ["old Petrakis", "Dr. Amara", "the meetup organizer"],
+    "mishap": ["power brownout", "spilled energy drink", "crashed router"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Priya'; 'attribute' -> 'the one on the budget app' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "coder",
+      "label": "Coder",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "priya", "label": "Priya" },
+        { "id": "milo", "label": "Milo" },
+        { "id": "zara", "label": "Zara" },
+        { "id": "dev", "label": "Dev" },
+        { "id": "ana", "label": "Ana" },
+        { "id": "kwame", "label": "Kwame" }
+      ]
+    },
+    {
+      "id": "app",
+      "label": "App",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "budget", "label": "Budget tracker", "phrase": "built the budget app", "refPhrase": "one on the budget app" },
+        { "id": "maproute", "label": "Route planner", "phrase": "built the route app", "refPhrase": "one on the route app" },
+        { "id": "recipe", "label": "Recipe box", "phrase": "built the recipe app", "refPhrase": "one on the recipe app" },
+        { "id": "habit", "label": "Habit streak", "phrase": "built the habit app", "refPhrase": "one on the habit app" },
+        { "id": "quiz", "label": "Quiz maker", "phrase": "built the quiz app", "refPhrase": "one on the quiz app" },
+        { "id": "weather", "label": "Weather board", "phrase": "built the weather app", "refPhrase": "one on the weather app" }
+      ]
+    },
+    {
+      "id": "rank",
+      "label": "Rank",
+      "kind": "numeric",
+      "unit": "place",
+      "valuePool": [
+        { "id": "place1", "label": "1st", "magnitude": 1, "phrase": "placed 1st" },
+        { "id": "place2", "label": "2nd", "magnitude": 2, "phrase": "placed 2nd" },
+        { "id": "place3", "label": "3rd", "magnitude": 3, "phrase": "placed 3rd" },
+        { "id": "place4", "label": "4th", "magnitude": 4, "phrase": "placed 4th" },
+        { "id": "place5", "label": "5th", "magnitude": 5, "phrase": "placed 5th" },
+        { "id": "place6", "label": "6th", "magnitude": 6, "phrase": "placed 6th" }
+      ]
+    },
+    {
+      "id": "language",
+      "label": "Language",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "python", "label": "Python", "phrase": "coded in Python", "refPhrase": "Python hacker" },
+        { "id": "rust", "label": "Rust", "phrase": "coded in Rust", "refPhrase": "Rust hacker" },
+        { "id": "kotlin", "label": "Kotlin", "phrase": "coded in Kotlin", "refPhrase": "Kotlin hacker" },
+        { "id": "elixir", "label": "Elixir", "phrase": "coded in Elixir", "refPhrase": "Elixir hacker" },
+        { "id": "golang", "label": "Go", "phrase": "coded in Go", "refPhrase": "Go hacker" },
+        { "id": "swift", "label": "Swift", "phrase": "coded in Swift", "refPhrase": "Swift hacker" }
+      ]
+    },
+    {
+      "id": "snack",
+      "label": "Snack",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "pizza", "label": "Pizza", "phrase": "lived on pizza", "refPhrase": "pizza fan" },
+        { "id": "donut", "label": "Donut", "phrase": "lived on donuts", "refPhrase": "donut fan" },
+        { "id": "cookie", "label": "Cookies", "phrase": "lived on cookies", "refPhrase": "cookie fan" },
+        { "id": "burger", "label": "Burger", "phrase": "lived on burgers", "refPhrase": "burger fan" },
+        { "id": "fries", "label": "Fries", "phrase": "lived on fries", "refPhrase": "fries fan" },
+        { "id": "sushi", "label": "Sushi", "phrase": "lived on sushi", "refPhrase": "sushi fan" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "rank",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} placed {delta} spots behind {b_ref}.",
+        "{a_ref} finished {delta} rungs under {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "rank",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} finished no higher than {bound} place.",
+        "{a_ref} placed {bound} or lower."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and shipped just one.",
+        "For {a_ref} it came to {x_label} or {y_label} - only one compiled."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

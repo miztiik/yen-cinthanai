@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "aquarium-night",
+  "title": "The Aquarium After Hours",
+  "subjectNoun": "keeper",
+  "subjectCategory": "keeper",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content, not transcribed from any source). Cozy after-hours aquarium. Anchor = keeper. creature -> creatures glyph pack; treat -> food glyph pack; tank is text-only; feeding is the numeric axis (the round in the evening schedule). The narrativeTemplate is setting flavor only - it never names a sliced category (feeding/tank/treat), so a lower tier that drops those axes never reads a premise it cannot fulfil. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "The aquarium settles into its after-hours calm, lit only by the blue glow of the great windows, as {n} keepers make their final rounds while {supervisor} checks the log after a {mishap} left the schedule in a muddle.",
+  "flavorPools": {
+    "supervisor": ["old Nakamura", "Ms. Ferreira", "the night supervisor"],
+    "mishap": ["hum of the filters", "flicker of the lamps", "splash from the pool"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Mina'; 'attribute' -> 'the one with the turtle' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "keeper",
+      "label": "Keeper",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "mina", "label": "Mina" },
+        { "id": "kai", "label": "Kai" },
+        { "id": "rosa", "label": "Rosa" },
+        { "id": "tom", "label": "Tom" },
+        { "id": "layla", "label": "Layla" },
+        { "id": "gus", "label": "Gus" }
+      ]
+    },
+    {
+      "id": "creature",
+      "label": "Creature",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "fish", "label": "Fish", "phrase": "looks after the fish", "refPhrase": "one with the fish" },
+        { "id": "shark", "label": "Shark", "phrase": "looks after the shark", "refPhrase": "one with the shark" },
+        { "id": "crab", "label": "Crab", "phrase": "looks after the crab", "refPhrase": "one with the crab" },
+        { "id": "turtle", "label": "Turtle", "phrase": "looks after the turtle", "refPhrase": "one with the turtle" },
+        { "id": "penguin", "label": "Penguin", "phrase": "looks after the penguin", "refPhrase": "one with the penguin" },
+        { "id": "shrimp", "label": "Shrimp", "phrase": "looks after the shrimp", "refPhrase": "one with the shrimp" }
+      ]
+    },
+    {
+      "id": "feeding",
+      "label": "Feeding",
+      "kind": "numeric",
+      "unit": "round",
+      "valuePool": [
+        { "id": "feed1", "label": "1st", "magnitude": 1, "phrase": "took the 1st feeding" },
+        { "id": "feed2", "label": "2nd", "magnitude": 2, "phrase": "took the 2nd feeding" },
+        { "id": "feed3", "label": "3rd", "magnitude": 3, "phrase": "took the 3rd feeding" },
+        { "id": "feed4", "label": "4th", "magnitude": 4, "phrase": "took the 4th feeding" },
+        { "id": "feed5", "label": "5th", "magnitude": 5, "phrase": "took the 5th feeding" },
+        { "id": "feed6", "label": "6th", "magnitude": 6, "phrase": "took the 6th feeding" }
+      ]
+    },
+    {
+      "id": "tank",
+      "label": "Tank",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "kelp", "label": "Kelp Forest", "phrase": "tends the Kelp Forest", "refPhrase": "one at the Kelp Forest" },
+        { "id": "reef", "label": "Coral Reef", "phrase": "tends the Coral Reef", "refPhrase": "one at the Coral Reef" },
+        { "id": "abyss", "label": "Deep Abyss", "phrase": "tends the Deep Abyss", "refPhrase": "one at the Deep Abyss" },
+        { "id": "tidepool", "label": "Tide Pool", "phrase": "tends the Tide Pool", "refPhrase": "one at the Tide Pool" },
+        { "id": "mangrove", "label": "Mangrove", "phrase": "tends the Mangrove", "refPhrase": "one at the Mangrove" },
+        { "id": "openocean", "label": "Open Ocean", "phrase": "tends the Open Ocean", "refPhrase": "one at the Open Ocean" }
+      ]
+    },
+    {
+      "id": "treat",
+      "label": "Treat",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "icecream", "label": "Ice cream", "phrase": "handed out the ice cream", "refPhrase": "ice-cream giver" },
+        { "id": "popsicle", "label": "Popsicle", "phrase": "handed out the popsicles", "refPhrase": "popsicle giver" },
+        { "id": "cookie", "label": "Cookies", "phrase": "handed out the cookies", "refPhrase": "cookie giver" },
+        { "id": "cupcake", "label": "Cupcake", "phrase": "handed out the cupcakes", "refPhrase": "cupcake giver" },
+        { "id": "donut", "label": "Donut", "phrase": "handed out the donuts", "refPhrase": "donut giver" },
+        { "id": "chocolate", "label": "Chocolate", "phrase": "handed out the chocolate", "refPhrase": "chocolate giver" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "feeding",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref}'s feeding came {delta} rounds after {b_ref}'s.",
+        "{a_ref} fed {delta} rounds later than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "feeding",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} fed no earlier than round {bound}.",
+        "{a_ref} took round {bound} or later."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and took just one.",
+        "For {a_ref} it came to {x_label} or {y_label} - only one, in the end."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
