@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "florist",
+  "title": "The Flower Shop",
+  "subjectNoun": "florist",
+  "subjectCategory": "florist",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A light-mystery afternoon in a busy flower shop. Anchor = florist. bloom is text-only (the flowers pack has fewer than six blooms, so this axis stays text); vessel and ribbon are text-only; bouquet is the numeric axis (bouquets tied) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (bouquet/vessel/ribbon).",
+  "narrativeTemplate": "A card slipped from an order and no one can say whose it was, so {host} studies the cool-room roster to work out what each of the {n} florists prepared before a {mishap} muddled the shelf.",
+  "flavorPools": {
+    "host": ["old Madame Fleur", "the shop matron", "florist-in-charge Okonkwo"],
+    "mishap": ["draught from the cold-room", "toppled bucket", "smudged delivery slip"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Iris'; 'attribute' -> 'the rose florist' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "florist",
+      "label": "Florist",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "iris", "label": "Iris" },
+        { "id": "quentin", "label": "Quentin" },
+        { "id": "lila", "label": "Lila" },
+        { "id": "amos", "label": "Amos" },
+        { "id": "faye", "label": "Faye" },
+        { "id": "rico", "label": "Rico" }
+      ]
+    },
+    {
+      "id": "bloom",
+      "label": "Bloom",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "roses", "label": "Roses", "phrase": "arranged the roses", "refPhrase": "rose florist" },
+        { "id": "tulips", "label": "Tulips", "phrase": "arranged the tulips", "refPhrase": "tulip florist" },
+        { "id": "lilies", "label": "Lilies", "phrase": "arranged the lilies", "refPhrase": "lily florist" },
+        { "id": "peonies", "label": "Peonies", "phrase": "arranged the peonies", "refPhrase": "peony florist" },
+        { "id": "daisies", "label": "Daisies", "phrase": "arranged the daisies", "refPhrase": "daisy florist" },
+        { "id": "freesias", "label": "Freesias", "phrase": "arranged the freesias", "refPhrase": "freesia florist" }
+      ]
+    },
+    {
+      "id": "bouquet",
+      "label": "Bouquets",
+      "kind": "numeric",
+      "unit": "bouquets",
+      "valuePool": [
+        { "id": "bouquet3", "label": "3 bouquets", "magnitude": 3, "phrase": "tied 3 bouquets" },
+        { "id": "bouquet5", "label": "5 bouquets", "magnitude": 5, "phrase": "tied 5 bouquets" },
+        { "id": "bouquet7", "label": "7 bouquets", "magnitude": 7, "phrase": "tied 7 bouquets" },
+        { "id": "bouquet9", "label": "9 bouquets", "magnitude": 9, "phrase": "tied 9 bouquets" },
+        { "id": "bouquet11", "label": "11 bouquets", "magnitude": 11, "phrase": "tied 11 bouquets" },
+        { "id": "bouquet13", "label": "13 bouquets", "magnitude": 13, "phrase": "tied 13 bouquets" }
+      ]
+    },
+    {
+      "id": "vessel",
+      "label": "Vessel",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "glassvase", "label": "Glass Vase", "phrase": "used the Glass Vase", "refPhrase": "Glass Vase florist" },
+        { "id": "stoneurn", "label": "Stone Urn", "phrase": "used the Stone Urn", "refPhrase": "Stone Urn florist" },
+        { "id": "tinpail", "label": "Tin Pail", "phrase": "used the Tin Pail", "refPhrase": "Tin Pail florist" },
+        { "id": "wickerbasket", "label": "Wicker Basket", "phrase": "used the Wicker Basket", "refPhrase": "Wicker Basket florist" },
+        { "id": "ceramicjug", "label": "Ceramic Jug", "phrase": "used the Ceramic Jug", "refPhrase": "Ceramic Jug florist" },
+        { "id": "copperpot", "label": "Copper Pot", "phrase": "used the Copper Pot", "refPhrase": "Copper Pot florist" }
+      ]
+    },
+    {
+      "id": "ribbon",
+      "label": "Ribbon",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "satinribbon", "label": "Satin Ribbon", "phrase": "finished with the Satin Ribbon", "refPhrase": "Satin Ribbon florist" },
+        { "id": "lacetrim", "label": "Lace Trim", "phrase": "finished with the Lace Trim", "refPhrase": "Lace Trim florist" },
+        { "id": "twinewrap", "label": "Twine Wrap", "phrase": "finished with the Twine Wrap", "refPhrase": "Twine Wrap florist" },
+        { "id": "velvetbow", "label": "Velvet Bow", "phrase": "finished with the Velvet Bow", "refPhrase": "Velvet Bow florist" },
+        { "id": "paperband", "label": "Paper Band", "phrase": "finished with the Paper Band", "refPhrase": "Paper Band florist" },
+        { "id": "silksash", "label": "Silk Sash", "phrase": "finished with the Silk Sash", "refPhrase": "Silk Sash florist" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "bouquet",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} tied {delta} more bouquets than {b_ref}.",
+        "{a_ref} tied {delta} more bouquets than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "bouquet",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} tied no fewer than {bound} bouquets.",
+        "{a_ref} tied at least {bound} bouquets."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the order slip read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

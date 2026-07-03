@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "tailor-shop",
+  "title": "The Tailor's Shop",
+  "subjectNoun": "tailor",
+  "subjectCategory": "tailor",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A light-mystery evening in a gaslit tailor's shop. Anchor = tailor. garment is glyph-backed by the clothes pack (value ids are pack slugs); cloth and thread are text-only; fitting is the numeric axis (fittings booked) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (fitting/cloth/thread).",
+  "narrativeTemplate": "Gaslight hums over the cutting table as {n} tailors bend to their work, and {host} must untangle whose commission was whose after a {mishap} scattered the pinned tickets.",
+  "flavorPools": {
+    "host": ["old Master Fenwick", "the shop forewoman", "tailor-in-chief Vasquez"],
+    "mishap": ["draught through the curtain", "toppled mannequin", "misfiled docket"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Vivian'; 'attribute' -> 'the wool-suit tailor' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "tailor",
+      "label": "Tailor",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "vivian", "label": "Vivian" },
+        { "id": "emre", "label": "Emre" },
+        { "id": "rosa", "label": "Rosa" },
+        { "id": "desmond", "label": "Desmond" },
+        { "id": "yuki", "label": "Yuki" },
+        { "id": "amara", "label": "Amara" }
+      ]
+    },
+    {
+      "id": "garment",
+      "label": "Garment",
+      "kind": "nominal",
+      "glyphPack": "clothes",
+      "valuePool": [
+        { "id": "mansuit", "label": "Wool suit", "phrase": "stitched the wool suit", "refPhrase": "wool-suit tailor" },
+        { "id": "manshirt", "label": "Dress shirt", "phrase": "stitched the dress shirt", "refPhrase": "dress-shirt tailor" },
+        { "id": "mantie", "label": "Silk tie", "phrase": "stitched the silk tie", "refPhrase": "silk-tie tailor" },
+        { "id": "womandress", "label": "Evening dress", "phrase": "stitched the evening dress", "refPhrase": "evening-dress tailor" },
+        { "id": "womanskirt", "label": "Pleated skirt", "phrase": "stitched the pleated skirt", "refPhrase": "pleated-skirt tailor" },
+        { "id": "womanshirt", "label": "Linen blouse", "phrase": "stitched the linen blouse", "refPhrase": "linen-blouse tailor" }
+      ]
+    },
+    {
+      "id": "fitting",
+      "label": "Fittings",
+      "kind": "numeric",
+      "unit": "fittings",
+      "valuePool": [
+        { "id": "fitting2", "label": "2 fittings", "magnitude": 2, "phrase": "booked 2 fittings" },
+        { "id": "fitting4", "label": "4 fittings", "magnitude": 4, "phrase": "booked 4 fittings" },
+        { "id": "fitting6", "label": "6 fittings", "magnitude": 6, "phrase": "booked 6 fittings" },
+        { "id": "fitting8", "label": "8 fittings", "magnitude": 8, "phrase": "booked 8 fittings" },
+        { "id": "fitting10", "label": "10 fittings", "magnitude": 10, "phrase": "booked 10 fittings" },
+        { "id": "fitting12", "label": "12 fittings", "magnitude": 12, "phrase": "booked 12 fittings" }
+      ]
+    },
+    {
+      "id": "cloth",
+      "label": "Cloth",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "tweedbolt", "label": "Tweed Bolt", "phrase": "cut from the Tweed Bolt", "refPhrase": "Tweed Bolt tailor" },
+        { "id": "damaskbolt", "label": "Damask Bolt", "phrase": "cut from the Damask Bolt", "refPhrase": "Damask Bolt tailor" },
+        { "id": "velvetbolt", "label": "Velvet Bolt", "phrase": "cut from the Velvet Bolt", "refPhrase": "Velvet Bolt tailor" },
+        { "id": "chambraybolt", "label": "Chambray Bolt", "phrase": "cut from the Chambray Bolt", "refPhrase": "Chambray Bolt tailor" },
+        { "id": "herringbonebolt", "label": "Herringbone Bolt", "phrase": "cut from the Herringbone Bolt", "refPhrase": "Herringbone Bolt tailor" },
+        { "id": "ginghambolt", "label": "Gingham Bolt", "phrase": "cut from the Gingham Bolt", "refPhrase": "Gingham Bolt tailor" }
+      ]
+    },
+    {
+      "id": "thread",
+      "label": "Thread",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "ivorythread", "label": "Ivory Thread", "phrase": "sewed with the Ivory Thread", "refPhrase": "Ivory Thread tailor" },
+        { "id": "crimsonthread", "label": "Crimson Thread", "phrase": "sewed with the Crimson Thread", "refPhrase": "Crimson Thread tailor" },
+        { "id": "indigothread", "label": "Indigo Thread", "phrase": "sewed with the Indigo Thread", "refPhrase": "Indigo Thread tailor" },
+        { "id": "sablethread", "label": "Sable Thread", "phrase": "sewed with the Sable Thread", "refPhrase": "Sable Thread tailor" },
+        { "id": "goldthread", "label": "Gold Thread", "phrase": "sewed with the Gold Thread", "refPhrase": "Gold Thread tailor" },
+        { "id": "jadethread", "label": "Jade Thread", "phrase": "sewed with the Jade Thread", "refPhrase": "Jade Thread tailor" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "fitting",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} booked {delta} more fittings than {b_ref}.",
+        "{a_ref} booked {delta} more fittings than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "fitting",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} booked no fewer than {bound} fittings.",
+        "{a_ref} booked at least {bound} fittings."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the ledger read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -604,6 +604,141 @@
       "kind": "mosaic",
       "status": "live",
       "verifiedSha": "eff00c7de26205cb2320096e08bb4386a9b17b140e58ef25ec0e07bdcc093552"
+    },
+    {
+      "id": "cat-cafe",
+      "file": "cat-cafe.json",
+      "title": "The Cat Cafe",
+      "tone": "cozy",
+      "kind": "catcafe",
+      "status": "live",
+      "verifiedSha": "b1f7140dc8fe899affd296c296f4166c0954cf94b6afa0f0b9b8771a68456b05"
+    },
+    {
+      "id": "pet-parade",
+      "file": "pet-parade.json",
+      "title": "The Pet Parade",
+      "tone": "whimsical",
+      "kind": "petparade",
+      "status": "live",
+      "verifiedSha": "43571a4feaac5219f0ccbb159495164688c7dcac3aea718b0043d96938fb8dfb"
+    },
+    {
+      "id": "bakery",
+      "file": "bakery.json",
+      "title": "The Corner Bakery",
+      "tone": "cozy",
+      "kind": "bakery",
+      "status": "live",
+      "verifiedSha": "28fb38fb3b70f1e60c830a12fb0a98753d017972f595a271d212c9d6b140c655"
+    },
+    {
+      "id": "tailor-shop",
+      "file": "tailor-shop.json",
+      "title": "The Tailor's Shop",
+      "tone": "light-mystery",
+      "kind": "tailor",
+      "status": "live",
+      "verifiedSha": "3625141c4f6d9ef548b50553e386807841f0681dfded952d45bfb4faccdc3fc8"
+    },
+    {
+      "id": "craft-fair",
+      "file": "craft-fair.json",
+      "title": "The Craft Fair",
+      "tone": "whimsical",
+      "kind": "craftfair",
+      "status": "live",
+      "verifiedSha": "baa9a61eecb644e5bea7e34044e828a331005d4758305801d1640c8bfc2b632d"
+    },
+    {
+      "id": "greengrocer",
+      "file": "greengrocer.json",
+      "title": "The Greengrocer",
+      "tone": "cozy",
+      "kind": "greengrocer",
+      "status": "live",
+      "verifiedSha": "17087dce31d249ab2342a53249ab12a365204b9a41f4e02fb59aa4dbcdd03e69"
+    },
+    {
+      "id": "sports-club",
+      "file": "sports-club.json",
+      "title": "The Sports Club",
+      "tone": "witty",
+      "kind": "sportsclub",
+      "status": "live",
+      "verifiedSha": "b92dc8f5328fd871a0335809c142d316fa0eaf0f17713de0b96a29bfeaf33ae7"
+    },
+    {
+      "id": "auto-garage",
+      "file": "auto-garage.json",
+      "title": "The Auto Garage",
+      "tone": "witty",
+      "kind": "garage",
+      "status": "live",
+      "verifiedSha": "03bff94993f5a82c4716efb6c31b3f014cefe67f01e2ee8ccb7e380107f84cd7"
+    },
+    {
+      "id": "florist",
+      "file": "florist.json",
+      "title": "The Flower Shop",
+      "tone": "light-mystery",
+      "kind": "florist",
+      "status": "live",
+      "verifiedSha": "8cb319740881f16fe386ef4b392e4a299786b8ada7c8247e30787ed5ed214c57"
+    },
+    {
+      "id": "moving-day",
+      "file": "moving-day.json",
+      "title": "Moving Day",
+      "tone": "witty",
+      "kind": "removals",
+      "status": "live",
+      "verifiedSha": "24219ead46a11050b9e2ff7c5e678fa4ad9b609b610ff27c19844496573e8f72"
+    },
+    {
+      "id": "travel-agency",
+      "file": "travel-agency.json",
+      "title": "The Travel Agency",
+      "tone": "whimsical",
+      "kind": "travelagency",
+      "status": "live",
+      "verifiedSha": "822ea8855a83e48eb1a5a6c1c042a86b4314e622bf214d50a6fb60bb0d0b1e6a"
+    },
+    {
+      "id": "career-day",
+      "file": "career-day.json",
+      "title": "Career Day",
+      "tone": "witty",
+      "kind": "careerday",
+      "status": "live",
+      "verifiedSha": "9cd8e4b42c43deafaac680efd9aac05e2abef45e905db6d3ac2f1d6f723e7f21"
+    },
+    {
+      "id": "quilting-bee",
+      "file": "quilting-bee.json",
+      "title": "The Quilting Bee",
+      "tone": "cozy",
+      "kind": "quilting",
+      "status": "live",
+      "verifiedSha": "c25898869410c0b7d1afbbf674e4e66d70f5ed1701d0a68b541c4e7586bddb3f"
+    },
+    {
+      "id": "spaceport",
+      "file": "spaceport.json",
+      "title": "The Spaceport",
+      "tone": "whimsical",
+      "kind": "spaceport",
+      "status": "live",
+      "verifiedSha": "3ef947b534e82e1701eaa08892adfbb99562e548a38f33c309183848daab709c"
+    },
+    {
+      "id": "paint-studio",
+      "file": "paint-studio.json",
+      "title": "The Paint Studio",
+      "tone": "light-mystery",
+      "kind": "paintstudio",
+      "status": "live",
+      "verifiedSha": "6f916384b1ae130fd1304a1853119f7a02043a872ded0a31828d612d73c6eab1"
     }
   ]
 }

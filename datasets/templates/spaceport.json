@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "spaceport",
+  "title": "The Spaceport",
+  "subjectNoun": "pilot",
+  "subjectCategory": "pilot",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical shift at a busy little spaceport. Anchor = pilot. ship is glyph-backed by the spaceship pack (value ids are pack slugs); berth and cargo are text-only; mission is the numeric axis (missions flown) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (mission/berth/cargo).",
+  "narrativeTemplate": "The departure board is blinking pure nonsense again, so {host} must puzzle out which of the {n} pilots did what across the shift after a {mishap} rattled the control tower.",
+  "flavorPools": {
+    "host": ["Controller Vex", "old Commodore Stellan", "the launch marshal"],
+    "mishap": ["meteor drill", "flickering console", "mischievous maintenance droid"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Vega'; 'attribute' -> 'the Saucer pilot' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "pilot",
+      "label": "Pilot",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "vega", "label": "Vega" },
+        { "id": "cass", "label": "Cass" },
+        { "id": "orion", "label": "Orion" },
+        { "id": "lyra", "label": "Lyra" },
+        { "id": "dax", "label": "Dax" },
+        { "id": "nova", "label": "Nova" }
+      ]
+    },
+    {
+      "id": "ship",
+      "label": "Ship",
+      "kind": "nominal",
+      "glyphPack": "spaceship",
+      "valuePool": [
+        { "id": "enterprise", "label": "the Cruiser", "phrase": "piloted the Cruiser", "refPhrase": "Cruiser pilot" },
+        { "id": "saucer", "label": "the Saucer", "phrase": "piloted the Saucer", "refPhrase": "Saucer pilot" },
+        { "id": "greenship", "label": "the Green Runner", "phrase": "piloted the Green Runner", "refPhrase": "Green Runner pilot" },
+        { "id": "orangeship", "label": "the Amber Dart", "phrase": "piloted the Amber Dart", "refPhrase": "Amber Dart pilot" },
+        { "id": "spaceshuttle", "label": "the Shuttle", "phrase": "piloted the Shuttle", "refPhrase": "Shuttle pilot" },
+        { "id": "spacerover", "label": "the Rover", "phrase": "piloted the Rover", "refPhrase": "Rover pilot" }
+      ]
+    },
+    {
+      "id": "mission",
+      "label": "Missions",
+      "kind": "numeric",
+      "unit": "missions",
+      "valuePool": [
+        { "id": "mission2", "label": "2 missions", "magnitude": 2, "phrase": "flew 2 missions" },
+        { "id": "mission4", "label": "4 missions", "magnitude": 4, "phrase": "flew 4 missions" },
+        { "id": "mission6", "label": "6 missions", "magnitude": 6, "phrase": "flew 6 missions" },
+        { "id": "mission8", "label": "8 missions", "magnitude": 8, "phrase": "flew 8 missions" },
+        { "id": "mission10", "label": "10 missions", "magnitude": 10, "phrase": "flew 10 missions" },
+        { "id": "mission12", "label": "12 missions", "magnitude": 12, "phrase": "flew 12 missions" }
+      ]
+    },
+    {
+      "id": "berth",
+      "label": "Berth",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "dockalpha", "label": "Dock Alpha", "phrase": "launched from Dock Alpha", "refPhrase": "Dock Alpha pilot" },
+        { "id": "ringberth", "label": "Ring Berth", "phrase": "launched from Ring Berth", "refPhrase": "Ring Berth pilot" },
+        { "id": "outerramp", "label": "Outer Ramp", "phrase": "launched from Outer Ramp", "refPhrase": "Outer Ramp pilot" },
+        { "id": "gantrynine", "label": "Gantry Nine", "phrase": "launched from Gantry Nine", "refPhrase": "Gantry Nine pilot" },
+        { "id": "silogate", "label": "Silo Gate", "phrase": "launched from Silo Gate", "refPhrase": "Silo Gate pilot" },
+        { "id": "tarmacpad", "label": "Tarmac Pad", "phrase": "launched from Tarmac Pad", "refPhrase": "Tarmac Pad pilot" }
+      ]
+    },
+    {
+      "id": "cargo",
+      "label": "Cargo",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "orecrates", "label": "Ore Crates", "phrase": "carried the Ore Crates", "refPhrase": "Ore Crates pilot" },
+        { "id": "seedvault", "label": "Seed Vault", "phrase": "carried the Seed Vault", "refPhrase": "Seed Vault pilot" },
+        { "id": "relaybeacon", "label": "Relay Beacon", "phrase": "carried the Relay Beacon", "refPhrase": "Relay Beacon pilot" },
+        { "id": "watertanks", "label": "Water Tanks", "phrase": "carried the Water Tanks", "refPhrase": "Water Tanks pilot" },
+        { "id": "starcharts", "label": "Star Charts", "phrase": "carried the Star Charts", "refPhrase": "Star Charts pilot" },
+        { "id": "medicalpods", "label": "Medical Pods", "phrase": "carried the Medical Pods", "refPhrase": "Medical Pods pilot" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "mission",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} flew {delta} more missions than {b_ref}.",
+        "{a_ref} flew {delta} more missions than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "mission",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} flew no fewer than {bound} missions.",
+        "{a_ref} flew at least {bound} missions."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the flight log read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

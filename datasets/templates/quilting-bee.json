@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "quilting-bee",
+  "title": "The Quilting Bee",
+  "subjectNoun": "quilter",
+  "subjectCategory": "quilter",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A cozy evening quilting bee by lamplight. Anchor = quilter. pattern is glyph-backed by the shapes pack (value ids are pack slugs); fabric and stitch are text-only; patch is the numeric axis (patches sewn) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (patch/fabric/stitch).",
+  "narrativeTemplate": "Lamplight pools on the big table as {n} quilters spread out their handiwork, and {host} keeps track of whose piece is whose after a {mishap} shuffled the sewing baskets.",
+  "flavorPools": {
+    "host": ["Grandma Tuppence", "the guild elder", "old Quilt-Mistress Ade"],
+    "mishap": ["draught from the porch", "tipped button jar", "curious kitten"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Agnes'; 'attribute' -> 'the star-block quilter' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "quilter",
+      "label": "Quilter",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "agnes", "label": "Agnes" },
+        { "id": "hugo", "label": "Hugo" },
+        { "id": "mabel", "label": "Mabel" },
+        { "id": "ruben", "label": "Ruben" },
+        { "id": "winnie", "label": "Winnie" },
+        { "id": "tomas", "label": "Tomas" }
+      ]
+    },
+    {
+      "id": "pattern",
+      "label": "Pattern",
+      "kind": "nominal",
+      "glyphPack": "shapes",
+      "valuePool": [
+        { "id": "square", "label": "Square block", "phrase": "pieced the square block", "refPhrase": "square-block quilter" },
+        { "id": "triangle", "label": "Triangle block", "phrase": "pieced the triangle block", "refPhrase": "triangle-block quilter" },
+        { "id": "hexagon", "label": "Hexagon block", "phrase": "pieced the hexagon block", "refPhrase": "hexagon-block quilter" },
+        { "id": "diamond", "label": "Diamond block", "phrase": "pieced the diamond block", "refPhrase": "diamond-block quilter" },
+        { "id": "star", "label": "Star block", "phrase": "pieced the star block", "refPhrase": "star-block quilter" },
+        { "id": "heart", "label": "Heart block", "phrase": "pieced the heart block", "refPhrase": "heart-block quilter" }
+      ]
+    },
+    {
+      "id": "patch",
+      "label": "Patches",
+      "kind": "numeric",
+      "unit": "patches",
+      "valuePool": [
+        { "id": "patch3", "label": "3 patches", "magnitude": 3, "phrase": "sewed 3 patches" },
+        { "id": "patch5", "label": "5 patches", "magnitude": 5, "phrase": "sewed 5 patches" },
+        { "id": "patch7", "label": "7 patches", "magnitude": 7, "phrase": "sewed 7 patches" },
+        { "id": "patch9", "label": "9 patches", "magnitude": 9, "phrase": "sewed 9 patches" },
+        { "id": "patch11", "label": "11 patches", "magnitude": 11, "phrase": "sewed 11 patches" },
+        { "id": "patch13", "label": "13 patches", "magnitude": 13, "phrase": "sewed 13 patches" }
+      ]
+    },
+    {
+      "id": "fabric",
+      "label": "Fabric",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "calicoprint", "label": "Calico Print", "phrase": "worked the Calico Print", "refPhrase": "Calico Print quilter" },
+        { "id": "ginghamweave", "label": "Gingham Weave", "phrase": "worked the Gingham Weave", "refPhrase": "Gingham Weave quilter" },
+        { "id": "floralchintz", "label": "Floral Chintz", "phrase": "worked the Floral Chintz", "refPhrase": "Floral Chintz quilter" },
+        { "id": "plaidwool", "label": "Plaid Wool", "phrase": "worked the Plaid Wool", "refPhrase": "Plaid Wool quilter" },
+        { "id": "muslinplain", "label": "Muslin Plain", "phrase": "worked the Muslin Plain", "refPhrase": "Muslin Plain quilter" },
+        { "id": "paisleysilk", "label": "Paisley Silk", "phrase": "worked the Paisley Silk", "refPhrase": "Paisley Silk quilter" }
+      ]
+    },
+    {
+      "id": "stitch",
+      "label": "Stitch",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "runningstitch", "label": "Running Stitch", "phrase": "used the Running Stitch", "refPhrase": "Running Stitch quilter" },
+        { "id": "chainstitch", "label": "Chain Stitch", "phrase": "used the Chain Stitch", "refPhrase": "Chain Stitch quilter" },
+        { "id": "whipstitch", "label": "Whip Stitch", "phrase": "used the Whip Stitch", "refPhrase": "Whip Stitch quilter" },
+        { "id": "blanketstitch", "label": "Blanket Stitch", "phrase": "used the Blanket Stitch", "refPhrase": "Blanket Stitch quilter" },
+        { "id": "crossstitch", "label": "Cross Stitch", "phrase": "used the Cross Stitch", "refPhrase": "Cross Stitch quilter" },
+        { "id": "featherstitch", "label": "Feather Stitch", "phrase": "used the Feather Stitch", "refPhrase": "Feather Stitch quilter" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "patch",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} sewed {delta} more patches than {b_ref}.",
+        "{a_ref} sewed {delta} more patches than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "patch",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} sewed no fewer than {bound} patches.",
+        "{a_ref} sewed at least {bound} patches."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the pattern sheet read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

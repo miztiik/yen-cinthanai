@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "greengrocer",
+  "title": "The Greengrocer",
+  "subjectNoun": "grocer",
+  "subjectCategory": "grocer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A cozy morning at the greengrocer's stalls. Anchor = grocer. produce is glyph-backed by the vegetables pack (value ids are pack slugs); aisle and wrap are text-only; sack is the numeric axis (sacks filled) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (sack/aisle/wrap).",
+  "narrativeTemplate": "Morning mist lifts off the market row as {n} grocers roll up their awnings, and {host} works out whose corner was whose after a {mishap} tumbled the price cards.",
+  "flavorPools": {
+    "host": ["old Greengrocer Pym", "Auntie Devi", "the market steward"],
+    "mishap": ["gust down the lane", "wobbly crate stack", "nosy spaniel"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Bea'; 'attribute' -> 'the carrot seller' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "grocer",
+      "label": "Grocer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "bea", "label": "Bea" },
+        { "id": "ravi", "label": "Ravi" },
+        { "id": "greta", "label": "Greta" },
+        { "id": "piotr", "label": "Piotr" },
+        { "id": "yara", "label": "Yara" },
+        { "id": "sol", "label": "Sol" }
+      ]
+    },
+    {
+      "id": "produce",
+      "label": "Produce",
+      "kind": "nominal",
+      "glyphPack": "vegetables",
+      "valuePool": [
+        { "id": "carrot", "label": "Carrots", "phrase": "arranged the carrots", "refPhrase": "carrot seller" },
+        { "id": "potato", "label": "Potatoes", "phrase": "arranged the potatoes", "refPhrase": "potato seller" },
+        { "id": "cabbage", "label": "Cabbages", "phrase": "arranged the cabbages", "refPhrase": "cabbage seller" },
+        { "id": "corn", "label": "Corn", "phrase": "arranged the corn", "refPhrase": "corn seller" },
+        { "id": "mushroom", "label": "Mushrooms", "phrase": "arranged the mushrooms", "refPhrase": "mushroom seller" },
+        { "id": "beet", "label": "Beets", "phrase": "arranged the beets", "refPhrase": "beet seller" }
+      ]
+    },
+    {
+      "id": "sack",
+      "label": "Sacks",
+      "kind": "numeric",
+      "unit": "sacks",
+      "valuePool": [
+        { "id": "sack2", "label": "2 sacks", "magnitude": 2, "phrase": "filled 2 sacks" },
+        { "id": "sack4", "label": "4 sacks", "magnitude": 4, "phrase": "filled 4 sacks" },
+        { "id": "sack6", "label": "6 sacks", "magnitude": 6, "phrase": "filled 6 sacks" },
+        { "id": "sack8", "label": "8 sacks", "magnitude": 8, "phrase": "filled 8 sacks" },
+        { "id": "sack10", "label": "10 sacks", "magnitude": 10, "phrase": "filled 10 sacks" },
+        { "id": "sack12", "label": "12 sacks", "magnitude": 12, "phrase": "filled 12 sacks" }
+      ]
+    },
+    {
+      "id": "aisle",
+      "label": "Aisle",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "frontbarrow", "label": "Front Barrow", "phrase": "tended the Front Barrow", "refPhrase": "Front Barrow grocer" },
+        { "id": "cornerstand", "label": "Corner Stand", "phrase": "tended the Corner Stand", "refPhrase": "Corner Stand grocer" },
+        { "id": "awningrow", "label": "Awning Row", "phrase": "tended the Awning Row", "refPhrase": "Awning Row grocer" },
+        { "id": "coldshelf", "label": "Cold Shelf", "phrase": "tended the Cold Shelf", "refPhrase": "Cold Shelf grocer" },
+        { "id": "basketnook", "label": "Basket Nook", "phrase": "tended the Basket Nook", "refPhrase": "Basket Nook grocer" },
+        { "id": "scaletable", "label": "Scale Table", "phrase": "tended the Scale Table", "refPhrase": "Scale Table grocer" }
+      ]
+    },
+    {
+      "id": "wrap",
+      "label": "Wrap",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "brownpaper", "label": "Brown Paper", "phrase": "bagged in the Brown Paper", "refPhrase": "Brown Paper grocer" },
+        { "id": "stringnet", "label": "String Net", "phrase": "bagged in the String Net", "refPhrase": "String Net grocer" },
+        { "id": "wovenbasket", "label": "Woven Basket", "phrase": "bagged in the Woven Basket", "refPhrase": "Woven Basket grocer" },
+        { "id": "waxcloth", "label": "Wax Cloth", "phrase": "bagged in the Wax Cloth", "refPhrase": "Wax Cloth grocer" },
+        { "id": "jutebag", "label": "Jute Bag", "phrase": "bagged in the Jute Bag", "refPhrase": "Jute Bag grocer" },
+        { "id": "cottontote", "label": "Cotton Tote", "phrase": "bagged in the Cotton Tote", "refPhrase": "Cotton Tote grocer" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "sack",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} filled {delta} more sacks than {b_ref}.",
+        "{a_ref} filled {delta} more sacks than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "sack",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} filled no fewer than {bound} sacks.",
+        "{a_ref} filled at least {bound} sacks."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the slate read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

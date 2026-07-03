@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "career-day",
+  "title": "Career Day",
+  "subjectNoun": "student",
+  "subjectCategory": "student",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A witty school career day full of booths. Anchor = student. calling is glyph-backed by the occupation pack (value ids are pack slugs); hall and pass are text-only; talk is the numeric axis (talks attended) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (talk/hall/pass).",
+  "narrativeTemplate": "Every clipboard came back scrambled, so {host} has to work out which of the {n} students went where during the fair, all thanks to a {mishap} by the entrance.",
+  "flavorPools": {
+    "host": ["Ms Prentice from careers", "old Principal Ferro", "the day's coordinator"],
+    "mishap": ["jammed sign-in tablet", "gust through the doors", "misprinted map"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Theo'; 'attribute' -> 'the nursing hopeful' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "student",
+      "label": "Student",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "theo", "label": "Theo" },
+        { "id": "zoya", "label": "Zoya" },
+        { "id": "kwame", "label": "Kwame" },
+        { "id": "elsie", "label": "Elsie" },
+        { "id": "raj", "label": "Raj" },
+        { "id": "pearl", "label": "Pearl" }
+      ]
+    },
+    {
+      "id": "calling",
+      "label": "Calling",
+      "kind": "nominal",
+      "glyphPack": "occupation",
+      "valuePool": [
+        { "id": "nurse", "label": "Nursing", "phrase": "leaned toward nursing", "refPhrase": "nursing hopeful" },
+        { "id": "engineer", "label": "Engineering", "phrase": "leaned toward engineering", "refPhrase": "engineering hopeful" },
+        { "id": "firefighter", "label": "Firefighting", "phrase": "leaned toward firefighting", "refPhrase": "firefighting hopeful" },
+        { "id": "farmer", "label": "Farming", "phrase": "leaned toward farming", "refPhrase": "farming hopeful" },
+        { "id": "astronomer", "label": "Astronomy", "phrase": "leaned toward astronomy", "refPhrase": "astronomy hopeful" },
+        { "id": "carpenter", "label": "Carpentry", "phrase": "leaned toward carpentry", "refPhrase": "carpentry hopeful" }
+      ]
+    },
+    {
+      "id": "talk",
+      "label": "Talks",
+      "kind": "numeric",
+      "unit": "talks",
+      "valuePool": [
+        { "id": "talk2", "label": "2 talks", "magnitude": 2, "phrase": "sat through 2 talks" },
+        { "id": "talk4", "label": "4 talks", "magnitude": 4, "phrase": "sat through 4 talks" },
+        { "id": "talk6", "label": "6 talks", "magnitude": 6, "phrase": "sat through 6 talks" },
+        { "id": "talk8", "label": "8 talks", "magnitude": 8, "phrase": "sat through 8 talks" },
+        { "id": "talk10", "label": "10 talks", "magnitude": 10, "phrase": "sat through 10 talks" },
+        { "id": "talk12", "label": "12 talks", "magnitude": 12, "phrase": "sat through 12 talks" }
+      ]
+    },
+    {
+      "id": "hall",
+      "label": "Hall",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "mainhall", "label": "Main Hall", "phrase": "toured the Main Hall", "refPhrase": "Main Hall student" },
+        { "id": "sciencewing", "label": "Science Wing", "phrase": "toured the Science Wing", "refPhrase": "Science Wing student" },
+        { "id": "sportsannex", "label": "Sports Annex", "phrase": "toured the Sports Annex", "refPhrase": "Sports Annex student" },
+        { "id": "libraryloft", "label": "Library Loft", "phrase": "toured the Library Loft", "refPhrase": "Library Loft student" },
+        { "id": "studiobarn", "label": "Studio Barn", "phrase": "toured the Studio Barn", "refPhrase": "Studio Barn student" },
+        { "id": "workshopyard", "label": "Workshop Yard", "phrase": "toured the Workshop Yard", "refPhrase": "Workshop Yard student" }
+      ]
+    },
+    {
+      "id": "pass",
+      "label": "Pass",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "starsticker", "label": "Star Sticker", "phrase": "collected the Star Sticker", "refPhrase": "Star Sticker student" },
+        { "id": "goldlanyard", "label": "Gold Lanyard", "phrase": "collected the Gold Lanyard", "refPhrase": "Gold Lanyard student" },
+        { "id": "papercap", "label": "Paper Cap", "phrase": "collected the Paper Cap", "refPhrase": "Paper Cap student" },
+        { "id": "clothbadge", "label": "Cloth Badge", "phrase": "collected the Cloth Badge", "refPhrase": "Cloth Badge student" },
+        { "id": "cliptag", "label": "Clip Tag", "phrase": "collected the Clip Tag", "refPhrase": "Clip Tag student" },
+        { "id": "totebag", "label": "Tote Bag", "phrase": "collected the Tote Bag", "refPhrase": "Tote Bag student" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "talk",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} sat through {delta} more talks than {b_ref}.",
+        "{a_ref} sat through {delta} more talks than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "talk",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} sat through no fewer than {bound} talks.",
+        "{a_ref} sat through at least {bound} talks."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the sign-up read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
