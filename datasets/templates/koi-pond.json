@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "koi-pond",
+  "title": "The Koi Pond",
+  "subjectNoun": "keeper",
+  "subjectCategory": "keeper",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A cozy morning round at the ornamental koi pond. Anchor = keeper. marker is glyph-backed by the color pack (value ids are pack slugs); koi and pool are text-only; feeding is the numeric axis (feedings given) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (feeding/koi/pool).",
+  "narrativeTemplate": "Reflections ripple across the water as {n} keepers make their morning rounds, and {curator} settles whose charge was whose after a {mishap} muddled the record slips by the {feature}.",
+  "flavorPools": {
+    "curator": ["old Mr. Tanaka", "the head keeper", "Auntie Willow"],
+    "mishap": ["heron at dawn", "tipped scoop of pellets", "gust across the deck"],
+    "feature": ["footbridge", "stone lantern", "bamboo spout"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Haruko'; 'attribute' -> 'the red-marker keeper' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "keeper",
+      "label": "Keeper",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "haruko", "label": "Haruko" },
+        { "id": "emeka", "label": "Emeka" },
+        { "id": "sofia", "label": "Sofia" },
+        { "id": "lin", "label": "Lin" },
+        { "id": "bram", "label": "Bram" },
+        { "id": "ivy", "label": "Ivy" }
+      ]
+    },
+    {
+      "id": "marker",
+      "label": "Marker",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red marker", "phrase": "tagged with the red marker", "refPhrase": "red-marker keeper" },
+        { "id": "blue", "label": "Blue marker", "phrase": "tagged with the blue marker", "refPhrase": "blue-marker keeper" },
+        { "id": "green", "label": "Green marker", "phrase": "tagged with the green marker", "refPhrase": "green-marker keeper" },
+        { "id": "yellow", "label": "Yellow marker", "phrase": "tagged with the yellow marker", "refPhrase": "yellow-marker keeper" },
+        { "id": "orange", "label": "Orange marker", "phrase": "tagged with the orange marker", "refPhrase": "orange-marker keeper" },
+        { "id": "purple", "label": "Purple marker", "phrase": "tagged with the purple marker", "refPhrase": "purple-marker keeper" }
+      ]
+    },
+    {
+      "id": "feeding",
+      "label": "Feeding",
+      "kind": "numeric",
+      "unit": "feedings",
+      "valuePool": [
+        { "id": "feeding1", "label": "1 feeding", "magnitude": 1, "phrase": "gave 1 feeding" },
+        { "id": "feeding2", "label": "2 feedings", "magnitude": 2, "phrase": "gave 2 feedings" },
+        { "id": "feeding3", "label": "3 feedings", "magnitude": 3, "phrase": "gave 3 feedings" },
+        { "id": "feeding4", "label": "4 feedings", "magnitude": 4, "phrase": "gave 4 feedings" },
+        { "id": "feeding5", "label": "5 feedings", "magnitude": 5, "phrase": "gave 5 feedings" },
+        { "id": "feeding6", "label": "6 feedings", "magnitude": 6, "phrase": "gave 6 feedings" }
+      ]
+    },
+    {
+      "id": "koi",
+      "label": "Koi",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "kohaku", "label": "Kohaku", "phrase": "tended the Kohaku", "refPhrase": "Kohaku keeper" },
+        { "id": "showa", "label": "Showa", "phrase": "tended the Showa", "refPhrase": "Showa keeper" },
+        { "id": "ogon", "label": "Ogon", "phrase": "tended the Ogon", "refPhrase": "Ogon keeper" },
+        { "id": "asagi", "label": "Asagi", "phrase": "tended the Asagi", "refPhrase": "Asagi keeper" },
+        { "id": "butterfly", "label": "Butterfly", "phrase": "tended the Butterfly", "refPhrase": "Butterfly keeper" },
+        { "id": "tancho", "label": "Tancho", "phrase": "tended the Tancho", "refPhrase": "Tancho keeper" }
+      ]
+    },
+    {
+      "id": "pool",
+      "label": "Pool",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "northpool", "label": "North pool", "phrase": "watched over the North pool", "refPhrase": "North-pool keeper" },
+        { "id": "stonebasin", "label": "Stone basin", "phrase": "watched over the Stone basin", "refPhrase": "Stone-basin keeper" },
+        { "id": "lilypool", "label": "Lily pool", "phrase": "watched over the Lily pool", "refPhrase": "Lily-pool keeper" },
+        { "id": "springpool", "label": "Spring pool", "phrase": "watched over the Spring pool", "refPhrase": "Spring-pool keeper" },
+        { "id": "shadepool", "label": "Shade pool", "phrase": "watched over the Shade pool", "refPhrase": "Shade-pool keeper" },
+        { "id": "mainpond", "label": "Main pond", "phrase": "watched over the Main pond", "refPhrase": "Main-pond keeper" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "feeding",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} gave {delta} more feedings than {b_ref}.",
+        "{a_ref} gave {delta} more feedings than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "feeding",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} gave no fewer than {bound} feedings.",
+        "{a_ref} gave at least {bound} feedings."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the log read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "watchmaker-bench",
+  "title": "The Watchmaker's Bench",
+  "subjectNoun": "watchmaker",
+  "subjectCategory": "watchmaker",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A light-mystery morning at the watchmaker's bench. Anchor = watchmaker. cloth is glyph-backed by the color pack (value ids are pack slugs); timepiece and fault are text-only; repair is the numeric axis (repairs completed) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (repair/timepiece/fault).",
+  "narrativeTemplate": "Brass shavings glint under the lamp as {n} watchmakers bend over the bench, and {master} pieces together whose morning was whose after a {mishap} sent the job tickets fluttering, every {clock} still ticking out of step.",
+  "flavorPools": {
+    "master": ["old Esposito", "the shop master", "Madame Tick"],
+    "mishap": ["draught from the door", "toppled parts tray", "curious cat"],
+    "clock": ["wall clock", "regulator", "grandfather clock"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Celeste'; 'attribute' -> 'the red-cloth watchmaker' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "watchmaker",
+      "label": "Watchmaker",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "celeste", "label": "Celeste" },
+        { "id": "bruno", "label": "Bruno" },
+        { "id": "ida", "label": "Ida" },
+        { "id": "marcel", "label": "Marcel" },
+        { "id": "sunila", "label": "Sunila" },
+        { "id": "yusuf", "label": "Yusuf" }
+      ]
+    },
+    {
+      "id": "cloth",
+      "label": "Cloth",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red cloth", "phrase": "used the red cloth", "refPhrase": "red-cloth watchmaker" },
+        { "id": "blue", "label": "Blue cloth", "phrase": "used the blue cloth", "refPhrase": "blue-cloth watchmaker" },
+        { "id": "green", "label": "Green cloth", "phrase": "used the green cloth", "refPhrase": "green-cloth watchmaker" },
+        { "id": "yellow", "label": "Yellow cloth", "phrase": "used the yellow cloth", "refPhrase": "yellow-cloth watchmaker" },
+        { "id": "orange", "label": "Orange cloth", "phrase": "used the orange cloth", "refPhrase": "orange-cloth watchmaker" },
+        { "id": "purple", "label": "Purple cloth", "phrase": "used the purple cloth", "refPhrase": "purple-cloth watchmaker" }
+      ]
+    },
+    {
+      "id": "repair",
+      "label": "Repair",
+      "kind": "numeric",
+      "unit": "repairs",
+      "valuePool": [
+        { "id": "repair2", "label": "2 repairs", "magnitude": 2, "phrase": "completed 2 repairs" },
+        { "id": "repair3", "label": "3 repairs", "magnitude": 3, "phrase": "completed 3 repairs" },
+        { "id": "repair4", "label": "4 repairs", "magnitude": 4, "phrase": "completed 4 repairs" },
+        { "id": "repair5", "label": "5 repairs", "magnitude": 5, "phrase": "completed 5 repairs" },
+        { "id": "repair6", "label": "6 repairs", "magnitude": 6, "phrase": "completed 6 repairs" },
+        { "id": "repair7", "label": "7 repairs", "magnitude": 7, "phrase": "completed 7 repairs" }
+      ]
+    },
+    {
+      "id": "timepiece",
+      "label": "Timepiece",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "pocketwatch", "label": "Pocket watch", "phrase": "serviced the pocket watch", "refPhrase": "pocket-watch hand" },
+        { "id": "mantelclock", "label": "Mantel clock", "phrase": "serviced the mantel clock", "refPhrase": "mantel-clock hand" },
+        { "id": "wristwatch", "label": "Wristwatch", "phrase": "serviced the wristwatch", "refPhrase": "wristwatch hand" },
+        { "id": "cuckooclock", "label": "Cuckoo clock", "phrase": "serviced the cuckoo clock", "refPhrase": "cuckoo-clock hand" },
+        { "id": "carriageclock", "label": "Carriage clock", "phrase": "serviced the carriage clock", "refPhrase": "carriage-clock hand" },
+        { "id": "alarmclock", "label": "Alarm clock", "phrase": "serviced the alarm clock", "refPhrase": "alarm-clock hand" }
+      ]
+    },
+    {
+      "id": "fault",
+      "label": "Fault",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "loosespring", "label": "Loose spring", "phrase": "traced a loose spring", "refPhrase": "loose-spring case" },
+        { "id": "worngear", "label": "Worn gear", "phrase": "traced a worn gear", "refPhrase": "worn-gear case" },
+        { "id": "benthand", "label": "Bent hand", "phrase": "traced a bent hand", "refPhrase": "bent-hand case" },
+        { "id": "crackedcrystal", "label": "Cracked crystal", "phrase": "traced a cracked crystal", "refPhrase": "cracked-crystal case" },
+        { "id": "stuckcrown", "label": "Stuck crown", "phrase": "traced a stuck crown", "refPhrase": "stuck-crown case" },
+        { "id": "drypivot", "label": "Dry pivot", "phrase": "traced a dry pivot", "refPhrase": "dry-pivot case" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "repair",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} completed {delta} more repairs than {b_ref}.",
+        "{a_ref} completed {delta} more repairs than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "repair",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} completed no fewer than {bound} repairs.",
+        "{a_ref} completed at least {bound} repairs."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the docket read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

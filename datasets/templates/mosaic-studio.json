@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "mosaic-studio",
+  "title": "The Mosaic Studio",
+  "subjectNoun": "artisan",
+  "subjectCategory": "artisan",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A light-mystery day of tile-setting in the mosaic studio. Anchor = artisan. tile is glyph-backed by the color pack (value ids are pack slugs); motif and stone are text-only; panel is the numeric axis (panels laid) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (panel/motif/stone).",
+  "narrativeTemplate": "Coloured chips glitter in trays across the {studio} as {n} artisans kneel to their work, and {master} pieces together whose section was whose after a {mishap} scattered the numbered sketches.",
+  "flavorPools": {
+    "studio": ["sunlit studio", "vaulted workshop", "old chapel floor"],
+    "master": ["old Maestro Vetro", "the studio master", "Signora Tessera"],
+    "mishap": ["draught through the arch", "tipped grout pail", "studio cat on the tray"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Livia'; 'attribute' -> 'the red-tile artisan' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "artisan",
+      "label": "Artisan",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "livia", "label": "Livia" },
+        { "id": "omar", "label": "Omar" },
+        { "id": "saanvi", "label": "Saanvi" },
+        { "id": "piet", "label": "Piet" },
+        { "id": "rania", "label": "Rania" },
+        { "id": "costa", "label": "Costa" }
+      ]
+    },
+    {
+      "id": "tile",
+      "label": "Tile",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red tile", "phrase": "laid the red tile", "refPhrase": "red-tile artisan" },
+        { "id": "blue", "label": "Blue tile", "phrase": "laid the blue tile", "refPhrase": "blue-tile artisan" },
+        { "id": "green", "label": "Green tile", "phrase": "laid the green tile", "refPhrase": "green-tile artisan" },
+        { "id": "yellow", "label": "Yellow tile", "phrase": "laid the yellow tile", "refPhrase": "yellow-tile artisan" },
+        { "id": "orange", "label": "Orange tile", "phrase": "laid the orange tile", "refPhrase": "orange-tile artisan" },
+        { "id": "purple", "label": "Purple tile", "phrase": "laid the purple tile", "refPhrase": "purple-tile artisan" }
+      ]
+    },
+    {
+      "id": "panel",
+      "label": "Panel",
+      "kind": "numeric",
+      "unit": "panels",
+      "valuePool": [
+        { "id": "panel1", "label": "1 panel", "magnitude": 1, "phrase": "laid 1 panel" },
+        { "id": "panel2", "label": "2 panels", "magnitude": 2, "phrase": "laid 2 panels" },
+        { "id": "panel3", "label": "3 panels", "magnitude": 3, "phrase": "laid 3 panels" },
+        { "id": "panel4", "label": "4 panels", "magnitude": 4, "phrase": "laid 4 panels" },
+        { "id": "panel5", "label": "5 panels", "magnitude": 5, "phrase": "laid 5 panels" },
+        { "id": "panel6", "label": "6 panels", "magnitude": 6, "phrase": "laid 6 panels" }
+      ]
+    },
+    {
+      "id": "motif",
+      "label": "Motif",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "fish", "label": "Fish", "phrase": "set the fish motif", "refPhrase": "fish-motif artisan" },
+        { "id": "vine", "label": "Vine", "phrase": "set the vine motif", "refPhrase": "vine-motif artisan" },
+        { "id": "sunburst", "label": "Sunburst", "phrase": "set the sunburst motif", "refPhrase": "sunburst-motif artisan" },
+        { "id": "knotwork", "label": "Knotwork", "phrase": "set the knotwork motif", "refPhrase": "knotwork-motif artisan" },
+        { "id": "bird", "label": "Bird", "phrase": "set the bird motif", "refPhrase": "bird-motif artisan" },
+        { "id": "wave", "label": "Wave", "phrase": "set the wave motif", "refPhrase": "wave-motif artisan" }
+      ]
+    },
+    {
+      "id": "stone",
+      "label": "Stone",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "marble", "label": "Marble", "phrase": "worked in marble", "refPhrase": "marble setter" },
+        { "id": "onyx", "label": "Onyx", "phrase": "worked in onyx", "refPhrase": "onyx setter" },
+        { "id": "jasper", "label": "Jasper", "phrase": "worked in jasper", "refPhrase": "jasper setter" },
+        { "id": "glass", "label": "Glass", "phrase": "worked in glass", "refPhrase": "glass setter" },
+        { "id": "slate", "label": "Slate", "phrase": "worked in slate", "refPhrase": "slate setter" },
+        { "id": "goldleaf", "label": "Gold leaf", "phrase": "worked in gold leaf", "refPhrase": "gold-leaf setter" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "panel",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} laid {delta} more panels than {b_ref}.",
+        "{a_ref} laid {delta} more panels than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "panel",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} laid no fewer than {bound} panels.",
+        "{a_ref} laid at least {bound} panels."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the sketch read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

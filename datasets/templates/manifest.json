@@ -469,6 +469,141 @@
       "kind": "perfumery",
       "status": "live",
       "verifiedSha": "e42ae8bba62595fb32c5bb9a2509a5e5025da423f6dddb8c15566373a4ec03e7"
+    },
+    {
+      "id": "orchard-harvest",
+      "file": "orchard-harvest.json",
+      "title": "The Orchard Harvest",
+      "tone": "cozy",
+      "kind": "orchard",
+      "status": "live",
+      "verifiedSha": "60ff1a8602b0ed2ab5936aaed4036e9a05af04ba0523581b9989a8421ed9751c"
+    },
+    {
+      "id": "planetarium-show",
+      "file": "planetarium-show.json",
+      "title": "The Planetarium Show",
+      "tone": "whimsical",
+      "kind": "planetarium",
+      "status": "live",
+      "verifiedSha": "c3fd0c9ea78bb54b2124b31448d71a30c96700424e19f07f27731e68423a9ec9"
+    },
+    {
+      "id": "watchmaker-bench",
+      "file": "watchmaker-bench.json",
+      "title": "The Watchmaker's Bench",
+      "tone": "light-mystery",
+      "kind": "watchmaker",
+      "status": "live",
+      "verifiedSha": "30c0b726b231263ae8bf9e7c73fa89b45521acb1b78185f22f270e2af3d0121b"
+    },
+    {
+      "id": "creamery-cave",
+      "file": "creamery-cave.json",
+      "title": "The Creamery Cave",
+      "tone": "cozy",
+      "kind": "creamery",
+      "status": "live",
+      "verifiedSha": "4195ac921ad15cc3013afefda44e240c95a6fc5219adae6808dd2f109830fa79"
+    },
+    {
+      "id": "cobbler-shop",
+      "file": "cobbler-shop.json",
+      "title": "The Cobbler's Shop",
+      "tone": "witty",
+      "kind": "cobbler",
+      "status": "live",
+      "verifiedSha": "960b501a27b464b286162e3019d1e97aa7292c1b4c619f7d0516080712b4cf02"
+    },
+    {
+      "id": "apothecary-counter",
+      "file": "apothecary-counter.json",
+      "title": "The Apothecary's Counter",
+      "tone": "light-mystery",
+      "kind": "apothecary",
+      "status": "live",
+      "verifiedSha": "b7ded2d874f11004c731cd630930bd2f6664300435612fed864eef14445178cb"
+    },
+    {
+      "id": "toy-workshop",
+      "file": "toy-workshop.json",
+      "title": "The Toy Workshop",
+      "tone": "whimsical",
+      "kind": "toyshop",
+      "status": "live",
+      "verifiedSha": "bbf1ed7e548d270d01d05f8036e792364af9087094fc5a9f45ce2f09490ecf59"
+    },
+    {
+      "id": "opera-house",
+      "file": "opera-house.json",
+      "title": "The Opera House",
+      "tone": "light-mystery",
+      "kind": "opera",
+      "status": "live",
+      "verifiedSha": "7ba5e7f900f8672dd44f1898c7a489e1f5151db3c9618e2d0c38b3f5008b005e"
+    },
+    {
+      "id": "skate-park",
+      "file": "skate-park.json",
+      "title": "The Skate Park",
+      "tone": "witty",
+      "kind": "skatepark",
+      "status": "live",
+      "verifiedSha": "e9b5bcde10e9b8b9d8aa6be897fa28e062832fac7a64fbea592d8c360f3d0ba5"
+    },
+    {
+      "id": "kayak-race",
+      "file": "kayak-race.json",
+      "title": "The Kayak Race",
+      "tone": "witty",
+      "kind": "kayak",
+      "status": "live",
+      "verifiedSha": "0de0f17134d700b3f6af50af23737cbd4a66cc029516035bbd5107b56a8708a7"
+    },
+    {
+      "id": "koi-pond",
+      "file": "koi-pond.json",
+      "title": "The Koi Pond",
+      "tone": "cozy",
+      "kind": "koipond",
+      "status": "live",
+      "verifiedSha": "f7934fc3286a84e1f0a60c0cc9d1082d06221ebd1f9a8b4f4aa334af20fde701"
+    },
+    {
+      "id": "calligraphy-hall",
+      "file": "calligraphy-hall.json",
+      "title": "The Calligraphy Hall",
+      "tone": "cozy",
+      "kind": "calligraphy",
+      "status": "live",
+      "verifiedSha": "62fbe9eb685f78502b8a8512c278cb85627adcaa4e7142392a388e261cdfa50e"
+    },
+    {
+      "id": "reptile-house",
+      "file": "reptile-house.json",
+      "title": "The Reptile House",
+      "tone": "whimsical",
+      "kind": "reptile",
+      "status": "live",
+      "verifiedSha": "93a2b5cc5384f9169a9dd4da33607ad820051ad15dd0c76ea956e3b1b10a765f"
+    },
+    {
+      "id": "shipyard-slipway",
+      "file": "shipyard-slipway.json",
+      "title": "The Shipyard Slipway",
+      "tone": "witty",
+      "kind": "shipyard",
+      "status": "live",
+      "verifiedSha": "6a4fe1f2266a4c5be7f0623357834cdb092e7225a70a44a5c952c07ab1bb8d0c"
+    },
+    {
+      "id": "mosaic-studio",
+      "file": "mosaic-studio.json",
+      "title": "The Mosaic Studio",
+      "tone": "light-mystery",
+      "kind": "mosaic",
+      "status": "live",
+      "verifiedSha": "eff00c7de26205cb2320096e08bb4386a9b17b140e58ef25ec0e07bdcc093552"
     }
   ]
 }

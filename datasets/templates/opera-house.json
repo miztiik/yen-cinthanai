@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "opera-house",
+  "title": "The Opera House",
+  "subjectNoun": "singer",
+  "subjectCategory": "singer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A light-mystery afternoon of dress rehearsal at the opera house. Anchor = singer. costume is glyph-backed by the clothes pack (value ids are pack slugs); role and prop are text-only; aria is the numeric axis (arias sung) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (aria/role/prop).",
+  "narrativeTemplate": "Gilt boxes gleam above the empty stalls as {n} singers warm up before the gala, and {director} untangles who was cast as what after a {mishap} scattered the rehearsal notes across the pit.",
+  "flavorPools": {
+    "director": ["Maestro Fontana", "the stage director", "Madame Crescendo"],
+    "mishap": ["draught from the wings", "toppled music stand", "theatre cat on the score"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Fiora'; 'attribute' -> 'the grey-suit singer' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "singer",
+      "label": "Singer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "fiora", "label": "Fiora" },
+        { "id": "dmitri", "label": "Dmitri" },
+        { "id": "carmen", "label": "Carmen" },
+        { "id": "lars", "label": "Lars" },
+        { "id": "ines", "label": "Ines" },
+        { "id": "tariq", "label": "Tariq" }
+      ]
+    },
+    {
+      "id": "costume",
+      "label": "Costume",
+      "kind": "nominal",
+      "glyphPack": "clothes",
+      "valuePool": [
+        { "id": "mansuit", "label": "Grey suit", "phrase": "wore the grey suit", "refPhrase": "grey-suit singer" },
+        { "id": "womandress", "label": "Green gown", "phrase": "wore the green gown", "refPhrase": "green-gown singer" },
+        { "id": "mantie", "label": "Silk cravat", "phrase": "wore the silk cravat", "refPhrase": "silk-cravat singer" },
+        { "id": "womanhat", "label": "Plumed hat", "phrase": "wore the plumed hat", "refPhrase": "plumed-hat singer" },
+        { "id": "manhat", "label": "Top hat", "phrase": "wore the top hat", "refPhrase": "top-hat singer" },
+        { "id": "womanpartydress", "label": "Ball gown", "phrase": "wore the ball gown", "refPhrase": "ball-gown singer" }
+      ]
+    },
+    {
+      "id": "aria",
+      "label": "Aria",
+      "kind": "numeric",
+      "unit": "arias",
+      "valuePool": [
+        { "id": "aria1", "label": "1 aria", "magnitude": 1, "phrase": "sang 1 aria" },
+        { "id": "aria2", "label": "2 arias", "magnitude": 2, "phrase": "sang 2 arias" },
+        { "id": "aria3", "label": "3 arias", "magnitude": 3, "phrase": "sang 3 arias" },
+        { "id": "aria4", "label": "4 arias", "magnitude": 4, "phrase": "sang 4 arias" },
+        { "id": "aria5", "label": "5 arias", "magnitude": 5, "phrase": "sang 5 arias" },
+        { "id": "aria6", "label": "6 arias", "magnitude": 6, "phrase": "sang 6 arias" }
+      ]
+    },
+    {
+      "id": "role",
+      "label": "Role",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "soprano", "label": "Soprano lead", "phrase": "played the soprano lead", "refPhrase": "soprano-lead player" },
+        { "id": "villain", "label": "Villain", "phrase": "played the villain", "refPhrase": "villain player" },
+        { "id": "jester", "label": "Jester", "phrase": "played the jester", "refPhrase": "jester player" },
+        { "id": "king", "label": "King", "phrase": "played the king", "refPhrase": "king player" },
+        { "id": "messenger", "label": "Messenger", "phrase": "played the messenger", "refPhrase": "messenger player" },
+        { "id": "ghost", "label": "Ghost", "phrase": "played the ghost", "refPhrase": "ghost player" }
+      ]
+    },
+    {
+      "id": "prop",
+      "label": "Prop",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "fan", "label": "Fan", "phrase": "carried the fan", "refPhrase": "fan bearer" },
+        { "id": "dagger", "label": "Dagger", "phrase": "carried the dagger", "refPhrase": "dagger bearer" },
+        { "id": "lantern", "label": "Lantern", "phrase": "carried the lantern", "refPhrase": "lantern bearer" },
+        { "id": "rose", "label": "Rose", "phrase": "carried the rose", "refPhrase": "rose bearer" },
+        { "id": "mask", "label": "Mask", "phrase": "carried the mask", "refPhrase": "mask bearer" },
+        { "id": "goblet", "label": "Goblet", "phrase": "carried the goblet", "refPhrase": "goblet bearer" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "aria",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} sang {delta} more arias than {b_ref}.",
+        "{a_ref} sang {delta} more arias than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "aria",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} sang no fewer than {bound} arias.",
+        "{a_ref} sang at least {bound} arias."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the playbill read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

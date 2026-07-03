@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "cobbler-shop",
+  "title": "The Cobbler's Shop",
+  "subjectNoun": "cobbler",
+  "subjectCategory": "cobbler",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A witty morning at the cobbler's bench mending the day's orders. Anchor = cobbler. thread is glyph-backed by the color pack (value ids are pack slugs); shoe and fix are text-only; pair is the numeric axis (pairs mended) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (pair/shoe/fix).",
+  "narrativeTemplate": "Leather and beeswax scent the little workshop as {n} cobblers hammer at the last, and {owner} works out whose ticket was whose after a {mishap} tumbled the finished orders off the rack.",
+  "flavorPools": {
+    "owner": ["old Crispin", "the shop owner", "Auntie Bootlace"],
+    "mishap": ["wobble of the workbench", "tipped tack jar", "shop dog underfoot"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Enzo'; 'attribute' -> 'the red-thread cobbler' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "cobbler",
+      "label": "Cobbler",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "enzo", "label": "Enzo" },
+        { "id": "dara", "label": "Dara" },
+        { "id": "mei", "label": "Mei" },
+        { "id": "ferdinand", "label": "Ferdinand" },
+        { "id": "aiko", "label": "Aiko" },
+        { "id": "kwame", "label": "Kwame" }
+      ]
+    },
+    {
+      "id": "thread",
+      "label": "Thread",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red thread", "phrase": "stitched with the red thread", "refPhrase": "red-thread cobbler" },
+        { "id": "blue", "label": "Blue thread", "phrase": "stitched with the blue thread", "refPhrase": "blue-thread cobbler" },
+        { "id": "green", "label": "Green thread", "phrase": "stitched with the green thread", "refPhrase": "green-thread cobbler" },
+        { "id": "yellow", "label": "Yellow thread", "phrase": "stitched with the yellow thread", "refPhrase": "yellow-thread cobbler" },
+        { "id": "orange", "label": "Orange thread", "phrase": "stitched with the orange thread", "refPhrase": "orange-thread cobbler" },
+        { "id": "purple", "label": "Purple thread", "phrase": "stitched with the purple thread", "refPhrase": "purple-thread cobbler" }
+      ]
+    },
+    {
+      "id": "pair",
+      "label": "Pair",
+      "kind": "numeric",
+      "unit": "pairs",
+      "valuePool": [
+        { "id": "pair2", "label": "2 pairs", "magnitude": 2, "phrase": "mended 2 pairs" },
+        { "id": "pair3", "label": "3 pairs", "magnitude": 3, "phrase": "mended 3 pairs" },
+        { "id": "pair4", "label": "4 pairs", "magnitude": 4, "phrase": "mended 4 pairs" },
+        { "id": "pair5", "label": "5 pairs", "magnitude": 5, "phrase": "mended 5 pairs" },
+        { "id": "pair6", "label": "6 pairs", "magnitude": 6, "phrase": "mended 6 pairs" },
+        { "id": "pair7", "label": "7 pairs", "magnitude": 7, "phrase": "mended 7 pairs" }
+      ]
+    },
+    {
+      "id": "shoe",
+      "label": "Shoe",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "boot", "label": "Boot", "phrase": "worked on the boot", "refPhrase": "boot job" },
+        { "id": "loafer", "label": "Loafer", "phrase": "worked on the loafer", "refPhrase": "loafer job" },
+        { "id": "sandal", "label": "Sandal", "phrase": "worked on the sandal", "refPhrase": "sandal job" },
+        { "id": "brogue", "label": "Brogue", "phrase": "worked on the brogue", "refPhrase": "brogue job" },
+        { "id": "clog", "label": "Clog", "phrase": "worked on the clog", "refPhrase": "clog job" },
+        { "id": "slipper", "label": "Slipper", "phrase": "worked on the slipper", "refPhrase": "slipper job" }
+      ]
+    },
+    {
+      "id": "fix",
+      "label": "Fix",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "newsole", "label": "New sole", "phrase": "gave it a new sole", "refPhrase": "new-sole job" },
+        { "id": "freshheel", "label": "Fresh heel", "phrase": "gave it a fresh heel", "refPhrase": "fresh-heel job" },
+        { "id": "restitch", "label": "Re-stitch", "phrase": "gave it a re-stitch", "refPhrase": "re-stitch job" },
+        { "id": "leatherpatch", "label": "Leather patch", "phrase": "gave it a leather patch", "refPhrase": "leather-patch job" },
+        { "id": "buffedshine", "label": "Buffed shine", "phrase": "gave it a buffed shine", "refPhrase": "buffed-shine job" },
+        { "id": "newlaces", "label": "New laces", "phrase": "gave it new laces", "refPhrase": "new-laces job" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "pair",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} mended {delta} more pairs than {b_ref}.",
+        "{a_ref} mended {delta} more pairs than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "pair",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} mended no fewer than {bound} pairs.",
+        "{a_ref} mended at least {bound} pairs."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the ticket read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
