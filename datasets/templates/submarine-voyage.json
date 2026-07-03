@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "submarine-voyage",
+  "title": "The Submarine Voyage",
+  "subjectNoun": "crewmate",
+  "subjectCategory": "crewmate",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A quiet research-sub descent, sorting out whose shift and sighting was whose. Anchor = crewmate. ration is glyph-backed by the food pack and sighting by the creatures pack (value ids are pack slugs); post is text-only; dive is the numeric axis (dives logged) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (dive/post/sighting).",
+  "narrativeTemplate": "Green light glows on the gauges and the hull ticks against the deep as {n} crewmates settle in for the long descent, and {host} pieces together whose shift was whose after a {mishap} jumbled the duty roster.",
+  "flavorPools": {
+    "host": ["Captain Reyes", "old Yusuke", "the first mate"],
+    "mishap": ["power flicker", "sudden roll", "loose hatch"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Dmitri'; 'attribute' -> 'the shark spotter' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "crewmate",
+      "label": "Crewmate",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "dmitri", "label": "Dmitri" },
+        { "id": "aiko", "label": "Aiko" },
+        { "id": "leon", "label": "Leon" },
+        { "id": "nadia", "label": "Nadia" },
+        { "id": "rafael", "label": "Rafael" },
+        { "id": "suri", "label": "Suri" }
+      ]
+    },
+    {
+      "id": "ration",
+      "label": "Ration",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "sushi", "label": "Sushi", "phrase": "ate the sushi ration", "refPhrase": "sushi-ration crewmate" },
+        { "id": "seafood", "label": "Seafood", "phrase": "ate the seafood ration", "refPhrase": "seafood-ration crewmate" },
+        { "id": "egg", "label": "Boiled egg", "phrase": "ate the boiled-egg ration", "refPhrase": "boiled-egg-ration crewmate" },
+        { "id": "bread", "label": "Bread", "phrase": "ate the bread ration", "refPhrase": "bread-ration crewmate" },
+        { "id": "cheese", "label": "Cheese", "phrase": "ate the cheese ration", "refPhrase": "cheese-ration crewmate" },
+        { "id": "cookie", "label": "Cookie", "phrase": "ate the cookie ration", "refPhrase": "cookie-ration crewmate" }
+      ]
+    },
+    {
+      "id": "dive",
+      "label": "Dive",
+      "kind": "numeric",
+      "unit": "dives",
+      "valuePool": [
+        { "id": "dive2", "label": "2 dives", "magnitude": 2, "phrase": "logged 2 dives" },
+        { "id": "dive4", "label": "4 dives", "magnitude": 4, "phrase": "logged 4 dives" },
+        { "id": "dive6", "label": "6 dives", "magnitude": 6, "phrase": "logged 6 dives" },
+        { "id": "dive8", "label": "8 dives", "magnitude": 8, "phrase": "logged 8 dives" },
+        { "id": "dive10", "label": "10 dives", "magnitude": 10, "phrase": "logged 10 dives" },
+        { "id": "dive12", "label": "12 dives", "magnitude": 12, "phrase": "logged 12 dives" }
+      ]
+    },
+    {
+      "id": "post",
+      "label": "Post",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "sonar", "label": "The sonar", "phrase": "manned the sonar", "refPhrase": "sonar hand" },
+        { "id": "galley", "label": "The galley", "phrase": "manned the galley", "refPhrase": "galley hand" },
+        { "id": "helm", "label": "The helm", "phrase": "manned the helm", "refPhrase": "helm hand" },
+        { "id": "periscope", "label": "The periscope", "phrase": "manned the periscope", "refPhrase": "periscope hand" },
+        { "id": "engineroom", "label": "The engine room", "phrase": "manned the engine room", "refPhrase": "engine-room hand" },
+        { "id": "radio", "label": "The radio", "phrase": "manned the radio", "refPhrase": "radio hand" }
+      ]
+    },
+    {
+      "id": "sighting",
+      "label": "Sighting",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "shark", "label": "Shark", "phrase": "spotted the shark", "refPhrase": "shark spotter" },
+        { "id": "fish", "label": "Fish", "phrase": "spotted the fish", "refPhrase": "fish spotter" },
+        { "id": "crab", "label": "Crab", "phrase": "spotted the crab", "refPhrase": "crab spotter" },
+        { "id": "turtle", "label": "Turtle", "phrase": "spotted the turtle", "refPhrase": "turtle spotter" },
+        { "id": "shrimp", "label": "Shrimp", "phrase": "spotted the shrimp", "refPhrase": "shrimp spotter" },
+        { "id": "penguin", "label": "Penguin", "phrase": "spotted the penguin", "refPhrase": "penguin spotter" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "dive",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} logged {delta} more dives than {b_ref}.",
+        "{a_ref} made {delta} dives more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "dive",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} logged no fewer than {bound} dives.",
+        "{a_ref} made at least {bound} dives."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

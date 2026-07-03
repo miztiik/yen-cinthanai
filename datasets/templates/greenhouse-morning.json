@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "greenhouse-morning",
+  "title": "The Greenhouse Morning",
+  "subjectNoun": "grower",
+  "subjectCategory": "grower",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A cozy dawn in a community greenhouse, sorting out who raised what. Anchor = grower. seedling is glyph-backed by the vegetables pack (value ids are pack slugs); corner and posy are text-only; tray is the numeric axis (trays raised) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (tray/corner/posy).",
+  "narrativeTemplate": "Warm light filters through the glass panes and the air smells of damp earth as {n} growers move along the benches, and {host} works out whose seedlings are whose after a {mishap} shuffled the plant markers.",
+  "flavorPools": {
+    "host": ["Head Grower Val", "old Magnus", "the nursery lead"],
+    "mishap": ["knocked watering can", "curious cat", "gust from the vent"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Fiona'; 'attribute' -> 'the carrot grower' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "grower",
+      "label": "Grower",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "fiona", "label": "Fiona" },
+        { "id": "deepak", "label": "Deepak" },
+        { "id": "marisol", "label": "Marisol" },
+        { "id": "bram", "label": "Bram" },
+        { "id": "yuki", "label": "Yuki" },
+        { "id": "ines", "label": "Ines" }
+      ]
+    },
+    {
+      "id": "seedling",
+      "label": "Seedling",
+      "kind": "nominal",
+      "glyphPack": "vegetables",
+      "valuePool": [
+        { "id": "carrot", "label": "Carrot", "phrase": "nursed the carrot seedlings", "refPhrase": "carrot grower" },
+        { "id": "corn", "label": "Corn", "phrase": "nursed the corn seedlings", "refPhrase": "corn grower" },
+        { "id": "potato", "label": "Potato", "phrase": "nursed the potato seedlings", "refPhrase": "potato grower" },
+        { "id": "cabbage", "label": "Cabbage", "phrase": "nursed the cabbage seedlings", "refPhrase": "cabbage grower" },
+        { "id": "beet", "label": "Beet", "phrase": "nursed the beet seedlings", "refPhrase": "beet grower" },
+        { "id": "okra", "label": "Okra", "phrase": "nursed the okra seedlings", "refPhrase": "okra grower" }
+      ]
+    },
+    {
+      "id": "tray",
+      "label": "Tray",
+      "kind": "numeric",
+      "unit": "trays",
+      "valuePool": [
+        { "id": "tray3", "label": "3 trays", "magnitude": 3, "phrase": "raised 3 trays" },
+        { "id": "tray5", "label": "5 trays", "magnitude": 5, "phrase": "raised 5 trays" },
+        { "id": "tray7", "label": "7 trays", "magnitude": 7, "phrase": "raised 7 trays" },
+        { "id": "tray9", "label": "9 trays", "magnitude": 9, "phrase": "raised 9 trays" },
+        { "id": "tray11", "label": "11 trays", "magnitude": 11, "phrase": "raised 11 trays" },
+        { "id": "tray13", "label": "13 trays", "magnitude": 13, "phrase": "raised 13 trays" }
+      ]
+    },
+    {
+      "id": "corner",
+      "label": "Corner",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "southbench", "label": "South bench", "phrase": "tended the south bench", "refPhrase": "south-bench grower" },
+        { "id": "mistingnook", "label": "Misting nook", "phrase": "tended the misting nook", "refPhrase": "misting-nook grower" },
+        { "id": "sunnysill", "label": "Sunny sill", "phrase": "tended the sunny sill", "refPhrase": "sunny-sill grower" },
+        { "id": "coolaisle", "label": "Cool aisle", "phrase": "tended the cool aisle", "refPhrase": "cool-aisle grower" },
+        { "id": "pottingtable", "label": "Potting table", "phrase": "tended the potting table", "refPhrase": "potting-table grower" },
+        { "id": "fernshelf", "label": "Fern shelf", "phrase": "tended the fern shelf", "refPhrase": "fern-shelf grower" }
+      ]
+    },
+    {
+      "id": "posy",
+      "label": "Posy",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "marigolds", "label": "Marigolds", "phrase": "grew the marigolds", "refPhrase": "marigold grower" },
+        { "id": "daisies", "label": "Daisies", "phrase": "grew the daisies", "refPhrase": "daisy grower" },
+        { "id": "violets", "label": "Violets", "phrase": "grew the violets", "refPhrase": "violet grower" },
+        { "id": "poppies", "label": "Poppies", "phrase": "grew the poppies", "refPhrase": "poppy grower" },
+        { "id": "asters", "label": "Asters", "phrase": "grew the asters", "refPhrase": "aster grower" },
+        { "id": "foxgloves", "label": "Foxgloves", "phrase": "grew the foxgloves", "refPhrase": "foxglove grower" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "tray",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} raised {delta} more trays than {b_ref}.",
+        "{a_ref} potted {delta} trays more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "tray",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} raised no fewer than {bound} trays.",
+        "{a_ref} potted at least {bound} trays."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

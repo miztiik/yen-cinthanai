@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "falconry-meet",
+  "title": "The Falconry Meet",
+  "subjectNoun": "falconer",
+  "subjectCategory": "falconer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A bright, whimsical morning meet on the meadow with hawks on the fist. Anchor = falconer. quarry is glyph-backed by the creatures pack and hood by the color pack (value ids are pack slugs); perch is text-only; flight is the numeric axis (flights flown) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (flight/hood/perch).",
+  "narrativeTemplate": "The meadow is bright with morning as {n} falconers walk out with their birds on the fist, and {host} works out whose hawk did what after a {mishap} sent the jesses and bells into a tangle.",
+  "flavorPools": {
+    "host": ["Master Falconer Wren", "old Emrys", "the field warden"],
+    "mishap": ["sudden gust", "startled pigeon", "loose leash"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Idris'; 'attribute' -> 'the mouse chaser' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "falconer",
+      "label": "Falconer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "idris", "label": "Idris" },
+        { "id": "elowen", "label": "Elowen" },
+        { "id": "tarek", "label": "Tarek" },
+        { "id": "maren", "label": "Maren" },
+        { "id": "kai", "label": "Kai" },
+        { "id": "rhian", "label": "Rhian" }
+      ]
+    },
+    {
+      "id": "quarry",
+      "label": "Quarry",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "mouse", "label": "Field mouse", "phrase": "chased the field mouse", "refPhrase": "mouse chaser" },
+        { "id": "rabbit", "label": "Rabbit", "phrase": "chased the rabbit", "refPhrase": "rabbit chaser" },
+        { "id": "sparrow", "label": "Sparrow", "phrase": "chased the sparrow", "refPhrase": "sparrow chaser" },
+        { "id": "frog", "label": "Frog", "phrase": "chased the frog", "refPhrase": "frog chaser" },
+        { "id": "fish", "label": "Fish", "phrase": "chased the fish", "refPhrase": "fish chaser" },
+        { "id": "squirrel", "label": "Squirrel", "phrase": "chased the squirrel", "refPhrase": "squirrel chaser" }
+      ]
+    },
+    {
+      "id": "flight",
+      "label": "Flight",
+      "kind": "numeric",
+      "unit": "flights",
+      "valuePool": [
+        { "id": "flight2", "label": "2 flights", "magnitude": 2, "phrase": "flew 2 flights" },
+        { "id": "flight4", "label": "4 flights", "magnitude": 4, "phrase": "flew 4 flights" },
+        { "id": "flight6", "label": "6 flights", "magnitude": 6, "phrase": "flew 6 flights" },
+        { "id": "flight8", "label": "8 flights", "magnitude": 8, "phrase": "flew 8 flights" },
+        { "id": "flight10", "label": "10 flights", "magnitude": 10, "phrase": "flew 10 flights" },
+        { "id": "flight12", "label": "12 flights", "magnitude": 12, "phrase": "flew 12 flights" }
+      ]
+    },
+    {
+      "id": "hood",
+      "label": "Hood",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red hood", "phrase": "used the red hood", "refPhrase": "red-hood falconer" },
+        { "id": "blue", "label": "Blue hood", "phrase": "used the blue hood", "refPhrase": "blue-hood falconer" },
+        { "id": "green", "label": "Green hood", "phrase": "used the green hood", "refPhrase": "green-hood falconer" },
+        { "id": "yellow", "label": "Yellow hood", "phrase": "used the yellow hood", "refPhrase": "yellow-hood falconer" },
+        { "id": "orange", "label": "Orange hood", "phrase": "used the orange hood", "refPhrase": "orange-hood falconer" },
+        { "id": "purple", "label": "Purple hood", "phrase": "used the purple hood", "refPhrase": "purple-hood falconer" }
+      ]
+    },
+    {
+      "id": "perch",
+      "label": "Perch",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "oakpost", "label": "The oak post", "phrase": "rested the bird on the oak post", "refPhrase": "oak-post falconer" },
+        { "id": "glove", "label": "The glove", "phrase": "rested the bird on the glove", "refPhrase": "glove falconer" },
+        { "id": "towerledge", "label": "The tower ledge", "phrase": "rested the bird on the tower ledge", "refPhrase": "tower-ledge falconer" },
+        { "id": "mewsrail", "label": "The mews rail", "phrase": "rested the bird on the mews rail", "refPhrase": "mews-rail falconer" },
+        { "id": "fencerail", "label": "The fence rail", "phrase": "rested the bird on the fence rail", "refPhrase": "fence-rail falconer" },
+        { "id": "cartseat", "label": "The cart seat", "phrase": "rested the bird on the cart seat", "refPhrase": "cart-seat falconer" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "flight",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} flew {delta} more flights than {b_ref}.",
+        "{a_ref} put up {delta} flights more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "flight",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} flew no fewer than {bound} flights.",
+        "{a_ref} put up at least {bound} flights."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "perfumery-atelier",
+  "title": "The Perfumery Atelier",
+  "subjectNoun": "perfumer",
+  "subjectCategory": "perfumer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical morning of blending scents in a perfumery atelier. Anchor = perfumer. bottle is glyph-backed by the color pack (value ids are pack slugs); essence and note are text-only; vial is the numeric axis (vials blended) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (vial/essence/note).",
+  "narrativeTemplate": "The studio smells of a hundred flowers at once and glass stoppers clink on marble as {n} perfumers hover over their blends, and {host} works out whose scent is whose after a {mishap} mixed up the little tags.",
+  "flavorPools": {
+    "host": ["Madame Fleur", "old Amir", "the master blender"],
+    "mishap": ["draught from the door", "spilled drop", "toppled stand"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Colette'; 'attribute' -> 'the red-bottle perfumer' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "perfumer",
+      "label": "Perfumer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "colette", "label": "Colette" },
+        { "id": "rashid", "label": "Rashid" },
+        { "id": "yara", "label": "Yara" },
+        { "id": "emil", "label": "Emil" },
+        { "id": "suki", "label": "Suki" },
+        { "id": "bahar", "label": "Bahar" }
+      ]
+    },
+    {
+      "id": "bottle",
+      "label": "Bottle",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red bottle", "phrase": "filled the red bottle", "refPhrase": "red-bottle perfumer" },
+        { "id": "blue", "label": "Blue bottle", "phrase": "filled the blue bottle", "refPhrase": "blue-bottle perfumer" },
+        { "id": "green", "label": "Green bottle", "phrase": "filled the green bottle", "refPhrase": "green-bottle perfumer" },
+        { "id": "yellow", "label": "Yellow bottle", "phrase": "filled the yellow bottle", "refPhrase": "yellow-bottle perfumer" },
+        { "id": "orange", "label": "Orange bottle", "phrase": "filled the orange bottle", "refPhrase": "orange-bottle perfumer" },
+        { "id": "purple", "label": "Purple bottle", "phrase": "filled the purple bottle", "refPhrase": "purple-bottle perfumer" }
+      ]
+    },
+    {
+      "id": "vial",
+      "label": "Vial",
+      "kind": "numeric",
+      "unit": "vials",
+      "valuePool": [
+        { "id": "vial3", "label": "3 vials", "magnitude": 3, "phrase": "blended 3 vials" },
+        { "id": "vial5", "label": "5 vials", "magnitude": 5, "phrase": "blended 5 vials" },
+        { "id": "vial7", "label": "7 vials", "magnitude": 7, "phrase": "blended 7 vials" },
+        { "id": "vial9", "label": "9 vials", "magnitude": 9, "phrase": "blended 9 vials" },
+        { "id": "vial11", "label": "11 vials", "magnitude": 11, "phrase": "blended 11 vials" },
+        { "id": "vial13", "label": "13 vials", "magnitude": 13, "phrase": "blended 13 vials" }
+      ]
+    },
+    {
+      "id": "essence",
+      "label": "Essence",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "rose", "label": "Rose", "phrase": "worked with the rose essence", "refPhrase": "rose blender" },
+        { "id": "jasmine", "label": "Jasmine", "phrase": "worked with the jasmine essence", "refPhrase": "jasmine blender" },
+        { "id": "sandalwood", "label": "Sandalwood", "phrase": "worked with the sandalwood essence", "refPhrase": "sandalwood blender" },
+        { "id": "bergamot", "label": "Bergamot", "phrase": "worked with the bergamot essence", "refPhrase": "bergamot blender" },
+        { "id": "vetiver", "label": "Vetiver", "phrase": "worked with the vetiver essence", "refPhrase": "vetiver blender" },
+        { "id": "amber", "label": "Amber", "phrase": "worked with the amber essence", "refPhrase": "amber blender" }
+      ]
+    },
+    {
+      "id": "note",
+      "label": "Note",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "floral", "label": "A floral note", "phrase": "chased a floral note", "refPhrase": "floral-note perfumer" },
+        { "id": "woody", "label": "A woody note", "phrase": "chased a woody note", "refPhrase": "woody-note perfumer" },
+        { "id": "citrus", "label": "A citrus note", "phrase": "chased a citrus note", "refPhrase": "citrus-note perfumer" },
+        { "id": "spicy", "label": "A spicy note", "phrase": "chased a spicy note", "refPhrase": "spicy-note perfumer" },
+        { "id": "fresh", "label": "A fresh note", "phrase": "chased a fresh note", "refPhrase": "fresh-note perfumer" },
+        { "id": "musk", "label": "A musk note", "phrase": "chased a musk note", "refPhrase": "musk-note perfumer" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "vial",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} blended {delta} more vials than {b_ref}.",
+        "{a_ref} mixed {delta} vials more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "vial",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} blended no fewer than {bound} vials.",
+        "{a_ref} mixed at least {bound} vials."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

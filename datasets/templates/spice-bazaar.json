@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "spice-bazaar",
+  "title": "The Spice Bazaar",
+  "subjectNoun": "trader",
+  "subjectCategory": "trader",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A bustling, witty morning at a covered spice bazaar. Anchor = trader. garb is glyph-backed by the clothes pack (value ids are pack slugs); spice and trinket are text-only; sale is the numeric axis (sales made) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (sale/spice/trinket).",
+  "narrativeTemplate": "The whole lane is a riot of colour and haggling as {n} traders call out over the crowd, and {host} tries to reckon who dealt what after a {mishap} sent the tally beads skittering across the counter.",
+  "flavorPools": {
+    "host": ["Elder Hakim", "the market warden", "old Zahra"],
+    "mishap": ["gust of wind", "toppled basket", "darting cat"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Yusuf'; 'attribute' -> 'the silk-tie trader' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "trader",
+      "label": "Trader",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "yusuf", "label": "Yusuf" },
+        { "id": "amina", "label": "Amina" },
+        { "id": "devi", "label": "Devi" },
+        { "id": "cyrus", "label": "Cyrus" },
+        { "id": "noor", "label": "Noor" },
+        { "id": "baran", "label": "Baran" }
+      ]
+    },
+    {
+      "id": "garb",
+      "label": "Garb",
+      "kind": "nominal",
+      "glyphPack": "clothes",
+      "valuePool": [
+        { "id": "mansuit", "label": "Fine suit", "phrase": "wore the fine suit", "refPhrase": "fine-suit trader" },
+        { "id": "womandress", "label": "Long dress", "phrase": "wore the long dress", "refPhrase": "long-dress trader" },
+        { "id": "mantie", "label": "Silk tie", "phrase": "wore the silk tie", "refPhrase": "silk-tie trader" },
+        { "id": "womanhat", "label": "Sun hat", "phrase": "wore the sun hat", "refPhrase": "sun-hat trader" },
+        { "id": "manhat", "label": "Felt hat", "phrase": "wore the felt hat", "refPhrase": "felt-hat trader" },
+        { "id": "womanpartydress", "label": "Festival dress", "phrase": "wore the festival dress", "refPhrase": "festival-dress trader" }
+      ]
+    },
+    {
+      "id": "sale",
+      "label": "Sale",
+      "kind": "numeric",
+      "unit": "sales",
+      "valuePool": [
+        { "id": "sale3", "label": "3 sales", "magnitude": 3, "phrase": "made 3 sales" },
+        { "id": "sale5", "label": "5 sales", "magnitude": 5, "phrase": "made 5 sales" },
+        { "id": "sale7", "label": "7 sales", "magnitude": 7, "phrase": "made 7 sales" },
+        { "id": "sale9", "label": "9 sales", "magnitude": 9, "phrase": "made 9 sales" },
+        { "id": "sale11", "label": "11 sales", "magnitude": 11, "phrase": "made 11 sales" },
+        { "id": "sale13", "label": "13 sales", "magnitude": 13, "phrase": "made 13 sales" }
+      ]
+    },
+    {
+      "id": "spice",
+      "label": "Spice",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "saffron", "label": "Saffron", "phrase": "sold the saffron", "refPhrase": "saffron seller" },
+        { "id": "cumin", "label": "Cumin", "phrase": "sold the cumin", "refPhrase": "cumin seller" },
+        { "id": "cardamom", "label": "Cardamom", "phrase": "sold the cardamom", "refPhrase": "cardamom seller" },
+        { "id": "paprika", "label": "Paprika", "phrase": "sold the paprika", "refPhrase": "paprika seller" },
+        { "id": "cinnamon", "label": "Cinnamon", "phrase": "sold the cinnamon", "refPhrase": "cinnamon seller" },
+        { "id": "cloves", "label": "Cloves", "phrase": "sold the cloves", "refPhrase": "clove seller" }
+      ]
+    },
+    {
+      "id": "trinket",
+      "label": "Trinket",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "brasslamp", "label": "A brass lamp", "phrase": "hawked a brass lamp", "refPhrase": "brass-lamp trader" },
+        { "id": "wovenrug", "label": "A woven rug", "phrase": "hawked a woven rug", "refPhrase": "woven-rug trader" },
+        { "id": "copperbell", "label": "A copper bell", "phrase": "hawked a copper bell", "refPhrase": "copper-bell trader" },
+        { "id": "glassbead", "label": "A glass bead", "phrase": "hawked a glass bead", "refPhrase": "glass-bead trader" },
+        { "id": "silkscarf", "label": "A silk scarf", "phrase": "hawked a silk scarf", "refPhrase": "silk-scarf trader" },
+        { "id": "claypot", "label": "A clay pot", "phrase": "hawked a clay pot", "refPhrase": "clay-pot trader" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "sale",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} made {delta} more sales than {b_ref}.",
+        "{a_ref} closed {delta} sales more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "sale",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} made no fewer than {bound} sales.",
+        "{a_ref} closed at least {bound} sales."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

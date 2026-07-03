@@ -334,6 +334,141 @@
       "kind": "apiary",
       "status": "live",
       "verifiedSha": "a9f427b659c17b89031f89cd78886a8026b4c4930ef17b600d501cdd74aa66d0"
+    },
+    {
+      "id": "vineyard-harvest",
+      "file": "vineyard-harvest.json",
+      "title": "The Vineyard Harvest",
+      "tone": "cozy",
+      "kind": "vineyard",
+      "status": "live",
+      "verifiedSha": "ebc0806e895486c9277cbda196d8f8f9b3585c10e52576ad492109d7ee5fcf93"
+    },
+    {
+      "id": "lighthouse-watch",
+      "file": "lighthouse-watch.json",
+      "title": "The Lighthouse Watch",
+      "tone": "light-mystery",
+      "kind": "lighthouse",
+      "status": "live",
+      "verifiedSha": "7081955202d3bccc910776fd5128f8b706603f910e68d00b973fee10c5ce3303"
+    },
+    {
+      "id": "greenhouse-morning",
+      "file": "greenhouse-morning.json",
+      "title": "The Greenhouse Morning",
+      "tone": "cozy",
+      "kind": "greenhouse",
+      "status": "live",
+      "verifiedSha": "e7401a72ee425f99a9d37300347debf663799eaa2b157553643b651933f8ba2f"
+    },
+    {
+      "id": "submarine-voyage",
+      "file": "submarine-voyage.json",
+      "title": "The Submarine Voyage",
+      "tone": "light-mystery",
+      "kind": "submarine",
+      "status": "live",
+      "verifiedSha": "980982d5bd84cb6193545c7a80d4c619d18db3d9ccb5cfac032e68b14e4532f7"
+    },
+    {
+      "id": "blacksmith-forge",
+      "file": "blacksmith-forge.json",
+      "title": "The Blacksmith's Forge",
+      "tone": "witty",
+      "kind": "forge",
+      "status": "live",
+      "verifiedSha": "6b1ea71d38aaed71da08e1b492ebf410355bc484f052f4d9a0b1d506afed847d"
+    },
+    {
+      "id": "windmill-mill",
+      "file": "windmill-mill.json",
+      "title": "The Windmill",
+      "tone": "light-mystery",
+      "kind": "windmill",
+      "status": "live",
+      "verifiedSha": "0db93c6cee998f884372ceb089955a1d8f5ec541028eb7866fc5277db58ed74d"
+    },
+    {
+      "id": "teahouse-afternoon",
+      "file": "teahouse-afternoon.json",
+      "title": "The Teahouse Afternoon",
+      "tone": "cozy",
+      "kind": "teahouse",
+      "status": "live",
+      "verifiedSha": "d341ddec5b7d5463c5d1b3637ff4041bcac7a95295432224ffa9430200367433"
+    },
+    {
+      "id": "spice-bazaar",
+      "file": "spice-bazaar.json",
+      "title": "The Spice Bazaar",
+      "tone": "witty",
+      "kind": "bazaar",
+      "status": "live",
+      "verifiedSha": "0241003e5d5858ed9daf755a487461297541b89abb516dbe497ef217c85dc310"
+    },
+    {
+      "id": "glassblowing-studio",
+      "file": "glassblowing-studio.json",
+      "title": "The Glassblowing Studio",
+      "tone": "whimsical",
+      "kind": "glassworks",
+      "status": "live",
+      "verifiedSha": "b082c49543b8cdf4148895edfe6f8b6fe11dd3b7d10c7e8873c9a721e375ffea"
+    },
+    {
+      "id": "falconry-meet",
+      "file": "falconry-meet.json",
+      "title": "The Falconry Meet",
+      "tone": "whimsical",
+      "kind": "falconry",
+      "status": "live",
+      "verifiedSha": "01038339615b984360e0547b1dc228d2227f08a6a0023997f53a707078e9abb4"
+    },
+    {
+      "id": "cave-expedition",
+      "file": "cave-expedition.json",
+      "title": "The Cave Expedition",
+      "tone": "light-mystery",
+      "kind": "caving",
+      "status": "live",
+      "verifiedSha": "8fc18cca27d5b225a2e50078bfc9440a96d6c6f4f9fc1a05bb4a67fec37c11ec"
+    },
+    {
+      "id": "bottling-works",
+      "file": "bottling-works.json",
+      "title": "The Bottling Works",
+      "tone": "witty",
+      "kind": "brewery",
+      "status": "live",
+      "verifiedSha": "367b2dee63e79fc9e05670656256048e5c1c04827ff37b3e487b88b1a8d7f07b"
+    },
+    {
+      "id": "puppet-theatre",
+      "file": "puppet-theatre.json",
+      "title": "The Puppet Theatre",
+      "tone": "whimsical",
+      "kind": "puppetry",
+      "status": "live",
+      "verifiedSha": "18c02b72b470b95cab68167995c9c5751fe7080f94a6b43a7d41ffdf26d32278"
+    },
+    {
+      "id": "rock-climbing-crag",
+      "file": "rock-climbing-crag.json",
+      "title": "The Climbing Crag",
+      "tone": "witty",
+      "kind": "climbing",
+      "status": "live",
+      "verifiedSha": "56e211e9e22209c410f38c6524ced33aa0be79bf9cc72646eb5b54ae33880fd3"
+    },
+    {
+      "id": "perfumery-atelier",
+      "file": "perfumery-atelier.json",
+      "title": "The Perfumery Atelier",
+      "tone": "whimsical",
+      "kind": "perfumery",
+      "status": "live",
+      "verifiedSha": "e42ae8bba62595fb32c5bb9a2509a5e5025da423f6dddb8c15566373a4ec03e7"
     }
   ]
 }

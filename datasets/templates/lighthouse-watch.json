@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "lighthouse-watch",
+  "title": "The Lighthouse Watch",
+  "subjectNoun": "keeper",
+  "subjectCategory": "keeper",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A hushed night of overlapping shifts in a coastal lighthouse - a gentle who-did-what. Anchor = keeper. flask is glyph-backed by the drinks pack (value ids are pack slugs); vessel and chore are text-only; watch is the numeric axis (hours on watch) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (watch/vessel/chore).",
+  "narrativeTemplate": "Fog rolls in off the black water and the lamp turns steady overhead as {n} keepers trade off through the long night, and {host} sorts out whose night was whose after a {mishap} knocked the logbook to the floor.",
+  "flavorPools": {
+    "host": ["Chief Mara", "old Ewan", "the relief keeper"],
+    "mishap": ["gust through the door", "slammed shutter", "toppled stool"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Nils'; 'attribute' -> 'the coffee drinker' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "keeper",
+      "label": "Keeper",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "nils", "label": "Nils" },
+        { "id": "orla", "label": "Orla" },
+        { "id": "hideo", "label": "Hideo" },
+        { "id": "marina", "label": "Marina" },
+        { "id": "cormac", "label": "Cormac" },
+        { "id": "saoirse", "label": "Saoirse" }
+      ]
+    },
+    {
+      "id": "flask",
+      "label": "Flask",
+      "kind": "nominal",
+      "glyphPack": "drinks",
+      "valuePool": [
+        { "id": "coffee", "label": "Coffee", "phrase": "kept warm with the coffee", "refPhrase": "coffee drinker" },
+        { "id": "tea", "label": "Tea", "phrase": "kept warm with the tea", "refPhrase": "tea drinker" },
+        { "id": "milk", "label": "Warm milk", "phrase": "kept warm with the warm milk", "refPhrase": "warm-milk drinker" },
+        { "id": "juice", "label": "Hot juice", "phrase": "kept warm with the hot juice", "refPhrase": "hot-juice drinker" },
+        { "id": "soda", "label": "Ginger soda", "phrase": "kept warm with the ginger soda", "refPhrase": "ginger-soda drinker" },
+        { "id": "water", "label": "Hot water", "phrase": "kept warm with the hot water", "refPhrase": "hot-water drinker" }
+      ]
+    },
+    {
+      "id": "watch",
+      "label": "Watch",
+      "kind": "numeric",
+      "unit": "hours",
+      "valuePool": [
+        { "id": "watch2", "label": "2 hours", "magnitude": 2, "phrase": "stood watch for 2 hours" },
+        { "id": "watch4", "label": "4 hours", "magnitude": 4, "phrase": "stood watch for 4 hours" },
+        { "id": "watch6", "label": "6 hours", "magnitude": 6, "phrase": "stood watch for 6 hours" },
+        { "id": "watch8", "label": "8 hours", "magnitude": 8, "phrase": "stood watch for 8 hours" },
+        { "id": "watch10", "label": "10 hours", "magnitude": 10, "phrase": "stood watch for 10 hours" },
+        { "id": "watch12", "label": "12 hours", "magnitude": 12, "phrase": "stood watch for 12 hours" }
+      ]
+    },
+    {
+      "id": "vessel",
+      "label": "Vessel",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "trawler", "label": "The trawler", "phrase": "logged the trawler", "refPhrase": "trawler watcher" },
+        { "id": "ferry", "label": "The ferry", "phrase": "logged the ferry", "refPhrase": "ferry watcher" },
+        { "id": "schooner", "label": "The schooner", "phrase": "logged the schooner", "refPhrase": "schooner watcher" },
+        { "id": "tug", "label": "The tug", "phrase": "logged the tug", "refPhrase": "tug watcher" },
+        { "id": "cutter", "label": "The cutter", "phrase": "logged the cutter", "refPhrase": "cutter watcher" },
+        { "id": "sloop", "label": "The sloop", "phrase": "logged the sloop", "refPhrase": "sloop watcher" }
+      ]
+    },
+    {
+      "id": "chore",
+      "label": "Chore",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "wick", "label": "Trim the wick", "phrase": "trimmed the wick", "refPhrase": "wick trimmer" },
+        { "id": "clock", "label": "Wind the clock", "phrase": "wound the clock", "refPhrase": "clock winder" },
+        { "id": "lens", "label": "Polish the lens", "phrase": "polished the lens", "refPhrase": "lens polisher" },
+        { "id": "tides", "label": "Log the tides", "phrase": "logged the tides", "refPhrase": "tide logger" },
+        { "id": "gallery", "label": "Sweep the gallery", "phrase": "swept the gallery", "refPhrase": "gallery sweeper" },
+        { "id": "gears", "label": "Oil the gears", "phrase": "oiled the gears", "refPhrase": "gear oiler" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "watch",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} stood watch {delta} more hours than {b_ref}.",
+        "{a_ref} kept the light {delta} hours longer than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "watch",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} stood watch no fewer than {bound} hours.",
+        "{a_ref} kept the light at least {bound} hours."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

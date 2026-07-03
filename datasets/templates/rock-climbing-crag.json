@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "rock-climbing-crag",
+  "title": "The Climbing Crag",
+  "subjectNoun": "climber",
+  "subjectCategory": "climber",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A bright, witty morning at a popular climbing crag. Anchor = climber. harness is glyph-backed by the color pack and snack by the food pack (value ids are pack slugs); route is text-only; pitch is the numeric axis (pitches led) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (pitch/route/snack).",
+  "narrativeTemplate": "Chalk dust drifts off the crag and carabiners jingle in the sun as {n} climbers queue up for the morning's best lines, and {host} sorts out who sent what after a {mishap} shuffled the topo cards.",
+  "flavorPools": {
+    "host": ["Guide Petra", "old Hank", "the crag warden"],
+    "mishap": ["gust off the face", "loose flake", "dropped chalk bag"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Tenzin'; 'attribute' -> 'the red-harness climber' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "climber",
+      "label": "Climber",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "tenzin", "label": "Tenzin" },
+        { "id": "marta", "label": "Marta" },
+        { "id": "jamal", "label": "Jamal" },
+        { "id": "heidi", "label": "Heidi" },
+        { "id": "rue", "label": "Rue" },
+        { "id": "cai", "label": "Cai" }
+      ]
+    },
+    {
+      "id": "harness",
+      "label": "Harness",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red harness", "phrase": "clipped into the red harness", "refPhrase": "red-harness climber" },
+        { "id": "blue", "label": "Blue harness", "phrase": "clipped into the blue harness", "refPhrase": "blue-harness climber" },
+        { "id": "green", "label": "Green harness", "phrase": "clipped into the green harness", "refPhrase": "green-harness climber" },
+        { "id": "yellow", "label": "Yellow harness", "phrase": "clipped into the yellow harness", "refPhrase": "yellow-harness climber" },
+        { "id": "orange", "label": "Orange harness", "phrase": "clipped into the orange harness", "refPhrase": "orange-harness climber" },
+        { "id": "purple", "label": "Purple harness", "phrase": "clipped into the purple harness", "refPhrase": "purple-harness climber" }
+      ]
+    },
+    {
+      "id": "pitch",
+      "label": "Pitch",
+      "kind": "numeric",
+      "unit": "pitches",
+      "valuePool": [
+        { "id": "pitch3", "label": "3 pitches", "magnitude": 3, "phrase": "led 3 pitches" },
+        { "id": "pitch5", "label": "5 pitches", "magnitude": 5, "phrase": "led 5 pitches" },
+        { "id": "pitch7", "label": "7 pitches", "magnitude": 7, "phrase": "led 7 pitches" },
+        { "id": "pitch9", "label": "9 pitches", "magnitude": 9, "phrase": "led 9 pitches" },
+        { "id": "pitch11", "label": "11 pitches", "magnitude": 11, "phrase": "led 11 pitches" },
+        { "id": "pitch13", "label": "13 pitches", "magnitude": 13, "phrase": "led 13 pitches" }
+      ]
+    },
+    {
+      "id": "route",
+      "label": "Route",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "chimney", "label": "The Chimney", "phrase": "took the Chimney", "refPhrase": "Chimney climber" },
+        { "id": "slab", "label": "The Slab", "phrase": "took the Slab", "refPhrase": "Slab climber" },
+        { "id": "overhang", "label": "The Overhang", "phrase": "took the Overhang", "refPhrase": "Overhang climber" },
+        { "id": "crack", "label": "The Crack", "phrase": "took the Crack", "refPhrase": "Crack climber" },
+        { "id": "arete", "label": "The Arete", "phrase": "took the Arete", "refPhrase": "Arete climber" },
+        { "id": "traverse", "label": "The Traverse", "phrase": "took the Traverse", "refPhrase": "Traverse climber" }
+      ]
+    },
+    {
+      "id": "snack",
+      "label": "Snack",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "cookie", "label": "Cookie", "phrase": "refuelled on the cookie", "refPhrase": "cookie climber" },
+        { "id": "chocolate", "label": "Chocolate", "phrase": "refuelled on the chocolate", "refPhrase": "chocolate climber" },
+        { "id": "egg", "label": "Boiled egg", "phrase": "refuelled on the boiled egg", "refPhrase": "boiled-egg climber" },
+        { "id": "toast", "label": "Toast", "phrase": "refuelled on the toast", "refPhrase": "toast climber" },
+        { "id": "bread", "label": "Bread", "phrase": "refuelled on the bread", "refPhrase": "bread climber" },
+        { "id": "cheese", "label": "Cheese", "phrase": "refuelled on the cheese", "refPhrase": "cheese climber" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "pitch",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} led {delta} more pitches than {b_ref}.",
+        "{a_ref} climbed {delta} pitches more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "pitch",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} led no fewer than {bound} pitches.",
+        "{a_ref} climbed at least {bound} pitches."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "puppet-theatre",
+  "title": "The Puppet Theatre",
+  "subjectNoun": "puppeteer",
+  "subjectCategory": "puppeteer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical afternoon of little shows behind a puppet booth. Anchor = puppeteer. puppet is glyph-backed by the creatures pack and costume by the clothes pack (value ids are pack slugs); tale is text-only; show is the numeric axis (shows given) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (show/tale/costume).",
+  "narrativeTemplate": "Little footlights glow at the front of the booth and the curtain sways as {n} puppeteers ready their hands for the crowd, and {host} works out who played what after a {mishap} tangled all the strings.",
+  "flavorPools": {
+    "host": ["Director Pim", "old Otto", "the stage hand"],
+    "mishap": ["gust through the tent", "dropped prop", "snapped string"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Pia'; 'attribute' -> 'the fox puppeteer' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "puppeteer",
+      "label": "Puppeteer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "pia", "label": "Pia" },
+        { "id": "ravi", "label": "Ravi" },
+        { "id": "selma", "label": "Selma" },
+        { "id": "dario", "label": "Dario" },
+        { "id": "anya", "label": "Anya" },
+        { "id": "bo", "label": "Bo" }
+      ]
+    },
+    {
+      "id": "puppet",
+      "label": "Puppet",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "fox", "label": "Fox", "phrase": "worked the fox puppet", "refPhrase": "fox puppeteer" },
+        { "id": "owl", "label": "Owl", "phrase": "worked the owl puppet", "refPhrase": "owl puppeteer" },
+        { "id": "frog", "label": "Frog", "phrase": "worked the frog puppet", "refPhrase": "frog puppeteer" },
+        { "id": "cat", "label": "Cat", "phrase": "worked the cat puppet", "refPhrase": "cat puppeteer" },
+        { "id": "rabbit", "label": "Rabbit", "phrase": "worked the rabbit puppet", "refPhrase": "rabbit puppeteer" },
+        { "id": "mouse", "label": "Mouse", "phrase": "worked the mouse puppet", "refPhrase": "mouse puppeteer" }
+      ]
+    },
+    {
+      "id": "show",
+      "label": "Show",
+      "kind": "numeric",
+      "unit": "shows",
+      "valuePool": [
+        { "id": "show3", "label": "3 shows", "magnitude": 3, "phrase": "gave 3 shows" },
+        { "id": "show5", "label": "5 shows", "magnitude": 5, "phrase": "gave 5 shows" },
+        { "id": "show7", "label": "7 shows", "magnitude": 7, "phrase": "gave 7 shows" },
+        { "id": "show9", "label": "9 shows", "magnitude": 9, "phrase": "gave 9 shows" },
+        { "id": "show11", "label": "11 shows", "magnitude": 11, "phrase": "gave 11 shows" },
+        { "id": "show13", "label": "13 shows", "magnitude": 13, "phrase": "gave 13 shows" }
+      ]
+    },
+    {
+      "id": "tale",
+      "label": "Tale",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "dragonstory", "label": "The dragon story", "phrase": "told the dragon story", "refPhrase": "dragon-story puppeteer" },
+        { "id": "moonfable", "label": "The moon fable", "phrase": "told the moon fable", "refPhrase": "moon-fable puppeteer" },
+        { "id": "papercrane", "label": "The paper crane", "phrase": "told the paper crane", "refPhrase": "paper-crane puppeteer" },
+        { "id": "lostmitten", "label": "The lost mitten", "phrase": "told the lost mitten", "refPhrase": "lost-mitten puppeteer" },
+        { "id": "seavoyage", "label": "The sea voyage", "phrase": "told the sea voyage", "refPhrase": "sea-voyage puppeteer" },
+        { "id": "winterking", "label": "The winter king", "phrase": "told the winter king", "refPhrase": "winter-king puppeteer" }
+      ]
+    },
+    {
+      "id": "costume",
+      "label": "Costume",
+      "kind": "nominal",
+      "glyphPack": "clothes",
+      "valuePool": [
+        { "id": "mansuit", "label": "Ringmaster coat", "phrase": "wore the ringmaster coat", "refPhrase": "ringmaster-coat puppeteer" },
+        { "id": "womandress", "label": "Flowing gown", "phrase": "wore the flowing gown", "refPhrase": "flowing-gown puppeteer" },
+        { "id": "mantie", "label": "Bow tie", "phrase": "wore the bow tie", "refPhrase": "bow-tie puppeteer" },
+        { "id": "womanhat", "label": "Feathered hat", "phrase": "wore the feathered hat", "refPhrase": "feathered-hat puppeteer" },
+        { "id": "manhat", "label": "Top hat", "phrase": "wore the top hat", "refPhrase": "top-hat puppeteer" },
+        { "id": "womanpartydress", "label": "Sparkly dress", "phrase": "wore the sparkly dress", "refPhrase": "sparkly-dress puppeteer" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "show",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} gave {delta} more shows than {b_ref}.",
+        "{a_ref} played {delta} shows more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "show",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} gave no fewer than {bound} shows.",
+        "{a_ref} played at least {bound} shows."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
