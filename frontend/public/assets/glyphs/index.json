@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-02T23:06:21Z",
+  "generatedAt": "2026-07-03T04:49:09Z",
   "packs": {
     "abstract": {
       "between": {
@@ -1454,13 +1454,25 @@
       }
     },
     "flowers": {
+      "hibiscus": {
+        "file": "flowers/hibiscus.svg",
+        "label": "Hibiscus"
+      },
       "jasmine": {
         "file": "flowers/jasmine.svg",
         "label": "Jasmine"
       },
+      "rose": {
+        "file": "flowers/rose.svg",
+        "label": "Rose"
+      },
       "sunflower": {
         "file": "flowers/sunflower.svg",
         "label": "Sunflower"
+      },
+      "tulips": {
+        "file": "flowers/tulips.svg",
+        "label": "Tulips"
       }
     },
     "food": {
