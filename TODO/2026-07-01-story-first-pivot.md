@@ -1,6 +1,6 @@
 # Story-First Matrix Logic-Grid - Execution Plan
 
-**Last Updated**: 2026-07-01
+**Last Updated**: 2026-07-03 (COMPLETE - all rows merged; see [Plan complete](#plan-complete))
 **Level**: 5 (core design / data model / runtime - authored per `.cladue/skills/prepare-plan`)
 
 ## 0. Operating contract
@@ -18,15 +18,15 @@
 
 | # | Row title | Depends-on | Parallel-group | Status | Worktree | PR | Subagent |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Extract `translator.py` (byte-identical) | - | A | PENDING | - | - | - |
-| 2 | Contracts + loaders (new manifest fields, categories/scenario JSON) | - | A | PENDING | - | - | - |
-| 3 | Generator emits story-first matrix shape | 1,2 | B | PENDING | - | - | - |
-| 4 | Frontend story panel + text ClueList + clue-strike | 3 | C | PENDING | - | - | - |
-| 5 | Numeric `kind` + numDiff/threshold | 3 | C | PENDING | - | - | - |
-| 6 | Compound clue types (oneOf/oneEachOf/ifThen) | 5 | D | PENDING | - | - | - |
-| 7 | Cross-out elimination grid + drag retarget | 4 | D | PENDING | - | - | - |
-| 8 | Flags glyph pack (country category) | - | A | PENDING | - | - | - |
-| 9 | Scale corpus + contract close (schema bump) | 5,6,7,8 | E | PENDING | - | - | - |
+| 1 | Extract `translator.py` (byte-identical) | - | A | DONE | merged | #15 | ✓ |
+| 2 | Contracts + loaders (new manifest fields, categories/scenario JSON) | - | A | DONE | merged | #16 | ✓ |
+| 3 | Generator emits story-first matrix shape | 1,2 | B | DONE | merged | #17 | ✓ |
+| 4 | Frontend story panel + text ClueList + clue-strike | 3 | C | DONE | merged | #20 | ✓ |
+| 5 | Numeric `kind` + numDiff/threshold | 3 | C | DONE | merged | #18 | ✓ |
+| 6 | Compound clue types (oneOf/oneEachOf/ifThen) | 5 | D | DONE | merged | #19 | ✓ |
+| 7 | Cross-out elimination grid + drag retarget | 4 | D | DONE | merged | #21 | ✓ |
+| 8 | Flags glyph pack (country category) | - | A | DONE | merged | #22 | ✓ |
+| 9 | Scale corpus + contract close (schema bump) | 5,6,7,8 | E | DONE | merged | #23-#28,#31 | ✓ |
 
 ## 2. Row #1 - Extract translator.py (byte-identical)
 
@@ -276,6 +276,26 @@ When this plan is in context and the instruction is "implement it", execute as t
 7. **Stop only at a real boundary.** Stop and ask ONLY when: an ESCALATE trigger fires (Level-5), an explicit user-named source/instruction would be scope-narrowed (STOP-AND-SURFACE per CLAUDE.md section 10), or an audit chain exceeds depth 3 (escalate with Path A/B/C options, do not ship a 4th audit). Otherwise do not pause; the user is not watching.
 
 8. **Closure.** Done only when every in-scope row is DONE or COLLAPSED-with-cited-rationale. No-op rows carry a receipt (the command + its zero result). Archive the plan-doc with a per-row distillation map per `docs/how-to/distill-a-plan.md`.
+
+## Plan complete
+
+Closed 2026-07-03. All 9 rows merged to `master` (@ `aa3eebe`). Story-first matrix logic-grid is live at manifest `schemaVersion` 2; the seating / round-table engine is retired. Distillation map (durable knowledge was lifted to living docs during execution; this plan-doc remains the audit ledger):
+
+- Row 1 (translator extract) -> [generator/pipeline.md](../docs/architecture/generator/pipeline.md) - translator is a pure Message-Translator filter; clue text stays baked in the manifest. PR #15.
+- Row 2 (contracts + loaders) -> [contracts/schemas.md](../docs/architecture/contracts/schemas.md) - tolerant Pydantic/TS readers; new optional manifest fields. PR #16.
+- Row 3 (story-first matrix generator) -> [generator/pipeline.md](../docs/architecture/generator/pipeline.md) + [concepts/core-loop.md](../docs/concepts/core-loop.md) - CP-SAT forbid-and-resolve uniqueness; P1-P7 quality gates; `shapeId` "grid". PR #17.
+- Row 4 (story panel + ClueList) -> [concepts/ui-shell.md](../docs/concepts/ui-shell.md) - StoryPanel + text ClueList; soft/hard auto-dim keyed by tier feedback. PR #20.
+- Row 5 (numeric kind + numDiff/threshold) -> [generator/pipeline.md](../docs/architecture/generator/pipeline.md) - reified magnitude-at-slot; numeric category MUST sit at index <= 2; `len(hints) == full_depth` generation invariant. PR #18.
+- Row 6 (compound clues) -> [generator/pipeline.md](../docs/architecture/generator/pipeline.md) - oneOf/oneEachOf (Sharp+), ifThen (Expert, <= 1); per-tier category slice `cats[:tiers.categories]`. PR #19.
+- Row 7 (cross-out grid) -> [concepts/ui-shell.md](../docs/concepts/ui-shell.md) - drag-glyph + auto-X (impliedX); 4-state cell; notes persistence. PR #21.
+- Row 8 (flags glyph pack) -> [concepts/glyph-roadmap.md](../docs/concepts/glyph-roadmap.md) + [runtime/stack-and-bundle.md](../docs/architecture/runtime/stack-and-bundle.md) - `max_svg_bytes` budget guard; flags lazy CacheFirst (not precached). PR #22.
+- Row 9 (scale + contract close) -> [contracts/schemas.md](../docs/architecture/contracts/schemas.md) + [generator/pipeline.md](../docs/architecture/generator/pipeline.md) - `schemaVersion` 1->2 (story-first required, ordinal dropped, matrix-only); 17 machine-checkable JSON Schemas each with an `evolution` log; incremental verification (`verifiedSha` per scenario). PRs #23-#28, #31.
+
+Post-plan follow-ups (hygiene, not plan rows): scenario catalog scaled 4 -> 100 templates with tones balanced 25/25/25/25, all `verifiedSha`-stamped (#29, #30, #33-#37); flowers glyph cleanup + reusable `tools/wash_svg.py` (#32); `mergeGridPlacements` DataCloneError fix (#38).
+
+Agent-only execution lessons distilled to `/memories/lessons-2026-07-01-story-first-pivot.md`.
+
+Plan-doc remains as the audit ledger; do not edit further. New work starts a new plan-doc.
 
 ## See also
 
