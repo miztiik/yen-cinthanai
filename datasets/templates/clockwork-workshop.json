@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "clockwork-workshop",
+  "title": "The Clockwork Workshop",
+  "subjectNoun": "tinkerer",
+  "subjectCategory": "tinkerer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Whimsical steampunk workshop. Anchor = tinkerer. invention, corner and casing are text-only (no pack fits); gauge is the numeric axis (boiler pressure) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (gauge/corner/casing).",
+  "narrativeTemplate": "Steam hisses and gears tick across the cluttered workshop as {n} tinkerers polish their latest marvels, and {patron} sorts out whose is whose after a {mishap} rattled the shelves.",
+  "flavorPools": {
+    "patron": ["Baroness Cog", "old Professor Fizz", "the guild patron"],
+    "mishap": ["boiler burp", "loose flywheel", "runaway spring"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Cornelius'; 'attribute' -> 'the orrery maker' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "tinkerer",
+      "label": "Tinkerer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "cornelius", "label": "Cornelius" },
+        { "id": "ada", "label": "Ada" },
+        { "id": "silas", "label": "Silas" },
+        { "id": "wren", "label": "Wren" },
+        { "id": "barnaby", "label": "Barnaby" },
+        { "id": "ottoline", "label": "Ottoline" }
+      ]
+    },
+    {
+      "id": "invention",
+      "label": "Invention",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "orrery", "label": "Orrery", "phrase": "built the orrery", "refPhrase": "orrery maker" },
+        { "id": "automaton", "label": "Automaton", "phrase": "built the automaton", "refPhrase": "automaton maker" },
+        { "id": "chronometer", "label": "Chronometer", "phrase": "built the chronometer", "refPhrase": "chronometer maker" },
+        { "id": "barometer", "label": "Barometer", "phrase": "built the barometer", "refPhrase": "barometer maker" },
+        { "id": "telegraph", "label": "Telegraph", "phrase": "built the telegraph", "refPhrase": "telegraph maker" },
+        { "id": "phonograph", "label": "Phonograph", "phrase": "built the phonograph", "refPhrase": "phonograph maker" }
+      ]
+    },
+    {
+      "id": "gauge",
+      "label": "Gauge",
+      "kind": "numeric",
+      "unit": "psi",
+      "valuePool": [
+        { "id": "g20", "label": "20 psi", "magnitude": 20, "phrase": "ran at 20 psi" },
+        { "id": "g30", "label": "30 psi", "magnitude": 30, "phrase": "ran at 30 psi" },
+        { "id": "g45", "label": "45 psi", "magnitude": 45, "phrase": "ran at 45 psi" },
+        { "id": "g60", "label": "60 psi", "magnitude": 60, "phrase": "ran at 60 psi" },
+        { "id": "g75", "label": "75 psi", "magnitude": 75, "phrase": "ran at 75 psi" },
+        { "id": "g90", "label": "90 psi", "magnitude": 90, "phrase": "ran at 90 psi" }
+      ]
+    },
+    {
+      "id": "corner",
+      "label": "Corner",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "attic", "label": "Attic", "phrase": "worked in the Attic", "refPhrase": "Attic tinkerer" },
+        { "id": "cellar", "label": "Cellar", "phrase": "worked in the Cellar", "refPhrase": "Cellar tinkerer" },
+        { "id": "gallery", "label": "Gallery", "phrase": "worked in the Gallery", "refPhrase": "Gallery tinkerer" },
+        { "id": "annex", "label": "Annex", "phrase": "worked in the Annex", "refPhrase": "Annex tinkerer" },
+        { "id": "forge", "label": "Forge", "phrase": "worked at the Forge", "refPhrase": "Forge tinkerer" },
+        { "id": "loft", "label": "Loft", "phrase": "worked in the Loft", "refPhrase": "Loft tinkerer" }
+      ]
+    },
+    {
+      "id": "casing",
+      "label": "Casing",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "brass", "label": "Brass", "phrase": "cased it in brass", "refPhrase": "brass casing" },
+        { "id": "copper", "label": "Copper", "phrase": "cased it in copper", "refPhrase": "copper casing" },
+        { "id": "iron", "label": "Iron", "phrase": "cased it in iron", "refPhrase": "iron casing" },
+        { "id": "pewter", "label": "Pewter", "phrase": "cased it in pewter", "refPhrase": "pewter casing" },
+        { "id": "bronze", "label": "Bronze", "phrase": "cased it in bronze", "refPhrase": "bronze casing" },
+        { "id": "chrome", "label": "Chrome", "phrase": "cased it in chrome", "refPhrase": "chrome casing" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "gauge",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref}'s boiler ran {delta} psi hotter than {b_ref}'s.",
+        "{a_ref} held {delta} psi more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "gauge",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} ran no lower than {bound} psi.",
+        "{a_ref} held at least {bound} psi."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was built.",
+        "For {a_ref} the plans read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

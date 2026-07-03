@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "balloon-fiesta",
+  "title": "The Balloon Fiesta",
+  "subjectNoun": "pilot",
+  "subjectCategory": "pilot",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Whimsical hot-air balloon fiesta at dawn. Anchor = pilot. canopy is glyph-backed by the color pack and motif by the shapes pack (value ids are pack slugs); field is text-only; altitude is the numeric axis at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (altitude/motif/field).",
+  "narrativeTemplate": "Dawn is calm and the burners roar as {n} pilots inflate their great balloons on the green, and {marshal} keeps the launch order straight after a {mishap} scattered the flight cards.",
+  "flavorPools": {
+    "marshal": ["Fieldmaster Bo", "old Auntie Wisp", "the launch marshal"],
+    "mishap": ["gust of wind", "tangled tether", "runaway clipboard"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Skye'; 'attribute' -> 'the red-canopy pilot' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "pilot",
+      "label": "Pilot",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "skye", "label": "Skye" },
+        { "id": "bramwell", "label": "Bramwell" },
+        { "id": "lark", "label": "Lark" },
+        { "id": "rufus", "label": "Rufus" },
+        { "id": "colette", "label": "Colette" },
+        { "id": "ozzie", "label": "Ozzie" }
+      ]
+    },
+    {
+      "id": "canopy",
+      "label": "Canopy",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red canopy", "phrase": "flew the red canopy", "refPhrase": "red-canopy pilot" },
+        { "id": "blue", "label": "Blue canopy", "phrase": "flew the blue canopy", "refPhrase": "blue-canopy pilot" },
+        { "id": "green", "label": "Green canopy", "phrase": "flew the green canopy", "refPhrase": "green-canopy pilot" },
+        { "id": "yellow", "label": "Yellow canopy", "phrase": "flew the yellow canopy", "refPhrase": "yellow-canopy pilot" },
+        { "id": "orange", "label": "Orange canopy", "phrase": "flew the orange canopy", "refPhrase": "orange-canopy pilot" },
+        { "id": "purple", "label": "Purple canopy", "phrase": "flew the purple canopy", "refPhrase": "purple-canopy pilot" }
+      ]
+    },
+    {
+      "id": "altitude",
+      "label": "Altitude",
+      "kind": "numeric",
+      "unit": "feet",
+      "valuePool": [
+        { "id": "a300", "label": "300 ft", "magnitude": 300, "phrase": "climbed to 300 feet" },
+        { "id": "a500", "label": "500 ft", "magnitude": 500, "phrase": "climbed to 500 feet" },
+        { "id": "a800", "label": "800 ft", "magnitude": 800, "phrase": "climbed to 800 feet" },
+        { "id": "a1000", "label": "1000 ft", "magnitude": 1000, "phrase": "climbed to 1000 feet" },
+        { "id": "a1200", "label": "1200 ft", "magnitude": 1200, "phrase": "climbed to 1200 feet" },
+        { "id": "a1500", "label": "1500 ft", "magnitude": 1500, "phrase": "climbed to 1500 feet" }
+      ]
+    },
+    {
+      "id": "motif",
+      "label": "Motif",
+      "kind": "nominal",
+      "glyphPack": "shapes",
+      "valuePool": [
+        { "id": "star", "label": "Star", "phrase": "wore the star motif", "refPhrase": "star-motif pilot" },
+        { "id": "heart", "label": "Heart", "phrase": "wore the heart motif", "refPhrase": "heart-motif pilot" },
+        { "id": "diamond", "label": "Diamond", "phrase": "wore the diamond motif", "refPhrase": "diamond-motif pilot" },
+        { "id": "circle", "label": "Circle", "phrase": "wore the circle motif", "refPhrase": "circle-motif pilot" },
+        { "id": "square", "label": "Square", "phrase": "wore the square motif", "refPhrase": "square-motif pilot" },
+        { "id": "triangle", "label": "Triangle", "phrase": "wore the triangle motif", "refPhrase": "triangle-motif pilot" }
+      ]
+    },
+    {
+      "id": "field",
+      "label": "Field",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "elmsford", "label": "Elmsford", "phrase": "launched from Elmsford", "refPhrase": "Elmsford launch" },
+        { "id": "harrowvale", "label": "Harrow Vale", "phrase": "launched from Harrow Vale", "refPhrase": "Harrow Vale launch" },
+        { "id": "kitehill", "label": "Kite Hill", "phrase": "launched from Kite Hill", "refPhrase": "Kite Hill launch" },
+        { "id": "galepoint", "label": "Gale Point", "phrase": "launched from Gale Point", "refPhrase": "Gale Point launch" },
+        { "id": "windyflats", "label": "Windy Flats", "phrase": "launched from Windy Flats", "refPhrase": "Windy Flats launch" },
+        { "id": "cloudmeadow", "label": "Cloud Meadow", "phrase": "launched from Cloud Meadow", "refPhrase": "Cloud Meadow launch" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "altitude",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} climbed {delta} feet higher than {b_ref}.",
+        "{a_ref} rose {delta} feet above {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "altitude",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} climbed no lower than {bound} feet.",
+        "{a_ref} rose to at least {bound} feet."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one flew.",
+        "For {a_ref} the sheet read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

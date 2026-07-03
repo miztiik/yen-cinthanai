@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "desert-caravan",
+  "title": "The Desert Caravan",
+  "subjectNoun": "trader",
+  "subjectCategory": "trader",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Cozy desert caravan at a dusk halt. Anchor = trader. beast, oasis are text-only; cargo is glyph-backed by the vegetables pack (value ids are pack slugs); league is the numeric axis (distance covered) at index 2 so it survives the standard slice. The narrativeTemplate is setting flavor only - it never names a sliced category (league/oasis/cargo).",
+  "narrativeTemplate": "The caravan halts at dusk as {n} traders unroll their mats in the lee of the dunes, and {elder} settles who carried what once a {mishap} scattered the tally sticks.",
+  "flavorPools": {
+    "elder": ["Grandmother Saba", "old Hadi", "the caravan elder"],
+    "mishap": ["sudden sandstorm", "torn ledger", "midnight scramble"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Amina'; 'attribute' -> 'the camel driver' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "trader",
+      "label": "Trader",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "amina", "label": "Amina" },
+        { "id": "idris", "label": "Idris" },
+        { "id": "layla", "label": "Layla" },
+        { "id": "omar", "label": "Omar" },
+        { "id": "zaid", "label": "Zaid" },
+        { "id": "farah", "label": "Farah" }
+      ]
+    },
+    {
+      "id": "beast",
+      "label": "Beast",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "camel", "label": "Camel", "phrase": "led the camel", "refPhrase": "camel driver" },
+        { "id": "mule", "label": "Mule", "phrase": "led the mule", "refPhrase": "mule driver" },
+        { "id": "donkey", "label": "Donkey", "phrase": "led the donkey", "refPhrase": "donkey driver" },
+        { "id": "mare", "label": "Mare", "phrase": "led the mare", "refPhrase": "mare driver" },
+        { "id": "ox", "label": "Ox", "phrase": "led the ox", "refPhrase": "ox driver" },
+        { "id": "pony", "label": "Pony", "phrase": "led the pony", "refPhrase": "pony driver" }
+      ]
+    },
+    {
+      "id": "league",
+      "label": "League",
+      "kind": "numeric",
+      "unit": "leagues",
+      "valuePool": [
+        { "id": "l3", "label": "3 leagues", "magnitude": 3, "phrase": "covered 3 leagues" },
+        { "id": "l5", "label": "5 leagues", "magnitude": 5, "phrase": "covered 5 leagues" },
+        { "id": "l8", "label": "8 leagues", "magnitude": 8, "phrase": "covered 8 leagues" },
+        { "id": "l10", "label": "10 leagues", "magnitude": 10, "phrase": "covered 10 leagues" },
+        { "id": "l12", "label": "12 leagues", "magnitude": 12, "phrase": "covered 12 leagues" },
+        { "id": "l15", "label": "15 leagues", "magnitude": 15, "phrase": "covered 15 leagues" }
+      ]
+    },
+    {
+      "id": "oasis",
+      "label": "Oasis",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "palmhollow", "label": "Palm Hollow", "phrase": "watered at Palm Hollow", "refPhrase": "Palm Hollow party" },
+        { "id": "saltflat", "label": "Salt Flat", "phrase": "watered at the Salt Flat", "refPhrase": "Salt Flat party" },
+        { "id": "reddunes", "label": "Red Dunes", "phrase": "watered at the Red Dunes", "refPhrase": "Red Dunes party" },
+        { "id": "coldspring", "label": "Cold Spring", "phrase": "watered at Cold Spring", "refPhrase": "Cold Spring party" },
+        { "id": "starwell", "label": "Star Well", "phrase": "watered at Star Well", "refPhrase": "Star Well party" },
+        { "id": "moonridge", "label": "Moon Ridge", "phrase": "watered at Moon Ridge", "refPhrase": "Moon Ridge party" }
+      ]
+    },
+    {
+      "id": "cargo",
+      "label": "Cargo",
+      "kind": "nominal",
+      "glyphPack": "vegetables",
+      "valuePool": [
+        { "id": "coconut", "label": "Coconuts", "phrase": "traded the coconuts", "refPhrase": "coconut trader" },
+        { "id": "mango", "label": "Mangoes", "phrase": "traded the mangoes", "refPhrase": "mango trader" },
+        { "id": "grape", "label": "Grapes", "phrase": "traded the grapes", "refPhrase": "grape trader" },
+        { "id": "corn", "label": "Corn", "phrase": "traded the corn", "refPhrase": "corn trader" },
+        { "id": "okra", "label": "Okra", "phrase": "traded the okra", "refPhrase": "okra trader" },
+        { "id": "chili", "label": "Chilies", "phrase": "traded the chilies", "refPhrase": "chili trader" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "league",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} covered {delta} leagues more than {b_ref}.",
+        "{a_ref} rode {delta} leagues further than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "league",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} covered no fewer than {bound} leagues.",
+        "{a_ref} rode at least {bound} leagues."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} it came to {x_label} or {y_label} - just one held."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

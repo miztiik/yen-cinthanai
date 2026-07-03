@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "esports-arena",
+  "title": "The Esports Arena",
+  "subjectNoun": "gamer",
+  "subjectCategory": "gamer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Witty esports arena finals. Anchor = gamer. title and squad are text-only; snack is glyph-backed by the food pack (value ids are pack slugs); score is the numeric axis (match points) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (score/squad/snack).",
+  "narrativeTemplate": "The arena lights strobe and the casters go hoarse as {n} gamers hunch over their rigs, and {organiser} pieces the bracket back together after a {mishap} wiped the leaderboard.",
+  "flavorPools": {
+    "organiser": ["Ref Tanaka", "the tournament organiser", "old Coach Blip"],
+    "mishap": ["server hiccup", "spilled energy drink", "tripped power strip"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Nova'; 'attribute' -> 'the Nova Rally main' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "gamer",
+      "label": "Gamer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "nova", "label": "Nova" },
+        { "id": "ace", "label": "Ace" },
+        { "id": "kestrel", "label": "Kestrel" },
+        { "id": "volt", "label": "Volt" },
+        { "id": "sable", "label": "Sable" },
+        { "id": "quill", "label": "Quill" }
+      ]
+    },
+    {
+      "id": "title",
+      "label": "Title",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "novarally", "label": "Nova Rally", "phrase": "queued into Nova Rally", "refPhrase": "Nova Rally main" },
+        { "id": "starsiege", "label": "Star Siege", "phrase": "queued into Star Siege", "refPhrase": "Star Siege main" },
+        { "id": "blockdrop", "label": "Block Drop", "phrase": "queued into Block Drop", "refPhrase": "Block Drop main" },
+        { "id": "dungeonrun", "label": "Dungeon Run", "phrase": "queued into Dungeon Run", "refPhrase": "Dungeon Run main" },
+        { "id": "pixelpitch", "label": "Pixel Pitch", "phrase": "queued into Pixel Pitch", "refPhrase": "Pixel Pitch main" },
+        { "id": "cybercup", "label": "Cyber Cup", "phrase": "queued into Cyber Cup", "refPhrase": "Cyber Cup main" }
+      ]
+    },
+    {
+      "id": "score",
+      "label": "Score",
+      "kind": "numeric",
+      "unit": "points",
+      "valuePool": [
+        { "id": "sc40", "label": "40 pts", "magnitude": 40, "phrase": "scored 40 points" },
+        { "id": "sc55", "label": "55 pts", "magnitude": 55, "phrase": "scored 55 points" },
+        { "id": "sc70", "label": "70 pts", "magnitude": 70, "phrase": "scored 70 points" },
+        { "id": "sc85", "label": "85 pts", "magnitude": 85, "phrase": "scored 85 points" },
+        { "id": "sc100", "label": "100 pts", "magnitude": 100, "phrase": "scored 100 points" },
+        { "id": "sc120", "label": "120 pts", "magnitude": 120, "phrase": "scored 120 points" }
+      ]
+    },
+    {
+      "id": "squad",
+      "label": "Squad",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "foxes", "label": "Foxes", "phrase": "played for the Foxes", "refPhrase": "Foxes player" },
+        { "id": "comets", "label": "Comets", "phrase": "played for the Comets", "refPhrase": "Comets player" },
+        { "id": "circuits", "label": "Circuits", "phrase": "played for the Circuits", "refPhrase": "Circuits player" },
+        { "id": "griffins", "label": "Griffins", "phrase": "played for the Griffins", "refPhrase": "Griffins player" },
+        { "id": "vipers", "label": "Vipers", "phrase": "played for the Vipers", "refPhrase": "Vipers player" },
+        { "id": "pandas", "label": "Pandas", "phrase": "played for the Pandas", "refPhrase": "Pandas player" }
+      ]
+    },
+    {
+      "id": "snack",
+      "label": "Snack",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "pizza", "label": "Pizza", "phrase": "snacked on the pizza", "refPhrase": "pizza fan" },
+        { "id": "burger", "label": "Burger", "phrase": "snacked on the burger", "refPhrase": "burger fan" },
+        { "id": "fries", "label": "Fries", "phrase": "snacked on the fries", "refPhrase": "fries fan" },
+        { "id": "donut", "label": "Donut", "phrase": "snacked on the donut", "refPhrase": "donut fan" },
+        { "id": "cookie", "label": "Cookie", "phrase": "snacked on the cookie", "refPhrase": "cookie fan" },
+        { "id": "popsicle", "label": "Popsicle", "phrase": "snacked on the popsicle", "refPhrase": "popsicle fan" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "score",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} scored {delta} points more than {b_ref}.",
+        "{a_ref} finished {delta} points above {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "score",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} scored no fewer than {bound} points.",
+        "{a_ref} put up at least {bound} points."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one locked in.",
+        "For {a_ref} the queue read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

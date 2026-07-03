@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "farmhouse-table",
+  "title": "The Farmhouse Table",
+  "subjectNoun": "cook",
+  "subjectCategory": "cook",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Cozy farm-to-table kitchen. Anchor = cook. dish is glyph-backed by the food pack and produce by the vegetables pack (value ids are pack slugs); preserve is text-only; cover is the numeric axis (servings) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (cover/produce/preserve).",
+  "narrativeTemplate": "Morning light spills across the big kitchen table as {n} cooks lay out the harvest spread, and {gran} keeps the recipe cards in order after a {mishap} shuffled the whole pile.",
+  "flavorPools": {
+    "gran": ["Gran Nettie", "old Uncle Bram", "the farmhouse cook"],
+    "mishap": ["gust through the window", "playful barn cat", "tipped flour tin"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Marnie'; 'attribute' -> 'the herb-omelette cook' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "cook",
+      "label": "Cook",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "marnie", "label": "Marnie" },
+        { "id": "otis", "label": "Otis" },
+        { "id": "della", "label": "Della" },
+        { "id": "cyrus", "label": "Cyrus" },
+        { "id": "bea", "label": "Bea" },
+        { "id": "hank", "label": "Hank" }
+      ]
+    },
+    {
+      "id": "dish",
+      "label": "Dish",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "omelette", "label": "Herb omelette", "phrase": "plated the herb omelette", "refPhrase": "herb-omelette cook" },
+        { "id": "toast", "label": "Buttered toast", "phrase": "plated the buttered toast", "refPhrase": "buttered-toast cook" },
+        { "id": "bread", "label": "Sourdough loaf", "phrase": "plated the sourdough loaf", "refPhrase": "sourdough cook" },
+        { "id": "cheese", "label": "Farmhouse cheese", "phrase": "plated the farmhouse cheese", "refPhrase": "cheese cook" },
+        { "id": "egg", "label": "Baked eggs", "phrase": "plated the baked eggs", "refPhrase": "baked-eggs cook" },
+        { "id": "baguette", "label": "Baguette", "phrase": "plated the baguette", "refPhrase": "baguette cook" }
+      ]
+    },
+    {
+      "id": "cover",
+      "label": "Cover",
+      "kind": "numeric",
+      "unit": "covers",
+      "valuePool": [
+        { "id": "c6", "label": "6 covers", "magnitude": 6, "phrase": "served 6 covers" },
+        { "id": "c8", "label": "8 covers", "magnitude": 8, "phrase": "served 8 covers" },
+        { "id": "c10", "label": "10 covers", "magnitude": 10, "phrase": "served 10 covers" },
+        { "id": "c12", "label": "12 covers", "magnitude": 12, "phrase": "served 12 covers" },
+        { "id": "c15", "label": "15 covers", "magnitude": 15, "phrase": "served 15 covers" },
+        { "id": "c18", "label": "18 covers", "magnitude": 18, "phrase": "served 18 covers" }
+      ]
+    },
+    {
+      "id": "produce",
+      "label": "Produce",
+      "kind": "nominal",
+      "glyphPack": "vegetables",
+      "valuePool": [
+        { "id": "carrot", "label": "Carrots", "phrase": "picked the carrots", "refPhrase": "carrot picker" },
+        { "id": "corn", "label": "Corn", "phrase": "picked the corn", "refPhrase": "corn picker" },
+        { "id": "potato", "label": "Potatoes", "phrase": "picked the potatoes", "refPhrase": "potato picker" },
+        { "id": "cabbage", "label": "Cabbage", "phrase": "picked the cabbage", "refPhrase": "cabbage picker" },
+        { "id": "beet", "label": "Beets", "phrase": "picked the beets", "refPhrase": "beet picker" },
+        { "id": "okra", "label": "Okra", "phrase": "picked the okra", "refPhrase": "okra picker" }
+      ]
+    },
+    {
+      "id": "preserve",
+      "label": "Preserve",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "jam", "label": "Berry jam", "phrase": "jarred the berry jam", "refPhrase": "jam maker" },
+        { "id": "chutney", "label": "Apple chutney", "phrase": "jarred the apple chutney", "refPhrase": "chutney maker" },
+        { "id": "pickle", "label": "Dill pickle", "phrase": "jarred the dill pickle", "refPhrase": "pickle maker" },
+        { "id": "honey", "label": "Clover honey", "phrase": "jarred the clover honey", "refPhrase": "honey maker" },
+        { "id": "relish", "label": "Corn relish", "phrase": "jarred the corn relish", "refPhrase": "relish maker" },
+        { "id": "marmalade", "label": "Marmalade", "phrase": "jarred the marmalade", "refPhrase": "marmalade maker" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "cover",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} served {delta} more covers than {b_ref}.",
+        "{a_ref} plated {delta} covers above {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "cover",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} served no fewer than {bound} covers.",
+        "{a_ref} plated at least {bound} covers."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one made the table.",
+        "For {a_ref} the menu read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "pottery-studio",
+  "title": "The Pottery Studio",
+  "subjectNoun": "potter",
+  "subjectCategory": "potter",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Witty pottery studio on trimming morning. Anchor = potter. piece and clay are text-only; glaze is glyph-backed by the color pack (value ids are pack slugs); firing is the numeric axis (kiln temperature) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (firing/glaze/clay).",
+  "narrativeTemplate": "Wheels whir and the whole studio hums as {n} potters trim their morning's work, and {teacher} sorts the drying rack after a {mishap} left the labels in a heap.",
+  "flavorPools": {
+    "teacher": ["Master Odell", "old Miss Fen", "the studio teacher"],
+    "mishap": ["wobbly shelf", "clumsy elbow", "cat on the wheel"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Winnie'; 'attribute' -> 'the vase maker' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "potter",
+      "label": "Potter",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "winnie", "label": "Winnie" },
+        { "id": "dev", "label": "Dev" },
+        { "id": "marisol", "label": "Marisol" },
+        { "id": "gus", "label": "Gus" },
+        { "id": "priya", "label": "Priya" },
+        { "id": "reuben", "label": "Reuben" }
+      ]
+    },
+    {
+      "id": "piece",
+      "label": "Piece",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "vase", "label": "Vase", "phrase": "threw the vase", "refPhrase": "vase maker" },
+        { "id": "bowl", "label": "Bowl", "phrase": "threw the bowl", "refPhrase": "bowl maker" },
+        { "id": "mug", "label": "Mug", "phrase": "threw the mug", "refPhrase": "mug maker" },
+        { "id": "jug", "label": "Jug", "phrase": "threw the jug", "refPhrase": "jug maker" },
+        { "id": "platter", "label": "Platter", "phrase": "threw the platter", "refPhrase": "platter maker" },
+        { "id": "teapot", "label": "Teapot", "phrase": "threw the teapot", "refPhrase": "teapot maker" }
+      ]
+    },
+    {
+      "id": "firing",
+      "label": "Firing",
+      "kind": "numeric",
+      "unit": "degrees",
+      "valuePool": [
+        { "id": "f900", "label": "900 degrees", "magnitude": 900, "phrase": "fired at 900 degrees" },
+        { "id": "f1000", "label": "1000 degrees", "magnitude": 1000, "phrase": "fired at 1000 degrees" },
+        { "id": "f1100", "label": "1100 degrees", "magnitude": 1100, "phrase": "fired at 1100 degrees" },
+        { "id": "f1150", "label": "1150 degrees", "magnitude": 1150, "phrase": "fired at 1150 degrees" },
+        { "id": "f1200", "label": "1200 degrees", "magnitude": 1200, "phrase": "fired at 1200 degrees" },
+        { "id": "f1250", "label": "1250 degrees", "magnitude": 1250, "phrase": "fired at 1250 degrees" }
+      ]
+    },
+    {
+      "id": "glaze",
+      "label": "Glaze",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red glaze", "phrase": "dipped it in the red glaze", "refPhrase": "red-glaze potter" },
+        { "id": "blue", "label": "Blue glaze", "phrase": "dipped it in the blue glaze", "refPhrase": "blue-glaze potter" },
+        { "id": "green", "label": "Green glaze", "phrase": "dipped it in the green glaze", "refPhrase": "green-glaze potter" },
+        { "id": "yellow", "label": "Yellow glaze", "phrase": "dipped it in the yellow glaze", "refPhrase": "yellow-glaze potter" },
+        { "id": "orange", "label": "Orange glaze", "phrase": "dipped it in the orange glaze", "refPhrase": "orange-glaze potter" },
+        { "id": "purple", "label": "Purple glaze", "phrase": "dipped it in the purple glaze", "refPhrase": "purple-glaze potter" }
+      ]
+    },
+    {
+      "id": "clay",
+      "label": "Clay",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "stoneware", "label": "Stoneware", "phrase": "worked in stoneware", "refPhrase": "stoneware potter" },
+        { "id": "porcelain", "label": "Porcelain", "phrase": "worked in porcelain", "refPhrase": "porcelain potter" },
+        { "id": "earthenware", "label": "Earthenware", "phrase": "worked in earthenware", "refPhrase": "earthenware potter" },
+        { "id": "terracotta", "label": "Terracotta", "phrase": "worked in terracotta", "refPhrase": "terracotta potter" },
+        { "id": "raku", "label": "Raku", "phrase": "worked in raku", "refPhrase": "raku potter" },
+        { "id": "fireclay", "label": "Fireclay", "phrase": "worked in fireclay", "refPhrase": "fireclay potter" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "firing",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} fired {delta} degrees hotter than {b_ref}.",
+        "{a_ref}'s kiln ran {delta} degrees above {b_ref}'s."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "firing",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} fired no cooler than {bound} degrees.",
+        "{a_ref} ran the kiln at {bound} degrees or hotter."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one came out.",
+        "For {a_ref} the slip read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

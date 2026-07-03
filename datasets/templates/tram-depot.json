@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "tram-depot",
+  "title": "The Tram Depot",
+  "subjectNoun": "driver",
+  "subjectCategory": "driver",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Witty tram depot at the pre-dawn sign-out. Anchor = driver. livery is glyph-backed by the color pack and bay by the abstract pack (numeral glyphs num1..num6; value ids are pack slugs); terminus and duty are text-only; bay is the numeric axis at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (bay/terminus/duty).",
+  "narrativeTemplate": "The depot clangs awake before dawn as {n} drivers sign out their trams for the day, and {super} sorts the running board after a {mishap} scrambled the chalk roster.",
+  "flavorPools": {
+    "super": ["Inspector Ped", "old Gladys", "the depot super"],
+    "mishap": ["points failure", "misplaced key ring", "cheeky pigeon"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Bertie'; 'attribute' -> 'the red-tram driver' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "driver",
+      "label": "Driver",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "bertie", "label": "Bertie" },
+        { "id": "nella", "label": "Nella" },
+        { "id": "sunil", "label": "Sunil" },
+        { "id": "gwen", "label": "Gwen" },
+        { "id": "marco", "label": "Marco" },
+        { "id": "ivy", "label": "Ivy" }
+      ]
+    },
+    {
+      "id": "livery",
+      "label": "Livery",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red livery", "phrase": "drove the red tram", "refPhrase": "red-tram driver" },
+        { "id": "blue", "label": "Blue livery", "phrase": "drove the blue tram", "refPhrase": "blue-tram driver" },
+        { "id": "green", "label": "Green livery", "phrase": "drove the green tram", "refPhrase": "green-tram driver" },
+        { "id": "yellow", "label": "Yellow livery", "phrase": "drove the yellow tram", "refPhrase": "yellow-tram driver" },
+        { "id": "orange", "label": "Orange livery", "phrase": "drove the orange tram", "refPhrase": "orange-tram driver" },
+        { "id": "purple", "label": "Purple livery", "phrase": "drove the purple tram", "refPhrase": "purple-tram driver" }
+      ]
+    },
+    {
+      "id": "bay",
+      "label": "Bay",
+      "kind": "numeric",
+      "unit": "bay",
+      "glyphPack": "abstract",
+      "valuePool": [
+        { "id": "num1", "label": "Bay 1", "magnitude": 1, "phrase": "parks in bay 1" },
+        { "id": "num2", "label": "Bay 2", "magnitude": 2, "phrase": "parks in bay 2" },
+        { "id": "num3", "label": "Bay 3", "magnitude": 3, "phrase": "parks in bay 3" },
+        { "id": "num4", "label": "Bay 4", "magnitude": 4, "phrase": "parks in bay 4" },
+        { "id": "num5", "label": "Bay 5", "magnitude": 5, "phrase": "parks in bay 5" },
+        { "id": "num6", "label": "Bay 6", "magnitude": 6, "phrase": "parks in bay 6" }
+      ]
+    },
+    {
+      "id": "terminus",
+      "label": "Terminus",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "marketgate", "label": "Marketgate", "phrase": "ran out to Marketgate", "refPhrase": "Marketgate service" },
+        { "id": "pierend", "label": "Pier End", "phrase": "ran out to Pier End", "refPhrase": "Pier End service" },
+        { "id": "hilltop", "label": "Hilltop", "phrase": "ran out to Hilltop", "refPhrase": "Hilltop service" },
+        { "id": "oldmill", "label": "Old Mill", "phrase": "ran out to Old Mill", "refPhrase": "Old Mill service" },
+        { "id": "cathedral", "label": "Cathedral", "phrase": "ran out to Cathedral", "refPhrase": "Cathedral service" },
+        { "id": "riverside", "label": "Riverside", "phrase": "ran out to Riverside", "refPhrase": "Riverside service" }
+      ]
+    },
+    {
+      "id": "duty",
+      "label": "Duty",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "early", "label": "Early shift", "phrase": "worked the early shift", "refPhrase": "early-shift driver" },
+        { "id": "late", "label": "Late shift", "phrase": "worked the late shift", "refPhrase": "late-shift driver" },
+        { "id": "relief", "label": "Relief shift", "phrase": "worked the relief shift", "refPhrase": "relief-shift driver" },
+        { "id": "express", "label": "Express shift", "phrase": "worked the express shift", "refPhrase": "express-shift driver" },
+        { "id": "loop", "label": "Loop shift", "phrase": "worked the loop shift", "refPhrase": "loop-shift driver" },
+        { "id": "night", "label": "Night shift", "phrase": "worked the night shift", "refPhrase": "night-shift driver" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "bay",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} parks {delta} bays past {b_ref}.",
+        "{a_ref}'s bay sits {delta} along from {b_ref}'s."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "bay",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} parks no lower than bay {bound}.",
+        "{a_ref} takes bay {bound} or higher."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was signed out.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

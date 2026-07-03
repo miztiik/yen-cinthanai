@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "speakeasy-jazz",
+  "title": "The Hidden Jazz Club",
+  "subjectNoun": "player",
+  "subjectCategory": "player",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Light-mystery hidden jazz club. Anchor = player. instrument and password are text-only; nightcap is glyph-backed by the drinks pack (soft drinks; value ids are pack slugs); set is the numeric axis (set order) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (set/nightcap/password).",
+  "narrativeTemplate": "Behind the tailor's shop the hidden club fills with candlelight and low chatter as {n} players warm up on the bandstand, and {boss} works out who did what after a {mishap} spilled across the sign-in book.",
+  "flavorPools": {
+    "boss": ["Mister Vaughn", "old Sax the barman", "the club boss"],
+    "mishap": ["blown fuse", "misheard cue", "toppled music stand"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Ruby'; 'attribute' -> 'the trumpet player' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "player",
+      "label": "Player",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "ruby", "label": "Ruby" },
+        { "id": "cole", "label": "Cole" },
+        { "id": "mabel", "label": "Mabel" },
+        { "id": "theo", "label": "Theo" },
+        { "id": "josie", "label": "Josie" },
+        { "id": "vince", "label": "Vince" }
+      ]
+    },
+    {
+      "id": "instrument",
+      "label": "Instrument",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "trumpet", "label": "Trumpet", "phrase": "took the trumpet", "refPhrase": "trumpet player" },
+        { "id": "saxophone", "label": "Saxophone", "phrase": "took the saxophone", "refPhrase": "saxophone player" },
+        { "id": "piano", "label": "Piano", "phrase": "took the piano", "refPhrase": "piano player" },
+        { "id": "doublebass", "label": "Double bass", "phrase": "took the double bass", "refPhrase": "double-bass player" },
+        { "id": "drums", "label": "Drums", "phrase": "took the drums", "refPhrase": "drums player" },
+        { "id": "clarinet", "label": "Clarinet", "phrase": "took the clarinet", "refPhrase": "clarinet player" }
+      ]
+    },
+    {
+      "id": "set",
+      "label": "Set",
+      "kind": "numeric",
+      "unit": "set",
+      "valuePool": [
+        { "id": "set1", "label": "Set 1", "magnitude": 1, "phrase": "played set 1" },
+        { "id": "set2", "label": "Set 2", "magnitude": 2, "phrase": "played set 2" },
+        { "id": "set3", "label": "Set 3", "magnitude": 3, "phrase": "played set 3" },
+        { "id": "set4", "label": "Set 4", "magnitude": 4, "phrase": "played set 4" },
+        { "id": "set5", "label": "Set 5", "magnitude": 5, "phrase": "played set 5" },
+        { "id": "set6", "label": "Set 6", "magnitude": 6, "phrase": "played set 6" }
+      ]
+    },
+    {
+      "id": "nightcap",
+      "label": "Nightcap",
+      "kind": "nominal",
+      "glyphPack": "drinks",
+      "valuePool": [
+        { "id": "coffee", "label": "Espresso", "phrase": "sipped the espresso", "refPhrase": "espresso drinker" },
+        { "id": "tea", "label": "Mint tea", "phrase": "sipped the mint tea", "refPhrase": "mint-tea drinker" },
+        { "id": "soda", "label": "Ginger soda", "phrase": "sipped the ginger soda", "refPhrase": "ginger-soda drinker" },
+        { "id": "juice", "label": "Citrus juice", "phrase": "sipped the citrus juice", "refPhrase": "citrus-juice drinker" },
+        { "id": "milk", "label": "Egg cream", "phrase": "sipped the egg cream", "refPhrase": "egg-cream drinker" },
+        { "id": "water", "label": "Seltzer", "phrase": "sipped the seltzer", "refPhrase": "seltzer drinker" }
+      ]
+    },
+    {
+      "id": "password",
+      "label": "Password",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "robin", "label": "Robin", "phrase": "gave the word Robin", "refPhrase": "Robin guest" },
+        { "id": "thistle", "label": "Thistle", "phrase": "gave the word Thistle", "refPhrase": "Thistle guest" },
+        { "id": "marlow", "label": "Marlow", "phrase": "gave the word Marlow", "refPhrase": "Marlow guest" },
+        { "id": "verona", "label": "Verona", "phrase": "gave the word Verona", "refPhrase": "Verona guest" },
+        { "id": "cinder", "label": "Cinder", "phrase": "gave the word Cinder", "refPhrase": "Cinder guest" },
+        { "id": "halcyon", "label": "Halcyon", "phrase": "gave the word Halcyon", "refPhrase": "Halcyon guest" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "set",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} played {delta} sets later than {b_ref}.",
+        "{a_ref} took the stand {delta} sets after {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "set",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} played no earlier than set {bound}.",
+        "{a_ref} took the stand in set {bound} or later."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was true.",
+        "For {a_ref} the card read {x_label} or {y_label} - just one held."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
