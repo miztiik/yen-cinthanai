@@ -139,7 +139,11 @@ export function mergeGridPlacements(
   placements: Placements,
   ticks: ReadonlySet<string>,
 ): Placements {
-  const merged: Placements = structuredClone(placements);
+  // Plain 2-level clone (Placements = entity -> cat -> value). NOT structuredClone: this is
+  // called from a $derived over the Svelte 5 $state placements proxy, which structuredClone
+  // cannot clone (DataCloneError on every grid render). A manual copy sidesteps the proxy.
+  const merged: Placements = {};
+  for (const [entity, cats] of Object.entries(placements)) merged[entity] = { ...cats };
   const anchorId = board.anchor.id;
   for (const key of ticks) {
     const [p, q] = parseCellKey(key);
