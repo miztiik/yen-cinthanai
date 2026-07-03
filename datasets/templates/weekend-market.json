@@ -81,9 +81,9 @@
       "valuePool": [
         { "id": "jasmine", "label": "Jasmine", "phrase": "displayed the jasmine", "refPhrase": "jasmine grower", "glyph": "flowers.jasmine" },
         { "id": "sunflower", "label": "Sunflowers", "phrase": "displayed the sunflowers", "refPhrase": "sunflower grower", "glyph": "flowers.sunflower" },
-        { "id": "tulips", "label": "Tulips", "phrase": "displayed the tulips", "refPhrase": "tulip grower" },
-        { "id": "daisies", "label": "Daisies", "phrase": "displayed the daisies", "refPhrase": "daisy grower" },
-        { "id": "lilies", "label": "Lilies", "phrase": "displayed the lilies", "refPhrase": "lily grower" },
+        { "id": "tulips", "label": "Tulips", "phrase": "displayed the tulips", "refPhrase": "tulip grower", "glyph": "flowers.tulips" },
+        { "id": "rose", "label": "Roses", "phrase": "displayed the roses", "refPhrase": "rose grower", "glyph": "flowers.rose" },
+        { "id": "hibiscus", "label": "Hibiscus", "phrase": "displayed the hibiscus", "refPhrase": "hibiscus grower", "glyph": "flowers.hibiscus" },
         { "id": "poppies", "label": "Poppies", "phrase": "displayed the poppies", "refPhrase": "poppy grower" }
       ]
     }

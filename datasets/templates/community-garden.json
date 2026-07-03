@@ -7,7 +7,7 @@
   "ordinalAxis": false,
   "minTier": "easy",
   "maxTier": "expert",
-  "note": "SAMPLE authoring template (original content). Cozy allotment judging morning. Anchor = grower. vegetable -> vegetables glyph pack, ribbon -> color glyph pack (the rosette colour); plot is the numeric axis (the allotment plot number), glyph-backed by the abstract numerals num1..num6 (renumbered 1..6 so each numeral matches its plot); bloom is a text-only flower. narrativeTemplate is setting flavor only. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "note": "SAMPLE authoring template (original content). Cozy allotment judging morning. Anchor = grower. vegetable -> vegetables glyph pack, ribbon -> color glyph pack (the rosette colour); plot is the numeric axis (the allotment plot number), glyph-backed by the abstract numerals num1..num6 (renumbered 1..6 so each numeral matches its plot); bloom -> flowers glyph pack (5 flowers glyph-backed + 1 text at expert). narrativeTemplate is setting flavor only. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
   "narrativeTemplate": "It is judging morning at the {place} community garden, where {n} growers have tended their allotments right through the season, and old {steward}, who has chaired the committee since before the greenhouse was built, is squinting at a rain-smudged results card trying to remember who won what.",
   "flavorPools": {
     "steward": ["Mr. Ogilvy", "Mrs. Baptiste", "Auntie Fen", "Old Hollis"],
@@ -66,11 +66,11 @@
       "label": "Bloom",
       "kind": "nominal",
       "valuePool": [
-        { "id": "dahlias", "label": "Dahlias", "phrase": "showed the dahlias", "refPhrase": "dahlia grower" },
-        { "id": "marigolds", "label": "Marigolds", "phrase": "showed the marigolds", "refPhrase": "marigold grower" },
-        { "id": "zinnias", "label": "Zinnias", "phrase": "showed the zinnias", "refPhrase": "zinnia grower" },
-        { "id": "asters", "label": "Asters", "phrase": "showed the asters", "refPhrase": "aster grower" },
-        { "id": "peonies", "label": "Peonies", "phrase": "showed the peonies", "refPhrase": "peony grower" },
+        { "id": "jasmine", "label": "Jasmine", "phrase": "showed the jasmine", "refPhrase": "jasmine grower", "glyph": "flowers.jasmine" },
+        { "id": "sunflower", "label": "Sunflowers", "phrase": "showed the sunflowers", "refPhrase": "sunflower grower", "glyph": "flowers.sunflower" },
+        { "id": "rose", "label": "Roses", "phrase": "showed the roses", "refPhrase": "rose grower", "glyph": "flowers.rose" },
+        { "id": "tulips", "label": "Tulips", "phrase": "showed the tulips", "refPhrase": "tulip grower", "glyph": "flowers.tulips" },
+        { "id": "hibiscus", "label": "Hibiscus", "phrase": "showed the hibiscus", "refPhrase": "hibiscus grower", "glyph": "flowers.hibiscus" },
         { "id": "cosmos", "label": "Cosmos", "phrase": "showed the cosmos", "refPhrase": "cosmos grower" }
       ]
     },
