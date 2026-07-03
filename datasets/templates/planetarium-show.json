@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "id": "planetarium-show",
+  "title": "The Planetarium Show",
+  "subjectNoun": "stargazer",
+  "subjectCategory": "stargazer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical evening under the planetarium dome. Anchor = stargazer. emblem is glyph-backed by the shapes pack and treat by the food pack (value ids are pack slugs); planet is text-only; show is the numeric axis (shows watched) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (show/planet/treat).",
+  "narrativeTemplate": "The lights dim and the great dome fills with {n} stargazers as {host} settles who sat where after a {mishap} scrambled the booking cards, the projector still humming toward the painted {sky}.",
+  "flavorPools": {
+    "host": ["Dr. Halley", "the night guide", "Curator Vega"],
+    "mishap": ["flickering console", "misprinted ticket", "dropped laser-pointer"],
+    "sky": ["northern sky", "winter stars", "milky band"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Nova'; 'attribute' -> 'the star-emblem stargazer' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "stargazer",
+      "label": "Stargazer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "nova", "label": "Nova" },
+        { "id": "rahul", "label": "Rahul" },
+        { "id": "ingrid", "label": "Ingrid" },
+        { "id": "tomas", "label": "Tomas" },
+        { "id": "amara", "label": "Amara" },
+        { "id": "wei", "label": "Wei" }
+      ]
+    },
+    {
+      "id": "emblem",
+      "label": "Emblem",
+      "kind": "nominal",
+      "glyphPack": "shapes",
+      "valuePool": [
+        { "id": "star", "label": "Star", "phrase": "wore the star emblem", "refPhrase": "star-emblem stargazer" },
+        { "id": "heart", "label": "Heart", "phrase": "wore the heart emblem", "refPhrase": "heart-emblem stargazer" },
+        { "id": "diamond", "label": "Diamond", "phrase": "wore the diamond emblem", "refPhrase": "diamond-emblem stargazer" },
+        { "id": "circle", "label": "Circle", "phrase": "wore the circle emblem", "refPhrase": "circle-emblem stargazer" },
+        { "id": "hexagon", "label": "Hexagon", "phrase": "wore the hexagon emblem", "refPhrase": "hexagon-emblem stargazer" },
+        { "id": "triangle", "label": "Triangle", "phrase": "wore the triangle emblem", "refPhrase": "triangle-emblem stargazer" }
+      ]
+    },
+    {
+      "id": "show",
+      "label": "Show",
+      "kind": "numeric",
+      "unit": "shows",
+      "valuePool": [
+        { "id": "show1", "label": "1 show", "magnitude": 1, "phrase": "watched 1 show" },
+        { "id": "show2", "label": "2 shows", "magnitude": 2, "phrase": "watched 2 shows" },
+        { "id": "show3", "label": "3 shows", "magnitude": 3, "phrase": "watched 3 shows" },
+        { "id": "show4", "label": "4 shows", "magnitude": 4, "phrase": "watched 4 shows" },
+        { "id": "show5", "label": "5 shows", "magnitude": 5, "phrase": "watched 5 shows" },
+        { "id": "show6", "label": "6 shows", "magnitude": 6, "phrase": "watched 6 shows" }
+      ]
+    },
+    {
+      "id": "planet",
+      "label": "Planet",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "mercury", "label": "Mercury", "phrase": "studied Mercury", "refPhrase": "Mercury watcher" },
+        { "id": "venus", "label": "Venus", "phrase": "studied Venus", "refPhrase": "Venus watcher" },
+        { "id": "mars", "label": "Mars", "phrase": "studied Mars", "refPhrase": "Mars watcher" },
+        { "id": "jupiter", "label": "Jupiter", "phrase": "studied Jupiter", "refPhrase": "Jupiter watcher" },
+        { "id": "saturn", "label": "Saturn", "phrase": "studied Saturn", "refPhrase": "Saturn watcher" },
+        { "id": "neptune", "label": "Neptune", "phrase": "studied Neptune", "refPhrase": "Neptune watcher" }
+      ]
+    },
+    {
+      "id": "treat",
+      "label": "Treat",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "popsicle", "label": "Popsicle", "phrase": "enjoyed the popsicle", "refPhrase": "popsicle fan" },
+        { "id": "cookie", "label": "Cookie", "phrase": "enjoyed the cookie", "refPhrase": "cookie fan" },
+        { "id": "donut", "label": "Donut", "phrase": "enjoyed the donut", "refPhrase": "donut fan" },
+        { "id": "cupcake", "label": "Cupcake", "phrase": "enjoyed the cupcake", "refPhrase": "cupcake fan" },
+        { "id": "icecream", "label": "Ice cream", "phrase": "enjoyed the ice cream", "refPhrase": "ice-cream fan" },
+        { "id": "chocolate", "label": "Chocolate", "phrase": "enjoyed the chocolate", "refPhrase": "chocolate fan" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "show",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} watched {delta} more shows than {b_ref}.",
+        "{a_ref} watched {delta} more shows than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "show",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} watched no fewer than {bound} shows.",
+        "{a_ref} watched at least {bound} shows."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the chart read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

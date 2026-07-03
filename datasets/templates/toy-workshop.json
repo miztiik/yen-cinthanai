@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "toy-workshop",
+  "title": "The Toy Workshop",
+  "subjectNoun": "toymaker",
+  "subjectCategory": "toymaker",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical toy workshop the week before the winter fair. Anchor = toymaker. sticker is glyph-backed by the shapes pack (value ids are pack slugs); gift and wood are text-only; order is the numeric axis (orders finished) at index 2 so it survives the standard slice. The subjectNoun 'toymaker' shares no letters with the sliced labels. The narrativeTemplate is flavor only - it never names a sliced category (order/gift/wood).",
+  "narrativeTemplate": "Sawdust drifts like snow across the floor as {n} toymakers tinker before the winter fair, and {foreman} figures out whose bench was whose after a {mishap} set the finished pieces rolling everywhere.",
+  "flavorPools": {
+    "foreman": ["old Fyodor", "the workshop foreman", "Granny Tinsel"],
+    "mishap": ["draught from the flue", "tipped glue pot", "wind-up mouse on the loose"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Pip'; 'attribute' -> 'the star-sticker toymaker' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "toymaker",
+      "label": "Toymaker",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "pip", "label": "Pip" },
+        { "id": "anouk", "label": "Anouk" },
+        { "id": "rafi", "label": "Rafi" },
+        { "id": "greta", "label": "Greta" },
+        { "id": "milo", "label": "Milo" },
+        { "id": "xia", "label": "Xia" }
+      ]
+    },
+    {
+      "id": "sticker",
+      "label": "Sticker",
+      "kind": "nominal",
+      "glyphPack": "shapes",
+      "valuePool": [
+        { "id": "star", "label": "Star", "phrase": "pressed on the star sticker", "refPhrase": "star-sticker toymaker" },
+        { "id": "heart", "label": "Heart", "phrase": "pressed on the heart sticker", "refPhrase": "heart-sticker toymaker" },
+        { "id": "diamond", "label": "Diamond", "phrase": "pressed on the diamond sticker", "refPhrase": "diamond-sticker toymaker" },
+        { "id": "circle", "label": "Circle", "phrase": "pressed on the circle sticker", "refPhrase": "circle-sticker toymaker" },
+        { "id": "hexagon", "label": "Hexagon", "phrase": "pressed on the hexagon sticker", "refPhrase": "hexagon-sticker toymaker" },
+        { "id": "triangle", "label": "Triangle", "phrase": "pressed on the triangle sticker", "refPhrase": "triangle-sticker toymaker" }
+      ]
+    },
+    {
+      "id": "order",
+      "label": "Order",
+      "kind": "numeric",
+      "unit": "orders",
+      "valuePool": [
+        { "id": "order2", "label": "2 orders", "magnitude": 2, "phrase": "finished 2 orders" },
+        { "id": "order3", "label": "3 orders", "magnitude": 3, "phrase": "finished 3 orders" },
+        { "id": "order4", "label": "4 orders", "magnitude": 4, "phrase": "finished 4 orders" },
+        { "id": "order5", "label": "5 orders", "magnitude": 5, "phrase": "finished 5 orders" },
+        { "id": "order6", "label": "6 orders", "magnitude": 6, "phrase": "finished 6 orders" },
+        { "id": "order7", "label": "7 orders", "magnitude": 7, "phrase": "finished 7 orders" }
+      ]
+    },
+    {
+      "id": "gift",
+      "label": "Gift",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "rockinghorse", "label": "Rocking horse", "phrase": "built the rocking horse", "refPhrase": "rocking-horse maker" },
+        { "id": "kite", "label": "Kite", "phrase": "built the kite", "refPhrase": "kite maker" },
+        { "id": "spinningtop", "label": "Spinning top", "phrase": "built the spinning top", "refPhrase": "spinning-top maker" },
+        { "id": "ragdoll", "label": "Rag doll", "phrase": "built the rag doll", "refPhrase": "rag-doll maker" },
+        { "id": "toydrum", "label": "Toy drum", "phrase": "built the toy drum", "refPhrase": "toy-drum maker" },
+        { "id": "woodentrain", "label": "Wooden train", "phrase": "built the wooden train", "refPhrase": "wooden-train maker" }
+      ]
+    },
+    {
+      "id": "wood",
+      "label": "Wood",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "pine", "label": "Pine", "phrase": "carved it from pine", "refPhrase": "pine piece" },
+        { "id": "oak", "label": "Oak", "phrase": "carved it from oak", "refPhrase": "oak piece" },
+        { "id": "maple", "label": "Maple", "phrase": "carved it from maple", "refPhrase": "maple piece" },
+        { "id": "birch", "label": "Birch", "phrase": "carved it from birch", "refPhrase": "birch piece" },
+        { "id": "walnut", "label": "Walnut", "phrase": "carved it from walnut", "refPhrase": "walnut piece" },
+        { "id": "beech", "label": "Beech", "phrase": "carved it from beech", "refPhrase": "beech piece" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "order",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} finished {delta} more orders than {b_ref}.",
+        "{a_ref} finished {delta} more orders than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "order",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} finished no fewer than {bound} orders.",
+        "{a_ref} finished at least {bound} orders."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the wish-list read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

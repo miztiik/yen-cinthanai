@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "shipyard-slipway",
+  "title": "The Shipyard Slipway",
+  "subjectNoun": "shipwright",
+  "subjectCategory": "shipwright",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A witty dawn shift on the shipyard slipway. Anchor = shipwright. hardhat is glyph-backed by the color pack (value ids are pack slugs); vessel and task are text-only; plank is the numeric axis (planks fitted) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (plank/vessel/task).",
+  "narrativeTemplate": "Gulls wheel over the slipway as {n} shipwrights clock in beneath the cranes, and {foreman} sorts out whose berth was whose after a {mishap} blew the work chits across the yard.",
+  "flavorPools": {
+    "foreman": ["old Barnacle Joe", "the yard foreman", "Skipper Meg"],
+    "mishap": ["squall off the harbour", "tipped tar bucket", "gull with a stolen roll"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Bjorn'; 'attribute' -> 'the red-hardhat shipwright' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "shipwright",
+      "label": "Shipwright",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "bjorn", "label": "Bjorn" },
+        { "id": "amina", "label": "Amina" },
+        { "id": "cormac", "label": "Cormac" },
+        { "id": "yuki", "label": "Yuki" },
+        { "id": "nikolai", "label": "Nikolai" },
+        { "id": "efua", "label": "Efua" }
+      ]
+    },
+    {
+      "id": "hardhat",
+      "label": "Hardhat",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red hardhat", "phrase": "wore the red hardhat", "refPhrase": "red-hardhat shipwright" },
+        { "id": "blue", "label": "Blue hardhat", "phrase": "wore the blue hardhat", "refPhrase": "blue-hardhat shipwright" },
+        { "id": "green", "label": "Green hardhat", "phrase": "wore the green hardhat", "refPhrase": "green-hardhat shipwright" },
+        { "id": "yellow", "label": "Yellow hardhat", "phrase": "wore the yellow hardhat", "refPhrase": "yellow-hardhat shipwright" },
+        { "id": "orange", "label": "Orange hardhat", "phrase": "wore the orange hardhat", "refPhrase": "orange-hardhat shipwright" },
+        { "id": "purple", "label": "Purple hardhat", "phrase": "wore the purple hardhat", "refPhrase": "purple-hardhat shipwright" }
+      ]
+    },
+    {
+      "id": "plank",
+      "label": "Plank",
+      "kind": "numeric",
+      "unit": "planks",
+      "valuePool": [
+        { "id": "plank2", "label": "2 planks", "magnitude": 2, "phrase": "fitted 2 planks" },
+        { "id": "plank4", "label": "4 planks", "magnitude": 4, "phrase": "fitted 4 planks" },
+        { "id": "plank6", "label": "6 planks", "magnitude": 6, "phrase": "fitted 6 planks" },
+        { "id": "plank8", "label": "8 planks", "magnitude": 8, "phrase": "fitted 8 planks" },
+        { "id": "plank10", "label": "10 planks", "magnitude": 10, "phrase": "fitted 10 planks" },
+        { "id": "plank12", "label": "12 planks", "magnitude": 12, "phrase": "fitted 12 planks" }
+      ]
+    },
+    {
+      "id": "vessel",
+      "label": "Vessel",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "fishingsmack", "label": "Fishing smack", "phrase": "worked on the fishing smack", "refPhrase": "fishing-smack crew" },
+        { "id": "tug", "label": "Tug", "phrase": "worked on the tug", "refPhrase": "tug crew" },
+        { "id": "schooner", "label": "Schooner", "phrase": "worked on the schooner", "refPhrase": "schooner crew" },
+        { "id": "ferry", "label": "Ferry", "phrase": "worked on the ferry", "refPhrase": "ferry crew" },
+        { "id": "trawler", "label": "Trawler", "phrase": "worked on the trawler", "refPhrase": "trawler crew" },
+        { "id": "sloop", "label": "Sloop", "phrase": "worked on the sloop", "refPhrase": "sloop crew" }
+      ]
+    },
+    {
+      "id": "task",
+      "label": "Task",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "caulking", "label": "Caulking", "phrase": "was on caulking", "refPhrase": "caulking hand" },
+        { "id": "riveting", "label": "Riveting", "phrase": "was on riveting", "refPhrase": "riveting hand" },
+        { "id": "painting", "label": "Painting", "phrase": "was on painting", "refPhrase": "painting hand" },
+        { "id": "rigging", "label": "Rigging", "phrase": "was on rigging", "refPhrase": "rigging hand" },
+        { "id": "welding", "label": "Welding", "phrase": "was on welding", "refPhrase": "welding hand" },
+        { "id": "sanding", "label": "Sanding", "phrase": "was on sanding", "refPhrase": "sanding hand" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "plank",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} fitted {delta} more planks than {b_ref}.",
+        "{a_ref} fitted {delta} more planks than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "plank",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} fitted no fewer than {bound} planks.",
+        "{a_ref} fitted at least {bound} planks."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the work chit read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "id": "calligraphy-hall",
+  "title": "The Calligraphy Hall",
+  "subjectNoun": "scribe",
+  "subjectCategory": "scribe",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A cozy afternoon of brushwork in the calligraphy hall. Anchor = scribe. ink is glyph-backed by the color pack (value ids are pack slugs); script and brush are text-only; scroll is the numeric axis (scrolls finished) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (scroll/script/brush).",
+  "narrativeTemplate": "Quiet settles over the {hall} as {n} scribes bend to their desks, and {master} works out whose sheet was whose after a {mishap} sent the drying pages sliding, {sound} the only sound.",
+  "flavorPools": {
+    "hall": ["long hall", "sunlit studio", "paper-walled room"],
+    "master": ["old Master Wen", "the guild master", "Sister Agnes"],
+    "mishap": ["draught from the shutters", "tipped water dish", "cat across the desk"],
+    "sound": ["a soft rustle", "the drip of an inkstone", "a distant bell"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Meilin'; 'attribute' -> 'the red-ink scribe' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "scribe",
+      "label": "Scribe",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "meilin", "label": "Meilin" },
+        { "id": "idris", "label": "Idris" },
+        { "id": "petra", "label": "Petra" },
+        { "id": "jun", "label": "Jun" },
+        { "id": "salma", "label": "Salma" },
+        { "id": "tobias", "label": "Tobias" }
+      ]
+    },
+    {
+      "id": "ink",
+      "label": "Ink",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red ink", "phrase": "wrote in the red ink", "refPhrase": "red-ink scribe" },
+        { "id": "blue", "label": "Blue ink", "phrase": "wrote in the blue ink", "refPhrase": "blue-ink scribe" },
+        { "id": "green", "label": "Green ink", "phrase": "wrote in the green ink", "refPhrase": "green-ink scribe" },
+        { "id": "yellow", "label": "Gold ink", "phrase": "wrote in the gold ink", "refPhrase": "gold-ink scribe" },
+        { "id": "orange", "label": "Amber ink", "phrase": "wrote in the amber ink", "refPhrase": "amber-ink scribe" },
+        { "id": "purple", "label": "Violet ink", "phrase": "wrote in the violet ink", "refPhrase": "violet-ink scribe" }
+      ]
+    },
+    {
+      "id": "scroll",
+      "label": "Scroll",
+      "kind": "numeric",
+      "unit": "scrolls",
+      "valuePool": [
+        { "id": "scroll1", "label": "1 scroll", "magnitude": 1, "phrase": "finished 1 scroll" },
+        { "id": "scroll2", "label": "2 scrolls", "magnitude": 2, "phrase": "finished 2 scrolls" },
+        { "id": "scroll3", "label": "3 scrolls", "magnitude": 3, "phrase": "finished 3 scrolls" },
+        { "id": "scroll4", "label": "4 scrolls", "magnitude": 4, "phrase": "finished 4 scrolls" },
+        { "id": "scroll5", "label": "5 scrolls", "magnitude": 5, "phrase": "finished 5 scrolls" },
+        { "id": "scroll6", "label": "6 scrolls", "magnitude": 6, "phrase": "finished 6 scrolls" }
+      ]
+    },
+    {
+      "id": "script",
+      "label": "Script",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "cursive", "label": "Cursive", "phrase": "practised the cursive hand", "refPhrase": "cursive scribe" },
+        { "id": "gothic", "label": "Gothic", "phrase": "practised the gothic hand", "refPhrase": "gothic scribe" },
+        { "id": "uncial", "label": "Uncial", "phrase": "practised the uncial hand", "refPhrase": "uncial scribe" },
+        { "id": "italic", "label": "Italic", "phrase": "practised the italic hand", "refPhrase": "italic scribe" },
+        { "id": "kufic", "label": "Kufic", "phrase": "practised the kufic hand", "refPhrase": "kufic scribe" },
+        { "id": "sealscript", "label": "Seal script", "phrase": "practised the seal script", "refPhrase": "seal-script scribe" }
+      ]
+    },
+    {
+      "id": "brush",
+      "label": "Brush",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "bamboobrush", "label": "Bamboo brush", "phrase": "wrote with the bamboo brush", "refPhrase": "bamboo-brush scribe" },
+        { "id": "reedpen", "label": "Reed pen", "phrase": "wrote with the reed pen", "refPhrase": "reed-pen scribe" },
+        { "id": "quill", "label": "Quill", "phrase": "wrote with the quill", "refPhrase": "quill scribe" },
+        { "id": "steelnib", "label": "Steel nib", "phrase": "wrote with the steel nib", "refPhrase": "steel-nib scribe" },
+        { "id": "felttip", "label": "Felt tip", "phrase": "wrote with the felt tip", "refPhrase": "felt-tip scribe" },
+        { "id": "fude", "label": "Fude", "phrase": "wrote with the fude", "refPhrase": "fude scribe" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "scroll",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} finished {delta} more scrolls than {b_ref}.",
+        "{a_ref} finished {delta} more scrolls than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "scroll",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} finished no fewer than {bound} scrolls.",
+        "{a_ref} finished at least {bound} scrolls."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the ledger read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

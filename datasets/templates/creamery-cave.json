@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "creamery-cave",
+  "title": "The Creamery Cave",
+  "subjectNoun": "dairyhand",
+  "subjectCategory": "hand",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A cozy morning turning the batch in a cheese-ageing creamery. Anchor = dairyhand. apron is glyph-backed by the color pack (value ids are pack slugs); cheese and cave are text-only; wheel is the numeric axis (wheels pressed) at index 2 so it survives the standard slice. The subjectNoun 'dairyhand' avoids the sliced label 'cheese'. The narrativeTemplate is flavor only - it never names a sliced category (wheel/cheese/cave).",
+  "narrativeTemplate": "Cool air drifts from the cellar as {n} dairyhands turn the morning batch, and {mistress} sorts out whose work was whose after a {mishap} knocked the chalk labels loose, the {aroma} thick in the air.",
+  "flavorPools": {
+    "mistress": ["old Signora Latte", "the head dairymaid", "Farmer Bess"],
+    "mishap": ["slip on the wet floor", "tipped rennet pail", "barn cat on the bench"],
+    "aroma": ["tang of curds", "smell of fresh milk", "yeasty warmth"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Pilar'; 'attribute' -> 'the red-apron dairyhand' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "hand",
+      "label": "Dairyhand",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "pilar", "label": "Pilar" },
+        { "id": "gunnar", "label": "Gunnar" },
+        { "id": "neha", "label": "Neha" },
+        { "id": "roland", "label": "Roland" },
+        { "id": "bea", "label": "Bea" },
+        { "id": "tomo", "label": "Tomo" }
+      ]
+    },
+    {
+      "id": "apron",
+      "label": "Apron",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red apron", "phrase": "wore the red apron", "refPhrase": "red-apron dairyhand" },
+        { "id": "blue", "label": "Blue apron", "phrase": "wore the blue apron", "refPhrase": "blue-apron dairyhand" },
+        { "id": "green", "label": "Green apron", "phrase": "wore the green apron", "refPhrase": "green-apron dairyhand" },
+        { "id": "yellow", "label": "Yellow apron", "phrase": "wore the yellow apron", "refPhrase": "yellow-apron dairyhand" },
+        { "id": "orange", "label": "Orange apron", "phrase": "wore the orange apron", "refPhrase": "orange-apron dairyhand" },
+        { "id": "purple", "label": "Purple apron", "phrase": "wore the purple apron", "refPhrase": "purple-apron dairyhand" }
+      ]
+    },
+    {
+      "id": "wheel",
+      "label": "Wheel",
+      "kind": "numeric",
+      "unit": "wheels",
+      "valuePool": [
+        { "id": "wheel2", "label": "2 wheels", "magnitude": 2, "phrase": "pressed 2 wheels" },
+        { "id": "wheel4", "label": "4 wheels", "magnitude": 4, "phrase": "pressed 4 wheels" },
+        { "id": "wheel6", "label": "6 wheels", "magnitude": 6, "phrase": "pressed 6 wheels" },
+        { "id": "wheel8", "label": "8 wheels", "magnitude": 8, "phrase": "pressed 8 wheels" },
+        { "id": "wheel10", "label": "10 wheels", "magnitude": 10, "phrase": "pressed 10 wheels" },
+        { "id": "wheel12", "label": "12 wheels", "magnitude": 12, "phrase": "pressed 12 wheels" }
+      ]
+    },
+    {
+      "id": "cheese",
+      "label": "Cheese",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "cheddar", "label": "Cheddar", "phrase": "made the cheddar", "refPhrase": "cheddar maker" },
+        { "id": "brie", "label": "Brie", "phrase": "made the brie", "refPhrase": "brie maker" },
+        { "id": "gouda", "label": "Gouda", "phrase": "made the gouda", "refPhrase": "gouda maker" },
+        { "id": "feta", "label": "Feta", "phrase": "made the feta", "refPhrase": "feta maker" },
+        { "id": "halloumi", "label": "Halloumi", "phrase": "made the halloumi", "refPhrase": "halloumi maker" },
+        { "id": "gruyere", "label": "Gruyere", "phrase": "made the gruyere", "refPhrase": "gruyere maker" }
+      ]
+    },
+    {
+      "id": "cave",
+      "label": "Cave",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "northcave", "label": "North cave", "phrase": "aged it in the North cave", "refPhrase": "North-cave batch" },
+        { "id": "lowercellar", "label": "Lower cellar", "phrase": "aged it in the Lower cellar", "refPhrase": "Lower-cellar batch" },
+        { "id": "oakvault", "label": "Oak vault", "phrase": "aged it in the Oak vault", "refPhrase": "Oak-vault batch" },
+        { "id": "stonearch", "label": "Stone arch", "phrase": "aged it in the Stone arch", "refPhrase": "Stone-arch batch" },
+        { "id": "deeproom", "label": "Deep room", "phrase": "aged it in the Deep room", "refPhrase": "Deep-room batch" },
+        { "id": "hillside", "label": "Hillside", "phrase": "aged it in the Hillside", "refPhrase": "Hillside batch" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "wheel",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} pressed {delta} more wheels than {b_ref}.",
+        "{a_ref} pressed {delta} more wheels than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "wheel",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} pressed no fewer than {bound} wheels.",
+        "{a_ref} pressed at least {bound} wheels."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the tag read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

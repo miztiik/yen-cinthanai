@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "skate-park",
+  "title": "The Skate Park",
+  "subjectNoun": "skater",
+  "subjectCategory": "skater",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A witty dusk session at the concrete skate park. Anchor = skater. deck is glyph-backed by the color pack (value ids are pack slugs); move and ramp are text-only; trick is the numeric axis (tricks landed) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (trick/move/ramp).",
+  "narrativeTemplate": "Wheels rattle over the concrete as {n} skaters session the park at dusk, and {marshal} sorts out whose run was whose after a {mishap} knocked the scorecards off the fence.",
+  "flavorPools": {
+    "marshal": ["old-school Vic", "the park marshal", "Coach Roller"],
+    "mishap": ["gust of wind", "tipped cone", "stray dog on the flat"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Zane'; 'attribute' -> 'the red-deck skater' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "skater",
+      "label": "Skater",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "zane", "label": "Zane" },
+        { "id": "lucia", "label": "Lucia" },
+        { "id": "deshawn", "label": "Deshawn" },
+        { "id": "freya", "label": "Freya" },
+        { "id": "ravi", "label": "Ravi" },
+        { "id": "cleo", "label": "Cleo" }
+      ]
+    },
+    {
+      "id": "deck",
+      "label": "Deck",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red deck", "phrase": "rode the red deck", "refPhrase": "red-deck skater" },
+        { "id": "blue", "label": "Blue deck", "phrase": "rode the blue deck", "refPhrase": "blue-deck skater" },
+        { "id": "green", "label": "Green deck", "phrase": "rode the green deck", "refPhrase": "green-deck skater" },
+        { "id": "yellow", "label": "Yellow deck", "phrase": "rode the yellow deck", "refPhrase": "yellow-deck skater" },
+        { "id": "orange", "label": "Orange deck", "phrase": "rode the orange deck", "refPhrase": "orange-deck skater" },
+        { "id": "purple", "label": "Purple deck", "phrase": "rode the purple deck", "refPhrase": "purple-deck skater" }
+      ]
+    },
+    {
+      "id": "trick",
+      "label": "Trick",
+      "kind": "numeric",
+      "unit": "tricks",
+      "valuePool": [
+        { "id": "trick2", "label": "2 tricks", "magnitude": 2, "phrase": "landed 2 tricks" },
+        { "id": "trick3", "label": "3 tricks", "magnitude": 3, "phrase": "landed 3 tricks" },
+        { "id": "trick4", "label": "4 tricks", "magnitude": 4, "phrase": "landed 4 tricks" },
+        { "id": "trick5", "label": "5 tricks", "magnitude": 5, "phrase": "landed 5 tricks" },
+        { "id": "trick6", "label": "6 tricks", "magnitude": 6, "phrase": "landed 6 tricks" },
+        { "id": "trick7", "label": "7 tricks", "magnitude": 7, "phrase": "landed 7 tricks" }
+      ]
+    },
+    {
+      "id": "move",
+      "label": "Move",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "ollie", "label": "Ollie", "phrase": "nailed the ollie", "refPhrase": "ollie specialist" },
+        { "id": "kickflip", "label": "Kickflip", "phrase": "nailed the kickflip", "refPhrase": "kickflip specialist" },
+        { "id": "grind", "label": "Grind", "phrase": "nailed the grind", "refPhrase": "grind specialist" },
+        { "id": "manual", "label": "Manual", "phrase": "nailed the manual", "refPhrase": "manual specialist" },
+        { "id": "dropin", "label": "Drop-in", "phrase": "nailed the drop-in", "refPhrase": "drop-in specialist" },
+        { "id": "tailslide", "label": "Tailslide", "phrase": "nailed the tailslide", "refPhrase": "tailslide specialist" }
+      ]
+    },
+    {
+      "id": "ramp",
+      "label": "Ramp",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "halfpipe", "label": "Half-pipe", "phrase": "skated the half-pipe", "refPhrase": "half-pipe skater" },
+        { "id": "quarterpipe", "label": "Quarter-pipe", "phrase": "skated the quarter-pipe", "refPhrase": "quarter-pipe skater" },
+        { "id": "funbox", "label": "Funbox", "phrase": "skated the funbox", "refPhrase": "funbox skater" },
+        { "id": "rail", "label": "Rail", "phrase": "skated the rail", "refPhrase": "rail skater" },
+        { "id": "bowl", "label": "Bowl", "phrase": "skated the bowl", "refPhrase": "bowl skater" },
+        { "id": "ledge", "label": "Ledge", "phrase": "skated the ledge", "refPhrase": "ledge skater" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "trick",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} landed {delta} more tricks than {b_ref}.",
+        "{a_ref} landed {delta} more tricks than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "trick",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} landed no fewer than {bound} tricks.",
+        "{a_ref} landed at least {bound} tricks."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the scorecard read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

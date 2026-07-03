@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "kayak-race",
+  "title": "The Kayak Race",
+  "subjectNoun": "paddler",
+  "subjectCategory": "paddler",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A witty morning heat on the river at the kayak race. Anchor = paddler. hull is glyph-backed by the color pack and snack by the food pack (value ids are pack slugs); stroke is text-only; lap is the numeric axis (laps paddled) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (lap/stroke/snack).",
+  "narrativeTemplate": "Mist rises off the river as {n} paddlers line up their boats at the start, and {umpire} works out whose heat was whose after a {mishap} washed the timing sheet overboard.",
+  "flavorPools": {
+    "umpire": ["old Coach Ferris", "the race umpire", "Skipper Wren"],
+    "mishap": ["swell from a passing barge", "tipped marker buoy", "gust down the gorge"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Sven'; 'attribute' -> 'the red-hull paddler' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "paddler",
+      "label": "Paddler",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "sven", "label": "Sven" },
+        { "id": "marisol", "label": "Marisol" },
+        { "id": "kenji", "label": "Kenji" },
+        { "id": "aoife", "label": "Aoife" },
+        { "id": "bode", "label": "Bode" },
+        { "id": "thandi", "label": "Thandi" }
+      ]
+    },
+    {
+      "id": "hull",
+      "label": "Hull",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red hull", "phrase": "raced the red hull", "refPhrase": "red-hull paddler" },
+        { "id": "blue", "label": "Blue hull", "phrase": "raced the blue hull", "refPhrase": "blue-hull paddler" },
+        { "id": "green", "label": "Green hull", "phrase": "raced the green hull", "refPhrase": "green-hull paddler" },
+        { "id": "yellow", "label": "Yellow hull", "phrase": "raced the yellow hull", "refPhrase": "yellow-hull paddler" },
+        { "id": "orange", "label": "Orange hull", "phrase": "raced the orange hull", "refPhrase": "orange-hull paddler" },
+        { "id": "purple", "label": "Purple hull", "phrase": "raced the purple hull", "refPhrase": "purple-hull paddler" }
+      ]
+    },
+    {
+      "id": "lap",
+      "label": "Lap",
+      "kind": "numeric",
+      "unit": "laps",
+      "valuePool": [
+        { "id": "lap2", "label": "2 laps", "magnitude": 2, "phrase": "paddled 2 laps" },
+        { "id": "lap4", "label": "4 laps", "magnitude": 4, "phrase": "paddled 4 laps" },
+        { "id": "lap6", "label": "6 laps", "magnitude": 6, "phrase": "paddled 6 laps" },
+        { "id": "lap8", "label": "8 laps", "magnitude": 8, "phrase": "paddled 8 laps" },
+        { "id": "lap10", "label": "10 laps", "magnitude": 10, "phrase": "paddled 10 laps" },
+        { "id": "lap12", "label": "12 laps", "magnitude": 12, "phrase": "paddled 12 laps" }
+      ]
+    },
+    {
+      "id": "stroke",
+      "label": "Stroke",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "forward", "label": "Forward", "phrase": "favoured the forward stroke", "refPhrase": "forward-stroke paddler" },
+        { "id": "sweep", "label": "Sweep", "phrase": "favoured the sweep stroke", "refPhrase": "sweep-stroke paddler" },
+        { "id": "draw", "label": "Draw", "phrase": "favoured the draw stroke", "refPhrase": "draw-stroke paddler" },
+        { "id": "brace", "label": "Brace", "phrase": "favoured the brace stroke", "refPhrase": "brace-stroke paddler" },
+        { "id": "roll", "label": "Roll", "phrase": "favoured the roll", "refPhrase": "roll paddler" },
+        { "id": "scull", "label": "Scull", "phrase": "favoured the scull stroke", "refPhrase": "scull-stroke paddler" }
+      ]
+    },
+    {
+      "id": "snack",
+      "label": "Snack",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "cookie", "label": "Cookie", "phrase": "grabbed the cookie", "refPhrase": "cookie eater" },
+        { "id": "donut", "label": "Donut", "phrase": "grabbed the donut", "refPhrase": "donut eater" },
+        { "id": "burger", "label": "Burger", "phrase": "grabbed the burger", "refPhrase": "burger eater" },
+        { "id": "pizza", "label": "Pizza", "phrase": "grabbed the pizza", "refPhrase": "pizza eater" },
+        { "id": "fries", "label": "Fries", "phrase": "grabbed the fries", "refPhrase": "fries eater" },
+        { "id": "cupcake", "label": "Cupcake", "phrase": "grabbed the cupcake", "refPhrase": "cupcake eater" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "lap",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} paddled {delta} more laps than {b_ref}.",
+        "{a_ref} paddled {delta} more laps than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "lap",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} paddled no fewer than {bound} laps.",
+        "{a_ref} paddled at least {bound} laps."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the heat sheet read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

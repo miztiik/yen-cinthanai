@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "reptile-house",
+  "title": "The Reptile House",
+  "subjectNoun": "handler",
+  "subjectCategory": "handler",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical morning check-round in the zoo's reptile house. Anchor = handler. tag is glyph-backed by the color pack (value ids are pack slugs); reptile and habitat are text-only; feed is the numeric axis (feeds given) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (feed/reptile/habitat).",
+  "narrativeTemplate": "Heat lamps glow along the glass as {n} handlers start the morning checks, and {curator} untangles whose enclosure was whose after a {mishap} shuffled the care cards, something {rustle} behind the leaves.",
+  "flavorPools": {
+    "curator": ["old Ranger Dax", "the head curator", "Auntie Iris"],
+    "mishap": ["misted-up viewing pane", "tipped cricket tub", "escapee on the loose"],
+    "rustle": ["rustling", "scritching", "shifting"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Zola'; 'attribute' -> 'the red-tag handler' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "handler",
+      "label": "Handler",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "zola", "label": "Zola" },
+        { "id": "beck", "label": "Beck" },
+        { "id": "priyanka", "label": "Priyanka" },
+        { "id": "otto", "label": "Otto" },
+        { "id": "femi", "label": "Femi" },
+        { "id": "sunniva", "label": "Sunniva" }
+      ]
+    },
+    {
+      "id": "tag",
+      "label": "Tag",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red tag", "phrase": "carried the red tag", "refPhrase": "red-tag handler" },
+        { "id": "blue", "label": "Blue tag", "phrase": "carried the blue tag", "refPhrase": "blue-tag handler" },
+        { "id": "green", "label": "Green tag", "phrase": "carried the green tag", "refPhrase": "green-tag handler" },
+        { "id": "yellow", "label": "Yellow tag", "phrase": "carried the yellow tag", "refPhrase": "yellow-tag handler" },
+        { "id": "orange", "label": "Orange tag", "phrase": "carried the orange tag", "refPhrase": "orange-tag handler" },
+        { "id": "purple", "label": "Purple tag", "phrase": "carried the purple tag", "refPhrase": "purple-tag handler" }
+      ]
+    },
+    {
+      "id": "feed",
+      "label": "Feed",
+      "kind": "numeric",
+      "unit": "feeds",
+      "valuePool": [
+        { "id": "feed1", "label": "1 feed", "magnitude": 1, "phrase": "gave 1 feed" },
+        { "id": "feed2", "label": "2 feeds", "magnitude": 2, "phrase": "gave 2 feeds" },
+        { "id": "feed3", "label": "3 feeds", "magnitude": 3, "phrase": "gave 3 feeds" },
+        { "id": "feed4", "label": "4 feeds", "magnitude": 4, "phrase": "gave 4 feeds" },
+        { "id": "feed5", "label": "5 feeds", "magnitude": 5, "phrase": "gave 5 feeds" },
+        { "id": "feed6", "label": "6 feeds", "magnitude": 6, "phrase": "gave 6 feeds" }
+      ]
+    },
+    {
+      "id": "reptile",
+      "label": "Reptile",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "gecko", "label": "Gecko", "phrase": "cared for the gecko", "refPhrase": "gecko handler" },
+        { "id": "iguana", "label": "Iguana", "phrase": "cared for the iguana", "refPhrase": "iguana handler" },
+        { "id": "tortoise", "label": "Tortoise", "phrase": "cared for the tortoise", "refPhrase": "tortoise handler" },
+        { "id": "chameleon", "label": "Chameleon", "phrase": "cared for the chameleon", "refPhrase": "chameleon handler" },
+        { "id": "python", "label": "Python", "phrase": "cared for the python", "refPhrase": "python handler" },
+        { "id": "skink", "label": "Skink", "phrase": "cared for the skink", "refPhrase": "skink handler" }
+      ]
+    },
+    {
+      "id": "habitat",
+      "label": "Habitat",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "desertvivarium", "label": "Desert vivarium", "phrase": "kept the desert vivarium", "refPhrase": "desert-vivarium handler" },
+        { "id": "rainforesttank", "label": "Rainforest tank", "phrase": "kept the rainforest tank", "refPhrase": "rainforest-tank handler" },
+        { "id": "rockpool", "label": "Rock pool", "phrase": "kept the rock pool", "refPhrase": "rock-pool handler" },
+        { "id": "canopyroost", "label": "Canopy roost", "phrase": "kept the canopy roost", "refPhrase": "canopy-roost handler" },
+        { "id": "riverbank", "label": "Riverbank", "phrase": "kept the riverbank", "refPhrase": "riverbank handler" },
+        { "id": "burrow", "label": "Burrow", "phrase": "kept the burrow", "refPhrase": "burrow handler" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "feed",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} gave {delta} more feeds than {b_ref}.",
+        "{a_ref} gave {delta} more feeds than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "feed",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} gave no fewer than {bound} feeds.",
+        "{a_ref} gave at least {bound} feeds."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the care card read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

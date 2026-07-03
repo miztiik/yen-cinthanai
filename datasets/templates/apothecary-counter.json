@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "apothecary-counter",
+  "title": "The Apothecary's Counter",
+  "subjectNoun": "apothecary",
+  "subjectCategory": "apothecary",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A light-mystery afternoon behind the apothecary's counter. Anchor = apothecary. phial is glyph-backed by the color pack (value ids are pack slugs); herb and ailment are text-only; remedy is the numeric axis (remedies mixed) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (remedy/herb/ailment).",
+  "narrativeTemplate": "Dust motes hang in the lamplight as {n} apothecaries grind at their mortars, and {elder} sets about whose shelf was whose after a {mishap} scattered the labelled jars, the air {scent}.",
+  "flavorPools": {
+    "elder": ["old Master Fennel", "the guild elder", "Dame Culpeper"],
+    "mishap": ["gust through the casement", "toppled pestle", "mouse among the jars"],
+    "scent": ["sharp with camphor", "sweet with honey", "bitter with rue"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Rosalind'; 'attribute' -> 'the red-phial apothecary' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "apothecary",
+      "label": "Apothecary",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "rosalind", "label": "Rosalind" },
+        { "id": "hassan", "label": "Hassan" },
+        { "id": "lena", "label": "Lena" },
+        { "id": "barto", "label": "Barto" },
+        { "id": "sujata", "label": "Sujata" },
+        { "id": "cato", "label": "Cato" }
+      ]
+    },
+    {
+      "id": "phial",
+      "label": "Phial",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red phial", "phrase": "reached for the red phial", "refPhrase": "red-phial apothecary" },
+        { "id": "blue", "label": "Blue phial", "phrase": "reached for the blue phial", "refPhrase": "blue-phial apothecary" },
+        { "id": "green", "label": "Green phial", "phrase": "reached for the green phial", "refPhrase": "green-phial apothecary" },
+        { "id": "yellow", "label": "Yellow phial", "phrase": "reached for the yellow phial", "refPhrase": "yellow-phial apothecary" },
+        { "id": "orange", "label": "Orange phial", "phrase": "reached for the orange phial", "refPhrase": "orange-phial apothecary" },
+        { "id": "purple", "label": "Purple phial", "phrase": "reached for the purple phial", "refPhrase": "purple-phial apothecary" }
+      ]
+    },
+    {
+      "id": "remedy",
+      "label": "Remedy",
+      "kind": "numeric",
+      "unit": "remedies",
+      "valuePool": [
+        { "id": "remedy1", "label": "1 remedy", "magnitude": 1, "phrase": "mixed 1 remedy" },
+        { "id": "remedy2", "label": "2 remedies", "magnitude": 2, "phrase": "mixed 2 remedies" },
+        { "id": "remedy3", "label": "3 remedies", "magnitude": 3, "phrase": "mixed 3 remedies" },
+        { "id": "remedy4", "label": "4 remedies", "magnitude": 4, "phrase": "mixed 4 remedies" },
+        { "id": "remedy5", "label": "5 remedies", "magnitude": 5, "phrase": "mixed 5 remedies" },
+        { "id": "remedy6", "label": "6 remedies", "magnitude": 6, "phrase": "mixed 6 remedies" }
+      ]
+    },
+    {
+      "id": "herb",
+      "label": "Herb",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "chamomile", "label": "Chamomile", "phrase": "ground the chamomile", "refPhrase": "chamomile blend" },
+        { "id": "lavender", "label": "Lavender", "phrase": "ground the lavender", "refPhrase": "lavender blend" },
+        { "id": "sage", "label": "Sage", "phrase": "ground the sage", "refPhrase": "sage blend" },
+        { "id": "mint", "label": "Mint", "phrase": "ground the mint", "refPhrase": "mint blend" },
+        { "id": "thyme", "label": "Thyme", "phrase": "ground the thyme", "refPhrase": "thyme blend" },
+        { "id": "rosemary", "label": "Rosemary", "phrase": "ground the rosemary", "refPhrase": "rosemary blend" }
+      ]
+    },
+    {
+      "id": "ailment",
+      "label": "Ailment",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "cough", "label": "Cough", "phrase": "treated a cough", "refPhrase": "cough case" },
+        { "id": "sniffles", "label": "Sniffles", "phrase": "treated the sniffles", "refPhrase": "sniffles case" },
+        { "id": "sorethroat", "label": "Sore throat", "phrase": "treated a sore throat", "refPhrase": "sore-throat case" },
+        { "id": "headache", "label": "Headache", "phrase": "treated a headache", "refPhrase": "headache case" },
+        { "id": "tiredfeet", "label": "Tired feet", "phrase": "treated tired feet", "refPhrase": "tired-feet case" },
+        { "id": "beesting", "label": "Bee sting", "phrase": "treated a bee sting", "refPhrase": "bee-sting case" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "remedy",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} mixed {delta} more remedies than {b_ref}.",
+        "{a_ref} mixed {delta} more remedies than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "remedy",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} mixed no fewer than {bound} remedies.",
+        "{a_ref} mixed at least {bound} remedies."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the label read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
