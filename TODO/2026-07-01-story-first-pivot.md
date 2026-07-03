@@ -1,7 +1,7 @@
 # Story-First Matrix Logic-Grid - Execution Plan
 
 **Last Updated**: 2026-07-03 (COMPLETE - all rows merged; see [Plan complete](#plan-complete))
-**Level**: 5 (core design / data model / runtime - authored per `.cladue/skills/prepare-plan`)
+**Level**: 5 (core design / data model / runtime - authored per `.claude/skills/prepare-plan`)
 
 ## 0. Operating contract
 
