@@ -115,7 +115,13 @@ MANIFEST_FILENAME = "manifest.json"
 class ScenarioManifestEntry(_Strict):
     """One catalogued scenario. `status` gates the daily rotation: 'live' scenarios rotate into
     the served bank; a 'build' scenario is staged (authorable + testable via --scenario) but kept
-    OUT of the live rotation. tone/kind are free-form editorial tags. file == '<id>.json'."""
+    OUT of the live rotation. tone/kind are free-form editorial tags. file == '<id>.json'.
+
+    `verifiedSha` is the OPTIONAL build-cache stamp written by `tools/verify_scenarios.py --stamp`:
+    the content-address (`scenario_fingerprint`) at which this scenario last passed full multi-tier
+    verification. When it matches the current fingerprint the incremental check SKIPS re-verifying
+    the scenario, so CI verifies only CHANGED scenarios (bounded regardless of catalog size). It is
+    optional so an unstamped/new scenario simply always verifies; absent == never verified."""
 
     id: str
     file: str
@@ -123,6 +129,7 @@ class ScenarioManifestEntry(_Strict):
     tone: str
     kind: str
     status: Status
+    verifiedSha: str | None = None
 
 
 class ScenarioManifest(_Strict):
