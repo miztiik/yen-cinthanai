@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "sports-club",
+  "title": "The Sports Club",
+  "subjectNoun": "member",
+  "subjectCategory": "member",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A witty muddle at the local sports club. Anchor = member. sport is glyph-backed by the sports pack (value ids are pack slugs); court and bag are text-only; match is the numeric axis (matches won) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (match/court/bag).",
+  "narrativeTemplate": "Somebody has, once again, jumbled the sign-up sheet, so {host} is left guessing which of the {n} members did what all season, thanks to a {mishap} at the clubhouse.",
+  "flavorPools": {
+    "host": ["the club secretary", "old Coach Bramwell", "committee chair Odele"],
+    "mishap": ["coffee spill", "gust through the lobby", "overeager new intern"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Nils'; 'attribute' -> 'the tennis player' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "member",
+      "label": "Member",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "nils", "label": "Nils" },
+        { "id": "deepa", "label": "Deepa" },
+        { "id": "cyrus", "label": "Cyrus" },
+        { "id": "blythe", "label": "Blythe" },
+        { "id": "tariq", "label": "Tariq" },
+        { "id": "gita", "label": "Gita" }
+      ]
+    },
+    {
+      "id": "sport",
+      "label": "Sport",
+      "kind": "nominal",
+      "glyphPack": "sports",
+      "valuePool": [
+        { "id": "tennis", "label": "Tennis", "phrase": "played tennis", "refPhrase": "tennis player" },
+        { "id": "golf", "label": "Golf", "phrase": "played golf", "refPhrase": "golf player" },
+        { "id": "badminton", "label": "Badminton", "phrase": "played badminton", "refPhrase": "badminton player" },
+        { "id": "hockey", "label": "Hockey", "phrase": "played hockey", "refPhrase": "hockey player" },
+        { "id": "baseball", "label": "Baseball", "phrase": "played baseball", "refPhrase": "baseball player" },
+        { "id": "waterpolo", "label": "Water polo", "phrase": "played water polo", "refPhrase": "water-polo player" }
+      ]
+    },
+    {
+      "id": "match",
+      "label": "Matches",
+      "kind": "numeric",
+      "unit": "matches",
+      "valuePool": [
+        { "id": "match2", "label": "2 matches", "magnitude": 2, "phrase": "won 2 matches" },
+        { "id": "match4", "label": "4 matches", "magnitude": 4, "phrase": "won 4 matches" },
+        { "id": "match6", "label": "6 matches", "magnitude": 6, "phrase": "won 6 matches" },
+        { "id": "match8", "label": "8 matches", "magnitude": 8, "phrase": "won 8 matches" },
+        { "id": "match10", "label": "10 matches", "magnitude": 10, "phrase": "won 10 matches" },
+        { "id": "match12", "label": "12 matches", "magnitude": 12, "phrase": "won 12 matches" }
+      ]
+    },
+    {
+      "id": "court",
+      "label": "Court",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "courtone", "label": "Court One", "phrase": "trained on Court One", "refPhrase": "Court One member" },
+        { "id": "thebaseline", "label": "The Baseline", "phrase": "trained on The Baseline", "refPhrase": "Baseline member" },
+        { "id": "northgreen", "label": "North Green", "phrase": "trained on North Green", "refPhrase": "North Green member" },
+        { "id": "clubhouselawn", "label": "Clubhouse Lawn", "phrase": "trained on Clubhouse Lawn", "refPhrase": "Clubhouse Lawn member" },
+        { "id": "riverlane", "label": "River Lane", "phrase": "trained on River Lane", "refPhrase": "River Lane member" },
+        { "id": "practicewall", "label": "Practice Wall", "phrase": "trained on Practice Wall", "refPhrase": "Practice Wall member" }
+      ]
+    },
+    {
+      "id": "bag",
+      "label": "Bag",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "canvasholdall", "label": "Canvas Holdall", "phrase": "carried the Canvas Holdall", "refPhrase": "Canvas Holdall member" },
+        { "id": "meshduffel", "label": "Mesh Duffel", "phrase": "carried the Mesh Duffel", "refPhrase": "Mesh Duffel member" },
+        { "id": "leathergrip", "label": "Leather Grip", "phrase": "carried the Leather Grip", "refPhrase": "Leather Grip member" },
+        { "id": "stripedkitbag", "label": "Striped Kitbag", "phrase": "carried the Striped Kitbag", "refPhrase": "Striped Kitbag member" },
+        { "id": "teamrucksack", "label": "Team Rucksack", "phrase": "carried the Team Rucksack", "refPhrase": "Team Rucksack member" },
+        { "id": "vintagesatchel", "label": "Vintage Satchel", "phrase": "carried the Vintage Satchel", "refPhrase": "Vintage Satchel member" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "match",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} won {delta} more matches than {b_ref}.",
+        "{a_ref} won {delta} more matches than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "match",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} won no fewer than {bound} matches.",
+        "{a_ref} won at least {bound} matches."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the roster read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

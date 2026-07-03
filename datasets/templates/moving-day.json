@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "moving-day",
+  "title": "Moving Day",
+  "subjectNoun": "mover",
+  "subjectCategory": "mover",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A witty removals-day scramble. Anchor = mover. item is glyph-backed by the household pack (value ids are pack slugs); room and run are text-only; box is the numeric axis (boxes carried) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (box/room/run).",
+  "narrativeTemplate": "The inventory clipboard has vanished into a stack of cartons, so {host} is left deducing which of the {n} movers shifted what before a {mishap} on the driveway.",
+  "flavorPools": {
+    "host": ["the crew foreman", "old Removals-Chief Barta", "dispatcher Quill"],
+    "mishap": ["sudden downpour", "jammed tail-lift", "double-parked hatchback"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Duke'; 'attribute' -> 'the wardrobe mover' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "mover",
+      "label": "Mover",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "duke", "label": "Duke" },
+        { "id": "petra", "label": "Petra" },
+        { "id": "sami", "label": "Sami" },
+        { "id": "odette", "label": "Odette" },
+        { "id": "gil", "label": "Gil" },
+        { "id": "nora", "label": "Nora" }
+      ]
+    },
+    {
+      "id": "item",
+      "label": "Item",
+      "kind": "nominal",
+      "glyphPack": "household",
+      "valuePool": [
+        { "id": "chair", "label": "Armchair", "phrase": "hauled the armchair", "refPhrase": "armchair mover" },
+        { "id": "closet", "label": "Wardrobe", "phrase": "hauled the wardrobe", "refPhrase": "wardrobe mover" },
+        { "id": "bookshelf", "label": "Bookshelf", "phrase": "hauled the bookshelf", "refPhrase": "bookshelf mover" },
+        { "id": "refrigerator", "label": "Refrigerator", "phrase": "hauled the refrigerator", "refPhrase": "refrigerator mover" },
+        { "id": "washingmachine", "label": "Washing machine", "phrase": "hauled the washing machine", "refPhrase": "washing-machine mover" },
+        { "id": "doublebed", "label": "Double bed", "phrase": "hauled the double bed", "refPhrase": "double-bed mover" }
+      ]
+    },
+    {
+      "id": "box",
+      "label": "Boxes",
+      "kind": "numeric",
+      "unit": "boxes",
+      "valuePool": [
+        { "id": "box3", "label": "3 boxes", "magnitude": 3, "phrase": "carried 3 boxes" },
+        { "id": "box5", "label": "5 boxes", "magnitude": 5, "phrase": "carried 5 boxes" },
+        { "id": "box7", "label": "7 boxes", "magnitude": 7, "phrase": "carried 7 boxes" },
+        { "id": "box9", "label": "9 boxes", "magnitude": 9, "phrase": "carried 9 boxes" },
+        { "id": "box11", "label": "11 boxes", "magnitude": 11, "phrase": "carried 11 boxes" },
+        { "id": "box13", "label": "13 boxes", "magnitude": 13, "phrase": "carried 13 boxes" }
+      ]
+    },
+    {
+      "id": "room",
+      "label": "Room",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "theattic", "label": "The Attic", "phrase": "cleared the Attic", "refPhrase": "Attic mover" },
+        { "id": "frontparlour", "label": "Front Parlour", "phrase": "cleared the Front Parlour", "refPhrase": "Front Parlour mover" },
+        { "id": "backkitchen", "label": "Back Kitchen", "phrase": "cleared the Back Kitchen", "refPhrase": "Back Kitchen mover" },
+        { "id": "upstairslanding", "label": "Upstairs Landing", "phrase": "cleared the Upstairs Landing", "refPhrase": "Upstairs Landing mover" },
+        { "id": "gardenshed", "label": "Garden Shed", "phrase": "cleared the Garden Shed", "refPhrase": "Garden Shed mover" },
+        { "id": "cellarsteps", "label": "Cellar Steps", "phrase": "cleared the Cellar Steps", "refPhrase": "Cellar Steps mover" }
+      ]
+    },
+    {
+      "id": "run",
+      "label": "Run",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "hillroadrun", "label": "Hill Road Run", "phrase": "drove the Hill Road Run", "refPhrase": "Hill Road mover" },
+        { "id": "coastroute", "label": "Coast Route", "phrase": "drove the Coast Route", "refPhrase": "Coast Route mover" },
+        { "id": "marketloop", "label": "Market Loop", "phrase": "drove the Market Loop", "refPhrase": "Market Loop mover" },
+        { "id": "bridgecrossing", "label": "Bridge Crossing", "phrase": "drove the Bridge Crossing", "refPhrase": "Bridge Crossing mover" },
+        { "id": "orchardlane", "label": "Orchard Lane", "phrase": "drove the Orchard Lane", "refPhrase": "Orchard Lane mover" },
+        { "id": "stationdrop", "label": "Station Drop", "phrase": "drove the Station Drop", "refPhrase": "Station Drop mover" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "box",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} carried {delta} more boxes than {b_ref}.",
+        "{a_ref} carried {delta} more boxes than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "box",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} carried no fewer than {bound} boxes.",
+        "{a_ref} carried at least {bound} boxes."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the manifest read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

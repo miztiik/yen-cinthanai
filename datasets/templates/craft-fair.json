@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "craft-fair",
+  "title": "The Craft Fair",
+  "subjectNoun": "maker",
+  "subjectCategory": "maker",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical craft fair full of makers' stalls. Anchor = maker. craft is glyph-backed by the crafts pack (value ids are pack slugs); pitch and banner are text-only; order is the numeric axis (orders taken) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (order/pitch/banner).",
+  "narrativeTemplate": "Bunting zigzags between the tents as {n} makers lay out their handiwork, and {host} pieces together whose corner was whose after a {mishap} upset the raffle box.",
+  "flavorPools": {
+    "host": ["Fair-Warden Bramble", "old Tilda Quince", "the fair steward"],
+    "mishap": ["breeze off the commons", "wobbly trestle", "excited terrier"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Wren'; 'attribute' -> 'the pottery artisan' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "maker",
+      "label": "Maker",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "wren", "label": "Wren" },
+        { "id": "cosmo", "label": "Cosmo" },
+        { "id": "ingmar", "label": "Ingmar" },
+        { "id": "lucia", "label": "Lucia" },
+        { "id": "femi", "label": "Femi" },
+        { "id": "tessa", "label": "Tessa" }
+      ]
+    },
+    {
+      "id": "craft",
+      "label": "Craft",
+      "kind": "nominal",
+      "glyphPack": "crafts",
+      "valuePool": [
+        { "id": "candlemaking", "label": "Candle-making", "phrase": "demonstrated candle-making", "refPhrase": "candle-making artisan" },
+        { "id": "carpentry", "label": "Carpentry", "phrase": "demonstrated carpentry", "refPhrase": "carpentry artisan" },
+        { "id": "gardening", "label": "Gardening", "phrase": "demonstrated gardening", "refPhrase": "gardening artisan" },
+        { "id": "painting", "label": "Painting", "phrase": "demonstrated painting", "refPhrase": "painting artisan" },
+        { "id": "pottery", "label": "Pottery", "phrase": "demonstrated pottery", "refPhrase": "pottery artisan" },
+        { "id": "soapmaking", "label": "Soap-making", "phrase": "demonstrated soap-making", "refPhrase": "soap-making artisan" }
+      ]
+    },
+    {
+      "id": "order",
+      "label": "Orders",
+      "kind": "numeric",
+      "unit": "orders",
+      "valuePool": [
+        { "id": "order3", "label": "3 orders", "magnitude": 3, "phrase": "took 3 orders" },
+        { "id": "order5", "label": "5 orders", "magnitude": 5, "phrase": "took 5 orders" },
+        { "id": "order7", "label": "7 orders", "magnitude": 7, "phrase": "took 7 orders" },
+        { "id": "order9", "label": "9 orders", "magnitude": 9, "phrase": "took 9 orders" },
+        { "id": "order11", "label": "11 orders", "magnitude": 11, "phrase": "took 11 orders" },
+        { "id": "order13", "label": "13 orders", "magnitude": 13, "phrase": "took 13 orders" }
+      ]
+    },
+    {
+      "id": "pitch",
+      "label": "Pitch",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "oakrow", "label": "Oak Row", "phrase": "set up on Oak Row", "refPhrase": "Oak Row maker" },
+        { "id": "willowwalk", "label": "Willow Walk", "phrase": "set up on Willow Walk", "refPhrase": "Willow Walk maker" },
+        { "id": "maplelane", "label": "Maple Lane", "phrase": "set up on Maple Lane", "refPhrase": "Maple Lane maker" },
+        { "id": "cedarcorner", "label": "Cedar Corner", "phrase": "set up on Cedar Corner", "refPhrase": "Cedar Corner maker" },
+        { "id": "birchend", "label": "Birch End", "phrase": "set up on Birch End", "refPhrase": "Birch End maker" },
+        { "id": "elmarch", "label": "Elm Arch", "phrase": "set up on Elm Arch", "refPhrase": "Elm Arch maker" }
+      ]
+    },
+    {
+      "id": "banner",
+      "label": "Banner",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "sunbanner", "label": "Sun Banner", "phrase": "flew the Sun Banner", "refPhrase": "Sun Banner maker" },
+        { "id": "starbanner", "label": "Star Banner", "phrase": "flew the Star Banner", "refPhrase": "Star Banner maker" },
+        { "id": "leafbanner", "label": "Leaf Banner", "phrase": "flew the Leaf Banner", "refPhrase": "Leaf Banner maker" },
+        { "id": "wavebanner", "label": "Wave Banner", "phrase": "flew the Wave Banner", "refPhrase": "Wave Banner maker" },
+        { "id": "moonbanner", "label": "Moon Banner", "phrase": "flew the Moon Banner", "refPhrase": "Moon Banner maker" },
+        { "id": "bloombanner", "label": "Bloom Banner", "phrase": "flew the Bloom Banner", "refPhrase": "Bloom Banner maker" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "order",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} took {delta} more orders than {b_ref}.",
+        "{a_ref} took {delta} more orders than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "order",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} took no fewer than {bound} orders.",
+        "{a_ref} took at least {bound} orders."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the tally read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

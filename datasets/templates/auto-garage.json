@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "auto-garage",
+  "title": "The Auto Garage",
+  "subjectNoun": "mechanic",
+  "subjectCategory": "mechanic",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A witty scramble at the auto garage. Anchor = mechanic. vehicle is glyph-backed by the transport pack (value ids are pack slugs); bay and kit are text-only; job is the numeric axis (jobs logged) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (job/bay/kit).",
+  "narrativeTemplate": "The logbook has vanished under a slick of oil, so {host} must reconstruct which of the {n} mechanics did what this week after a {mishap} in the workshop.",
+  "flavorPools": {
+    "host": ["foreman Dawes", "old Sparky Nunez", "the service manager"],
+    "mishap": ["clatter of dropped spanners", "power cut", "delivery mix-up"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Hank'; 'attribute' -> 'the jeep mechanic' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "mechanic",
+      "label": "Mechanic",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "hank", "label": "Hank" },
+        { "id": "suri", "label": "Suri" },
+        { "id": "delia", "label": "Delia" },
+        { "id": "marcus", "label": "Marcus" },
+        { "id": "pia", "label": "Pia" },
+        { "id": "bo", "label": "Bo" }
+      ]
+    },
+    {
+      "id": "vehicle",
+      "label": "Vehicle",
+      "kind": "nominal",
+      "glyphPack": "transport",
+      "valuePool": [
+        { "id": "car", "label": "Saloon car", "phrase": "tuned the saloon car", "refPhrase": "saloon-car mechanic" },
+        { "id": "van", "label": "Delivery van", "phrase": "tuned the delivery van", "refPhrase": "delivery-van mechanic" },
+        { "id": "truck", "label": "Pickup truck", "phrase": "tuned the pickup truck", "refPhrase": "pickup-truck mechanic" },
+        { "id": "bicycle", "label": "Bicycle", "phrase": "tuned the bicycle", "refPhrase": "bicycle mechanic" },
+        { "id": "motorcycle", "label": "Motorcycle", "phrase": "tuned the motorcycle", "refPhrase": "motorcycle mechanic" },
+        { "id": "jeep", "label": "Jeep", "phrase": "tuned the jeep", "refPhrase": "jeep mechanic" }
+      ]
+    },
+    {
+      "id": "job",
+      "label": "Jobs",
+      "kind": "numeric",
+      "unit": "jobs",
+      "valuePool": [
+        { "id": "job2", "label": "2 jobs", "magnitude": 2, "phrase": "logged 2 jobs" },
+        { "id": "job4", "label": "4 jobs", "magnitude": 4, "phrase": "logged 4 jobs" },
+        { "id": "job6", "label": "6 jobs", "magnitude": 6, "phrase": "logged 6 jobs" },
+        { "id": "job8", "label": "8 jobs", "magnitude": 8, "phrase": "logged 8 jobs" },
+        { "id": "job10", "label": "10 jobs", "magnitude": 10, "phrase": "logged 10 jobs" },
+        { "id": "job12", "label": "12 jobs", "magnitude": 12, "phrase": "logged 12 jobs" }
+      ]
+    },
+    {
+      "id": "bay",
+      "label": "Bay",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "frontramp", "label": "Front Ramp", "phrase": "worked the Front Ramp", "refPhrase": "Front Ramp mechanic" },
+        { "id": "cornerpit", "label": "Corner Pit", "phrase": "worked the Corner Pit", "refPhrase": "Corner Pit mechanic" },
+        { "id": "washlane", "label": "Wash Lane", "phrase": "worked the Wash Lane", "refPhrase": "Wash Lane mechanic" },
+        { "id": "toolalcove", "label": "Tool Alcove", "phrase": "worked the Tool Alcove", "refPhrase": "Tool Alcove mechanic" },
+        { "id": "spraybooth", "label": "Spray Booth", "phrase": "worked the Spray Booth", "refPhrase": "Spray Booth mechanic" },
+        { "id": "diagnosticsnook", "label": "Diagnostics Nook", "phrase": "worked the Diagnostics Nook", "refPhrase": "Diagnostics Nook mechanic" }
+      ]
+    },
+    {
+      "id": "kit",
+      "label": "Kit",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "ratchetset", "label": "Ratchet Set", "phrase": "grabbed the Ratchet Set", "refPhrase": "Ratchet Set mechanic" },
+        { "id": "socketroll", "label": "Socket Roll", "phrase": "grabbed the Socket Roll", "refPhrase": "Socket Roll mechanic" },
+        { "id": "torquekit", "label": "Torque Kit", "phrase": "grabbed the Torque Kit", "refPhrase": "Torque Kit mechanic" },
+        { "id": "spannercase", "label": "Spanner Case", "phrase": "grabbed the Spanner Case", "refPhrase": "Spanner Case mechanic" },
+        { "id": "gaugebox", "label": "Gauge Box", "phrase": "grabbed the Gauge Box", "refPhrase": "Gauge Box mechanic" },
+        { "id": "weldingrig", "label": "Welding Rig", "phrase": "grabbed the Welding Rig", "refPhrase": "Welding Rig mechanic" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "job",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} logged {delta} more jobs than {b_ref}.",
+        "{a_ref} logged {delta} more jobs than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "job",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} logged no fewer than {bound} jobs.",
+        "{a_ref} logged at least {bound} jobs."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the worksheet read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

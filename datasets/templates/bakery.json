@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "bakery",
+  "title": "The Corner Bakery",
+  "subjectNoun": "baker",
+  "subjectCategory": "baker",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A cozy pre-dawn bake at the corner bakery. Anchor = baker. bake is glyph-backed by the food pack (value ids are pack slugs); station and glaze are text-only; loaf is the numeric axis (loaves baked) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (loaf/station/glaze).",
+  "narrativeTemplate": "Warmth rolls out of the ovens before dawn as {n} bakers dust their boards, and {host} sorts out whose batch was whose after a {mishap} jumbled the order tickets.",
+  "flavorPools": {
+    "host": ["old Baker Fournier", "Nonna Rosa", "the head baker"],
+    "mishap": ["gust from the yard door", "toppled flour sack", "mixed-up timer"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Marco'; 'attribute' -> 'the baguette baker' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "baker",
+      "label": "Baker",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "marco", "label": "Marco" },
+        { "id": "ingrid", "label": "Ingrid" },
+        { "id": "hassan", "label": "Hassan" },
+        { "id": "beatrix", "label": "Beatrix" },
+        { "id": "sunil", "label": "Sunil" },
+        { "id": "colette", "label": "Colette" }
+      ]
+    },
+    {
+      "id": "bake",
+      "label": "Bake",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "baguette", "label": "Baguettes", "phrase": "shaped the baguettes", "refPhrase": "baguette baker" },
+        { "id": "bread", "label": "Sourdough", "phrase": "shaped the sourdough", "refPhrase": "sourdough baker" },
+        { "id": "cookie", "label": "Cookies", "phrase": "shaped the cookies", "refPhrase": "cookie baker" },
+        { "id": "cupcake", "label": "Cupcakes", "phrase": "shaped the cupcakes", "refPhrase": "cupcake baker" },
+        { "id": "donut", "label": "Doughnuts", "phrase": "shaped the doughnuts", "refPhrase": "doughnut baker" },
+        { "id": "gingerbread", "label": "Gingerbread", "phrase": "shaped the gingerbread", "refPhrase": "gingerbread baker" }
+      ]
+    },
+    {
+      "id": "loaf",
+      "label": "Loaves",
+      "kind": "numeric",
+      "unit": "loaves",
+      "valuePool": [
+        { "id": "loaf3", "label": "3 loaves", "magnitude": 3, "phrase": "baked 3 loaves" },
+        { "id": "loaf5", "label": "5 loaves", "magnitude": 5, "phrase": "baked 5 loaves" },
+        { "id": "loaf7", "label": "7 loaves", "magnitude": 7, "phrase": "baked 7 loaves" },
+        { "id": "loaf9", "label": "9 loaves", "magnitude": 9, "phrase": "baked 9 loaves" },
+        { "id": "loaf11", "label": "11 loaves", "magnitude": 11, "phrase": "baked 11 loaves" },
+        { "id": "loaf13", "label": "13 loaves", "magnitude": 13, "phrase": "baked 13 loaves" }
+      ]
+    },
+    {
+      "id": "station",
+      "label": "Station",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "stonehearth", "label": "Stone Hearth", "phrase": "worked the Stone Hearth", "refPhrase": "Stone Hearth baker" },
+        { "id": "cornerbench", "label": "Corner Bench", "phrase": "worked the Corner Bench", "refPhrase": "Corner Bench baker" },
+        { "id": "provingrack", "label": "Proving Rack", "phrase": "worked the Proving Rack", "refPhrase": "Proving Rack baker" },
+        { "id": "coolingledge", "label": "Cooling Ledge", "phrase": "worked the Cooling Ledge", "refPhrase": "Cooling Ledge baker" },
+        { "id": "frontcounter", "label": "Front Counter", "phrase": "worked the Front Counter", "refPhrase": "Front Counter baker" },
+        { "id": "flourloft", "label": "Flour Loft", "phrase": "worked the Flour Loft", "refPhrase": "Flour Loft baker" }
+      ]
+    },
+    {
+      "id": "glaze",
+      "label": "Glaze",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "honeyglaze", "label": "Honey Glaze", "phrase": "finished with the Honey Glaze", "refPhrase": "Honey Glaze baker" },
+        { "id": "lemondrizzle", "label": "Lemon Drizzle", "phrase": "finished with the Lemon Drizzle", "refPhrase": "Lemon Drizzle baker" },
+        { "id": "sugardust", "label": "Sugar Dust", "phrase": "finished with the Sugar Dust", "refPhrase": "Sugar Dust baker" },
+        { "id": "maplewash", "label": "Maple Wash", "phrase": "finished with the Maple Wash", "refPhrase": "Maple Wash baker" },
+        { "id": "berrycoulis", "label": "Berry Coulis", "phrase": "finished with the Berry Coulis", "refPhrase": "Berry Coulis baker" },
+        { "id": "spicedbutter", "label": "Spiced Butter", "phrase": "finished with the Spiced Butter", "refPhrase": "Spiced Butter baker" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "loaf",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} baked {delta} more loaves than {b_ref}.",
+        "{a_ref} baked {delta} more loaves than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "loaf",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} baked no fewer than {bound} loaves.",
+        "{a_ref} baked at least {bound} loaves."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the docket read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

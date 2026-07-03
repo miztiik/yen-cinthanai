@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "travel-agency",
+  "title": "The Travel Agency",
+  "subjectNoun": "traveller",
+  "subjectCategory": "traveller",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical afternoon plotting trips at the travel agency. Anchor = traveller. destination is glyph-backed by the vacation pack (value ids are pack slugs); package and keepsake are text-only; night is the numeric axis (nights stayed) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (night/package/keepsake).",
+  "narrativeTemplate": "The wall map is stuck with so many pins that {host} can no longer tell which of the {n} travellers is bound where, especially after a {mishap} fluttered the itineraries loose.",
+  "flavorPools": {
+    "host": ["Agent Marlowe", "old wanderer Sparrow", "the booking clerk"],
+    "mishap": ["gust from the ceiling fan", "spilled globe of coffee", "over-caffeinated intern"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Colm'; 'attribute' -> 'the Big Ben traveller' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "traveller",
+      "label": "Traveller",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "colm", "label": "Colm" },
+        { "id": "anita", "label": "Anita" },
+        { "id": "zane", "label": "Zane" },
+        { "id": "rhea", "label": "Rhea" },
+        { "id": "bjorn", "label": "Bjorn" },
+        { "id": "suki", "label": "Suki" }
+      ]
+    },
+    {
+      "id": "destination",
+      "label": "Destination",
+      "kind": "nominal",
+      "glyphPack": "vacation",
+      "valuePool": [
+        { "id": "eiffeltower", "label": "the Eiffel Tower", "phrase": "set off for the Eiffel Tower", "refPhrase": "Eiffel Tower traveller" },
+        { "id": "bigben", "label": "Big Ben", "phrase": "set off for Big Ben", "refPhrase": "Big Ben traveller" },
+        { "id": "colosseum", "label": "the Colosseum", "phrase": "set off for the Colosseum", "refPhrase": "Colosseum traveller" },
+        { "id": "pyramid", "label": "the Pyramids", "phrase": "set off for the Pyramids", "refPhrase": "Pyramids traveller" },
+        { "id": "tajmahal", "label": "the Taj Mahal", "phrase": "set off for the Taj Mahal", "refPhrase": "Taj Mahal traveller" },
+        { "id": "statueofliberty", "label": "the Statue of Liberty", "phrase": "set off for the Statue of Liberty", "refPhrase": "Statue of Liberty traveller" }
+      ]
+    },
+    {
+      "id": "night",
+      "label": "Nights",
+      "kind": "numeric",
+      "unit": "nights",
+      "valuePool": [
+        { "id": "night2", "label": "2 nights", "magnitude": 2, "phrase": "stayed 2 nights" },
+        { "id": "night4", "label": "4 nights", "magnitude": 4, "phrase": "stayed 4 nights" },
+        { "id": "night6", "label": "6 nights", "magnitude": 6, "phrase": "stayed 6 nights" },
+        { "id": "night8", "label": "8 nights", "magnitude": 8, "phrase": "stayed 8 nights" },
+        { "id": "night10", "label": "10 nights", "magnitude": 10, "phrase": "stayed 10 nights" },
+        { "id": "night12", "label": "12 nights", "magnitude": 12, "phrase": "stayed 12 nights" }
+      ]
+    },
+    {
+      "id": "package",
+      "label": "Package",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "deluxepackage", "label": "Deluxe Package", "phrase": "chose the Deluxe Package", "refPhrase": "Deluxe Package traveller" },
+        { "id": "budgettour", "label": "Budget Tour", "phrase": "chose the Budget Tour", "refPhrase": "Budget Tour traveller" },
+        { "id": "familyplan", "label": "Family Plan", "phrase": "chose the Family Plan", "refPhrase": "Family Plan traveller" },
+        { "id": "soloescape", "label": "Solo Escape", "phrase": "chose the Solo Escape", "refPhrase": "Solo Escape traveller" },
+        { "id": "groupvoyage", "label": "Group Voyage", "phrase": "chose the Group Voyage", "refPhrase": "Group Voyage traveller" },
+        { "id": "cruisebundle", "label": "Cruise Bundle", "phrase": "chose the Cruise Bundle", "refPhrase": "Cruise Bundle traveller" }
+      ]
+    },
+    {
+      "id": "keepsake",
+      "label": "Keepsake",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "postcardset", "label": "Postcard Set", "phrase": "brought back the Postcard Set", "refPhrase": "Postcard Set traveller" },
+        { "id": "wovenscarf", "label": "Woven Scarf", "phrase": "brought back the Woven Scarf", "refPhrase": "Woven Scarf traveller" },
+        { "id": "spicetin", "label": "Spice Tin", "phrase": "brought back the Spice Tin", "refPhrase": "Spice Tin traveller" },
+        { "id": "shellcharm", "label": "Shell Charm", "phrase": "brought back the Shell Charm", "refPhrase": "Shell Charm traveller" },
+        { "id": "paintedfan", "label": "Painted Fan", "phrase": "brought back the Painted Fan", "refPhrase": "Painted Fan traveller" },
+        { "id": "leatherjournal", "label": "Leather Journal", "phrase": "brought back the Leather Journal", "refPhrase": "Leather Journal traveller" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "night",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} stayed {delta} more nights than {b_ref}.",
+        "{a_ref} stayed {delta} more nights than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "night",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} stayed no fewer than {bound} nights.",
+        "{a_ref} stayed at least {bound} nights."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the itinerary read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

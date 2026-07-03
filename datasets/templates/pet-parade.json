@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "pet-parade",
+  "title": "The Pet Parade",
+  "subjectNoun": "owner",
+  "subjectCategory": "owner",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical village pet parade on the green. Anchor = owner. pet is glyph-backed by the creatures pack (value ids are pack slugs); float and trick are text-only; rosette is the numeric axis (rosettes won) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (rosette/float/trick).",
+  "narrativeTemplate": "Bunting flaps over the green as {n} owners line up their companions for the grand procession, and {host} works out whose turn was whose after a {mishap} muddled the running order.",
+  "flavorPools": {
+    "host": ["Marshal Poppy", "old Ringmaster Fenn", "the parade steward"],
+    "mishap": ["runaway balloon", "sudden drizzle", "tangle of leads"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Dahlia'; 'attribute' -> 'the dog owner' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "owner",
+      "label": "Owner",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "dahlia", "label": "Dahlia" },
+        { "id": "wesley", "label": "Wesley" },
+        { "id": "priya", "label": "Priya" },
+        { "id": "malik", "label": "Malik" },
+        { "id": "fern", "label": "Fern" },
+        { "id": "otto", "label": "Otto" }
+      ]
+    },
+    {
+      "id": "pet",
+      "label": "Pet",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "dog", "label": "Dog", "phrase": "showed the dog", "refPhrase": "dog owner" },
+        { "id": "cat", "label": "Cat", "phrase": "showed the cat", "refPhrase": "cat owner" },
+        { "id": "rabbit", "label": "Rabbit", "phrase": "showed the rabbit", "refPhrase": "rabbit owner" },
+        { "id": "turtle", "label": "Turtle", "phrase": "showed the turtle", "refPhrase": "turtle owner" },
+        { "id": "mouse", "label": "Mouse", "phrase": "showed the mouse", "refPhrase": "mouse owner" },
+        { "id": "owl", "label": "Owl", "phrase": "showed the owl", "refPhrase": "owl owner" }
+      ]
+    },
+    {
+      "id": "rosette",
+      "label": "Rosettes",
+      "kind": "numeric",
+      "unit": "rosettes",
+      "valuePool": [
+        { "id": "rosette2", "label": "2 rosettes", "magnitude": 2, "phrase": "won 2 rosettes" },
+        { "id": "rosette4", "label": "4 rosettes", "magnitude": 4, "phrase": "won 4 rosettes" },
+        { "id": "rosette6", "label": "6 rosettes", "magnitude": 6, "phrase": "won 6 rosettes" },
+        { "id": "rosette8", "label": "8 rosettes", "magnitude": 8, "phrase": "won 8 rosettes" },
+        { "id": "rosette10", "label": "10 rosettes", "magnitude": 10, "phrase": "won 10 rosettes" },
+        { "id": "rosette12", "label": "12 rosettes", "magnitude": 12, "phrase": "won 12 rosettes" }
+      ]
+    },
+    {
+      "id": "float",
+      "label": "Float",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "sunbeamfloat", "label": "Sunbeam Float", "phrase": "rode the Sunbeam Float", "refPhrase": "Sunbeam Float marcher" },
+        { "id": "meadowcart", "label": "Meadow Cart", "phrase": "rode the Meadow Cart", "refPhrase": "Meadow Cart marcher" },
+        { "id": "bramblewagon", "label": "Bramble Wagon", "phrase": "rode the Bramble Wagon", "refPhrase": "Bramble Wagon marcher" },
+        { "id": "ripplebarge", "label": "Ripple Barge", "phrase": "rode the Ripple Barge", "refPhrase": "Ripple Barge marcher" },
+        { "id": "comettrolley", "label": "Comet Trolley", "phrase": "rode the Comet Trolley", "refPhrase": "Comet Trolley marcher" },
+        { "id": "clovercoach", "label": "Clover Coach", "phrase": "rode the Clover Coach", "refPhrase": "Clover Coach marcher" }
+      ]
+    },
+    {
+      "id": "trick",
+      "label": "Trick",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "bow", "label": "the bow", "phrase": "performed the bow", "refPhrase": "bow performer" },
+        { "id": "spin", "label": "the spin", "phrase": "performed the spin", "refPhrase": "spin performer" },
+        { "id": "leap", "label": "the leap", "phrase": "performed the leap", "refPhrase": "leap performer" },
+        { "id": "wave", "label": "the wave", "phrase": "performed the wave", "refPhrase": "wave performer" },
+        { "id": "roll", "label": "the roll", "phrase": "performed the roll", "refPhrase": "roll performer" },
+        { "id": "salute", "label": "the salute", "phrase": "performed the salute", "refPhrase": "salute performer" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "rosette",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} won {delta} more rosettes than {b_ref}.",
+        "{a_ref} won {delta} more rosettes than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "rosette",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} won no fewer than {bound} rosettes.",
+        "{a_ref} won at least {bound} rosettes."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the card read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

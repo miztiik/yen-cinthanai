@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "cat-cafe",
+  "title": "The Cat Cafe",
+  "subjectNoun": "visitor",
+  "subjectCategory": "visitor",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A cozy afternoon at a cafe full of dozing cats. Anchor = visitor. order is glyph-backed by the drinks pack (value ids are pack slugs); nook and feline are text-only; stamp is the numeric axis (loyalty stamps) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (stamp/nook/feline).",
+  "narrativeTemplate": "Steam curls off the counter as {n} visitors settle in among the cushions and the dozing kittens, and {host} untangles whose afternoon was whose after a {mishap} scattered the loyalty cards.",
+  "flavorPools": {
+    "host": ["barista Wren", "old Barnaby Wallace", "the cafe host"],
+    "mishap": ["toppled stool", "dash across the rug", "draught from the door"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Mira'; 'attribute' -> 'the coffee sipper' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "visitor",
+      "label": "Visitor",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "mira", "label": "Mira" },
+        { "id": "tobias", "label": "Tobias" },
+        { "id": "anya", "label": "Anya" },
+        { "id": "rashid", "label": "Rashid" },
+        { "id": "lena", "label": "Lena" },
+        { "id": "bruno", "label": "Bruno" }
+      ]
+    },
+    {
+      "id": "order",
+      "label": "Order",
+      "kind": "nominal",
+      "glyphPack": "drinks",
+      "valuePool": [
+        { "id": "coffee", "label": "Coffee", "phrase": "ordered the coffee", "refPhrase": "coffee sipper" },
+        { "id": "tea", "label": "Tea", "phrase": "ordered the tea", "refPhrase": "tea sipper" },
+        { "id": "milk", "label": "Warm milk", "phrase": "ordered the warm milk", "refPhrase": "warm-milk sipper" },
+        { "id": "juice", "label": "Juice", "phrase": "ordered the juice", "refPhrase": "juice sipper" },
+        { "id": "soda", "label": "Soda", "phrase": "ordered the soda", "refPhrase": "soda sipper" },
+        { "id": "water", "label": "Water", "phrase": "ordered the water", "refPhrase": "water sipper" }
+      ]
+    },
+    {
+      "id": "stamp",
+      "label": "Stamps",
+      "kind": "numeric",
+      "unit": "stamps",
+      "valuePool": [
+        { "id": "stamp2", "label": "2 stamps", "magnitude": 2, "phrase": "collected 2 stamps" },
+        { "id": "stamp4", "label": "4 stamps", "magnitude": 4, "phrase": "collected 4 stamps" },
+        { "id": "stamp6", "label": "6 stamps", "magnitude": 6, "phrase": "collected 6 stamps" },
+        { "id": "stamp8", "label": "8 stamps", "magnitude": 8, "phrase": "collected 8 stamps" },
+        { "id": "stamp10", "label": "10 stamps", "magnitude": 10, "phrase": "collected 10 stamps" },
+        { "id": "stamp12", "label": "12 stamps", "magnitude": 12, "phrase": "collected 12 stamps" }
+      ]
+    },
+    {
+      "id": "nook",
+      "label": "Nook",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "windownook", "label": "Window Nook", "phrase": "settled at the Window Nook", "refPhrase": "Window Nook regular" },
+        { "id": "readingcorner", "label": "Reading Corner", "phrase": "settled at the Reading Corner", "refPhrase": "Reading Corner regular" },
+        { "id": "sunbeamledge", "label": "Sunbeam Ledge", "phrase": "settled at the Sunbeam Ledge", "refPhrase": "Sunbeam Ledge regular" },
+        { "id": "hearthseat", "label": "Hearth Seat", "phrase": "settled at the Hearth Seat", "refPhrase": "Hearth Seat regular" },
+        { "id": "gardenbench", "label": "Garden Bench", "phrase": "settled at the Garden Bench", "refPhrase": "Garden Bench regular" },
+        { "id": "loftperch", "label": "Loft Perch", "phrase": "settled at the Loft Perch", "refPhrase": "Loft Perch regular" }
+      ]
+    },
+    {
+      "id": "feline",
+      "label": "Feline",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "tabby", "label": "the tabby", "phrase": "cuddled the tabby", "refPhrase": "tabby cuddler" },
+        { "id": "tuxedo", "label": "the tuxedo", "phrase": "cuddled the tuxedo", "refPhrase": "tuxedo cuddler" },
+        { "id": "ginger", "label": "the ginger", "phrase": "cuddled the ginger", "refPhrase": "ginger cuddler" },
+        { "id": "calico", "label": "the calico", "phrase": "cuddled the calico", "refPhrase": "calico cuddler" },
+        { "id": "tortie", "label": "the tortie", "phrase": "cuddled the tortie", "refPhrase": "tortie cuddler" },
+        { "id": "grey", "label": "the grey", "phrase": "cuddled the grey", "refPhrase": "grey cuddler" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "stamp",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} collected {delta} more stamps than {b_ref}.",
+        "{a_ref} collected {delta} more stamps than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "stamp",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} collected no fewer than {bound} stamps.",
+        "{a_ref} collected at least {bound} stamps."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the tab read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

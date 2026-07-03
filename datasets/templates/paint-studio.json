@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "paint-studio",
+  "title": "The Paint Studio",
+  "subjectNoun": "painter",
+  "subjectCategory": "painter",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A light-mystery afternoon in a shared paint studio. Anchor = painter. paint is glyph-backed by the color pack (value ids are pack slugs); spot and subject are text-only; canvas is the numeric axis (canvases finished) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (canvas/spot/subject).",
+  "narrativeTemplate": "An unsigned piece turned up on the drying rack, so {host} studies the studio log to work out what each of the {n} painters made before a {mishap} scattered the loose sketches.",
+  "flavorPools": {
+    "host": ["old Maestro Corvi", "the studio steward", "curator Delacroix"],
+    "mishap": ["draught from the skylight", "knocked-over turpentine", "gust through the courtyard"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Remy'; 'attribute' -> 'the blue painter' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "painter",
+      "label": "Painter",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "remy", "label": "Remy" },
+        { "id": "saskia", "label": "Saskia" },
+        { "id": "gio", "label": "Gio" },
+        { "id": "elke", "label": "Elke" },
+        { "id": "basil", "label": "Basil" },
+        { "id": "mona", "label": "Mona" }
+      ]
+    },
+    {
+      "id": "paint",
+      "label": "Paint",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red", "phrase": "worked in red", "refPhrase": "red painter" },
+        { "id": "blue", "label": "Blue", "phrase": "worked in blue", "refPhrase": "blue painter" },
+        { "id": "green", "label": "Green", "phrase": "worked in green", "refPhrase": "green painter" },
+        { "id": "yellow", "label": "Yellow", "phrase": "worked in yellow", "refPhrase": "yellow painter" },
+        { "id": "orange", "label": "Orange", "phrase": "worked in orange", "refPhrase": "orange painter" },
+        { "id": "purple", "label": "Purple", "phrase": "worked in purple", "refPhrase": "purple painter" }
+      ]
+    },
+    {
+      "id": "canvas",
+      "label": "Canvases",
+      "kind": "numeric",
+      "unit": "canvases",
+      "valuePool": [
+        { "id": "canvas2", "label": "2 canvases", "magnitude": 2, "phrase": "finished 2 canvases" },
+        { "id": "canvas4", "label": "4 canvases", "magnitude": 4, "phrase": "finished 4 canvases" },
+        { "id": "canvas6", "label": "6 canvases", "magnitude": 6, "phrase": "finished 6 canvases" },
+        { "id": "canvas8", "label": "8 canvases", "magnitude": 8, "phrase": "finished 8 canvases" },
+        { "id": "canvas10", "label": "10 canvases", "magnitude": 10, "phrase": "finished 10 canvases" },
+        { "id": "canvas12", "label": "12 canvases", "magnitude": 12, "phrase": "finished 12 canvases" }
+      ]
+    },
+    {
+      "id": "spot",
+      "label": "Spot",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "northeasel", "label": "North Easel", "phrase": "set up at the North Easel", "refPhrase": "North Easel painter" },
+        { "id": "windoweasel", "label": "Window Easel", "phrase": "set up at the Window Easel", "refPhrase": "Window Easel painter" },
+        { "id": "cornereasel", "label": "Corner Easel", "phrase": "set up at the Corner Easel", "refPhrase": "Corner Easel painter" },
+        { "id": "lofteasel", "label": "Loft Easel", "phrase": "set up at the Loft Easel", "refPhrase": "Loft Easel painter" },
+        { "id": "gardeneasel", "label": "Garden Easel", "phrase": "set up at the Garden Easel", "refPhrase": "Garden Easel painter" },
+        { "id": "skylighteasel", "label": "Skylight Easel", "phrase": "set up at the Skylight Easel", "refPhrase": "Skylight Easel painter" }
+      ]
+    },
+    {
+      "id": "subject",
+      "label": "Subject",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "stilllife", "label": "Still Life", "phrase": "painted a Still Life", "refPhrase": "Still Life painter" },
+        { "id": "seascape", "label": "Seascape", "phrase": "painted a Seascape", "refPhrase": "Seascape painter" },
+        { "id": "portrait", "label": "Portrait", "phrase": "painted a Portrait", "refPhrase": "Portrait painter" },
+        { "id": "landscape", "label": "Landscape", "phrase": "painted a Landscape", "refPhrase": "Landscape painter" },
+        { "id": "abstract", "label": "Abstract", "phrase": "painted an Abstract", "refPhrase": "Abstract painter" },
+        { "id": "cityscape", "label": "Cityscape", "phrase": "painted a Cityscape", "refPhrase": "Cityscape painter" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "canvas",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} finished {delta} more canvases than {b_ref}.",
+        "{a_ref} finished {delta} more canvases than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "canvas",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} finished no fewer than {bound} canvases.",
+        "{a_ref} finished at least {bound} canvases."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the studio log read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
