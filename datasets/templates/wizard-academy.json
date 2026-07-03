@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "wizard-academy",
+  "title": "The Wizard Academy",
+  "subjectNoun": "apprentice",
+  "subjectCategory": "apprentice",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content, not transcribed from any source). Whimsical wizard academy. Anchor = apprentice. familiar -> creatures glyph pack; spell and house are text-only; rank is the numeric axis (class standing, lower is better). The narrativeTemplate is setting flavor only - it never names a sliced category (rank/house/familiar), so a lower tier that drops those axes never reads a premise it cannot fulfil. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "Chalk runes still glow on the tower walls as {n} apprentices file into the hall, and {archmage} settles who studies what after a {mishap} scrambled the enrolment scrolls.",
+  "flavorPools": {
+    "archmage": ["old Thistlewood", "Mistress Yara", "the archmage"],
+    "mishap": ["flicker of the sconces", "sudden draught", "toppled inkpot"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Wren'; 'attribute' -> 'the levitation caster' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "apprentice",
+      "label": "Apprentice",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "wren", "label": "Wren" },
+        { "id": "bram", "label": "Bram" },
+        { "id": "sable", "label": "Sable" },
+        { "id": "finn", "label": "Finn" },
+        { "id": "lux", "label": "Lux" },
+        { "id": "opal", "label": "Opal" }
+      ]
+    },
+    {
+      "id": "spell",
+      "label": "Spell",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "levitation", "label": "Levitation", "phrase": "mastered levitation", "refPhrase": "levitation caster" },
+        { "id": "fireward", "label": "Fireward", "phrase": "mastered fireward", "refPhrase": "fireward caster" },
+        { "id": "mistcall", "label": "Mistcall", "phrase": "mastered mistcall", "refPhrase": "mistcall caster" },
+        { "id": "ironskin", "label": "Ironskin", "phrase": "mastered ironskin", "refPhrase": "ironskin caster" },
+        { "id": "starmap", "label": "Starmap", "phrase": "mastered starmap", "refPhrase": "starmap caster" },
+        { "id": "beastspeech", "label": "Beastspeech", "phrase": "mastered beastspeech", "refPhrase": "beastspeech caster" }
+      ]
+    },
+    {
+      "id": "rank",
+      "label": "Rank",
+      "kind": "numeric",
+      "unit": "place",
+      "valuePool": [
+        { "id": "rank1", "label": "1st", "magnitude": 1, "phrase": "ranked 1st" },
+        { "id": "rank2", "label": "2nd", "magnitude": 2, "phrase": "ranked 2nd" },
+        { "id": "rank3", "label": "3rd", "magnitude": 3, "phrase": "ranked 3rd" },
+        { "id": "rank4", "label": "4th", "magnitude": 4, "phrase": "ranked 4th" },
+        { "id": "rank5", "label": "5th", "magnitude": 5, "phrase": "ranked 5th" },
+        { "id": "rank6", "label": "6th", "magnitude": 6, "phrase": "ranked 6th" }
+      ]
+    },
+    {
+      "id": "house",
+      "label": "House",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "emberhall", "label": "Emberhall", "phrase": "belonged to Emberhall", "refPhrase": "one from Emberhall" },
+        { "id": "tidewatch", "label": "Tidewatch", "phrase": "belonged to Tidewatch", "refPhrase": "one from Tidewatch" },
+        { "id": "stormcrest", "label": "Stormcrest", "phrase": "belonged to Stormcrest", "refPhrase": "one from Stormcrest" },
+        { "id": "thornwood", "label": "Thornwood", "phrase": "belonged to Thornwood", "refPhrase": "one from Thornwood" },
+        { "id": "duskmoor", "label": "Duskmoor", "phrase": "belonged to Duskmoor", "refPhrase": "one from Duskmoor" },
+        { "id": "sunspire", "label": "Sunspire", "phrase": "belonged to Sunspire", "refPhrase": "one from Sunspire" }
+      ]
+    },
+    {
+      "id": "familiar",
+      "label": "Familiar",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "owl", "label": "Owl", "phrase": "kept the owl", "refPhrase": "one with the owl" },
+        { "id": "cat", "label": "Cat", "phrase": "kept the cat", "refPhrase": "one with the cat" },
+        { "id": "frog", "label": "Frog", "phrase": "kept the frog", "refPhrase": "one with the frog" },
+        { "id": "mouse", "label": "Mouse", "phrase": "kept the mouse", "refPhrase": "one with the mouse" },
+        { "id": "spider", "label": "Spider", "phrase": "kept the spider", "refPhrase": "one with the spider" },
+        { "id": "sparrow", "label": "Sparrow", "phrase": "kept the sparrow", "refPhrase": "one with the sparrow" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "rank",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} ranked {delta} places under {b_ref}.",
+        "{a_ref} placed {delta} rungs below {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "rank",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} placed no higher than {bound}.",
+        "{a_ref} ranked {bound} or lower."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and learned just one.",
+        "For {a_ref} it came to {x_label} or {y_label} - only one took hold."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

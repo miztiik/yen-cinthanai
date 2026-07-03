@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "wildlife-safari",
+  "title": "The Dawn Safari",
+  "subjectNoun": "ranger",
+  "subjectCategory": "ranger",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content, not transcribed from any source). Whimsical dawn safari. Anchor = ranger. animal -> creatures glyph pack; vehicle -> transport glyph pack; zone is text-only; sighting is the numeric axis (a morning count). The narrativeTemplate is setting flavor only - it never names a sliced category (sighting/zone/vehicle), so a lower tier that drops those axes never reads a premise it cannot fulfil. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "Dawn breaks pink over the savanna as {n} rangers gather at the gate for the morning drive, and {warden} sorts the route after a {mishap} scattered the field notes.",
+  "flavorPools": {
+    "warden": ["old Mbeki", "Ranger Faye", "the head warden"],
+    "mishap": ["dawn mist", "stalled engine", "swirl of dust"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Kaia'; 'attribute' -> 'the elephant tracker' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "ranger",
+      "label": "Ranger",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "kaia", "label": "Kaia" },
+        { "id": "juma", "label": "Juma" },
+        { "id": "petra", "label": "Petra" },
+        { "id": "bo", "label": "Bo" },
+        { "id": "nia", "label": "Nia" },
+        { "id": "arlo", "label": "Arlo" }
+      ]
+    },
+    {
+      "id": "animal",
+      "label": "Animal",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "elephant", "label": "Elephant", "phrase": "tracked the elephant", "refPhrase": "elephant tracker" },
+        { "id": "lion", "label": "Lion", "phrase": "tracked the lion", "refPhrase": "lion tracker" },
+        { "id": "giraffe", "label": "Giraffe", "phrase": "tracked the giraffe", "refPhrase": "giraffe tracker" },
+        { "id": "monkey", "label": "Monkey", "phrase": "tracked the monkey", "refPhrase": "monkey tracker" },
+        { "id": "deer", "label": "Deer", "phrase": "tracked the deer", "refPhrase": "deer tracker" },
+        { "id": "kangaroo", "label": "Kangaroo", "phrase": "tracked the kangaroo", "refPhrase": "kangaroo tracker" }
+      ]
+    },
+    {
+      "id": "sighting",
+      "label": "Sighting",
+      "kind": "numeric",
+      "unit": "sightings",
+      "valuePool": [
+        { "id": "see2", "label": "2", "magnitude": 2, "phrase": "logged 2 sightings" },
+        { "id": "see3", "label": "3", "magnitude": 3, "phrase": "logged 3 sightings" },
+        { "id": "see5", "label": "5", "magnitude": 5, "phrase": "logged 5 sightings" },
+        { "id": "see7", "label": "7", "magnitude": 7, "phrase": "logged 7 sightings" },
+        { "id": "see9", "label": "9", "magnitude": 9, "phrase": "logged 9 sightings" },
+        { "id": "see12", "label": "12", "magnitude": 12, "phrase": "logged 12 sightings" }
+      ]
+    },
+    {
+      "id": "zone",
+      "label": "Zone",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "acacia", "label": "Acacia Flats", "phrase": "patrolled the Acacia Flats", "refPhrase": "one on the Acacia Flats" },
+        { "id": "riverbend", "label": "Riverbend", "phrase": "patrolled Riverbend", "refPhrase": "one on Riverbend" },
+        { "id": "kopje", "label": "Kopje Ridge", "phrase": "patrolled Kopje Ridge", "refPhrase": "one on Kopje Ridge" },
+        { "id": "baobab", "label": "Baobab Grove", "phrase": "patrolled the Baobab Grove", "refPhrase": "one on the Baobab Grove" },
+        { "id": "saltpan", "label": "Salt Pan", "phrase": "patrolled the Salt Pan", "refPhrase": "one on the Salt Pan" },
+        { "id": "fighollow", "label": "Fig Hollow", "phrase": "patrolled Fig Hollow", "refPhrase": "one on Fig Hollow" }
+      ]
+    },
+    {
+      "id": "vehicle",
+      "label": "Vehicle",
+      "kind": "nominal",
+      "glyphPack": "transport",
+      "valuePool": [
+        { "id": "jeep", "label": "Jeep", "phrase": "drove the jeep", "refPhrase": "one in the jeep" },
+        { "id": "truck", "label": "Truck", "phrase": "drove the truck", "refPhrase": "one in the truck" },
+        { "id": "lorry", "label": "Lorry", "phrase": "drove the lorry", "refPhrase": "one in the lorry" },
+        { "id": "motorcycle", "label": "Motorcycle", "phrase": "rode the motorcycle", "refPhrase": "one on the motorcycle" },
+        { "id": "bicycle", "label": "Bicycle", "phrase": "rode the bicycle", "refPhrase": "one on the bicycle" },
+        { "id": "helicopter", "label": "Helicopter", "phrase": "took the helicopter", "refPhrase": "one in the helicopter" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "sighting",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} logged {delta} more sightings than {b_ref}.",
+        "{a_ref}'s tally beat {b_ref}'s by {delta} sightings."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "sighting",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} logged at least {bound} sightings.",
+        "{a_ref} came back with no fewer than {bound} sightings."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and chased just one.",
+        "For {a_ref} it came to {x_label} or {y_label} - only one panned out."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

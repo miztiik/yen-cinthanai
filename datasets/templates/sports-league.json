@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "sports-league",
+  "title": "The Sunday League",
+  "subjectNoun": "team",
+  "subjectCategory": "team",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content, not transcribed from any source). Witty amateur sports league. Anchor = team. sport -> sports glyph pack; mascot -> creatures glyph pack; city is text-only; rank is the numeric axis (league standing, lower is better). The narrativeTemplate is setting flavor only - it never names a sliced category (rank/city/mascot), so a lower tier that drops those axes never reads a premise it cannot fulfil. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "The floodlights blaze over the county ground as {n} teams jog out for the season opener, and {commish} sorts the fixtures after a {mishap} jumbled the team sheets.",
+  "flavorPools": {
+    "commish": ["old Delgado", "Coach Bex", "the league commissioner"],
+    "mishap": ["floodlight flicker", "sudden downpour", "misplaced roster"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Rovers'; 'attribute' -> 'the tennis side' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "team",
+      "label": "Team",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "rovers", "label": "Rovers" },
+        { "id": "comets", "label": "Comets" },
+        { "id": "otters", "label": "Otters" },
+        { "id": "pioneers", "label": "Pioneers" },
+        { "id": "harriers", "label": "Harriers" },
+        { "id": "bluejays", "label": "Blue Jays" }
+      ]
+    },
+    {
+      "id": "sport",
+      "label": "Sport",
+      "kind": "nominal",
+      "glyphPack": "sports",
+      "valuePool": [
+        { "id": "tennis", "label": "Tennis", "phrase": "played tennis", "refPhrase": "tennis side" },
+        { "id": "hockey", "label": "Hockey", "phrase": "played hockey", "refPhrase": "hockey side" },
+        { "id": "golf", "label": "Golf", "phrase": "played golf", "refPhrase": "golf side" },
+        { "id": "rowing", "label": "Rowing", "phrase": "took up rowing", "refPhrase": "rowing crew" },
+        { "id": "baseball", "label": "Baseball", "phrase": "played baseball", "refPhrase": "baseball side" },
+        { "id": "badminton", "label": "Badminton", "phrase": "played badminton", "refPhrase": "badminton side" }
+      ]
+    },
+    {
+      "id": "rank",
+      "label": "Rank",
+      "kind": "numeric",
+      "unit": "place",
+      "valuePool": [
+        { "id": "rank1", "label": "1st", "magnitude": 1, "phrase": "sat 1st" },
+        { "id": "rank2", "label": "2nd", "magnitude": 2, "phrase": "sat 2nd" },
+        { "id": "rank3", "label": "3rd", "magnitude": 3, "phrase": "sat 3rd" },
+        { "id": "rank4", "label": "4th", "magnitude": 4, "phrase": "sat 4th" },
+        { "id": "rank5", "label": "5th", "magnitude": 5, "phrase": "sat 5th" },
+        { "id": "rank6", "label": "6th", "magnitude": 6, "phrase": "sat 6th" }
+      ]
+    },
+    {
+      "id": "city",
+      "label": "City",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "brightwater", "label": "Brightwater", "phrase": "hailed from Brightwater", "refPhrase": "Brightwater outfit" },
+        { "id": "millbrook", "label": "Millbrook", "phrase": "hailed from Millbrook", "refPhrase": "Millbrook outfit" },
+        { "id": "ashford", "label": "Ashford", "phrase": "hailed from Ashford", "refPhrase": "Ashford outfit" },
+        { "id": "kettleby", "label": "Kettleby", "phrase": "hailed from Kettleby", "refPhrase": "Kettleby outfit" },
+        { "id": "danforth", "label": "Danforth", "phrase": "hailed from Danforth", "refPhrase": "Danforth outfit" },
+        { "id": "seabridge", "label": "Seabridge", "phrase": "hailed from Seabridge", "refPhrase": "Seabridge outfit" }
+      ]
+    },
+    {
+      "id": "mascot",
+      "label": "Mascot",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "tiger", "label": "Tiger", "phrase": "cheered on the tiger", "refPhrase": "tiger crew" },
+        { "id": "lion", "label": "Lion", "phrase": "cheered on the lion", "refPhrase": "lion crew" },
+        { "id": "bear", "label": "Bear", "phrase": "cheered on the bear", "refPhrase": "bear crew" },
+        { "id": "fox", "label": "Fox", "phrase": "cheered on the fox", "refPhrase": "fox crew" },
+        { "id": "deer", "label": "Deer", "phrase": "cheered on the deer", "refPhrase": "deer crew" },
+        { "id": "owl", "label": "Owl", "phrase": "cheered on the owl", "refPhrase": "owl crew" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one that {b_phrase} was {a_ref}.",
+        "It was {a_ref} that {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one that {b_phrase}.",
+        "The one that {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} that {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "rank",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} finished {delta} places below {b_ref}.",
+        "{a_ref} sat {delta} rungs under {b_ref} in the table."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "rank",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} finished no higher than {bound} place.",
+        "{a_ref} placed {bound} or lower."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and fielded just one.",
+        "For {a_ref} it came to {x_label} or {y_label} - only one stuck."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one that {b_phrase}."
+      ]
+    }
+  }
+}

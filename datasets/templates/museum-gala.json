@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "museum-gala",
+  "title": "The Museum Gala",
+  "subjectNoun": "curator",
+  "subjectCategory": "curator",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content, not transcribed from any source). Light-mystery museum gala. Anchor = curator. exhibit, wing and artifact are text-only (no pack fits); hour is the numeric axis (unveiling time, on the evening clock). The narrativeTemplate is setting flavor only - it never names a sliced category (hour/wing/artifact), so a lower tier that drops those axes never reads a premise it cannot fulfil. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "The evening gala fills the marble atrium as {n} curators drift between the cases, and {patron} sorts out who brought which piece after a {mishap} shuffled the loan cards.",
+  "flavorPools": {
+    "patron": ["Lady Ashgrove", "Mr. Okafor", "the museum patron"],
+    "mishap": ["power flicker", "dropped catalogue", "draught through the atrium"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Elena'; 'attribute' -> 'the one with the meteorite' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "curator",
+      "label": "Curator",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "elena", "label": "Elena" },
+        { "id": "raj", "label": "Raj" },
+        { "id": "yuki", "label": "Yuki" },
+        { "id": "omar", "label": "Omar" },
+        { "id": "nadia", "label": "Nadia" },
+        { "id": "theo", "label": "Theo" }
+      ]
+    },
+    {
+      "id": "exhibit",
+      "label": "Exhibit",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "meteorite", "label": "Meteorite", "phrase": "unveiled the meteorite", "refPhrase": "one with the meteorite" },
+        { "id": "mummy", "label": "Gilded mummy", "phrase": "unveiled the gilded mummy", "refPhrase": "one with the gilded mummy" },
+        { "id": "astrolabe", "label": "Astrolabe", "phrase": "unveiled the astrolabe", "refPhrase": "one with the astrolabe" },
+        { "id": "tapestry", "label": "Tapestry", "phrase": "unveiled the tapestry", "refPhrase": "one with the tapestry" },
+        { "id": "fossil", "label": "Fossil", "phrase": "unveiled the fossil", "refPhrase": "one with the fossil" },
+        { "id": "orrery", "label": "Orrery", "phrase": "unveiled the orrery", "refPhrase": "one with the orrery" }
+      ]
+    },
+    {
+      "id": "hour",
+      "label": "Hour",
+      "kind": "numeric",
+      "unit": "o'clock",
+      "valuePool": [
+        { "id": "hr6", "label": "6 pm", "magnitude": 6, "phrase": "unveiled at 6" },
+        { "id": "hr7", "label": "7 pm", "magnitude": 7, "phrase": "unveiled at 7" },
+        { "id": "hr8", "label": "8 pm", "magnitude": 8, "phrase": "unveiled at 8" },
+        { "id": "hr9", "label": "9 pm", "magnitude": 9, "phrase": "unveiled at 9" },
+        { "id": "hr10", "label": "10 pm", "magnitude": 10, "phrase": "unveiled at 10" },
+        { "id": "hr11", "label": "11 pm", "magnitude": 11, "phrase": "unveiled at 11" }
+      ]
+    },
+    {
+      "id": "wing",
+      "label": "Wing",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "antiquities", "label": "Antiquities", "phrase": "set up in Antiquities", "refPhrase": "one in Antiquities" },
+        { "id": "moderns", "label": "Moderns", "phrase": "set up in the Moderns", "refPhrase": "one in the Moderns" },
+        { "id": "naturalia", "label": "Naturalia", "phrase": "set up in Naturalia", "refPhrase": "one in Naturalia" },
+        { "id": "cartography", "label": "Cartography", "phrase": "set up in Cartography", "refPhrase": "one in Cartography" },
+        { "id": "sculpture", "label": "Sculpture", "phrase": "set up in Sculpture", "refPhrase": "one in Sculpture" },
+        { "id": "textiles", "label": "Textiles", "phrase": "set up in Textiles", "refPhrase": "one in Textiles" }
+      ]
+    },
+    {
+      "id": "artifact",
+      "label": "Artifact",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "scarab", "label": "Jade scarab", "phrase": "guarded the jade scarab", "refPhrase": "one with the jade scarab" },
+        { "id": "chalice", "label": "Silver chalice", "phrase": "guarded the silver chalice", "refPhrase": "one with the silver chalice" },
+        { "id": "diadem", "label": "Diadem", "phrase": "guarded the diadem", "refPhrase": "one with the diadem" },
+        { "id": "codex", "label": "Codex", "phrase": "guarded the codex", "refPhrase": "one with the codex" },
+        { "id": "amulet", "label": "Amber amulet", "phrase": "guarded the amber amulet", "refPhrase": "one with the amber amulet" },
+        { "id": "sextant", "label": "Brass sextant", "phrase": "guarded the brass sextant", "refPhrase": "one with the brass sextant" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "hour",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref}'s slot fell {delta} hours after {b_ref}'s.",
+        "{a_ref} unveiled {delta} hours later than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "hour",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} unveiled no earlier than {bound} o'clock.",
+        "{a_ref} went on at {bound} o'clock or later."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and chose just one.",
+        "For {a_ref} it came to {x_label} or {y_label} - only one made the floor."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

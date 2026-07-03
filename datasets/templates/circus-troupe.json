@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "circus-troupe",
+  "title": "The Circus Troupe",
+  "subjectNoun": "performer",
+  "subjectCategory": "performer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content, not transcribed from any source). Whimsical big-top circus. Anchor = performer. costume -> clothes glyph pack; act and ring are text-only; showtime is the numeric axis (evening cue on the clock). The narrativeTemplate is setting flavor only - it never names a sliced category (showtime/ring/costume), so a lower tier that drops those axes never reads a premise it cannot fulfil. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "The big top glows for opening night as {n} performers stretch backstage, and {compere} settles the running order after a {mishap} sent the props tumbling.",
+  "flavorPools": {
+    "compere": ["old Barnaby", "Signora Rosa", "the compere"],
+    "mishap": ["burst balloon", "gust of confetti", "toppled prop"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Juno'; 'attribute' -> 'the trapeze artist' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "performer",
+      "label": "Performer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "juno", "label": "Juno" },
+        { "id": "pip", "label": "Pip" },
+        { "id": "esme", "label": "Esme" },
+        { "id": "rex", "label": "Rex" },
+        { "id": "coco", "label": "Coco" },
+        { "id": "vito", "label": "Vito" }
+      ]
+    },
+    {
+      "id": "act",
+      "label": "Act",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "trapeze", "label": "Trapeze", "phrase": "ran the trapeze act", "refPhrase": "trapeze artist" },
+        { "id": "juggling", "label": "Juggling", "phrase": "ran the juggling act", "refPhrase": "juggling artist" },
+        { "id": "tightrope", "label": "Tightrope", "phrase": "ran the tightrope act", "refPhrase": "tightrope artist" },
+        { "id": "acrobatics", "label": "Acrobatics", "phrase": "ran the acrobatics act", "refPhrase": "acrobatics artist" },
+        { "id": "clowning", "label": "Clowning", "phrase": "ran the clowning act", "refPhrase": "clowning artist" },
+        { "id": "magic", "label": "Magic", "phrase": "ran the magic act", "refPhrase": "magic artist" }
+      ]
+    },
+    {
+      "id": "showtime",
+      "label": "Showtime",
+      "kind": "numeric",
+      "unit": "o'clock",
+      "valuePool": [
+        { "id": "cue6", "label": "6 pm", "magnitude": 6, "phrase": "went on at 6" },
+        { "id": "cue7", "label": "7 pm", "magnitude": 7, "phrase": "went on at 7" },
+        { "id": "cue8", "label": "8 pm", "magnitude": 8, "phrase": "went on at 8" },
+        { "id": "cue9", "label": "9 pm", "magnitude": 9, "phrase": "went on at 9" },
+        { "id": "cue10", "label": "10 pm", "magnitude": 10, "phrase": "went on at 10" },
+        { "id": "cue11", "label": "11 pm", "magnitude": 11, "phrase": "went on at 11" }
+      ]
+    },
+    {
+      "id": "ring",
+      "label": "Ring",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "center", "label": "Center ring", "phrase": "performed in the Center ring", "refPhrase": "one in the Center ring" },
+        { "id": "north", "label": "North ring", "phrase": "performed in the North ring", "refPhrase": "one in the North ring" },
+        { "id": "south", "label": "South ring", "phrase": "performed in the South ring", "refPhrase": "one in the South ring" },
+        { "id": "amber", "label": "Amber ring", "phrase": "performed in the Amber ring", "refPhrase": "one in the Amber ring" },
+        { "id": "ruby", "label": "Ruby ring", "phrase": "performed in the Ruby ring", "refPhrase": "one in the Ruby ring" },
+        { "id": "grand", "label": "Grand ring", "phrase": "performed in the Grand ring", "refPhrase": "one in the Grand ring" }
+      ]
+    },
+    {
+      "id": "costume",
+      "label": "Costume",
+      "kind": "nominal",
+      "glyphPack": "clothes",
+      "valuePool": [
+        { "id": "mansuit", "label": "Tailcoat", "phrase": "wore the tailcoat", "refPhrase": "one in the tailcoat" },
+        { "id": "womanpartydress", "label": "Spangled dress", "phrase": "wore the spangled dress", "refPhrase": "one in the spangled dress" },
+        { "id": "manhat", "label": "Top hat", "phrase": "wore the top hat", "refPhrase": "one in the top hat" },
+        { "id": "womanhat", "label": "Feathered hat", "phrase": "wore the feathered hat", "refPhrase": "one in the feathered hat" },
+        { "id": "mantie", "label": "Polka bow tie", "phrase": "wore the polka bow tie", "refPhrase": "one in the polka bow tie" },
+        { "id": "womandress", "label": "Harlequin gown", "phrase": "wore the harlequin gown", "refPhrase": "one in the harlequin gown" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "showtime",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} went on {delta} hours after {b_ref}.",
+        "{a_ref} took the stage {delta} hours later than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "showtime",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} performed no earlier than {bound} o'clock.",
+        "{a_ref} went on at {bound} o'clock or later."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and took just one.",
+        "For {a_ref} it came to {x_label} or {y_label} - only one made the bill."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

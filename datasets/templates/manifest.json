@@ -97,6 +97,86 @@
       "tone": "whimsical",
       "kind": "carnival",
       "status": "live"
+    },
+    {
+      "id": "detective-agency",
+      "file": "detective-agency.json",
+      "title": "The Detective Agency",
+      "tone": "light-mystery",
+      "kind": "noir",
+      "status": "live"
+    },
+    {
+      "id": "night-train",
+      "file": "night-train.json",
+      "title": "The Night Train",
+      "tone": "light-mystery",
+      "kind": "railway",
+      "status": "live"
+    },
+    {
+      "id": "sports-league",
+      "file": "sports-league.json",
+      "title": "The Sunday League",
+      "tone": "witty",
+      "kind": "stadium",
+      "status": "live"
+    },
+    {
+      "id": "museum-gala",
+      "file": "museum-gala.json",
+      "title": "The Museum Gala",
+      "tone": "light-mystery",
+      "kind": "museum",
+      "status": "live"
+    },
+    {
+      "id": "startup-hackathon",
+      "file": "startup-hackathon.json",
+      "title": "The All-Night Hackathon",
+      "tone": "witty",
+      "kind": "tech",
+      "status": "live"
+    },
+    {
+      "id": "wildlife-safari",
+      "file": "wildlife-safari.json",
+      "title": "The Dawn Safari",
+      "tone": "whimsical",
+      "kind": "savanna",
+      "status": "live"
+    },
+    {
+      "id": "wizard-academy",
+      "file": "wizard-academy.json",
+      "title": "The Wizard Academy",
+      "tone": "whimsical",
+      "kind": "fantasy",
+      "status": "live"
+    },
+    {
+      "id": "circus-troupe",
+      "file": "circus-troupe.json",
+      "title": "The Circus Troupe",
+      "tone": "whimsical",
+      "kind": "bigtop",
+      "status": "live"
+    },
+    {
+      "id": "aquarium-night",
+      "file": "aquarium-night.json",
+      "title": "The Aquarium After Hours",
+      "tone": "cozy",
+      "kind": "aquarium",
+      "status": "live"
+    },
+    {
+      "id": "library-hush",
+      "file": "library-hush.json",
+      "title": "The Library at Closing",
+      "tone": "light-mystery",
+      "kind": "library",
+      "status": "live"
     }
   ]
 }

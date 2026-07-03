@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "library-hush",
+  "title": "The Library at Closing",
+  "subjectNoun": "reader",
+  "subjectCategory": "reader",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content, not transcribed from any source). Light-mystery library. Anchor = reader. book, shelf and bookmark are text-only (no pack fits); due is the numeric axis (days until the book is due back). The narrativeTemplate is setting flavor only - it never names a sliced category (due/shelf/bookmark), so a lower tier that drops those axes never reads a premise it cannot fulfil. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "The reading room settles into its closing hush as {n} readers linger among the stacks, and {librarian} works out who borrowed what after a {mishap} toppled the returns cart.",
+  "flavorPools": {
+    "librarian": ["old Fenwick", "Miss Aparna", "the head librarian"],
+    "mishap": ["flickering lamp", "dropped stack", "gust from the vent"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Cleo'; 'attribute' -> 'the one reading The Blue Atlas' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "reader",
+      "label": "Reader",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "cleo", "label": "Cleo" },
+        { "id": "amos", "label": "Amos" },
+        { "id": "vera", "label": "Vera" },
+        { "id": "raf", "label": "Raf" },
+        { "id": "nell", "label": "Nell" },
+        { "id": "otis", "label": "Otis" }
+      ]
+    },
+    {
+      "id": "book",
+      "label": "Book",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "atlas", "label": "The Blue Atlas", "phrase": "checked out The Blue Atlas", "refPhrase": "one reading The Blue Atlas" },
+        { "id": "almanac", "label": "The Wild Almanac", "phrase": "checked out The Wild Almanac", "refPhrase": "one reading The Wild Almanac" },
+        { "id": "ledger", "label": "The Ghost Ledger", "phrase": "checked out The Ghost Ledger", "refPhrase": "one reading The Ghost Ledger" },
+        { "id": "diaries", "label": "The Coral Diaries", "phrase": "checked out The Coral Diaries", "refPhrase": "one reading The Coral Diaries" },
+        { "id": "sonnets", "label": "The Iron Sonnets", "phrase": "checked out The Iron Sonnets", "refPhrase": "one reading The Iron Sonnets" },
+        { "id": "moons", "label": "The Paper Moons", "phrase": "checked out The Paper Moons", "refPhrase": "one reading The Paper Moons" }
+      ]
+    },
+    {
+      "id": "due",
+      "label": "Due",
+      "kind": "numeric",
+      "unit": "days",
+      "valuePool": [
+        { "id": "due3", "label": "3 d", "magnitude": 3, "phrase": "is due in 3 days" },
+        { "id": "due5", "label": "5 d", "magnitude": 5, "phrase": "is due in 5 days" },
+        { "id": "due7", "label": "7 d", "magnitude": 7, "phrase": "is due in 7 days" },
+        { "id": "due10", "label": "10 d", "magnitude": 10, "phrase": "is due in 10 days" },
+        { "id": "due14", "label": "14 d", "magnitude": 14, "phrase": "is due in 14 days" },
+        { "id": "due21", "label": "21 d", "magnitude": 21, "phrase": "is due in 21 days" }
+      ]
+    },
+    {
+      "id": "shelf",
+      "label": "Shelf",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "history", "label": "History", "phrase": "filed under History", "refPhrase": "one at History" },
+        { "id": "poetry", "label": "Poetry", "phrase": "filed under Poetry", "refPhrase": "one at Poetry" },
+        { "id": "voyages", "label": "Voyages", "phrase": "filed under Voyages", "refPhrase": "one at Voyages" },
+        { "id": "botany", "label": "Botany", "phrase": "filed under Botany", "refPhrase": "one at Botany" },
+        { "id": "ciphers", "label": "Ciphers", "phrase": "filed under Ciphers", "refPhrase": "one at Ciphers" },
+        { "id": "maps", "label": "Maps", "phrase": "filed under Maps", "refPhrase": "one at Maps" }
+      ]
+    },
+    {
+      "id": "bookmark",
+      "label": "Bookmark",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "ribbon", "label": "Red ribbon", "phrase": "left the red ribbon", "refPhrase": "one with the red ribbon" },
+        { "id": "leaf", "label": "Pressed leaf", "phrase": "left the pressed leaf", "refPhrase": "one with the pressed leaf" },
+        { "id": "clip", "label": "Brass clip", "phrase": "left the brass clip", "refPhrase": "one with the brass clip" },
+        { "id": "crane", "label": "Paper crane", "phrase": "left the paper crane", "refPhrase": "one with the paper crane" },
+        { "id": "tassel", "label": "Silk tassel", "phrase": "left the silk tassel", "refPhrase": "one with the silk tassel" },
+        { "id": "postcard", "label": "Old postcard", "phrase": "left the old postcard", "refPhrase": "one with the old postcard" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "due",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref}'s book is due {delta} days after {b_ref}'s.",
+        "{a_ref} has {delta} more days than {b_ref} before returning it."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "due",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref}'s book is not due for at least {bound} days.",
+        "{a_ref} has {bound} days or more before it is due."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and took just one.",
+        "For {a_ref} it came to {x_label} or {y_label} - only one, in the end."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
