@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "cave-expedition",
+  "title": "The Cave Expedition",
+  "subjectNoun": "caver",
+  "subjectCategory": "caver",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A careful survey deep in a limestone cave system - a quiet who-did-what in the dark. Anchor = caver. morsel is glyph-backed by the food pack (value ids are pack slugs); passage and find are text-only; chamber is the numeric axis (chambers explored) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (chamber/passage/find).",
+  "narrativeTemplate": "Head-torches bob in the dark and every drip echoes off the stone as {n} cavers rope down into the cold, and {host} pieces together whose route was whose after a {mishap} smudged the survey notebook.",
+  "flavorPools": {
+    "host": ["Lead Caver Odette", "old Gus", "the survey chief"],
+    "mishap": ["falling pebble", "flickering lamp", "sudden draught"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Elena'; 'attribute' -> 'the cookie eater' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "caver",
+      "label": "Caver",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "elena", "label": "Elena" },
+        { "id": "bruno", "label": "Bruno" },
+        { "id": "sana", "label": "Sana" },
+        { "id": "milo", "label": "Milo" },
+        { "id": "farah", "label": "Farah" },
+        { "id": "otto", "label": "Otto" }
+      ]
+    },
+    {
+      "id": "morsel",
+      "label": "Morsel",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "cookie", "label": "Cookie", "phrase": "snacked on the cookie", "refPhrase": "cookie eater" },
+        { "id": "cheese", "label": "Cheese", "phrase": "snacked on the cheese", "refPhrase": "cheese eater" },
+        { "id": "chocolate", "label": "Chocolate", "phrase": "snacked on the chocolate", "refPhrase": "chocolate eater" },
+        { "id": "egg", "label": "Boiled egg", "phrase": "snacked on the boiled egg", "refPhrase": "boiled-egg eater" },
+        { "id": "toast", "label": "Toast", "phrase": "snacked on the toast", "refPhrase": "toast eater" },
+        { "id": "bread", "label": "Bread", "phrase": "snacked on the bread", "refPhrase": "bread eater" }
+      ]
+    },
+    {
+      "id": "chamber",
+      "label": "Chamber",
+      "kind": "numeric",
+      "unit": "chambers",
+      "valuePool": [
+        { "id": "chamber2", "label": "2 chambers", "magnitude": 2, "phrase": "explored 2 chambers" },
+        { "id": "chamber4", "label": "4 chambers", "magnitude": 4, "phrase": "explored 4 chambers" },
+        { "id": "chamber6", "label": "6 chambers", "magnitude": 6, "phrase": "explored 6 chambers" },
+        { "id": "chamber8", "label": "8 chambers", "magnitude": 8, "phrase": "explored 8 chambers" },
+        { "id": "chamber10", "label": "10 chambers", "magnitude": 10, "phrase": "explored 10 chambers" },
+        { "id": "chamber12", "label": "12 chambers", "magnitude": 12, "phrase": "explored 12 chambers" }
+      ]
+    },
+    {
+      "id": "passage",
+      "label": "Passage",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "battunnel", "label": "The Bat Tunnel", "phrase": "crawled through the Bat Tunnel", "refPhrase": "Bat Tunnel caver" },
+        { "id": "crystalhall", "label": "The Crystal Hall", "phrase": "crawled through the Crystal Hall", "refPhrase": "Crystal Hall caver" },
+        { "id": "narrows", "label": "The Narrows", "phrase": "crawled through the Narrows", "refPhrase": "Narrows caver" },
+        { "id": "echovault", "label": "The Echo Vault", "phrase": "crawled through the Echo Vault", "refPhrase": "Echo Vault caver" },
+        { "id": "dripstone", "label": "The Dripstone", "phrase": "crawled through the Dripstone", "refPhrase": "Dripstone caver" },
+        { "id": "deepshaft", "label": "The Deep Shaft", "phrase": "crawled through the Deep Shaft", "refPhrase": "Deep Shaft caver" }
+      ]
+    },
+    {
+      "id": "find",
+      "label": "Find",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "fossil", "label": "A fossil", "phrase": "brought back a fossil", "refPhrase": "fossil finder" },
+        { "id": "flowstone", "label": "A flowstone", "phrase": "brought back a flowstone", "refPhrase": "flowstone finder" },
+        { "id": "oldlantern", "label": "An old lantern", "phrase": "brought back an old lantern", "refPhrase": "old-lantern finder" },
+        { "id": "cavepearl", "label": "A cave pearl", "phrase": "brought back a cave pearl", "refPhrase": "cave-pearl finder" },
+        { "id": "shell", "label": "A fossil shell", "phrase": "brought back a fossil shell", "refPhrase": "fossil-shell finder" },
+        { "id": "runestone", "label": "A rune stone", "phrase": "brought back a rune stone", "refPhrase": "rune-stone finder" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "chamber",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} explored {delta} more chambers than {b_ref}.",
+        "{a_ref} mapped {delta} chambers more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "chamber",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} explored no fewer than {bound} chambers.",
+        "{a_ref} mapped at least {bound} chambers."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

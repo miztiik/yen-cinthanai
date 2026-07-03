@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "vineyard-harvest",
+  "title": "The Vineyard Harvest",
+  "subjectNoun": "picker",
+  "subjectCategory": "picker",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Cozy autumn grape harvest on a hillside vineyard. Anchor = picker. kerchief is glyph-backed by the color pack and snack by the food pack (value ids are pack slugs); block is text-only; crate is the numeric axis (crates filled) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (crate/block/snack).",
+  "narrativeTemplate": "Morning mist drifts over the vine rows as {n} pickers work their way down the hillside, and {host} untangles whose baskets are whose after a {mishap} scattered the tally cards.",
+  "flavorPools": {
+    "host": ["Vintner Rosa", "old Bertrand", "the cellar hand"],
+    "mishap": ["gust off the hills", "runaway cart", "startled hound"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Mateo'; 'attribute' -> 'the red-kerchief picker' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "picker",
+      "label": "Picker",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "mateo", "label": "Mateo" },
+        { "id": "lucia", "label": "Lucia" },
+        { "id": "priya", "label": "Priya" },
+        { "id": "sven", "label": "Sven" },
+        { "id": "amara", "label": "Amara" },
+        { "id": "tomas", "label": "Tomas" }
+      ]
+    },
+    {
+      "id": "kerchief",
+      "label": "Kerchief",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red kerchief", "phrase": "wore the red kerchief", "refPhrase": "red-kerchief picker" },
+        { "id": "blue", "label": "Blue kerchief", "phrase": "wore the blue kerchief", "refPhrase": "blue-kerchief picker" },
+        { "id": "green", "label": "Green kerchief", "phrase": "wore the green kerchief", "refPhrase": "green-kerchief picker" },
+        { "id": "yellow", "label": "Yellow kerchief", "phrase": "wore the yellow kerchief", "refPhrase": "yellow-kerchief picker" },
+        { "id": "orange", "label": "Orange kerchief", "phrase": "wore the orange kerchief", "refPhrase": "orange-kerchief picker" },
+        { "id": "purple", "label": "Purple kerchief", "phrase": "wore the purple kerchief", "refPhrase": "purple-kerchief picker" }
+      ]
+    },
+    {
+      "id": "crate",
+      "label": "Crate",
+      "kind": "numeric",
+      "unit": "crates",
+      "valuePool": [
+        { "id": "crate3", "label": "3 crates", "magnitude": 3, "phrase": "filled 3 crates" },
+        { "id": "crate5", "label": "5 crates", "magnitude": 5, "phrase": "filled 5 crates" },
+        { "id": "crate7", "label": "7 crates", "magnitude": 7, "phrase": "filled 7 crates" },
+        { "id": "crate9", "label": "9 crates", "magnitude": 9, "phrase": "filled 9 crates" },
+        { "id": "crate11", "label": "11 crates", "magnitude": 11, "phrase": "filled 11 crates" },
+        { "id": "crate13", "label": "13 crates", "magnitude": 13, "phrase": "filled 13 crates" }
+      ]
+    },
+    {
+      "id": "block",
+      "label": "Block",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "sunnyslope", "label": "Sunny Slope", "phrase": "worked the Sunny Slope", "refPhrase": "Sunny Slope picker" },
+        { "id": "oldterrace", "label": "Old Terrace", "phrase": "worked the Old Terrace", "refPhrase": "Old Terrace picker" },
+        { "id": "stonewall", "label": "Stone Wall", "phrase": "worked the Stone Wall", "refPhrase": "Stone Wall picker" },
+        { "id": "foxhollow", "label": "Fox Hollow", "phrase": "worked the Fox Hollow", "refPhrase": "Fox Hollow picker" },
+        { "id": "riverbend", "label": "River Bend", "phrase": "worked the River Bend", "refPhrase": "River Bend picker" },
+        { "id": "highridge", "label": "High Ridge", "phrase": "worked the High Ridge", "refPhrase": "High Ridge picker" }
+      ]
+    },
+    {
+      "id": "snack",
+      "label": "Snack",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "bread", "label": "Bread", "phrase": "snacked on the bread", "refPhrase": "bread snacker" },
+        { "id": "cheese", "label": "Cheese", "phrase": "snacked on the cheese", "refPhrase": "cheese snacker" },
+        { "id": "cookie", "label": "Cookie", "phrase": "snacked on the cookie", "refPhrase": "cookie snacker" },
+        { "id": "egg", "label": "Boiled egg", "phrase": "snacked on the boiled egg", "refPhrase": "boiled-egg snacker" },
+        { "id": "toast", "label": "Toast", "phrase": "snacked on the toast", "refPhrase": "toast snacker" },
+        { "id": "baguette", "label": "Baguette", "phrase": "snacked on the baguette", "refPhrase": "baguette snacker" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "crate",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} filled {delta} more crates than {b_ref}.",
+        "{a_ref} picked {delta} crates more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "crate",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} filled no fewer than {bound} crates.",
+        "{a_ref} picked at least {bound} crates."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "glassblowing-studio",
+  "title": "The Glassblowing Studio",
+  "subjectNoun": "artisan",
+  "subjectCategory": "artisan",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A warm, whimsical morning in a glassblowing studio full of glowing colour. Anchor = artisan. hue is glyph-backed by the color pack (value ids are pack slugs); shape and furnace are text-only; batch is the numeric axis (batches blown) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (batch/shape/furnace).",
+  "narrativeTemplate": "Molten glass glows like honey and the air shimmers with heat as {n} artisans spin their pipes before the flames, and {host} sorts out whose work is whose after a {mishap} jostled the finished pieces on the rack.",
+  "flavorPools": {
+    "host": ["Maestra Livia", "old Bartok", "the studio lead"],
+    "mishap": ["sudden draught", "cracked mould", "flare from the flames"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Vera'; 'attribute' -> 'the red-glass artisan' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "artisan",
+      "label": "Artisan",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "vera", "label": "Vera" },
+        { "id": "enzo", "label": "Enzo" },
+        { "id": "halima", "label": "Halima" },
+        { "id": "soren", "label": "Soren" },
+        { "id": "talia", "label": "Talia" },
+        { "id": "rui", "label": "Rui" }
+      ]
+    },
+    {
+      "id": "hue",
+      "label": "Hue",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red glass", "phrase": "blew the red glass", "refPhrase": "red-glass artisan" },
+        { "id": "blue", "label": "Blue glass", "phrase": "blew the blue glass", "refPhrase": "blue-glass artisan" },
+        { "id": "green", "label": "Green glass", "phrase": "blew the green glass", "refPhrase": "green-glass artisan" },
+        { "id": "yellow", "label": "Yellow glass", "phrase": "blew the yellow glass", "refPhrase": "yellow-glass artisan" },
+        { "id": "orange", "label": "Orange glass", "phrase": "blew the orange glass", "refPhrase": "orange-glass artisan" },
+        { "id": "purple", "label": "Purple glass", "phrase": "blew the purple glass", "refPhrase": "purple-glass artisan" }
+      ]
+    },
+    {
+      "id": "batch",
+      "label": "Batch",
+      "kind": "numeric",
+      "unit": "batches",
+      "valuePool": [
+        { "id": "batch3", "label": "3 batches", "magnitude": 3, "phrase": "blew 3 batches" },
+        { "id": "batch5", "label": "5 batches", "magnitude": 5, "phrase": "blew 5 batches" },
+        { "id": "batch7", "label": "7 batches", "magnitude": 7, "phrase": "blew 7 batches" },
+        { "id": "batch9", "label": "9 batches", "magnitude": 9, "phrase": "blew 9 batches" },
+        { "id": "batch11", "label": "11 batches", "magnitude": 11, "phrase": "blew 11 batches" },
+        { "id": "batch13", "label": "13 batches", "magnitude": 13, "phrase": "blew 13 batches" }
+      ]
+    },
+    {
+      "id": "shape",
+      "label": "Shape",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "vase", "label": "A vase", "phrase": "shaped a vase", "refPhrase": "vase blower" },
+        { "id": "goblet", "label": "A goblet", "phrase": "shaped a goblet", "refPhrase": "goblet blower" },
+        { "id": "bauble", "label": "A bauble", "phrase": "shaped a bauble", "refPhrase": "bauble blower" },
+        { "id": "bottle", "label": "A bottle", "phrase": "shaped a bottle", "refPhrase": "bottle blower" },
+        { "id": "bead", "label": "A bead", "phrase": "shaped a bead", "refPhrase": "bead blower" },
+        { "id": "bowl", "label": "A bowl", "phrase": "shaped a bowl", "refPhrase": "bowl blower" }
+      ]
+    },
+    {
+      "id": "furnace",
+      "label": "Furnace",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "eastkiln", "label": "The east kiln", "phrase": "worked at the east kiln", "refPhrase": "east-kiln artisan" },
+        { "id": "annealer", "label": "The annealer", "phrase": "worked at the annealer", "refPhrase": "annealer artisan" },
+        { "id": "reheatchamber", "label": "The reheat chamber", "phrase": "worked at the reheat chamber", "refPhrase": "reheat-chamber artisan" },
+        { "id": "gatheringpot", "label": "The gathering pot", "phrase": "worked at the gathering pot", "refPhrase": "gathering-pot artisan" },
+        { "id": "marver", "label": "The marver", "phrase": "worked at the marver", "refPhrase": "marver artisan" },
+        { "id": "coolingshelf", "label": "The cooling shelf", "phrase": "worked at the cooling shelf", "refPhrase": "cooling-shelf artisan" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "batch",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} blew {delta} more batches than {b_ref}.",
+        "{a_ref} finished {delta} batches more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "batch",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} blew no fewer than {bound} batches.",
+        "{a_ref} finished at least {bound} batches."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "teahouse-afternoon",
+  "title": "The Teahouse Afternoon",
+  "subjectNoun": "server",
+  "subjectCategory": "server",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A gentle afternoon rush in a neighbourhood teahouse. Anchor = server. brew is glyph-backed by the drinks pack and sweet by the food pack (value ids are pack slugs); table is text-only; refill is the numeric axis (refills poured) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (refill/sweet/table).",
+  "narrativeTemplate": "Steam curls from the kettles and soft chatter fills the room as {n} servers weave between the guests, and {host} works out who carried what after a {mishap} muddled the order slips.",
+  "flavorPools": {
+    "host": ["Auntie Mila", "old Hemant", "the tea master"],
+    "mishap": ["clattered cups", "spilled sugar", "gust from the door"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Mei'; 'attribute' -> 'the tea server' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "server",
+      "label": "Server",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "mei", "label": "Mei" },
+        { "id": "arjun", "label": "Arjun" },
+        { "id": "keiko", "label": "Keiko" },
+        { "id": "omar", "label": "Omar" },
+        { "id": "lila", "label": "Lila" },
+        { "id": "tariq", "label": "Tariq" }
+      ]
+    },
+    {
+      "id": "brew",
+      "label": "Brew",
+      "kind": "nominal",
+      "glyphPack": "drinks",
+      "valuePool": [
+        { "id": "tea", "label": "Green tea", "phrase": "served the green tea", "refPhrase": "green-tea server" },
+        { "id": "coffee", "label": "Coffee", "phrase": "served the coffee", "refPhrase": "coffee server" },
+        { "id": "milk", "label": "Warm milk", "phrase": "served the warm milk", "refPhrase": "warm-milk server" },
+        { "id": "juice", "label": "Fruit juice", "phrase": "served the fruit juice", "refPhrase": "fruit-juice server" },
+        { "id": "soda", "label": "Cream soda", "phrase": "served the cream soda", "refPhrase": "cream-soda server" },
+        { "id": "water", "label": "Barley water", "phrase": "served the barley water", "refPhrase": "barley-water server" }
+      ]
+    },
+    {
+      "id": "refill",
+      "label": "Refill",
+      "kind": "numeric",
+      "unit": "refills",
+      "valuePool": [
+        { "id": "refill3", "label": "3 refills", "magnitude": 3, "phrase": "poured 3 refills" },
+        { "id": "refill5", "label": "5 refills", "magnitude": 5, "phrase": "poured 5 refills" },
+        { "id": "refill7", "label": "7 refills", "magnitude": 7, "phrase": "poured 7 refills" },
+        { "id": "refill9", "label": "9 refills", "magnitude": 9, "phrase": "poured 9 refills" },
+        { "id": "refill11", "label": "11 refills", "magnitude": 11, "phrase": "poured 11 refills" },
+        { "id": "refill13", "label": "13 refills", "magnitude": 13, "phrase": "poured 13 refills" }
+      ]
+    },
+    {
+      "id": "sweet",
+      "label": "Sweet",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "cookie", "label": "Cookie", "phrase": "brought out the cookie", "refPhrase": "cookie server" },
+        { "id": "cupcake", "label": "Cupcake", "phrase": "brought out the cupcake", "refPhrase": "cupcake server" },
+        { "id": "donut", "label": "Donut", "phrase": "brought out the donut", "refPhrase": "donut server" },
+        { "id": "gingerbread", "label": "Gingerbread", "phrase": "brought out the gingerbread", "refPhrase": "gingerbread server" },
+        { "id": "popsicle", "label": "Popsicle", "phrase": "brought out the popsicle", "refPhrase": "popsicle server" },
+        { "id": "icecream", "label": "Ice cream", "phrase": "brought out the ice cream", "refPhrase": "ice-cream server" }
+      ]
+    },
+    {
+      "id": "table",
+      "label": "Table",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "windowseat", "label": "Window seat", "phrase": "waited on the window seat", "refPhrase": "window-seat server" },
+        { "id": "gardennook", "label": "Garden nook", "phrase": "waited on the garden nook", "refPhrase": "garden-nook server" },
+        { "id": "cornerbooth", "label": "Corner booth", "phrase": "waited on the corner booth", "refPhrase": "corner-booth server" },
+        { "id": "lowtable", "label": "Low table", "phrase": "waited on the low table", "refPhrase": "low-table server" },
+        { "id": "veranda", "label": "Veranda", "phrase": "waited on the veranda", "refPhrase": "veranda server" },
+        { "id": "tatamimat", "label": "Tatami mat", "phrase": "waited on the tatami mat", "refPhrase": "tatami-mat server" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "refill",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} poured {delta} more refills than {b_ref}.",
+        "{a_ref} served {delta} refills more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "refill",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} poured no fewer than {bound} refills.",
+        "{a_ref} served at least {bound} refills."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

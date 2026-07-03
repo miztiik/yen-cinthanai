@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "windmill-mill",
+  "title": "The Windmill",
+  "subjectNoun": "miller",
+  "subjectCategory": "miller",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A grey morning at a working windmill, sorting out whose sacks are whose - a gentle who-did-what. Anchor = miller. companion is glyph-backed by the creatures pack (value ids are pack slugs); grain and delivery are text-only; sweep is the numeric axis (sail sweeps logged) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (sweep/grain/delivery).",
+  "narrativeTemplate": "The great sails turn slow against a grey sky and the whole mill hums as {n} millers work the grindstones, and {host} puzzles out whose sacks are whose after a {mishap} tumbled the labelled tags off their hooks.",
+  "flavorPools": {
+    "host": ["Overseer Wenna", "old Gerrit", "the village reeve"],
+    "mishap": ["strong gust", "snapped cord", "loose shutter"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Joost'; 'attribute' -> 'the cat keeper' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "miller",
+      "label": "Miller",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "joost", "label": "Joost" },
+        { "id": "katrien", "label": "Katrien" },
+        { "id": "bay", "label": "Bay" },
+        { "id": "elif", "label": "Elif" },
+        { "id": "piet", "label": "Piet" },
+        { "id": "sanne", "label": "Sanne" }
+      ]
+    },
+    {
+      "id": "companion",
+      "label": "Companion",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "cat", "label": "Cat", "phrase": "looked after the cat", "refPhrase": "cat keeper" },
+        { "id": "dog", "label": "Dog", "phrase": "looked after the dog", "refPhrase": "dog keeper" },
+        { "id": "mouse", "label": "Mouse", "phrase": "looked after the mouse", "refPhrase": "mouse keeper" },
+        { "id": "owl", "label": "Owl", "phrase": "looked after the owl", "refPhrase": "owl keeper" },
+        { "id": "goat", "label": "Goat", "phrase": "looked after the goat", "refPhrase": "goat keeper" },
+        { "id": "sheep", "label": "Sheep", "phrase": "looked after the sheep", "refPhrase": "sheep keeper" }
+      ]
+    },
+    {
+      "id": "sweep",
+      "label": "Sweep",
+      "kind": "numeric",
+      "unit": "sweeps",
+      "valuePool": [
+        { "id": "sweep2", "label": "2 sweeps", "magnitude": 2, "phrase": "logged 2 sweeps" },
+        { "id": "sweep4", "label": "4 sweeps", "magnitude": 4, "phrase": "logged 4 sweeps" },
+        { "id": "sweep6", "label": "6 sweeps", "magnitude": 6, "phrase": "logged 6 sweeps" },
+        { "id": "sweep8", "label": "8 sweeps", "magnitude": 8, "phrase": "logged 8 sweeps" },
+        { "id": "sweep10", "label": "10 sweeps", "magnitude": 10, "phrase": "logged 10 sweeps" },
+        { "id": "sweep12", "label": "12 sweeps", "magnitude": 12, "phrase": "logged 12 sweeps" }
+      ]
+    },
+    {
+      "id": "grain",
+      "label": "Grain",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "wheat", "label": "Wheat", "phrase": "milled the wheat", "refPhrase": "wheat miller" },
+        { "id": "rye", "label": "Rye", "phrase": "milled the rye", "refPhrase": "rye miller" },
+        { "id": "barley", "label": "Barley", "phrase": "milled the barley", "refPhrase": "barley miller" },
+        { "id": "oats", "label": "Oats", "phrase": "milled the oats", "refPhrase": "oat miller" },
+        { "id": "spelt", "label": "Spelt", "phrase": "milled the spelt", "refPhrase": "spelt miller" },
+        { "id": "millet", "label": "Millet", "phrase": "milled the millet", "refPhrase": "millet miller" }
+      ]
+    },
+    {
+      "id": "delivery",
+      "label": "Delivery",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "baker", "label": "The baker", "phrase": "supplied the baker", "refPhrase": "baker's miller" },
+        { "id": "tavern", "label": "The tavern", "phrase": "supplied the tavern", "refPhrase": "tavern's miller" },
+        { "id": "farmstead", "label": "The farmstead", "phrase": "supplied the farmstead", "refPhrase": "farmstead's miller" },
+        { "id": "market", "label": "The market", "phrase": "supplied the market", "refPhrase": "market's miller" },
+        { "id": "abbey", "label": "The abbey", "phrase": "supplied the abbey", "refPhrase": "abbey's miller" },
+        { "id": "schoolhouse", "label": "The schoolhouse", "phrase": "supplied the schoolhouse", "refPhrase": "schoolhouse's miller" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "sweep",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} logged {delta} more sweeps than {b_ref}.",
+        "{a_ref} counted {delta} sweeps more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "sweep",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} logged no fewer than {bound} sweeps.",
+        "{a_ref} counted at least {bound} sweeps."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

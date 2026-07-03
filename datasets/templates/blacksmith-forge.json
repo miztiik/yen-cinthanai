@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "blacksmith-forge",
+  "title": "The Blacksmith's Forge",
+  "subjectNoun": "smith",
+  "subjectCategory": "smith",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A busy morning at a village forge clearing a backlog of jobs. Anchor = smith. ride is glyph-backed by the transport pack (value ids are pack slugs); piece and metal are text-only; order is the numeric axis (orders hammered) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (order/piece/metal).",
+  "narrativeTemplate": "Sparks fly and the anvil rings out across the yard as {n} smiths race to clear the morning's backlog, and {host} squares up whose work is whose after a {mishap} sent the job tickets flying.",
+  "flavorPools": {
+    "host": ["Master Smith Ada", "old Osgar", "the guild reeve"],
+    "mishap": ["dropped tongs", "flare from the coals", "runaway cart"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Bran'; 'attribute' -> 'the bicycle rider' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "smith",
+      "label": "Smith",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "bran", "label": "Bran" },
+        { "id": "greta", "label": "Greta" },
+        { "id": "kofi", "label": "Kofi" },
+        { "id": "ilse", "label": "Ilse" },
+        { "id": "marek", "label": "Marek" },
+        { "id": "zara", "label": "Zara" }
+      ]
+    },
+    {
+      "id": "ride",
+      "label": "Ride",
+      "kind": "nominal",
+      "glyphPack": "transport",
+      "valuePool": [
+        { "id": "bicycle", "label": "Bicycle", "phrase": "rolled up on the bicycle", "refPhrase": "bicycle rider" },
+        { "id": "motorcycle", "label": "Motorcycle", "phrase": "rolled up on the motorcycle", "refPhrase": "motorcycle rider" },
+        { "id": "vespa", "label": "Scooter", "phrase": "rolled up on the scooter", "refPhrase": "scooter rider" },
+        { "id": "jeep", "label": "Jeep", "phrase": "rolled up in the jeep", "refPhrase": "jeep driver" },
+        { "id": "van", "label": "Van", "phrase": "rolled up in the van", "refPhrase": "van driver" },
+        { "id": "lorry", "label": "Lorry", "phrase": "rolled up in the lorry", "refPhrase": "lorry driver" }
+      ]
+    },
+    {
+      "id": "order",
+      "label": "Order",
+      "kind": "numeric",
+      "unit": "orders",
+      "valuePool": [
+        { "id": "order3", "label": "3 orders", "magnitude": 3, "phrase": "hammered out 3 orders" },
+        { "id": "order5", "label": "5 orders", "magnitude": 5, "phrase": "hammered out 5 orders" },
+        { "id": "order7", "label": "7 orders", "magnitude": 7, "phrase": "hammered out 7 orders" },
+        { "id": "order9", "label": "9 orders", "magnitude": 9, "phrase": "hammered out 9 orders" },
+        { "id": "order11", "label": "11 orders", "magnitude": 11, "phrase": "hammered out 11 orders" },
+        { "id": "order13", "label": "13 orders", "magnitude": 13, "phrase": "hammered out 13 orders" }
+      ]
+    },
+    {
+      "id": "piece",
+      "label": "Piece",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "hinge", "label": "A hinge", "phrase": "forged a hinge", "refPhrase": "hinge forger" },
+        { "id": "blade", "label": "A blade", "phrase": "forged a blade", "refPhrase": "blade forger" },
+        { "id": "nail", "label": "A batch of nails", "phrase": "forged a batch of nails", "refPhrase": "nail forger" },
+        { "id": "gate", "label": "A gate", "phrase": "forged a gate", "refPhrase": "gate forger" },
+        { "id": "anchor", "label": "An anchor", "phrase": "forged an anchor", "refPhrase": "anchor forger" },
+        { "id": "horseshoe", "label": "A horseshoe", "phrase": "forged a horseshoe", "refPhrase": "horseshoe forger" }
+      ]
+    },
+    {
+      "id": "metal",
+      "label": "Metal",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "iron", "label": "Iron", "phrase": "worked in iron", "refPhrase": "iron smith" },
+        { "id": "bronze", "label": "Bronze", "phrase": "worked in bronze", "refPhrase": "bronze smith" },
+        { "id": "copper", "label": "Copper", "phrase": "worked in copper", "refPhrase": "copper smith" },
+        { "id": "steel", "label": "Steel", "phrase": "worked in steel", "refPhrase": "steel smith" },
+        { "id": "brass", "label": "Brass", "phrase": "worked in brass", "refPhrase": "brass smith" },
+        { "id": "pewter", "label": "Pewter", "phrase": "worked in pewter", "refPhrase": "pewter smith" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "order",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} hammered {delta} more orders than {b_ref}.",
+        "{a_ref} finished {delta} orders more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "order",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} hammered no fewer than {bound} orders.",
+        "{a_ref} finished at least {bound} orders."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

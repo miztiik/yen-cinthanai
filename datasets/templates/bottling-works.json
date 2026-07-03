@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "bottling-works",
+  "title": "The Bottling Works",
+  "subjectNoun": "brewer",
+  "subjectCategory": "brewer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A lively craft SODA works (root beer, ginger ale - all non-alcoholic) on bottling day. Anchor = brewer. nibble is glyph-backed by the food pack and label by the color pack (value ids are pack slugs); fizz is text-only; barrel is the numeric axis (barrels bottled) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (barrel/fizz/label).",
+  "narrativeTemplate": "The bottling line clatters and hisses and everything smells of ginger and citrus as {n} brewers keep the crates moving, and {host} sorts out whose run was whose after a {mishap} jumbled the tasting flight.",
+  "flavorPools": {
+    "host": ["Foreman Greer", "old Sal", "the line boss"],
+    "mishap": ["stuck valve", "foam-over", "slippery floor"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Hans'; 'attribute' -> 'the cheese nibbler' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "brewer",
+      "label": "Brewer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "hans", "label": "Hans" },
+        { "id": "bea", "label": "Bea" },
+        { "id": "diego", "label": "Diego" },
+        { "id": "petra", "label": "Petra" },
+        { "id": "nkechi", "label": "Nkechi" },
+        { "id": "wyatt", "label": "Wyatt" }
+      ]
+    },
+    {
+      "id": "nibble",
+      "label": "Nibble",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "cheese", "label": "Cheese", "phrase": "snacked on the cheese", "refPhrase": "cheese nibbler" },
+        { "id": "bread", "label": "Bread", "phrase": "snacked on the bread", "refPhrase": "bread nibbler" },
+        { "id": "cookie", "label": "Cookie", "phrase": "snacked on the cookie", "refPhrase": "cookie nibbler" },
+        { "id": "egg", "label": "Boiled egg", "phrase": "snacked on the boiled egg", "refPhrase": "boiled-egg nibbler" },
+        { "id": "toast", "label": "Toast", "phrase": "snacked on the toast", "refPhrase": "toast nibbler" },
+        { "id": "baguette", "label": "Baguette", "phrase": "snacked on the baguette", "refPhrase": "baguette nibbler" }
+      ]
+    },
+    {
+      "id": "barrel",
+      "label": "Barrel",
+      "kind": "numeric",
+      "unit": "barrels",
+      "valuePool": [
+        { "id": "barrel3", "label": "3 barrels", "magnitude": 3, "phrase": "bottled 3 barrels" },
+        { "id": "barrel5", "label": "5 barrels", "magnitude": 5, "phrase": "bottled 5 barrels" },
+        { "id": "barrel7", "label": "7 barrels", "magnitude": 7, "phrase": "bottled 7 barrels" },
+        { "id": "barrel9", "label": "9 barrels", "magnitude": 9, "phrase": "bottled 9 barrels" },
+        { "id": "barrel11", "label": "11 barrels", "magnitude": 11, "phrase": "bottled 11 barrels" },
+        { "id": "barrel13", "label": "13 barrels", "magnitude": 13, "phrase": "bottled 13 barrels" }
+      ]
+    },
+    {
+      "id": "fizz",
+      "label": "Fizz",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "gingerale", "label": "Ginger ale", "phrase": "brewed the ginger ale", "refPhrase": "ginger-ale brewer" },
+        { "id": "rootbeer", "label": "Root beer", "phrase": "brewed the root beer", "refPhrase": "root-beer brewer" },
+        { "id": "creamsoda", "label": "Cream soda", "phrase": "brewed the cream soda", "refPhrase": "cream-soda brewer" },
+        { "id": "cola", "label": "Cola", "phrase": "brewed the cola", "refPhrase": "cola brewer" },
+        { "id": "lemonade", "label": "Lemonade", "phrase": "brewed the lemonade", "refPhrase": "lemonade brewer" },
+        { "id": "birchbeer", "label": "Birch beer", "phrase": "brewed the birch beer", "refPhrase": "birch-beer brewer" }
+      ]
+    },
+    {
+      "id": "label",
+      "label": "Label",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red label", "phrase": "ran the red label", "refPhrase": "red-label brewer" },
+        { "id": "blue", "label": "Blue label", "phrase": "ran the blue label", "refPhrase": "blue-label brewer" },
+        { "id": "green", "label": "Green label", "phrase": "ran the green label", "refPhrase": "green-label brewer" },
+        { "id": "yellow", "label": "Yellow label", "phrase": "ran the yellow label", "refPhrase": "yellow-label brewer" },
+        { "id": "orange", "label": "Orange label", "phrase": "ran the orange label", "refPhrase": "orange-label brewer" },
+        { "id": "purple", "label": "Purple label", "phrase": "ran the purple label", "refPhrase": "purple-label brewer" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "barrel",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} bottled {delta} more barrels than {b_ref}.",
+        "{a_ref} racked {delta} barrels more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "barrel",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} bottled no fewer than {bound} barrels.",
+        "{a_ref} racked at least {bound} barrels."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
