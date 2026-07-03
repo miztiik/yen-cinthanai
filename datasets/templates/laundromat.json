@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "laundromat",
+  "title": "The Laundromat",
+  "subjectNoun": "patron",
+  "subjectCategory": "patron",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A witty afternoon at the corner laundromat. Anchor = patron. garment is glyph-backed by the clothes pack (value ids are pack slugs); soap and load are text-only; cycle is the numeric axis (wash cycles) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (cycle/soap/load).",
+  "narrativeTemplate": "Warm lint-scented air hangs over the row as {n} patrons feed coins into the machines, and {host} works out whose afternoon was whose after a {mishap} jumbled the claim tickets.",
+  "flavorPools": {
+    "host": ["attendant Rosa", "old Gil", "the counter clerk"],
+    "mishap": ["jammed coin slot", "sock avalanche", "power flicker"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Dev'; 'attribute' -> 'the shirt washer' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "patron",
+      "label": "Patron",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "dev", "label": "Dev" },
+        { "id": "colette", "label": "Colette" },
+        { "id": "marcus", "label": "Marcus" },
+        { "id": "saoirse", "label": "Saoirse" },
+        { "id": "hiro", "label": "Hiro" },
+        { "id": "nadia", "label": "Nadia" }
+      ]
+    },
+    {
+      "id": "garment",
+      "label": "Garment",
+      "kind": "nominal",
+      "glyphPack": "clothes",
+      "valuePool": [
+        { "id": "manshirt", "label": "Shirt", "phrase": "washed the shirt", "refPhrase": "shirt washer" },
+        { "id": "womandress", "label": "Dress", "phrase": "washed the dress", "refPhrase": "dress washer" },
+        { "id": "manhat", "label": "Hat", "phrase": "washed the hat", "refPhrase": "hat washer" },
+        { "id": "womanskirt", "label": "Skirt", "phrase": "washed the skirt", "refPhrase": "skirt washer" },
+        { "id": "mantie", "label": "Tie", "phrase": "washed the tie", "refPhrase": "tie washer" },
+        { "id": "womantshirt", "label": "T-shirt", "phrase": "washed the t-shirt", "refPhrase": "t-shirt washer" }
+      ]
+    },
+    {
+      "id": "cycle",
+      "label": "Cycle",
+      "kind": "numeric",
+      "unit": "cycles",
+      "valuePool": [
+        { "id": "cycle3", "label": "3 cycles", "magnitude": 3, "phrase": "ran 3 cycles" },
+        { "id": "cycle5", "label": "5 cycles", "magnitude": 5, "phrase": "ran 5 cycles" },
+        { "id": "cycle7", "label": "7 cycles", "magnitude": 7, "phrase": "ran 7 cycles" },
+        { "id": "cycle9", "label": "9 cycles", "magnitude": 9, "phrase": "ran 9 cycles" },
+        { "id": "cycle11", "label": "11 cycles", "magnitude": 11, "phrase": "ran 11 cycles" },
+        { "id": "cycle13", "label": "13 cycles", "magnitude": 13, "phrase": "ran 13 cycles" }
+      ]
+    },
+    {
+      "id": "soap",
+      "label": "Soap",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "pinesoap", "label": "Pine Soap", "phrase": "used the Pine Soap", "refPhrase": "Pine Soap user" },
+        { "id": "citrussoap", "label": "Citrus Soap", "phrase": "used the Citrus Soap", "refPhrase": "Citrus Soap user" },
+        { "id": "lavendersoap", "label": "Lavender Soap", "phrase": "used the Lavender Soap", "refPhrase": "Lavender Soap user" },
+        { "id": "oceansoap", "label": "Ocean Soap", "phrase": "used the Ocean Soap", "refPhrase": "Ocean Soap user" },
+        { "id": "rosesoap", "label": "Rose Soap", "phrase": "used the Rose Soap", "refPhrase": "Rose Soap user" },
+        { "id": "cedarsoap", "label": "Cedar Soap", "phrase": "used the Cedar Soap", "refPhrase": "Cedar Soap user" }
+      ]
+    },
+    {
+      "id": "load",
+      "label": "Load",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "whiteload", "label": "White Load", "phrase": "brought the White Load", "refPhrase": "White Load patron" },
+        { "id": "darkload", "label": "Dark Load", "phrase": "brought the Dark Load", "refPhrase": "Dark Load patron" },
+        { "id": "towelsload", "label": "Towels Load", "phrase": "brought the Towels Load", "refPhrase": "Towels Load patron" },
+        { "id": "linensload", "label": "Linens Load", "phrase": "brought the Linens Load", "refPhrase": "Linens Load patron" },
+        { "id": "woolensload", "label": "Woolens Load", "phrase": "brought the Woolens Load", "refPhrase": "Woolens Load patron" },
+        { "id": "delicatesload", "label": "Delicates Load", "phrase": "brought the Delicates Load", "refPhrase": "Delicates Load patron" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "cycle",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} ran {delta} more cycles than {b_ref}.",
+        "{a_ref} ran {delta} more cycles than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "cycle",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} ran no fewer than {bound} cycles.",
+        "{a_ref} ran at least {bound} cycles."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the ticket read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

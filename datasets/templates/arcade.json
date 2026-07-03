@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "arcade",
+  "title": "The Arcade",
+  "subjectNoun": "gamer",
+  "subjectCategory": "gamer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical evening in a neon retro arcade. Anchor = gamer. plush is glyph-backed by the shapes pack (value ids are pack slugs - the claw-machine plush shape won); cabinet and prize are text-only; token is the numeric axis (tokens fed in) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (token/cabinet/prize).",
+  "narrativeTemplate": "Bleeps and jingles bounce off the neon walls as {n} gamers dart from machine to machine, and {host} works out whose streak was whose after a {mishap} jammed the change dispenser.",
+  "flavorPools": {
+    "host": ["manager Cruz", "old Petrov", "the change-booth clerk"],
+    "mishap": ["blown fuse", "stuck joystick", "runaway skee-ball"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Remy'; 'attribute' -> 'the star winner' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "gamer",
+      "label": "Gamer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "remy", "label": "Remy" },
+        { "id": "dara", "label": "Dara" },
+        { "id": "kenta", "label": "Kenta" },
+        { "id": "bianca", "label": "Bianca" },
+        { "id": "nils", "label": "Nils" },
+        { "id": "opal", "label": "Opal" }
+      ]
+    },
+    {
+      "id": "plush",
+      "label": "Plush",
+      "kind": "nominal",
+      "glyphPack": "shapes",
+      "valuePool": [
+        { "id": "star", "label": "Star Plush", "phrase": "won the star plush", "refPhrase": "star-plush winner" },
+        { "id": "heart", "label": "Heart Plush", "phrase": "won the heart plush", "refPhrase": "heart-plush winner" },
+        { "id": "diamond", "label": "Diamond Plush", "phrase": "won the diamond plush", "refPhrase": "diamond-plush winner" },
+        { "id": "circle", "label": "Round Plush", "phrase": "won the round plush", "refPhrase": "round-plush winner" },
+        { "id": "hexagon", "label": "Hex Plush", "phrase": "won the hex plush", "refPhrase": "hex-plush winner" },
+        { "id": "pentagon", "label": "Penta Plush", "phrase": "won the penta plush", "refPhrase": "penta-plush winner" }
+      ]
+    },
+    {
+      "id": "token",
+      "label": "Token",
+      "kind": "numeric",
+      "unit": "tokens",
+      "valuePool": [
+        { "id": "token3", "label": "3 tokens", "magnitude": 3, "phrase": "fed in 3 tokens" },
+        { "id": "token5", "label": "5 tokens", "magnitude": 5, "phrase": "fed in 5 tokens" },
+        { "id": "token7", "label": "7 tokens", "magnitude": 7, "phrase": "fed in 7 tokens" },
+        { "id": "token9", "label": "9 tokens", "magnitude": 9, "phrase": "fed in 9 tokens" },
+        { "id": "token11", "label": "11 tokens", "magnitude": 11, "phrase": "fed in 11 tokens" },
+        { "id": "token13", "label": "13 tokens", "magnitude": 13, "phrase": "fed in 13 tokens" }
+      ]
+    },
+    {
+      "id": "cabinet",
+      "label": "Cabinet",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "racer", "label": "Racer", "phrase": "ruled the Racer", "refPhrase": "Racer champ" },
+        { "id": "pinball", "label": "Pinball", "phrase": "ruled the Pinball", "refPhrase": "Pinball champ" },
+        { "id": "shooter", "label": "Shooter", "phrase": "ruled the Shooter", "refPhrase": "Shooter champ" },
+        { "id": "dancer", "label": "Dancer", "phrase": "ruled the Dancer", "refPhrase": "Dancer champ" },
+        { "id": "puncher", "label": "Puncher", "phrase": "ruled the Puncher", "refPhrase": "Puncher champ" },
+        { "id": "hopper", "label": "Hopper", "phrase": "ruled the Hopper", "refPhrase": "Hopper champ" }
+      ]
+    },
+    {
+      "id": "prize",
+      "label": "Prize",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "bouncyball", "label": "Bouncy Ball", "phrase": "cashed in for the Bouncy Ball", "refPhrase": "Bouncy Ball gamer" },
+        { "id": "glowstick", "label": "Glow Stick", "phrase": "cashed in for the Glow Stick", "refPhrase": "Glow Stick gamer" },
+        { "id": "stickerpack", "label": "Sticker Pack", "phrase": "cashed in for the Sticker Pack", "refPhrase": "Sticker Pack gamer" },
+        { "id": "rubberduck", "label": "Rubber Duck", "phrase": "cashed in for the Rubber Duck", "refPhrase": "Rubber Duck gamer" },
+        { "id": "puzzlecube", "label": "Puzzle Cube", "phrase": "cashed in for the Puzzle Cube", "refPhrase": "Puzzle Cube gamer" },
+        { "id": "yoyo", "label": "Yo-yo", "phrase": "cashed in for the Yo-yo", "refPhrase": "Yo-yo gamer" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "token",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} fed in {delta} more tokens than {b_ref}.",
+        "{a_ref} fed in {delta} more tokens than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "token",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} fed in no fewer than {bound} tokens.",
+        "{a_ref} fed in at least {bound} tokens."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the screen read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

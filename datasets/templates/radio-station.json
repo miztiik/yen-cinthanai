@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "radio-station",
+  "title": "The Radio Station",
+  "subjectNoun": "guest",
+  "subjectCategory": "guest",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A witty evening on a small late-night radio show. Anchor = guest. job is glyph-backed by the occupation pack (value ids are pack slugs); slot and segment are text-only; track is the numeric axis (tracks spun) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (track/slot/segment).",
+  "narrativeTemplate": "The ON AIR lamp glows red as {n} guests crowd the little booth, and {host} sorts out whose turn was whose after a {mishap} scrambled the running order.",
+  "flavorPools": {
+    "host": ["producer Nel", "old Sanjay", "the station manager"],
+    "mishap": ["feedback squeal", "spilled coffee", "dead microphone"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Bea'; 'attribute' -> 'the chemist guest' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "guest",
+      "label": "Guest",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "bea", "label": "Bea" },
+        { "id": "khalid", "label": "Khalid" },
+        { "id": "rosalind", "label": "Rosalind" },
+        { "id": "tavi", "label": "Tavi" },
+        { "id": "mei", "label": "Mei" },
+        { "id": "gus", "label": "Gus" }
+      ]
+    },
+    {
+      "id": "job",
+      "label": "Job",
+      "kind": "nominal",
+      "glyphPack": "occupation",
+      "valuePool": [
+        { "id": "chemist", "label": "Chemist", "phrase": "spoke as the chemist", "refPhrase": "chemist guest" },
+        { "id": "lawyer", "label": "Lawyer", "phrase": "spoke as the lawyer", "refPhrase": "lawyer guest" },
+        { "id": "farmer", "label": "Farmer", "phrase": "spoke as the farmer", "refPhrase": "farmer guest" },
+        { "id": "nurse", "label": "Nurse", "phrase": "spoke as the nurse", "refPhrase": "nurse guest" },
+        { "id": "engineer", "label": "Engineer", "phrase": "spoke as the engineer", "refPhrase": "engineer guest" },
+        { "id": "writer", "label": "Writer", "phrase": "spoke as the writer", "refPhrase": "writer guest" }
+      ]
+    },
+    {
+      "id": "track",
+      "label": "Track",
+      "kind": "numeric",
+      "unit": "tracks",
+      "valuePool": [
+        { "id": "track2", "label": "2 tracks", "magnitude": 2, "phrase": "spun 2 tracks" },
+        { "id": "track4", "label": "4 tracks", "magnitude": 4, "phrase": "spun 4 tracks" },
+        { "id": "track6", "label": "6 tracks", "magnitude": 6, "phrase": "spun 6 tracks" },
+        { "id": "track8", "label": "8 tracks", "magnitude": 8, "phrase": "spun 8 tracks" },
+        { "id": "track10", "label": "10 tracks", "magnitude": 10, "phrase": "spun 10 tracks" },
+        { "id": "track12", "label": "12 tracks", "magnitude": 12, "phrase": "spun 12 tracks" }
+      ]
+    },
+    {
+      "id": "slot",
+      "label": "Slot",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "dawnslot", "label": "Dawn Slot", "phrase": "took the Dawn Slot", "refPhrase": "Dawn Slot guest" },
+        { "id": "noonslot", "label": "Noon Slot", "phrase": "took the Noon Slot", "refPhrase": "Noon Slot guest" },
+        { "id": "driveslot", "label": "Drive Slot", "phrase": "took the Drive Slot", "refPhrase": "Drive Slot guest" },
+        { "id": "duskslot", "label": "Dusk Slot", "phrase": "took the Dusk Slot", "refPhrase": "Dusk Slot guest" },
+        { "id": "lateslot", "label": "Late Slot", "phrase": "took the Late Slot", "refPhrase": "Late Slot guest" },
+        { "id": "graveslot", "label": "Graveyard Slot", "phrase": "took the Graveyard Slot", "refPhrase": "Graveyard Slot guest" }
+      ]
+    },
+    {
+      "id": "segment",
+      "label": "Segment",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "interview", "label": "The Interview", "phrase": "led The Interview", "refPhrase": "Interview guest" },
+        { "id": "quiz", "label": "The Quiz", "phrase": "led The Quiz", "refPhrase": "Quiz guest" },
+        { "id": "roundup", "label": "The Roundup", "phrase": "led The Roundup", "refPhrase": "Roundup guest" },
+        { "id": "requests", "label": "The Requests", "phrase": "led The Requests", "refPhrase": "Requests guest" },
+        { "id": "storyhour", "label": "The Story Hour", "phrase": "led The Story Hour", "refPhrase": "Story Hour guest" },
+        { "id": "debate", "label": "The Debate", "phrase": "led The Debate", "refPhrase": "Debate guest" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "track",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} spun {delta} more tracks than {b_ref}.",
+        "{a_ref} spun {delta} more tracks than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "track",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} spun no fewer than {bound} tracks.",
+        "{a_ref} spun at least {bound} tracks."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the cue read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

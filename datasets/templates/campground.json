@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "campground",
+  "title": "The Campground",
+  "subjectNoun": "camper",
+  "subjectCategory": "camper",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A cozy lakeside campsite as the fire burns down. Anchor = camper. snack is glyph-backed by the food pack (value ids are pack slugs); clearing and shelter are text-only; mile is the numeric axis (miles hiked) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (mile/clearing/shelter).",
+  "narrativeTemplate": "Woodsmoke curls into the pines as {n} campers unroll their bags by the fire, and {host} untangles whose evening was whose after a {mishap} flattened the marker pegs.",
+  "flavorPools": {
+    "host": ["ranger Dell", "old Bess", "the site warden"],
+    "mishap": ["gust off the lake", "curious raccoon", "rolled log"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Tariq'; 'attribute' -> 'the cookie packer' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "camper",
+      "label": "Camper",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "tariq", "label": "Tariq" },
+        { "id": "ingrid", "label": "Ingrid" },
+        { "id": "marisol", "label": "Marisol" },
+        { "id": "jonah", "label": "Jonah" },
+        { "id": "keiko", "label": "Keiko" },
+        { "id": "seb", "label": "Seb" }
+      ]
+    },
+    {
+      "id": "snack",
+      "label": "Snack",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "toast", "label": "Campfire toast", "phrase": "packed the campfire toast", "refPhrase": "campfire-toast packer" },
+        { "id": "cookie", "label": "Cookie", "phrase": "packed the cookie", "refPhrase": "cookie packer" },
+        { "id": "pizza", "label": "Pizza slice", "phrase": "packed the pizza slice", "refPhrase": "pizza-slice packer" },
+        { "id": "burger", "label": "Bean burger", "phrase": "packed the bean burger", "refPhrase": "bean-burger packer" },
+        { "id": "donut", "label": "Donut", "phrase": "packed the donut", "refPhrase": "donut packer" },
+        { "id": "cupcake", "label": "Cupcake", "phrase": "packed the cupcake", "refPhrase": "cupcake packer" }
+      ]
+    },
+    {
+      "id": "mile",
+      "label": "Mile",
+      "kind": "numeric",
+      "unit": "miles",
+      "valuePool": [
+        { "id": "mile2", "label": "2 miles", "magnitude": 2, "phrase": "hiked 2 miles" },
+        { "id": "mile4", "label": "4 miles", "magnitude": 4, "phrase": "hiked 4 miles" },
+        { "id": "mile6", "label": "6 miles", "magnitude": 6, "phrase": "hiked 6 miles" },
+        { "id": "mile8", "label": "8 miles", "magnitude": 8, "phrase": "hiked 8 miles" },
+        { "id": "mile10", "label": "10 miles", "magnitude": 10, "phrase": "hiked 10 miles" },
+        { "id": "mile12", "label": "12 miles", "magnitude": 12, "phrase": "hiked 12 miles" }
+      ]
+    },
+    {
+      "id": "clearing",
+      "label": "Clearing",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "cedarclearing", "label": "Cedar Clearing", "phrase": "camped at the Cedar Clearing", "refPhrase": "Cedar Clearing camper" },
+        { "id": "creekclearing", "label": "Creek Clearing", "phrase": "camped at the Creek Clearing", "refPhrase": "Creek Clearing camper" },
+        { "id": "ridgeclearing", "label": "Ridge Clearing", "phrase": "camped at the Ridge Clearing", "refPhrase": "Ridge Clearing camper" },
+        { "id": "fernclearing", "label": "Fern Clearing", "phrase": "camped at the Fern Clearing", "refPhrase": "Fern Clearing camper" },
+        { "id": "birchclearing", "label": "Birch Clearing", "phrase": "camped at the Birch Clearing", "refPhrase": "Birch Clearing camper" },
+        { "id": "otterclearing", "label": "Otter Clearing", "phrase": "camped at the Otter Clearing", "refPhrase": "Otter Clearing camper" }
+      ]
+    },
+    {
+      "id": "shelter",
+      "label": "Shelter",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "dometent", "label": "Dome Tent", "phrase": "slept in the Dome Tent", "refPhrase": "Dome Tent camper" },
+        { "id": "ridgetent", "label": "Ridge Tent", "phrase": "slept in the Ridge Tent", "refPhrase": "Ridge Tent camper" },
+        { "id": "hammock", "label": "Hammock", "phrase": "slept in the Hammock", "refPhrase": "Hammock camper" },
+        { "id": "bivvy", "label": "Bivvy Bag", "phrase": "slept in the Bivvy Bag", "refPhrase": "Bivvy Bag camper" },
+        { "id": "tarp", "label": "Tarp Shelter", "phrase": "slept in the Tarp Shelter", "refPhrase": "Tarp Shelter camper" },
+        { "id": "teepee", "label": "Canvas Teepee", "phrase": "slept in the Canvas Teepee", "refPhrase": "Canvas Teepee camper" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "mile",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} hiked {delta} more miles than {b_ref}.",
+        "{a_ref} hiked {delta} more miles than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "mile",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} hiked no fewer than {bound} miles.",
+        "{a_ref} hiked at least {bound} miles."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the logbook read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

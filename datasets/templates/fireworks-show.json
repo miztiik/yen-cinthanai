@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "fireworks-show",
+  "title": "The Fireworks Show",
+  "subjectNoun": "reveller",
+  "subjectCategory": "reveller",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical festival night of fireworks over the bay. Anchor = reveller. treat is glyph-backed by the food pack (value ids are pack slugs); burst and spot are text-only; shell is the numeric axis (shells counted) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (shell/burst/spot).",
+  "narrativeTemplate": "Sparks blaze green and gold over the bay as {n} revellers tilt their heads to the sky, and {host} works out whose evening was whose after a {mishap} scattered the paper programmes.",
+  "flavorPools": {
+    "host": ["marshal Quinn", "old Ferro", "the display chief"],
+    "mishap": ["gust off the water", "damp fuse", "dropped lantern"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Suki'; 'attribute' -> 'the ice-cream fan' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "reveller",
+      "label": "Reveller",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "suki", "label": "Suki" },
+        { "id": "diego", "label": "Diego" },
+        { "id": "orla", "label": "Orla" },
+        { "id": "amir", "label": "Amir" },
+        { "id": "linh", "label": "Linh" },
+        { "id": "bo", "label": "Bo" }
+      ]
+    },
+    {
+      "id": "treat",
+      "label": "Treat",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "icecream", "label": "Ice Cream", "phrase": "bought the ice cream", "refPhrase": "ice-cream fan" },
+        { "id": "popsicle", "label": "Popsicle", "phrase": "bought the popsicle", "refPhrase": "popsicle fan" },
+        { "id": "cookie", "label": "Cookie", "phrase": "bought the cookie", "refPhrase": "cookie fan" },
+        { "id": "cupcake", "label": "Cupcake", "phrase": "bought the cupcake", "refPhrase": "cupcake fan" },
+        { "id": "donut", "label": "Donut", "phrase": "bought the donut", "refPhrase": "donut fan" },
+        { "id": "chocolate", "label": "Chocolate", "phrase": "bought the chocolate", "refPhrase": "chocolate fan" }
+      ]
+    },
+    {
+      "id": "shell",
+      "label": "Shell",
+      "kind": "numeric",
+      "unit": "shells",
+      "valuePool": [
+        { "id": "shell2", "label": "2 shells", "magnitude": 2, "phrase": "counted 2 shells" },
+        { "id": "shell4", "label": "4 shells", "magnitude": 4, "phrase": "counted 4 shells" },
+        { "id": "shell6", "label": "6 shells", "magnitude": 6, "phrase": "counted 6 shells" },
+        { "id": "shell8", "label": "8 shells", "magnitude": 8, "phrase": "counted 8 shells" },
+        { "id": "shell10", "label": "10 shells", "magnitude": 10, "phrase": "counted 10 shells" },
+        { "id": "shell12", "label": "12 shells", "magnitude": 12, "phrase": "counted 12 shells" }
+      ]
+    },
+    {
+      "id": "burst",
+      "label": "Burst",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "willow", "label": "The Willow", "phrase": "cheered The Willow", "refPhrase": "Willow watcher" },
+        { "id": "peony", "label": "The Peony", "phrase": "cheered The Peony", "refPhrase": "Peony watcher" },
+        { "id": "comet", "label": "The Comet", "phrase": "cheered The Comet", "refPhrase": "Comet watcher" },
+        { "id": "fountain", "label": "The Fountain", "phrase": "cheered The Fountain", "refPhrase": "Fountain watcher" },
+        { "id": "cascade", "label": "The Cascade", "phrase": "cheered The Cascade", "refPhrase": "Cascade watcher" },
+        { "id": "crackle", "label": "The Crackle", "phrase": "cheered The Crackle", "refPhrase": "Crackle watcher" }
+      ]
+    },
+    {
+      "id": "spot",
+      "label": "Spot",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "hilltop", "label": "The Hilltop", "phrase": "watched from The Hilltop", "refPhrase": "Hilltop reveller" },
+        { "id": "bridge", "label": "The Bridge", "phrase": "watched from The Bridge", "refPhrase": "Bridge reveller" },
+        { "id": "pier", "label": "The Pier", "phrase": "watched from The Pier", "refPhrase": "Pier reveller" },
+        { "id": "rooftop", "label": "The Rooftop", "phrase": "watched from The Rooftop", "refPhrase": "Rooftop reveller" },
+        { "id": "meadow", "label": "The Meadow", "phrase": "watched from The Meadow", "refPhrase": "Meadow reveller" },
+        { "id": "quay", "label": "The Quay", "phrase": "watched from The Quay", "refPhrase": "Quay reveller" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "shell",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} counted {delta} more shells than {b_ref}.",
+        "{a_ref} counted {delta} more shells than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "shell",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} counted no fewer than {bound} shells.",
+        "{a_ref} counted at least {bound} shells."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the programme read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

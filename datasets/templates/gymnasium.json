@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "gymnasium",
+  "title": "The Gymnasium",
+  "subjectNoun": "member",
+  "subjectCategory": "member",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A witty morning at the community gymnasium. Anchor = member. sport is glyph-backed by the sports pack (value ids are pack slugs); coach and drill are text-only; lap is the numeric axis (laps run) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (lap/coach/drill).",
+  "narrativeTemplate": "Trainers squeak on the polished floor as {n} members warm up along the mats, and {host} works out whose session was whose after a {mishap} knocked the sign-up board over.",
+  "flavorPools": {
+    "host": ["instructor Kayla", "old Boris", "the front-desk lead"],
+    "mishap": ["squeaky treadmill", "rogue medicine ball", "dropped whistle"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Aiko'; 'attribute' -> 'the tennis trainee' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "member",
+      "label": "Member",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "aiko", "label": "Aiko" },
+        { "id": "reuben", "label": "Reuben" },
+        { "id": "carmen", "label": "Carmen" },
+        { "id": "idris", "label": "Idris" },
+        { "id": "petra", "label": "Petra" },
+        { "id": "sunil", "label": "Sunil" }
+      ]
+    },
+    {
+      "id": "sport",
+      "label": "Sport",
+      "kind": "nominal",
+      "glyphPack": "sports",
+      "valuePool": [
+        { "id": "badminton", "label": "Badminton", "phrase": "trained at the badminton", "refPhrase": "badminton trainee" },
+        { "id": "tennis", "label": "Tennis", "phrase": "trained at the tennis", "refPhrase": "tennis trainee" },
+        { "id": "hockey", "label": "Hockey", "phrase": "trained at the hockey", "refPhrase": "hockey trainee" },
+        { "id": "baseball", "label": "Baseball", "phrase": "trained at the baseball", "refPhrase": "baseball trainee" },
+        { "id": "golf", "label": "Golf", "phrase": "trained at the golf", "refPhrase": "golf trainee" },
+        { "id": "gymnastics", "label": "Gymnastics", "phrase": "trained at the gymnastics", "refPhrase": "gymnastics trainee" }
+      ]
+    },
+    {
+      "id": "lap",
+      "label": "Lap",
+      "kind": "numeric",
+      "unit": "laps",
+      "valuePool": [
+        { "id": "lap2", "label": "2 laps", "magnitude": 2, "phrase": "ran 2 laps" },
+        { "id": "lap4", "label": "4 laps", "magnitude": 4, "phrase": "ran 4 laps" },
+        { "id": "lap6", "label": "6 laps", "magnitude": 6, "phrase": "ran 6 laps" },
+        { "id": "lap8", "label": "8 laps", "magnitude": 8, "phrase": "ran 8 laps" },
+        { "id": "lap10", "label": "10 laps", "magnitude": 10, "phrase": "ran 10 laps" },
+        { "id": "lap12", "label": "12 laps", "magnitude": 12, "phrase": "ran 12 laps" }
+      ]
+    },
+    {
+      "id": "coach",
+      "label": "Coach",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "coachbern", "label": "Coach Bern", "phrase": "trained under Coach Bern", "refPhrase": "Coach Bern squad" },
+        { "id": "coachpia", "label": "Coach Pia", "phrase": "trained under Coach Pia", "refPhrase": "Coach Pia squad" },
+        { "id": "coachvidal", "label": "Coach Vidal", "phrase": "trained under Coach Vidal", "refPhrase": "Coach Vidal squad" },
+        { "id": "coachnunez", "label": "Coach Nunez", "phrase": "trained under Coach Nunez", "refPhrase": "Coach Nunez squad" },
+        { "id": "coachokafor", "label": "Coach Okafor", "phrase": "trained under Coach Okafor", "refPhrase": "Coach Okafor squad" },
+        { "id": "coachreyes", "label": "Coach Reyes", "phrase": "trained under Coach Reyes", "refPhrase": "Coach Reyes squad" }
+      ]
+    },
+    {
+      "id": "drill",
+      "label": "Drill",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "sprintdrill", "label": "Sprint Drill", "phrase": "finished the Sprint Drill", "refPhrase": "Sprint Drill member" },
+        { "id": "circuitdrill", "label": "Circuit Drill", "phrase": "finished the Circuit Drill", "refPhrase": "Circuit Drill member" },
+        { "id": "coredrill", "label": "Core Drill", "phrase": "finished the Core Drill", "refPhrase": "Core Drill member" },
+        { "id": "agilitydrill", "label": "Agility Drill", "phrase": "finished the Agility Drill", "refPhrase": "Agility Drill member" },
+        { "id": "stretchdrill", "label": "Stretch Drill", "phrase": "finished the Stretch Drill", "refPhrase": "Stretch Drill member" },
+        { "id": "powerdrill", "label": "Power Drill", "phrase": "finished the Power Drill", "refPhrase": "Power Drill member" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "lap",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} ran {delta} more laps than {b_ref}.",
+        "{a_ref} ran {delta} more laps than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "lap",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} ran no fewer than {bound} laps.",
+        "{a_ref} ran at least {bound} laps."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

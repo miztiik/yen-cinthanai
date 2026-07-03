@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "antiques-shop",
+  "title": "The Antiques Shop",
+  "subjectNoun": "customer",
+  "subjectCategory": "customer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A light-mystery afternoon in a crowded antiques shop. Anchor = customer. piece is glyph-backed by the household pack (value ids are pack slugs); era and tag are text-only; bid is the numeric axis (bids placed) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (bid/era/tag).",
+  "narrativeTemplate": "Dust motes hang in the lamplight as {n} customers drift between the crowded shelves, and {host} puzzles out whose interest was whose after a {mishap} toppled the ledger stand.",
+  "flavorPools": {
+    "host": ["dealer Agatha", "old Crenshaw", "the shop keeper"],
+    "mishap": ["draught through the curtain", "wobbling display", "curious tabby"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Elodie'; 'attribute' -> 'the teapot buyer' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "customer",
+      "label": "Customer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "elodie", "label": "Elodie" },
+        { "id": "rashad", "label": "Rashad" },
+        { "id": "beatrix", "label": "Beatrix" },
+        { "id": "lorcan", "label": "Lorcan" },
+        { "id": "sana", "label": "Sana" },
+        { "id": "walt", "label": "Walt" }
+      ]
+    },
+    {
+      "id": "piece",
+      "label": "Piece",
+      "kind": "nominal",
+      "glyphPack": "household",
+      "valuePool": [
+        { "id": "teapot", "label": "Teapot", "phrase": "admired the teapot", "refPhrase": "teapot buyer" },
+        { "id": "bench", "label": "Bench", "phrase": "admired the bench", "refPhrase": "bench buyer" },
+        { "id": "bookshelf", "label": "Bookcase", "phrase": "admired the bookcase", "refPhrase": "bookcase buyer" },
+        { "id": "chair", "label": "Chair", "phrase": "admired the chair", "refPhrase": "chair buyer" },
+        { "id": "closet", "label": "Wardrobe", "phrase": "admired the wardrobe", "refPhrase": "wardrobe buyer" },
+        { "id": "televisioncabinet", "label": "Cabinet", "phrase": "admired the cabinet", "refPhrase": "cabinet buyer" }
+      ]
+    },
+    {
+      "id": "bid",
+      "label": "Bid",
+      "kind": "numeric",
+      "unit": "bids",
+      "valuePool": [
+        { "id": "bid2", "label": "2 bids", "magnitude": 2, "phrase": "placed 2 bids" },
+        { "id": "bid4", "label": "4 bids", "magnitude": 4, "phrase": "placed 4 bids" },
+        { "id": "bid6", "label": "6 bids", "magnitude": 6, "phrase": "placed 6 bids" },
+        { "id": "bid8", "label": "8 bids", "magnitude": 8, "phrase": "placed 8 bids" },
+        { "id": "bid10", "label": "10 bids", "magnitude": 10, "phrase": "placed 10 bids" },
+        { "id": "bid12", "label": "12 bids", "magnitude": 12, "phrase": "placed 12 bids" }
+      ]
+    },
+    {
+      "id": "era",
+      "label": "Era",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "regency", "label": "Regency", "phrase": "favoured the Regency", "refPhrase": "Regency collector" },
+        { "id": "victorian", "label": "Victorian", "phrase": "favoured the Victorian", "refPhrase": "Victorian collector" },
+        { "id": "edwardian", "label": "Edwardian", "phrase": "favoured the Edwardian", "refPhrase": "Edwardian collector" },
+        { "id": "deco", "label": "Deco", "phrase": "favoured the Deco", "refPhrase": "Deco collector" },
+        { "id": "nouveau", "label": "Nouveau", "phrase": "favoured the Nouveau", "refPhrase": "Nouveau collector" },
+        { "id": "georgian", "label": "Georgian", "phrase": "favoured the Georgian", "refPhrase": "Georgian collector" }
+      ]
+    },
+    {
+      "id": "tag",
+      "label": "Tag",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "estatetag", "label": "Estate Tag", "phrase": "carried the Estate Tag", "refPhrase": "Estate Tag piece" },
+        { "id": "auctiontag", "label": "Auction Tag", "phrase": "carried the Auction Tag", "refPhrase": "Auction Tag piece" },
+        { "id": "attictag", "label": "Attic Tag", "phrase": "carried the Attic Tag", "refPhrase": "Attic Tag piece" },
+        { "id": "salvagetag", "label": "Salvage Tag", "phrase": "carried the Salvage Tag", "refPhrase": "Salvage Tag piece" },
+        { "id": "heirloomtag", "label": "Heirloom Tag", "phrase": "carried the Heirloom Tag", "refPhrase": "Heirloom Tag piece" },
+        { "id": "importtag", "label": "Import Tag", "phrase": "carried the Import Tag", "refPhrase": "Import Tag piece" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "bid",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} placed {delta} more bids than {b_ref}.",
+        "{a_ref} placed {delta} more bids than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "bid",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} placed no fewer than {bound} bids.",
+        "{a_ref} placed at least {bound} bids."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the ledger read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

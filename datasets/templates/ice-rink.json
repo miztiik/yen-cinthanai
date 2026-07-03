@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "ice-rink",
+  "title": "The Ice Rink",
+  "subjectNoun": "skater",
+  "subjectCategory": "skater",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical morning session at the winter ice rink. Anchor = skater. boots is glyph-backed by the color pack (value ids are pack slugs - the skate-boot colour); session and move are text-only; spin is the numeric axis (spins landed) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (spin/session/move).",
+  "narrativeTemplate": "Blades hiss over the fresh ice as {n} skaters glide out under the rafters, and {host} works out whose turn was whose after a {mishap} scattered the guard covers.",
+  "flavorPools": {
+    "host": ["coach Elke", "old Sorensen", "the rink marshal"],
+    "mishap": ["stray puck", "wobbly barrier", "flickering floodlight"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Ines'; 'attribute' -> 'the red-boot skater' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "skater",
+      "label": "Skater",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "ines", "label": "Ines" },
+        { "id": "boris", "label": "Boris" },
+        { "id": "chiara", "label": "Chiara" },
+        { "id": "dane", "label": "Dane" },
+        { "id": "yara", "label": "Yara" },
+        { "id": "pol", "label": "Pol" }
+      ]
+    },
+    {
+      "id": "boots",
+      "label": "Boots",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red Boots", "phrase": "laced the red boots", "refPhrase": "red-boot skater" },
+        { "id": "blue", "label": "Blue Boots", "phrase": "laced the blue boots", "refPhrase": "blue-boot skater" },
+        { "id": "green", "label": "Green Boots", "phrase": "laced the green boots", "refPhrase": "green-boot skater" },
+        { "id": "yellow", "label": "Yellow Boots", "phrase": "laced the yellow boots", "refPhrase": "yellow-boot skater" },
+        { "id": "orange", "label": "Orange Boots", "phrase": "laced the orange boots", "refPhrase": "orange-boot skater" },
+        { "id": "purple", "label": "Purple Boots", "phrase": "laced the purple boots", "refPhrase": "purple-boot skater" }
+      ]
+    },
+    {
+      "id": "spin",
+      "label": "Spin",
+      "kind": "numeric",
+      "unit": "spins",
+      "valuePool": [
+        { "id": "spin2", "label": "2 spins", "magnitude": 2, "phrase": "landed 2 spins" },
+        { "id": "spin4", "label": "4 spins", "magnitude": 4, "phrase": "landed 4 spins" },
+        { "id": "spin6", "label": "6 spins", "magnitude": 6, "phrase": "landed 6 spins" },
+        { "id": "spin8", "label": "8 spins", "magnitude": 8, "phrase": "landed 8 spins" },
+        { "id": "spin10", "label": "10 spins", "magnitude": 10, "phrase": "landed 10 spins" },
+        { "id": "spin12", "label": "12 spins", "magnitude": 12, "phrase": "landed 12 spins" }
+      ]
+    },
+    {
+      "id": "session",
+      "label": "Session",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "dawnsession", "label": "Dawn Session", "phrase": "skated the Dawn Session", "refPhrase": "Dawn Session skater" },
+        { "id": "publicsession", "label": "Public Session", "phrase": "skated the Public Session", "refPhrase": "Public Session skater" },
+        { "id": "lessonsession", "label": "Lesson Session", "phrase": "skated the Lesson Session", "refPhrase": "Lesson Session skater" },
+        { "id": "freestylesession", "label": "Freestyle Session", "phrase": "skated the Freestyle Session", "refPhrase": "Freestyle Session skater" },
+        { "id": "dancesession", "label": "Dance Session", "phrase": "skated the Dance Session", "refPhrase": "Dance Session skater" },
+        { "id": "hockeysession", "label": "Hockey Session", "phrase": "skated the Hockey Session", "refPhrase": "Hockey Session skater" }
+      ]
+    },
+    {
+      "id": "move",
+      "label": "Move",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "loop", "label": "The Loop", "phrase": "practised The Loop", "refPhrase": "Loop skater" },
+        { "id": "axel", "label": "The Axel", "phrase": "practised The Axel", "refPhrase": "Axel skater" },
+        { "id": "salchow", "label": "The Salchow", "phrase": "practised The Salchow", "refPhrase": "Salchow skater" },
+        { "id": "lutz", "label": "The Lutz", "phrase": "practised The Lutz", "refPhrase": "Lutz skater" },
+        { "id": "camel", "label": "The Camel", "phrase": "practised The Camel", "refPhrase": "Camel skater" },
+        { "id": "bracket", "label": "The Bracket", "phrase": "practised The Bracket", "refPhrase": "Bracket skater" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "spin",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} landed {delta} more spins than {b_ref}.",
+        "{a_ref} landed {delta} more spins than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "spin",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} landed no fewer than {bound} spins.",
+        "{a_ref} landed at least {bound} spins."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the roster read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

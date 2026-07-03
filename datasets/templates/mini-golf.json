@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "mini-golf",
+  "title": "The Mini-Golf Course",
+  "subjectNoun": "player",
+  "subjectCategory": "player",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A witty round at the seaside mini-golf course. Anchor = player. hole is text-only (no glyph pack fits themed obstacles); club and prize are text-only; stroke is the numeric axis (strokes taken) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (stroke/club/prize).",
+  "narrativeTemplate": "Windmills clack and bells ding across the course as {n} players line up their shots, and {host} works out whose round was whose after a {mishap} scattered the scorecards.",
+  "flavorPools": {
+    "host": ["marshal Dot", "old Pemberton", "the kiosk attendant"],
+    "mishap": ["stuck windmill blade", "runaway ball", "sudden drizzle"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Rory'; 'attribute' -> 'the Windmill ace' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "player",
+      "label": "Player",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "rory", "label": "Rory" },
+        { "id": "delia", "label": "Delia" },
+        { "id": "kwame", "label": "Kwame" },
+        { "id": "sonia", "label": "Sonia" },
+        { "id": "haru", "label": "Haru" },
+        { "id": "vince", "label": "Vince" }
+      ]
+    },
+    {
+      "id": "hole",
+      "label": "Hole",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "windmill", "label": "The Windmill", "phrase": "aced the Windmill", "refPhrase": "Windmill ace" },
+        { "id": "castle", "label": "The Castle", "phrase": "aced the Castle", "refPhrase": "Castle ace" },
+        { "id": "loop", "label": "The Loop", "phrase": "aced the Loop", "refPhrase": "Loop ace" },
+        { "id": "tunnel", "label": "The Tunnel", "phrase": "aced the Tunnel", "refPhrase": "Tunnel ace" },
+        { "id": "bridge", "label": "The Bridge", "phrase": "aced the Bridge", "refPhrase": "Bridge ace" },
+        { "id": "volcano", "label": "The Volcano", "phrase": "aced the Volcano", "refPhrase": "Volcano ace" }
+      ]
+    },
+    {
+      "id": "stroke",
+      "label": "Stroke",
+      "kind": "numeric",
+      "unit": "strokes",
+      "valuePool": [
+        { "id": "stroke3", "label": "3 strokes", "magnitude": 3, "phrase": "took 3 strokes" },
+        { "id": "stroke5", "label": "5 strokes", "magnitude": 5, "phrase": "took 5 strokes" },
+        { "id": "stroke7", "label": "7 strokes", "magnitude": 7, "phrase": "took 7 strokes" },
+        { "id": "stroke9", "label": "9 strokes", "magnitude": 9, "phrase": "took 9 strokes" },
+        { "id": "stroke11", "label": "11 strokes", "magnitude": 11, "phrase": "took 11 strokes" },
+        { "id": "stroke13", "label": "13 strokes", "magnitude": 13, "phrase": "took 13 strokes" }
+      ]
+    },
+    {
+      "id": "club",
+      "label": "Club",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "loanerclub", "label": "Loaner Club", "phrase": "swung the Loaner Club", "refPhrase": "Loaner Club player" },
+        { "id": "juniorclub", "label": "Junior Club", "phrase": "swung the Junior Club", "refPhrase": "Junior Club player" },
+        { "id": "proclub", "label": "Pro Club", "phrase": "swung the Pro Club", "refPhrase": "Pro Club player" },
+        { "id": "bentclub", "label": "Bent Club", "phrase": "swung the Bent Club", "refPhrase": "Bent Club player" },
+        { "id": "longclub", "label": "Long Club", "phrase": "swung the Long Club", "refPhrase": "Long Club player" },
+        { "id": "shortclub", "label": "Short Club", "phrase": "swung the Short Club", "refPhrase": "Short Club player" }
+      ]
+    },
+    {
+      "id": "prize",
+      "label": "Prize",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "freeround", "label": "Free Round", "phrase": "won the Free Round", "refPhrase": "Free Round player" },
+        { "id": "goldtoken", "label": "Gold Token", "phrase": "won the Gold Token", "refPhrase": "Gold Token player" },
+        { "id": "snackvoucher", "label": "Snack Voucher", "phrase": "won the Snack Voucher", "refPhrase": "Snack Voucher player" },
+        { "id": "sunhat", "label": "Sun Hat", "phrase": "won the Sun Hat", "refPhrase": "Sun Hat player" },
+        { "id": "enamelbadge", "label": "Enamel Badge", "phrase": "won the Enamel Badge", "refPhrase": "Enamel Badge player" },
+        { "id": "keyring", "label": "Keyring", "phrase": "won the Keyring", "refPhrase": "Keyring player" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "stroke",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} took {delta} more strokes than {b_ref}.",
+        "{a_ref} took {delta} more strokes than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "stroke",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} took no fewer than {bound} strokes.",
+        "{a_ref} took at least {bound} strokes."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the card read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

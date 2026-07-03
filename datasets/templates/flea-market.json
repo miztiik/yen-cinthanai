@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "flea-market",
+  "title": "The Flea Market",
+  "subjectNoun": "seller",
+  "subjectCategory": "seller",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A light-mystery dawn at a weekend flea market. Anchor = seller. ware is glyph-backed by the crafts pack (value ids are pack slugs); stall and token are text-only; find is the numeric axis (finds logged) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (find/stall/token).",
+  "narrativeTemplate": "Bunting flaps over the cobbles as {n} sellers lay out their tables at dawn, and {host} puzzles out whose corner was whose after a {mishap} blew the price cards about.",
+  "flavorPools": {
+    "host": ["organiser Bev", "old Ferris", "the market steward"],
+    "mishap": ["gust down the lane", "upset money tin", "sudden shower"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Pia'; 'attribute' -> 'the pottery seller' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "seller",
+      "label": "Seller",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "pia", "label": "Pia" },
+        { "id": "desmond", "label": "Desmond" },
+        { "id": "yara", "label": "Yara" },
+        { "id": "florian", "label": "Florian" },
+        { "id": "lin", "label": "Lin" },
+        { "id": "otis", "label": "Otis" }
+      ]
+    },
+    {
+      "id": "ware",
+      "label": "Ware",
+      "kind": "nominal",
+      "glyphPack": "crafts",
+      "valuePool": [
+        { "id": "pottery", "label": "Pottery", "phrase": "sold the pottery", "refPhrase": "pottery seller" },
+        { "id": "painting", "label": "Paintings", "phrase": "sold the paintings", "refPhrase": "paintings seller" },
+        { "id": "carpentry", "label": "Woodwork", "phrase": "sold the woodwork", "refPhrase": "woodwork seller" },
+        { "id": "candlemaking", "label": "Candles", "phrase": "sold the candles", "refPhrase": "candles seller" },
+        { "id": "soapmaking", "label": "Soaps", "phrase": "sold the soaps", "refPhrase": "soaps seller" },
+        { "id": "gardening", "label": "Potted Plants", "phrase": "sold the potted plants", "refPhrase": "potted-plants seller" }
+      ]
+    },
+    {
+      "id": "find",
+      "label": "Find",
+      "kind": "numeric",
+      "unit": "finds",
+      "valuePool": [
+        { "id": "find3", "label": "3 finds", "magnitude": 3, "phrase": "logged 3 finds" },
+        { "id": "find5", "label": "5 finds", "magnitude": 5, "phrase": "logged 5 finds" },
+        { "id": "find7", "label": "7 finds", "magnitude": 7, "phrase": "logged 7 finds" },
+        { "id": "find9", "label": "9 finds", "magnitude": 9, "phrase": "logged 9 finds" },
+        { "id": "find11", "label": "11 finds", "magnitude": 11, "phrase": "logged 11 finds" },
+        { "id": "find13", "label": "13 finds", "magnitude": 13, "phrase": "logged 13 finds" }
+      ]
+    },
+    {
+      "id": "stall",
+      "label": "Stall",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "cornerstall", "label": "Corner Stall", "phrase": "ran the Corner Stall", "refPhrase": "Corner Stall seller" },
+        { "id": "awningstall", "label": "Awning Stall", "phrase": "ran the Awning Stall", "refPhrase": "Awning Stall seller" },
+        { "id": "gatestall", "label": "Gate Stall", "phrase": "ran the Gate Stall", "refPhrase": "Gate Stall seller" },
+        { "id": "fountainstall", "label": "Fountain Stall", "phrase": "ran the Fountain Stall", "refPhrase": "Fountain Stall seller" },
+        { "id": "archstall", "label": "Arch Stall", "phrase": "ran the Arch Stall", "refPhrase": "Arch Stall seller" },
+        { "id": "lanestall", "label": "Lane Stall", "phrase": "ran the Lane Stall", "refPhrase": "Lane Stall seller" }
+      ]
+    },
+    {
+      "id": "token",
+      "label": "Token",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "brasstoken", "label": "Brass Token", "phrase": "took the Brass Token", "refPhrase": "Brass Token seller" },
+        { "id": "ribbontoken", "label": "Ribbon Token", "phrase": "took the Ribbon Token", "refPhrase": "Ribbon Token seller" },
+        { "id": "papertoken", "label": "Paper Token", "phrase": "took the Paper Token", "refPhrase": "Paper Token seller" },
+        { "id": "waxtoken", "label": "Wax Token", "phrase": "took the Wax Token", "refPhrase": "Wax Token seller" },
+        { "id": "claytoken", "label": "Clay Token", "phrase": "took the Clay Token", "refPhrase": "Clay Token seller" },
+        { "id": "tintoken", "label": "Tin Token", "phrase": "took the Tin Token", "refPhrase": "Tin Token seller" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "find",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} logged {delta} more finds than {b_ref}.",
+        "{a_ref} logged {delta} more finds than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "find",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} logged no fewer than {bound} finds.",
+        "{a_ref} logged at least {bound} finds."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the tally read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "hot-spring",
+  "title": "The Hot Spring",
+  "subjectNoun": "bather",
+  "subjectCategory": "bather",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A cozy afternoon at a steaming thermal bathhouse. Anchor = bather. drink is glyph-backed by the drinks pack (value ids are pack slugs); pool and robe are text-only; soak is the numeric axis (soaks taken) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (soak/pool/robe).",
+  "narrativeTemplate": "Steam drifts across the water as {n} bathers ease into the warmth, and {host} sorts out whose afternoon was whose after a {mishap} muddled the towel pegs.",
+  "flavorPools": {
+    "host": ["attendant Yuki", "old Mr Halloran", "the bathhouse host"],
+    "mishap": ["draught from the door", "slippery step", "toppled basket"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Noor'; 'attribute' -> 'the coffee sipper' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "bather",
+      "label": "Bather",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "noor", "label": "Noor" },
+        { "id": "kenji", "label": "Kenji" },
+        { "id": "sofia", "label": "Sofia" },
+        { "id": "amara", "label": "Amara" },
+        { "id": "dmitri", "label": "Dmitri" },
+        { "id": "leilani", "label": "Leilani" }
+      ]
+    },
+    {
+      "id": "drink",
+      "label": "Drink",
+      "kind": "nominal",
+      "glyphPack": "drinks",
+      "valuePool": [
+        { "id": "coffee", "label": "Coffee", "phrase": "sipped the coffee", "refPhrase": "coffee sipper" },
+        { "id": "tea", "label": "Green tea", "phrase": "sipped the green tea", "refPhrase": "green-tea sipper" },
+        { "id": "milk", "label": "Warm milk", "phrase": "sipped the warm milk", "refPhrase": "warm-milk sipper" },
+        { "id": "juice", "label": "Fruit juice", "phrase": "sipped the fruit juice", "refPhrase": "fruit-juice sipper" },
+        { "id": "soda", "label": "Cream soda", "phrase": "sipped the cream soda", "refPhrase": "cream-soda sipper" },
+        { "id": "water", "label": "Mineral water", "phrase": "sipped the mineral water", "refPhrase": "mineral-water sipper" }
+      ]
+    },
+    {
+      "id": "soak",
+      "label": "Soak",
+      "kind": "numeric",
+      "unit": "soaks",
+      "valuePool": [
+        { "id": "soak2", "label": "2 soaks", "magnitude": 2, "phrase": "took 2 soaks" },
+        { "id": "soak4", "label": "4 soaks", "magnitude": 4, "phrase": "took 4 soaks" },
+        { "id": "soak6", "label": "6 soaks", "magnitude": 6, "phrase": "took 6 soaks" },
+        { "id": "soak8", "label": "8 soaks", "magnitude": 8, "phrase": "took 8 soaks" },
+        { "id": "soak10", "label": "10 soaks", "magnitude": 10, "phrase": "took 10 soaks" },
+        { "id": "soak12", "label": "12 soaks", "magnitude": 12, "phrase": "took 12 soaks" }
+      ]
+    },
+    {
+      "id": "pool",
+      "label": "Pool",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "cedarpool", "label": "Cedar Pool", "phrase": "settled in the Cedar Pool", "refPhrase": "Cedar Pool regular" },
+        { "id": "willowpool", "label": "Willow Pool", "phrase": "settled in the Willow Pool", "refPhrase": "Willow Pool regular" },
+        { "id": "lotuspool", "label": "Lotus Pool", "phrase": "settled in the Lotus Pool", "refPhrase": "Lotus Pool regular" },
+        { "id": "emberpool", "label": "Ember Pool", "phrase": "settled in the Ember Pool", "refPhrase": "Ember Pool regular" },
+        { "id": "mistpool", "label": "Mist Pool", "phrase": "settled in the Mist Pool", "refPhrase": "Mist Pool regular" },
+        { "id": "stonepool", "label": "Stone Pool", "phrase": "settled in the Stone Pool", "refPhrase": "Stone Pool regular" }
+      ]
+    },
+    {
+      "id": "robe",
+      "label": "Robe",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "linenrobe", "label": "Linen Robe", "phrase": "wore the Linen Robe", "refPhrase": "Linen Robe guest" },
+        { "id": "cottonrobe", "label": "Cotton Robe", "phrase": "wore the Cotton Robe", "refPhrase": "Cotton Robe guest" },
+        { "id": "silkrobe", "label": "Silk Robe", "phrase": "wore the Silk Robe", "refPhrase": "Silk Robe guest" },
+        { "id": "woolrobe", "label": "Wool Robe", "phrase": "wore the Wool Robe", "refPhrase": "Wool Robe guest" },
+        { "id": "bamboorobe", "label": "Bamboo Robe", "phrase": "wore the Bamboo Robe", "refPhrase": "Bamboo Robe guest" },
+        { "id": "terryrobe", "label": "Terry Robe", "phrase": "wore the Terry Robe", "refPhrase": "Terry Robe guest" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "soak",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} took {delta} more soaks than {b_ref}.",
+        "{a_ref} took {delta} more soaks than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "soak",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} took no fewer than {bound} soaks.",
+        "{a_ref} took at least {bound} soaks."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the ledger read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
