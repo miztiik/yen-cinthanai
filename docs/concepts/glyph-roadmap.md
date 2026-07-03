@@ -13,18 +13,21 @@ Which glyph pack backs each scenario CATEGORY, what is reused today, and what ar
 
 ## Packs backing scenarios today
 
-Backfilled 2026-07-03: `crafts`, `flowers` (partial), `spaceship`, plus the `abstract` numerals now wired to numbered/position categories and sequential numeric axes.
+Backfilled 2026-07-03: `crafts`, `flowers` (partial), `spaceship`, plus the `abstract` numerals now wired to numbered/position categories and sequential numeric axes. Row 9g then SCALED the catalog from 4 to 12 scenarios by REUSING existing packs (no new art): `food`, `drinks`, `vegetables`, `color`, `creatures` and `clothes` each back several scenarios, and `medals` decorates the top three film-festival prizes per-value. Per this batch's rule the ANCHOR and every NUMERIC axis stay text.
 
 | Pack | Backs (scenario.category) | Notes |
 | --- | --- | --- |
 | `crafts` | weekend-market.craft | BACKFILLED: candlemaking, carpentry, gardening, painting, pottery, soapmaking (6/6) |
-| `food` | food-truck-festival.dish, weekend-market.produce | dish = pizza/burger/sushi/fries/toast/seafood; produce = bread/cheese/egg/baguette/cookie/donut (2 scenarios) |
+| `food` | food-truck-festival.dish, weekend-market.produce, science-fair.snack, costume-parade.treat | dish/produce/snack/treat draw from the 18-value food pack (pizza/cookie/donut/cupcake/popsicle/icecream/... ) - 4 scenarios |
 | `flowers` | weekend-market.bloom (PARTIAL, per-value) | BACKFILLED but only 2/6: jasmine + sunflower wired via per-value `glyph`; tulips/daisies/lilies/poppies stay text until 4 more flowers land |
 | `spaceship` | starliner-crew.vessel | BACKFILLED: enterprise/greenship/orangeship/saucer/spacerover/spaceshuttle (6/6). The old text-only `deck` was repurposed into a `vessel` category (the spaceship glyphs are VESSEL types, not decks) |
 | `abstract` | food-truck-festival.pitch, community-garden.plot, starliner-crew.shift | numerals num1..num6 back numbered positions AND sequential numeric axes (plot/shift aligned to 1..6) |
-| `drinks` | food-truck-festival.drink | non-alcoholic subset (coffee/juice/soda/tea/milk/water) - wholesome |
-| `vegetables` | community-garden.vegetable | carrot, potato, corn, cabbage, spinach, beet |
-| `color` | community-garden.ribbon | the rosette colour (blue/red/green/yellow/purple/orange) |
+| `drinks` | food-truck-festival.drink, observatory-night.drink, newsroom-deadline.drink | non-alcoholic subset (coffee/tea/milk/juice/soda/water) - wholesome; 3 scenarios |
+| `vegetables` | community-garden.vegetable, county-fair.crop | carrot/corn/potato/cabbage/beet/okra + spinach; 2 scenarios |
+| `color` | community-garden.ribbon, harbor-regatta.sailcolor | rosette colour / sail colour (red/blue/green/yellow/orange/purple) |
+| `creatures` | harbor-regatta.mascot, county-fair.animal | mascot = crab/turtle/penguin/shark/fish/owl; animal = cow/goat/sheep/horse/rabbit/dog (28-value pack) |
+| `clothes` | orchestra-tuning.outfit, costume-parade.costume | concert attire / carnival costume drawn from the 25-value clothes pack |
+| `medals` | film-festival.award (PARTIAL, per-value) | 3/3 pack (gold/silver/bronze) wired per-value onto the top three film prizes; the other three awards stay text |
 | `occupation` | starliner-crew.role | PARTIAL reuse: occupation slugs stand in for crew roles (astronomer -> Navigator, biologist -> Botanist, surgeon -> Medic, scientist -> Science Officer, captain, engineer) |
 | `flags` | categories.country (dimension source; not yet in a scenario) | 271-flag pack, curated subset in `datasets/categories.json` |
 
@@ -54,13 +57,54 @@ Legend: GLYPH = renders from a shipped pack; TEXT = text-only (anchor, or a non-
 | starliner-crew | shift | numeric | `abstract` | GLYPH (numerals 1..6) |
 | starliner-crew | vessel | nominal | `spaceship` | GLYPH (repurposed from deck) |
 | starliner-crew | cargo | nominal | - | TEXT (no cargo pack yet) |
+| science-fair | student (anchor) | nominal | - | TEXT (person) |
+| science-fair | project | nominal | - | TEXT (no project pack) |
+| science-fair | score | numeric | - | TEXT (points, non-sequential) |
+| science-fair | subject | nominal | - | TEXT (no subject pack) |
+| science-fair | snack | nominal | `food` | GLYPH |
+| harbor-regatta | sailor (anchor) | nominal | - | TEXT (person) |
+| harbor-regatta | boat | nominal | - | TEXT (boat rigs) |
+| harbor-regatta | finish | numeric | - | TEXT (minutes, non-sequential) |
+| harbor-regatta | sailcolor | nominal | `color` | GLYPH |
+| harbor-regatta | mascot | nominal | `creatures` | GLYPH |
+| film-festival | director (anchor) | nominal | - | TEXT (person) |
+| film-festival | genre | nominal | - | TEXT (no genre pack) |
+| film-festival | slot | numeric | - | TEXT (screening order 1..6, kept text) |
+| film-festival | venue | nominal | - | TEXT (no venue pack) |
+| film-festival | award | nominal | per-value | PARTIAL (`medals`: gold/silver/bronze; 3 prizes text) |
+| observatory-night | astronomer (anchor) | nominal | - | TEXT (person) |
+| observatory-night | target | nominal | - | TEXT (no sky pack) |
+| observatory-night | vigil | numeric | - | TEXT (hours, non-sequential) |
+| observatory-night | instrument | nominal | - | TEXT (no instrument pack) |
+| observatory-night | drink | nominal | `drinks` | GLYPH |
+| orchestra-tuning | musician (anchor) | nominal | - | TEXT (person) |
+| orchestra-tuning | instrument | nominal | - | TEXT (no instrument pack) |
+| orchestra-tuning | seat | numeric | - | TEXT (chair 1..6, kept text) |
+| orchestra-tuning | piece | nominal | - | TEXT (no piece pack) |
+| orchestra-tuning | outfit | nominal | `clothes` | GLYPH |
+| county-fair | farmer (anchor) | nominal | - | TEXT (person) |
+| county-fair | animal | nominal | `creatures` | GLYPH |
+| county-fair | tally | numeric | - | TEXT (ribbons, non-sequential) |
+| county-fair | crop | nominal | `vegetables` | GLYPH |
+| county-fair | tool | nominal | - | TEXT (no tool pack) |
+| newsroom-deadline | reporter (anchor) | nominal | - | TEXT (person) |
+| newsroom-deadline | beat | nominal | - | TEXT (no beat pack) |
+| newsroom-deadline | length | numeric | - | TEXT (words, non-sequential) |
+| newsroom-deadline | section | nominal | - | TEXT (no section pack) |
+| newsroom-deadline | drink | nominal | `drinks` | GLYPH |
+| costume-parade | reveller (anchor) | nominal | - | TEXT (person) |
+| costume-parade | costume | nominal | `clothes` | GLYPH |
+| costume-parade | float | numeric | - | TEXT (parade position 1..6, kept text) |
+| costume-parade | mask | nominal | - | TEXT (no mask pack) |
+| costume-parade | treat | nominal | `food` | GLYPH |
 
 ## Gap backlog (remaining art to backfill)
 
 1. `flowers` (SHORT: 2/6) - has only jasmine + sunflower, so weekend-market.bloom wires those two per-value and community-garden.bloom stays fully text. Add ~4 more (e.g. rose, tulip, daisy, lily, poppy, marigold) for a full 6-value column, then flip both blooms to a category `glyphPack`. Highest ROI.
-2. `cargo` (or a generic sci-fi pack) - starliner-crew.cargo (ore/ice/grain/alloy/relics/spores) is the last text-only ATTRIBUTE in the batch. A space pack could also enrich role beyond the occupation-pack stand-ins.
+2. `cargo` (or a generic sci-fi pack) - starliner-crew.cargo (ore/ice/grain/alloy/relics/spores) is the last text-only ATTRIBUTE in the original batch. A space pack could also enrich role beyond the occupation-pack stand-ins.
+3. Row-9g text-only ATTRIBUTE categories (candidates for a future pack, roughly by ROI): musical `instrument` (orchestra-tuning), `mask` (costume-parade), `boat` rig (harbor-regatta), film `genre` (film-festival) and `tool` (county-fair); plus the abstract text columns project/subject, target/instrument, venue, beat/section and piece. Each reads cleanly as text today; a pack just lights its column up.
 
-Everything else in the batch is now glyph-backed. Numbered/position categories (pitch) and sequential numeric axes (plot, shift) are covered by the `abstract` numerals (num1..num6) - there is no separate "markers" pack to build. Until a pack lands, a category stays text-only - fully playable, just unillustrated.
+Every glyph-BACKED column resolves to a shipped pack. Numbered/position categories (pitch) and sequential numeric axes (plot, shift) are covered by the `abstract` numerals (num1..num6) - there is no separate "markers" pack to build. The row-9g batch keeps its NUMERIC axes text (per the batch rule) and leaves the attribute categories above unillustrated. Until a pack lands, a category stays text-only - fully playable, just unillustrated.
 
 ## Rendering note
 

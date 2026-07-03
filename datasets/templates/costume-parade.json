@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "costume-parade",
+  "title": "The Costume Parade",
+  "subjectNoun": "reveller",
+  "subjectCategory": "reveller",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content). Whimsical spring carnival. Anchor = reveller. costume -> clothes glyph pack; treat -> food glyph pack; mask is text-only; float is the numeric axis (position in the procession). The narrativeTemplate is setting flavor only and never names a sliced category (float/mask/treat). Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "The spring carnival has taken over the town square, and {n} revellers in full costume are lining up for the grand procession while {marshal}, who organises the pageant, sorts out the order after the {mishap} sent everyone milling about.",
+  "flavorPools": {
+    "marshal": ["old Peregrine", "Madame Sol", "the carnival marshal"],
+    "mishap": ["sudden shower", "gust of confetti", "burst balloon"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Juno'; 'attribute' -> 'the one in the gown' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "reveller",
+      "label": "Reveller",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "juno", "label": "Juno" },
+        { "id": "bram", "label": "Bram" },
+        { "id": "esme", "label": "Esme" },
+        { "id": "tariq", "label": "Tariq" },
+        { "id": "wren", "label": "Wren" },
+        { "id": "cosmo", "label": "Cosmo" }
+      ]
+    },
+    {
+      "id": "costume",
+      "label": "Costume",
+      "kind": "nominal",
+      "glyphPack": "clothes",
+      "valuePool": [
+        { "id": "womanpartydress", "label": "Party dress", "phrase": "turned up in the party dress", "refPhrase": "one in the party dress" },
+        { "id": "mansuit", "label": "Dapper suit", "phrase": "turned up in the dapper suit", "refPhrase": "one in the dapper suit" },
+        { "id": "manhat", "label": "Top hat", "phrase": "turned up in the top hat", "refPhrase": "one in the top hat" },
+        { "id": "womanhat", "label": "Sun hat", "phrase": "turned up in the sun hat", "refPhrase": "one in the sun hat" },
+        { "id": "mantie", "label": "Bow tie", "phrase": "turned up in the bow tie", "refPhrase": "one in the bow tie" },
+        { "id": "womandress", "label": "Gown", "phrase": "turned up in the gown", "refPhrase": "one in the gown" }
+      ]
+    },
+    {
+      "id": "float",
+      "label": "Float",
+      "kind": "numeric",
+      "valuePool": [
+        { "id": "float1", "label": "Float 1", "magnitude": 1, "phrase": "rode on float 1" },
+        { "id": "float2", "label": "Float 2", "magnitude": 2, "phrase": "rode on float 2" },
+        { "id": "float3", "label": "Float 3", "magnitude": 3, "phrase": "rode on float 3" },
+        { "id": "float4", "label": "Float 4", "magnitude": 4, "phrase": "rode on float 4" },
+        { "id": "float5", "label": "Float 5", "magnitude": 5, "phrase": "rode on float 5" },
+        { "id": "float6", "label": "Float 6", "magnitude": 6, "phrase": "rode on float 6" }
+      ]
+    },
+    {
+      "id": "mask",
+      "label": "Mask",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "fox", "label": "Fox", "phrase": "wore the fox mask", "refPhrase": "one in the fox mask" },
+        { "id": "sun", "label": "Sun", "phrase": "wore the sun mask", "refPhrase": "one in the sun mask" },
+        { "id": "moon", "label": "Moon", "phrase": "wore the moon mask", "refPhrase": "one in the moon mask" },
+        { "id": "jester", "label": "Jester", "phrase": "wore the jester mask", "refPhrase": "one in the jester mask" },
+        { "id": "dragon", "label": "Dragon", "phrase": "wore the dragon mask", "refPhrase": "one in the dragon mask" },
+        { "id": "star", "label": "Star", "phrase": "wore the star mask", "refPhrase": "one in the star mask" }
+      ]
+    },
+    {
+      "id": "treat",
+      "label": "Treat",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "cupcake", "label": "Cupcake", "phrase": "handed out the cupcakes", "refPhrase": "cupcake giver" },
+        { "id": "cookie", "label": "Cookies", "phrase": "handed out the cookies", "refPhrase": "cookie giver" },
+        { "id": "donut", "label": "Donut", "phrase": "handed out the donuts", "refPhrase": "donut giver" },
+        { "id": "icecream", "label": "Ice cream", "phrase": "handed out the ice cream", "refPhrase": "ice-cream giver" },
+        { "id": "popsicle", "label": "Popsicle", "phrase": "handed out the popsicles", "refPhrase": "popsicle giver" },
+        { "id": "chocolate", "label": "Chocolate", "phrase": "handed out the chocolate", "refPhrase": "chocolate giver" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "float",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref}'s float came {delta} later than {b_ref}'s.",
+        "{a_ref} rolled out {delta} behind {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "float",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} rode no earlier than float {bound}.",
+        "{a_ref} was on float {bound} or later."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was torn between {x_label} and {y_label}, and picked just one.",
+        "For {a_ref} it was {x_label} or {y_label} - not both."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

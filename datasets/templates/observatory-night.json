@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "observatory-night",
+  "title": "A Night at the Observatory",
+  "subjectNoun": "stargazer",
+  "subjectCategory": "astronomer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content). Whimsical night-sky observing session. Anchor = astronomer. target + instrument are text-only; drink -> drinks glyph pack (non-alcoholic, wholesome); vigil is the numeric axis (hours kept at the eyepiece). The narrativeTemplate is setting flavor only and never names a sliced category (vigil/instrument/drink) nor a target value. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "It is a clear, dark night up on the ridge, and {n} stargazers have carried their gear to the old observatory lawn, where {keeper}, who minds the dome, is trying to remember who set up where before the {mishap} muddled the log.",
+  "flavorPools": {
+    "keeper": ["old Halvorsen", "Ms. Pryce", "Professor Adeyemi"],
+    "mishap": ["gust down the valley", "flat torch battery", "knocked-over stool"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Orla'; 'attribute' -> 'the Mars watcher' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "astronomer",
+      "label": "Astronomer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "orla", "label": "Orla" },
+        { "id": "sanjay", "label": "Sanjay" },
+        { "id": "beatriz", "label": "Beatriz" },
+        { "id": "kwame", "label": "Kwame" },
+        { "id": "inga", "label": "Inga" },
+        { "id": "milo", "label": "Milo" }
+      ]
+    },
+    {
+      "id": "target",
+      "label": "Target",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "moon", "label": "Moon", "phrase": "tracked the moon", "refPhrase": "moon watcher" },
+        { "id": "mars", "label": "Mars", "phrase": "tracked Mars", "refPhrase": "Mars watcher" },
+        { "id": "saturn", "label": "Saturn", "phrase": "tracked Saturn", "refPhrase": "Saturn watcher" },
+        { "id": "comet", "label": "Comet", "phrase": "chased the comet", "refPhrase": "comet chaser" },
+        { "id": "nebula", "label": "Nebula", "phrase": "sketched the nebula", "refPhrase": "nebula sketcher" },
+        { "id": "cluster", "label": "Cluster", "phrase": "counted the cluster", "refPhrase": "cluster counter" }
+      ]
+    },
+    {
+      "id": "vigil",
+      "label": "Vigil",
+      "kind": "numeric",
+      "unit": "hours",
+      "valuePool": [
+        { "id": "hr2", "label": "2 hrs", "magnitude": 2, "phrase": "kept vigil for 2 hours" },
+        { "id": "hr3", "label": "3 hrs", "magnitude": 3, "phrase": "kept vigil for 3 hours" },
+        { "id": "hr4", "label": "4 hrs", "magnitude": 4, "phrase": "kept vigil for 4 hours" },
+        { "id": "hr5", "label": "5 hrs", "magnitude": 5, "phrase": "kept vigil for 5 hours" },
+        { "id": "hr6", "label": "6 hrs", "magnitude": 6, "phrase": "kept vigil for 6 hours" },
+        { "id": "hr7", "label": "7 hrs", "magnitude": 7, "phrase": "kept vigil for 7 hours" }
+      ]
+    },
+    {
+      "id": "instrument",
+      "label": "Instrument",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "refractor", "label": "Refractor", "phrase": "set up the refractor", "refPhrase": "refractor owner" },
+        { "id": "reflector", "label": "Reflector", "phrase": "set up the reflector", "refPhrase": "reflector owner" },
+        { "id": "binoculars", "label": "Binoculars", "phrase": "raised the binoculars", "refPhrase": "one with the binoculars" },
+        { "id": "dobsonian", "label": "Dobsonian", "phrase": "set up the Dobsonian", "refPhrase": "Dobsonian owner" },
+        { "id": "camera", "label": "Camera", "phrase": "mounted the camera", "refPhrase": "one with the camera" },
+        { "id": "spectroscope", "label": "Spectroscope", "phrase": "fitted the spectroscope", "refPhrase": "one with the spectroscope" }
+      ]
+    },
+    {
+      "id": "drink",
+      "label": "Drink",
+      "kind": "nominal",
+      "glyphPack": "drinks",
+      "valuePool": [
+        { "id": "coffee", "label": "Coffee", "phrase": "sipped the coffee", "refPhrase": "coffee drinker" },
+        { "id": "tea", "label": "Tea", "phrase": "brewed the tea", "refPhrase": "tea drinker" },
+        { "id": "milk", "label": "Warm milk", "phrase": "warmed the milk", "refPhrase": "milk drinker" },
+        { "id": "juice", "label": "Juice", "phrase": "poured the juice", "refPhrase": "juice drinker" },
+        { "id": "soda", "label": "Soda", "phrase": "cracked open the soda", "refPhrase": "soda drinker" },
+        { "id": "water", "label": "Water", "phrase": "sipped the water", "refPhrase": "water drinker" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "vigil",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref}'s vigil ran {delta} longer than {b_ref}'s.",
+        "{a_ref} stayed out {delta} more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "vigil",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} kept vigil for at least {bound} hours.",
+        "{a_ref} did not pack up before {bound} hours."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "For {a_ref} it was {x_label} or {y_label} - only one.",
+        "{a_ref} settled on either {x_label} or {y_label}, not both."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "science-fair",
+  "title": "The Science Fair",
+  "subjectNoun": "student",
+  "subjectCategory": "student",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content, not transcribed from any source). Witty school science fair. Anchor = student. project + subject are text-only (no pack fits); snack -> food glyph pack; score is the numeric axis (points). The narrativeTemplate is setting flavor only - it never names a sliced category (score/subject/snack), so a lower tier that drops those axes never reads a premise it cannot fulfil. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "The school gym is packed for the annual science fair, where {n} students have set up their exhibits along the back wall while {judge}, the visiting judge, works out who built what before the ribbons go up. A {mishap} earlier scrambled the entry cards, so the row has to be sorted out from scratch.",
+  "flavorPools": {
+    "judge": ["Dr. Okonkwo", "Ms. Farley", "Professor Lund"],
+    "mishap": ["gust from the propped-open door", "toppled display board", "clumsy elbow"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Priya'; 'attribute' -> 'the volcano builder' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "student",
+      "label": "Student",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "priya", "label": "Priya" },
+        { "id": "marcus", "label": "Marcus" },
+        { "id": "lena", "label": "Lena" },
+        { "id": "kofi", "label": "Kofi" },
+        { "id": "sana", "label": "Sana" },
+        { "id": "diego", "label": "Diego" }
+      ]
+    },
+    {
+      "id": "project",
+      "label": "Project",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "volcano", "label": "Volcano", "phrase": "built the volcano", "refPhrase": "volcano builder" },
+        { "id": "robot", "label": "Robot", "phrase": "built the robot", "refPhrase": "robot builder" },
+        { "id": "solaroven", "label": "Solar oven", "phrase": "built the solar oven", "refPhrase": "solar-oven maker" },
+        { "id": "crystalgarden", "label": "Crystal garden", "phrase": "grew the crystal garden", "refPhrase": "crystal grower" },
+        { "id": "maze", "label": "Maze", "phrase": "built the maze", "refPhrase": "maze builder" },
+        { "id": "windmill", "label": "Windmill", "phrase": "built the windmill", "refPhrase": "windmill maker" }
+      ]
+    },
+    {
+      "id": "score",
+      "label": "Score",
+      "kind": "numeric",
+      "unit": "points",
+      "valuePool": [
+        { "id": "pts6", "label": "6 pts", "magnitude": 6, "phrase": "scored 6 points" },
+        { "id": "pts7", "label": "7 pts", "magnitude": 7, "phrase": "scored 7 points" },
+        { "id": "pts9", "label": "9 pts", "magnitude": 9, "phrase": "scored 9 points" },
+        { "id": "pts11", "label": "11 pts", "magnitude": 11, "phrase": "scored 11 points" },
+        { "id": "pts13", "label": "13 pts", "magnitude": 13, "phrase": "scored 13 points" },
+        { "id": "pts16", "label": "16 pts", "magnitude": 16, "phrase": "scored 16 points" }
+      ]
+    },
+    {
+      "id": "subject",
+      "label": "Subject",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "biology", "label": "Biology", "phrase": "signed up for biology", "refPhrase": "biology entrant" },
+        { "id": "physics", "label": "Physics", "phrase": "signed up for physics", "refPhrase": "physics entrant" },
+        { "id": "chemistry", "label": "Chemistry", "phrase": "signed up for chemistry", "refPhrase": "chemistry entrant" },
+        { "id": "geology", "label": "Geology", "phrase": "signed up for geology", "refPhrase": "geology entrant" },
+        { "id": "botany", "label": "Botany", "phrase": "signed up for botany", "refPhrase": "botany entrant" },
+        { "id": "robotics", "label": "Robotics", "phrase": "signed up for robotics", "refPhrase": "robotics entrant" }
+      ]
+    },
+    {
+      "id": "snack",
+      "label": "Snack",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "pizza", "label": "Pizza", "phrase": "munched the pizza", "refPhrase": "pizza fan" },
+        { "id": "cookie", "label": "Cookies", "phrase": "munched the cookies", "refPhrase": "cookie fan" },
+        { "id": "donut", "label": "Donut", "phrase": "munched the donut", "refPhrase": "donut fan" },
+        { "id": "cupcake", "label": "Cupcake", "phrase": "munched the cupcake", "refPhrase": "cupcake fan" },
+        { "id": "popsicle", "label": "Popsicle", "phrase": "munched the popsicle", "refPhrase": "popsicle fan" },
+        { "id": "icecream", "label": "Ice cream", "phrase": "munched the ice cream", "refPhrase": "ice-cream fan" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "score",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} outscored {b_ref} by {delta}.",
+        "{a_ref}'s score beat {b_ref}'s by {delta}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "score",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} scored at least {bound} points.",
+        "{a_ref} did not score below {bound} points."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and went with just one.",
+        "For {a_ref} it came to {x_label} or {y_label} - only one made the bench."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

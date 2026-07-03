@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "orchestra-tuning",
+  "title": "Before the Concert",
+  "subjectNoun": "musician",
+  "subjectCategory": "musician",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content). Cozy pre-concert tune-up. Anchor = musician. instrument + piece are text-only; outfit -> clothes glyph pack; seat is the numeric axis (chair number). The narrativeTemplate is setting flavor only and never names a sliced category (seat/piece/outfit). Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "Half an hour before the concert, {n} musicians are warming up in the pit while {conductor} tries to work out who is playing what and sitting where, after the {mishap} scattered the running order.",
+  "flavorPools": {
+    "conductor": ["Maestro Rilke", "Ms. Dvorak", "old Bassett"],
+    "mishap": ["draught through the stage door", "toppled music stand", "spilled tin of rosin"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Elif'; 'attribute' -> 'the cellist' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "musician",
+      "label": "Musician",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "elif", "label": "Elif" },
+        { "id": "pablo", "label": "Pablo" },
+        { "id": "hana", "label": "Hana" },
+        { "id": "sven", "label": "Sven" },
+        { "id": "greta", "label": "Greta" },
+        { "id": "idris", "label": "Idris" }
+      ]
+    },
+    {
+      "id": "instrument",
+      "label": "Instrument",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "violin", "label": "Violin", "phrase": "tuned the violin", "refPhrase": "violinist" },
+        { "id": "cello", "label": "Cello", "phrase": "tuned the cello", "refPhrase": "cellist" },
+        { "id": "flute", "label": "Flute", "phrase": "tuned the flute", "refPhrase": "flautist" },
+        { "id": "oboe", "label": "Oboe", "phrase": "tuned the oboe", "refPhrase": "oboist" },
+        { "id": "trumpet", "label": "Trumpet", "phrase": "tuned the trumpet", "refPhrase": "trumpeter" },
+        { "id": "harp", "label": "Harp", "phrase": "tuned the harp", "refPhrase": "harpist" }
+      ]
+    },
+    {
+      "id": "seat",
+      "label": "Seat",
+      "kind": "numeric",
+      "valuePool": [
+        { "id": "chair1", "label": "Chair 1", "magnitude": 1, "phrase": "took chair 1" },
+        { "id": "chair2", "label": "Chair 2", "magnitude": 2, "phrase": "took chair 2" },
+        { "id": "chair3", "label": "Chair 3", "magnitude": 3, "phrase": "took chair 3" },
+        { "id": "chair4", "label": "Chair 4", "magnitude": 4, "phrase": "took chair 4" },
+        { "id": "chair5", "label": "Chair 5", "magnitude": 5, "phrase": "took chair 5" },
+        { "id": "chair6", "label": "Chair 6", "magnitude": 6, "phrase": "took chair 6" }
+      ]
+    },
+    {
+      "id": "piece",
+      "label": "Piece",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "sonata", "label": "Sonata", "phrase": "rehearsed the sonata", "refPhrase": "sonata player" },
+        { "id": "nocturne", "label": "Nocturne", "phrase": "rehearsed the nocturne", "refPhrase": "nocturne player" },
+        { "id": "waltz", "label": "Waltz", "phrase": "rehearsed the waltz", "refPhrase": "waltz player" },
+        { "id": "prelude", "label": "Prelude", "phrase": "rehearsed the prelude", "refPhrase": "prelude player" },
+        { "id": "fugue", "label": "Fugue", "phrase": "rehearsed the fugue", "refPhrase": "fugue player" },
+        { "id": "anthem", "label": "Anthem", "phrase": "rehearsed the anthem", "refPhrase": "anthem player" }
+      ]
+    },
+    {
+      "id": "outfit",
+      "label": "Outfit",
+      "kind": "nominal",
+      "glyphPack": "clothes",
+      "valuePool": [
+        { "id": "mansuit", "label": "Suit", "phrase": "wore the suit", "refPhrase": "one in the suit" },
+        { "id": "womandress", "label": "Gown", "phrase": "wore the gown", "refPhrase": "one in the gown" },
+        { "id": "mantie", "label": "Bow tie", "phrase": "wore the bow tie", "refPhrase": "one in the bow tie" },
+        { "id": "womanshirt", "label": "Blouse", "phrase": "wore the blouse", "refPhrase": "one in the blouse" },
+        { "id": "manshirt", "label": "Dress shirt", "phrase": "wore the dress shirt", "refPhrase": "one in the dress shirt" },
+        { "id": "womanskirt", "label": "Skirt", "phrase": "wore the skirt", "refPhrase": "one in the skirt" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "seat",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref}'s chair was {delta} further along than {b_ref}'s.",
+        "{a_ref} sat {delta} down the row from {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "seat",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} sat no nearer than chair {bound}.",
+        "{a_ref} took chair {bound} or further along."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and took just one.",
+        "For {a_ref} it was {x_label} or {y_label} - not both."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

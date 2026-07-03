@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "county-fair",
+  "title": "The County Fair",
+  "subjectNoun": "farmer",
+  "subjectCategory": "farmer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "SAMPLE authoring template (original content). Cozy countryside county fair. Anchor = farmer. animal -> creatures glyph pack; crop -> vegetables glyph pack; tool is text-only; tally is the numeric axis (prize ribbons won). The narrativeTemplate is setting flavor only and never names a sliced category (tally/crop/tool) nor an animal value. Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "The county fair is in full swing under a hot sun, and {n} farmers have lined up their stalls along the show ring while {steward}, who judges the livestock every year, sorts out the entries after the {mishap} blew the paper cards about.",
+  "flavorPools": {
+    "steward": ["old Hargrove", "Mrs. Boone", "Deputy Salt"],
+    "mishap": ["dust devil by the gate", "runaway piglet", "gust off the paddock"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Opal'; 'attribute' -> 'the cow handler' (the value's refPhrase). Gated up by tier so hard tiers read indirectly like a printed puzzle.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "farmer",
+      "label": "Farmer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "opal", "label": "Opal" },
+        { "id": "jed", "label": "Jed" },
+        { "id": "mabel", "label": "Mabel" },
+        { "id": "cyrus", "label": "Cyrus" },
+        { "id": "della", "label": "Della" },
+        { "id": "roscoe", "label": "Roscoe" }
+      ]
+    },
+    {
+      "id": "animal",
+      "label": "Animal",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "cow", "label": "Cow", "phrase": "showed the cow", "refPhrase": "cow handler" },
+        { "id": "goat", "label": "Goat", "phrase": "showed the goat", "refPhrase": "goat handler" },
+        { "id": "sheep", "label": "Sheep", "phrase": "showed the sheep", "refPhrase": "shepherd" },
+        { "id": "horse", "label": "Horse", "phrase": "showed the horse", "refPhrase": "horse handler" },
+        { "id": "rabbit", "label": "Rabbit", "phrase": "showed the rabbit", "refPhrase": "rabbit keeper" },
+        { "id": "dog", "label": "Dog", "phrase": "showed the dog", "refPhrase": "dog handler" }
+      ]
+    },
+    {
+      "id": "tally",
+      "label": "Tally",
+      "kind": "numeric",
+      "unit": "ribbons",
+      "valuePool": [
+        { "id": "rib2", "label": "2 ribbons", "magnitude": 2, "phrase": "took home 2 ribbons" },
+        { "id": "rib3", "label": "3 ribbons", "magnitude": 3, "phrase": "took home 3 ribbons" },
+        { "id": "rib4", "label": "4 ribbons", "magnitude": 4, "phrase": "took home 4 ribbons" },
+        { "id": "rib5", "label": "5 ribbons", "magnitude": 5, "phrase": "took home 5 ribbons" },
+        { "id": "rib6", "label": "6 ribbons", "magnitude": 6, "phrase": "took home 6 ribbons" },
+        { "id": "rib7", "label": "7 ribbons", "magnitude": 7, "phrase": "took home 7 ribbons" }
+      ]
+    },
+    {
+      "id": "crop",
+      "label": "Crop",
+      "kind": "nominal",
+      "glyphPack": "vegetables",
+      "valuePool": [
+        { "id": "carrot", "label": "Carrots", "phrase": "grew the carrots", "refPhrase": "carrot grower" },
+        { "id": "corn", "label": "Corn", "phrase": "grew the corn", "refPhrase": "corn grower" },
+        { "id": "potato", "label": "Potatoes", "phrase": "grew the potatoes", "refPhrase": "potato grower" },
+        { "id": "cabbage", "label": "Cabbage", "phrase": "grew the cabbage", "refPhrase": "cabbage grower" },
+        { "id": "beet", "label": "Beets", "phrase": "grew the beets", "refPhrase": "beet grower" },
+        { "id": "okra", "label": "Okra", "phrase": "grew the okra", "refPhrase": "okra grower" }
+      ]
+    },
+    {
+      "id": "tool",
+      "label": "Tool",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "pitchfork", "label": "Pitchfork", "phrase": "brought the pitchfork", "refPhrase": "one with the pitchfork" },
+        { "id": "rake", "label": "Rake", "phrase": "brought the rake", "refPhrase": "one with the rake" },
+        { "id": "shovel", "label": "Shovel", "phrase": "brought the shovel", "refPhrase": "one with the shovel" },
+        { "id": "hoe", "label": "Hoe", "phrase": "brought the hoe", "refPhrase": "one with the hoe" },
+        { "id": "wheelbarrow", "label": "Wheelbarrow", "phrase": "brought the wheelbarrow", "refPhrase": "one with the wheelbarrow" },
+        { "id": "spade", "label": "Spade", "phrase": "brought the spade", "refPhrase": "one with the spade" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "tally",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} took home {delta} more than {b_ref}.",
+        "{a_ref} beat {b_ref} by {delta} on the ribbon count."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "tally",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} took home at least {bound} ribbons.",
+        "{a_ref} won no fewer than {bound} ribbons."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} entered either {x_label} or {y_label}, not both.",
+        "For {a_ref} it came to {x_label} or {y_label} - just the one."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
