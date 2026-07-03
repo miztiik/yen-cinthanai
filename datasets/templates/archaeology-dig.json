@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "archaeology-dig",
+  "title": "The Archaeology Dig",
+  "subjectNoun": "digger",
+  "subjectCategory": "digger",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Light-mystery archaeological dig. Anchor = digger. relic, era and tool are text-only (no pack fits); layer is the numeric axis (soil layer) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (layer/era/tool).",
+  "narrativeTemplate": "The trench sits open under the tarpaulin as {n} diggers brush away the last of the soil, and {director} pieces the record together after a {mishap} muddled the field notes.",
+  "flavorPools": {
+    "director": ["Professor Hale", "old Dr. Amari", "the dig director"],
+    "mishap": ["sudden downpour", "collapsed spoil heap", "mixed-up bag tags"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Selin'; 'attribute' -> 'the amphora finder' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "digger",
+      "label": "Digger",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "selin", "label": "Selin" },
+        { "id": "bishop", "label": "Bishop" },
+        { "id": "odette", "label": "Odette" },
+        { "id": "emeka", "label": "Emeka" },
+        { "id": "cormac", "label": "Cormac" },
+        { "id": "iris", "label": "Iris" }
+      ]
+    },
+    {
+      "id": "relic",
+      "label": "Relic",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "amphora", "label": "Amphora", "phrase": "uncovered the amphora", "refPhrase": "amphora finder" },
+        { "id": "mosaic", "label": "Mosaic", "phrase": "uncovered the mosaic", "refPhrase": "mosaic finder" },
+        { "id": "idol", "label": "Idol", "phrase": "uncovered the idol", "refPhrase": "idol finder" },
+        { "id": "tablet", "label": "Clay tablet", "phrase": "uncovered the clay tablet", "refPhrase": "tablet finder" },
+        { "id": "torque", "label": "Gold torque", "phrase": "uncovered the gold torque", "refPhrase": "torque finder" },
+        { "id": "seal", "label": "Cylinder seal", "phrase": "uncovered the cylinder seal", "refPhrase": "seal finder" }
+      ]
+    },
+    {
+      "id": "layer",
+      "label": "Layer",
+      "kind": "numeric",
+      "unit": "layer",
+      "valuePool": [
+        { "id": "ly1", "label": "Layer 1", "magnitude": 1, "phrase": "worked layer 1" },
+        { "id": "ly2", "label": "Layer 2", "magnitude": 2, "phrase": "worked layer 2" },
+        { "id": "ly3", "label": "Layer 3", "magnitude": 3, "phrase": "worked layer 3" },
+        { "id": "ly4", "label": "Layer 4", "magnitude": 4, "phrase": "worked layer 4" },
+        { "id": "ly5", "label": "Layer 5", "magnitude": 5, "phrase": "worked layer 5" },
+        { "id": "ly6", "label": "Layer 6", "magnitude": 6, "phrase": "worked layer 6" }
+      ]
+    },
+    {
+      "id": "era",
+      "label": "Era",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "bronze", "label": "Bronze Age", "phrase": "dated it to the Bronze Age", "refPhrase": "Bronze Age hand" },
+        { "id": "iron", "label": "Iron Age", "phrase": "dated it to the Iron Age", "refPhrase": "Iron Age hand" },
+        { "id": "roman", "label": "Roman", "phrase": "dated it to the Roman era", "refPhrase": "Roman hand" },
+        { "id": "saxon", "label": "Saxon", "phrase": "dated it to the Saxon era", "refPhrase": "Saxon hand" },
+        { "id": "norse", "label": "Norse", "phrase": "dated it to the Norse era", "refPhrase": "Norse hand" },
+        { "id": "celtic", "label": "Celtic", "phrase": "dated it to the Celtic era", "refPhrase": "Celtic hand" }
+      ]
+    },
+    {
+      "id": "tool",
+      "label": "Tool",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "trowel", "label": "Trowel", "phrase": "worked with the trowel", "refPhrase": "trowel hand" },
+        { "id": "brush", "label": "Brush", "phrase": "worked with the brush", "refPhrase": "brush hand" },
+        { "id": "sieve", "label": "Sieve", "phrase": "worked with the sieve", "refPhrase": "sieve hand" },
+        { "id": "pick", "label": "Pick", "phrase": "worked with the pick", "refPhrase": "pick hand" },
+        { "id": "plumbline", "label": "Plumb line", "phrase": "worked with the plumb line", "refPhrase": "plumb-line hand" },
+        { "id": "spade", "label": "Spade", "phrase": "worked with the spade", "refPhrase": "spade hand" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "layer",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} dug {delta} layers deeper than {b_ref}.",
+        "{a_ref} worked {delta} layers below {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "layer",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} dug no shallower than layer {bound}.",
+        "{a_ref} worked layer {bound} or deeper."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was logged.",
+        "For {a_ref} the register read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

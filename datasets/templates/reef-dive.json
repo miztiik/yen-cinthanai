@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "reef-dive",
+  "title": "The Reef Survey",
+  "subjectNoun": "diver",
+  "subjectCategory": "diver",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Whimsical coral-reef survey. Anchor = diver. creature, zone are text-only; buoy is glyph-backed by the color pack (value ids are color slugs); depth is the numeric axis (metres down) at index 2 so it survives the standard 3-category slice. The narrativeTemplate is setting flavor only - it never names a sliced category (depth/zone/buoy).",
+  "narrativeTemplate": "Sunlight ripples over the coral as {n} divers drift along the outer reef, and {marshal} keeps the survey log straight after a {mishap} jumbled the slates back on deck.",
+  "flavorPools": {
+    "marshal": ["Old Reg", "Captain Wells", "the divemaster"],
+    "mishap": ["sudden surge", "tangle of kelp", "drifting current"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Mara'; 'attribute' -> 'the clownfish counter' (the value's refPhrase). Gated up by tier so hard tiers read indirectly.",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "diver",
+      "label": "Diver",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "mara", "label": "Mara" },
+        { "id": "kai", "label": "Kai" },
+        { "id": "sol", "label": "Sol" },
+        { "id": "nia", "label": "Nia" },
+        { "id": "ravi", "label": "Ravi" },
+        { "id": "tess", "label": "Tess" }
+      ]
+    },
+    {
+      "id": "creature",
+      "label": "Creature",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "clownfish", "label": "Clownfish", "phrase": "counted the clownfish", "refPhrase": "clownfish counter" },
+        { "id": "seahorse", "label": "Seahorse", "phrase": "counted the seahorses", "refPhrase": "seahorse counter" },
+        { "id": "octopus", "label": "Octopus", "phrase": "counted the octopus", "refPhrase": "octopus counter" },
+        { "id": "moray", "label": "Moray eel", "phrase": "counted the moray eels", "refPhrase": "moray counter" },
+        { "id": "manta", "label": "Manta ray", "phrase": "counted the manta rays", "refPhrase": "manta counter" },
+        { "id": "angelfish", "label": "Angelfish", "phrase": "counted the angelfish", "refPhrase": "angelfish counter" }
+      ]
+    },
+    {
+      "id": "depth",
+      "label": "Depth",
+      "kind": "numeric",
+      "unit": "metres",
+      "valuePool": [
+        { "id": "d8", "label": "8 m", "magnitude": 8, "phrase": "dived to 8 metres" },
+        { "id": "d10", "label": "10 m", "magnitude": 10, "phrase": "dived to 10 metres" },
+        { "id": "d12", "label": "12 m", "magnitude": 12, "phrase": "dived to 12 metres" },
+        { "id": "d15", "label": "15 m", "magnitude": 15, "phrase": "dived to 15 metres" },
+        { "id": "d18", "label": "18 m", "magnitude": 18, "phrase": "dived to 18 metres" },
+        { "id": "d20", "label": "20 m", "magnitude": 20, "phrase": "dived to 20 metres" }
+      ]
+    },
+    {
+      "id": "zone",
+      "label": "Zone",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "lagoon", "label": "Lagoon", "phrase": "surveyed the lagoon", "refPhrase": "lagoon diver" },
+        { "id": "dropoff", "label": "Drop-off", "phrase": "surveyed the drop-off", "refPhrase": "drop-off diver" },
+        { "id": "cavern", "label": "Cavern", "phrase": "surveyed the cavern", "refPhrase": "cavern diver" },
+        { "id": "pinnacle", "label": "Pinnacle", "phrase": "surveyed the pinnacle", "refPhrase": "pinnacle diver" },
+        { "id": "shallows", "label": "Shallows", "phrase": "surveyed the shallows", "refPhrase": "shallows diver" },
+        { "id": "canyon", "label": "Canyon", "phrase": "surveyed the canyon", "refPhrase": "canyon diver" }
+      ]
+    },
+    {
+      "id": "buoy",
+      "label": "Buoy",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red buoy", "phrase": "tied off at the red buoy", "refPhrase": "red-buoy diver" },
+        { "id": "blue", "label": "Blue buoy", "phrase": "tied off at the blue buoy", "refPhrase": "blue-buoy diver" },
+        { "id": "green", "label": "Green buoy", "phrase": "tied off at the green buoy", "refPhrase": "green-buoy diver" },
+        { "id": "yellow", "label": "Yellow buoy", "phrase": "tied off at the yellow buoy", "refPhrase": "yellow-buoy diver" },
+        { "id": "orange", "label": "Orange buoy", "phrase": "tied off at the orange buoy", "refPhrase": "orange-buoy diver" },
+        { "id": "purple", "label": "Purple buoy", "phrase": "tied off at the purple buoy", "refPhrase": "purple-buoy diver" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "depth",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} dived {delta} metres deeper than {b_ref}.",
+        "{a_ref} went {delta} metres below {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "depth",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} dived no shallower than {bound} metres.",
+        "{a_ref} went at least {bound} metres down."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one panned out.",
+        "For {a_ref} it came to {x_label} or {y_label} - just one held true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

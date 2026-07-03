@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "jousting-tourney",
+  "title": "The Jousting Tourney",
+  "subjectNoun": "knight",
+  "subjectCategory": "knight",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Witty medieval jousting tourney. Anchor = knight. device is glyph-backed by the creatures pack (heraldic beasts; value ids are pack slugs); shire and prize are text-only; round is the numeric axis at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (round/shire/prize).",
+  "narrativeTemplate": "The lists are raked and the crowd is loud as {n} knights trot out to unhorse one another, and {herald} untangles the muddle after a {mishap} sent the scoring rolls flying.",
+  "flavorPools": {
+    "herald": ["Herald Bertram", "the tourney herald", "Marshal Quill"],
+    "mishap": ["gust of wind", "startled palfrey", "spilled inkpot"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Godwin'; 'attribute' -> 'the knight of the lion' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "knight",
+      "label": "Knight",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "godwin", "label": "Godwin" },
+        { "id": "bram", "label": "Bram" },
+        { "id": "elspeth", "label": "Elspeth" },
+        { "id": "cuthbert", "label": "Cuthbert" },
+        { "id": "rowena", "label": "Rowena" },
+        { "id": "percy", "label": "Percy" }
+      ]
+    },
+    {
+      "id": "device",
+      "label": "Device",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "lion", "label": "Lion", "phrase": "bore the lion crest", "refPhrase": "knight of the lion" },
+        { "id": "bear", "label": "Bear", "phrase": "bore the bear crest", "refPhrase": "knight of the bear" },
+        { "id": "fox", "label": "Fox", "phrase": "bore the fox crest", "refPhrase": "knight of the fox" },
+        { "id": "deer", "label": "Stag", "phrase": "bore the stag crest", "refPhrase": "knight of the stag" },
+        { "id": "horse", "label": "Charger", "phrase": "bore the charger crest", "refPhrase": "knight of the charger" },
+        { "id": "owl", "label": "Owl", "phrase": "bore the owl crest", "refPhrase": "knight of the owl" }
+      ]
+    },
+    {
+      "id": "round",
+      "label": "Round",
+      "kind": "numeric",
+      "unit": "round",
+      "valuePool": [
+        { "id": "r1", "label": "Round 1", "magnitude": 1, "phrase": "rode in round 1" },
+        { "id": "r2", "label": "Round 2", "magnitude": 2, "phrase": "rode in round 2" },
+        { "id": "r3", "label": "Round 3", "magnitude": 3, "phrase": "rode in round 3" },
+        { "id": "r4", "label": "Round 4", "magnitude": 4, "phrase": "rode in round 4" },
+        { "id": "r5", "label": "Round 5", "magnitude": 5, "phrase": "rode in round 5" },
+        { "id": "r6", "label": "Round 6", "magnitude": 6, "phrase": "rode in round 6" }
+      ]
+    },
+    {
+      "id": "shire",
+      "label": "Shire",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "ashford", "label": "Ashford", "phrase": "hailed from Ashford", "refPhrase": "Ashford champion" },
+        { "id": "blackmoor", "label": "Blackmoor", "phrase": "hailed from Blackmoor", "refPhrase": "Blackmoor champion" },
+        { "id": "greenholt", "label": "Greenholt", "phrase": "hailed from Greenholt", "refPhrase": "Greenholt champion" },
+        { "id": "thornbury", "label": "Thornbury", "phrase": "hailed from Thornbury", "refPhrase": "Thornbury champion" },
+        { "id": "highgate", "label": "Highgate", "phrase": "hailed from Highgate", "refPhrase": "Highgate champion" },
+        { "id": "wexley", "label": "Wexley", "phrase": "hailed from Wexley", "refPhrase": "Wexley champion" }
+      ]
+    },
+    {
+      "id": "prize",
+      "label": "Prize",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "garland", "label": "Silver garland", "phrase": "took the silver garland", "refPhrase": "garland winner" },
+        { "id": "chalice", "label": "Gold chalice", "phrase": "took the gold chalice", "refPhrase": "chalice winner" },
+        { "id": "spurs", "label": "Gilt spurs", "phrase": "took the gilt spurs", "refPhrase": "spurs winner" },
+        { "id": "gauntlet", "label": "Jewelled gauntlet", "phrase": "took the jewelled gauntlet", "refPhrase": "gauntlet winner" },
+        { "id": "cloak", "label": "Velvet cloak", "phrase": "took the velvet cloak", "refPhrase": "cloak winner" },
+        { "id": "ring", "label": "Signet ring", "phrase": "took the signet ring", "refPhrase": "ring winner" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "round",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} rode {delta} rounds later than {b_ref}.",
+        "{a_ref} took the lists {delta} rounds after {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "round",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} rode no earlier than round {bound}.",
+        "{a_ref} took the lists in round {bound} or later."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was borne.",
+        "For {a_ref} the roll read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "ski-lodge",
+  "title": "The Ski Lodge",
+  "subjectNoun": "guest",
+  "subjectCategory": "guest",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Cozy alpine ski lodge at apres-ski. Anchor = guest. warmer is glyph-backed by the drinks pack and kit by the color pack (value ids are pack slugs); piste is text-only; run is the numeric axis (runs skied) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (run/piste/kit).",
+  "narrativeTemplate": "Snow piles against the windows and the fire crackles as {n} guests thaw out in the lodge, and {host} works out whose day was whose after a {mishap} knocked the sign-in sheet off its hook.",
+  "flavorPools": {
+    "host": ["Innkeeper Greta", "old Rolf", "the lodge host"],
+    "mishap": ["draught off the door", "toppled ski rack", "puppy underfoot"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Freya'; 'attribute' -> 'the coffee drinker' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "guest",
+      "label": "Guest",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "freya", "label": "Freya" },
+        { "id": "anders", "label": "Anders" },
+        { "id": "mika", "label": "Mika" },
+        { "id": "elsa", "label": "Elsa" },
+        { "id": "rocco", "label": "Rocco" },
+        { "id": "nadia", "label": "Nadia" }
+      ]
+    },
+    {
+      "id": "warmer",
+      "label": "Warmer",
+      "kind": "nominal",
+      "glyphPack": "drinks",
+      "valuePool": [
+        { "id": "coffee", "label": "Coffee", "phrase": "warmed up with the coffee", "refPhrase": "coffee drinker" },
+        { "id": "tea", "label": "Chai tea", "phrase": "warmed up with the chai tea", "refPhrase": "chai-tea drinker" },
+        { "id": "milk", "label": "Warm milk", "phrase": "warmed up with the warm milk", "refPhrase": "warm-milk drinker" },
+        { "id": "juice", "label": "Spiced juice", "phrase": "warmed up with the spiced juice", "refPhrase": "spiced-juice drinker" },
+        { "id": "soda", "label": "Cream soda", "phrase": "warmed up with the cream soda", "refPhrase": "cream-soda drinker" },
+        { "id": "water", "label": "Mineral water", "phrase": "warmed up with the mineral water", "refPhrase": "mineral-water drinker" }
+      ]
+    },
+    {
+      "id": "run",
+      "label": "Run",
+      "kind": "numeric",
+      "unit": "runs",
+      "valuePool": [
+        { "id": "run3", "label": "3 runs", "magnitude": 3, "phrase": "skied 3 runs" },
+        { "id": "run5", "label": "5 runs", "magnitude": 5, "phrase": "skied 5 runs" },
+        { "id": "run7", "label": "7 runs", "magnitude": 7, "phrase": "skied 7 runs" },
+        { "id": "run9", "label": "9 runs", "magnitude": 9, "phrase": "skied 9 runs" },
+        { "id": "run11", "label": "11 runs", "magnitude": 11, "phrase": "skied 11 runs" },
+        { "id": "run13", "label": "13 runs", "magnitude": 13, "phrase": "skied 13 runs" }
+      ]
+    },
+    {
+      "id": "piste",
+      "label": "Piste",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "embertrail", "label": "Ember Trail", "phrase": "took the Ember Trail", "refPhrase": "Ember Trail skier" },
+        { "id": "foxtrail", "label": "Fox Trail", "phrase": "took the Fox Trail", "refPhrase": "Fox Trail skier" },
+        { "id": "glacierbowl", "label": "Glacier Bowl", "phrase": "took the Glacier Bowl", "refPhrase": "Glacier Bowl skier" },
+        { "id": "pinechute", "label": "Pine Chute", "phrase": "took the Pine Chute", "refPhrase": "Pine Chute skier" },
+        { "id": "summitface", "label": "Summit Face", "phrase": "took the Summit Face", "refPhrase": "Summit Face skier" },
+        { "id": "eagledrop", "label": "Eagle Drop", "phrase": "took the Eagle Drop", "refPhrase": "Eagle Drop skier" }
+      ]
+    },
+    {
+      "id": "kit",
+      "label": "Kit",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red kit", "phrase": "wore the red kit", "refPhrase": "red-kit guest" },
+        { "id": "blue", "label": "Blue kit", "phrase": "wore the blue kit", "refPhrase": "blue-kit guest" },
+        { "id": "green", "label": "Green kit", "phrase": "wore the green kit", "refPhrase": "green-kit guest" },
+        { "id": "yellow", "label": "Yellow kit", "phrase": "wore the yellow kit", "refPhrase": "yellow-kit guest" },
+        { "id": "orange", "label": "Orange kit", "phrase": "wore the orange kit", "refPhrase": "orange-kit guest" },
+        { "id": "purple", "label": "Purple kit", "phrase": "wore the purple kit", "refPhrase": "purple-kit guest" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "run",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} skied {delta} more runs than {b_ref}.",
+        "{a_ref} took {delta} runs more than {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "run",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} skied no fewer than {bound} runs.",
+        "{a_ref} took at least {bound} runs."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "chocolate-factory",
+  "title": "The Chocolate Factory",
+  "subjectNoun": "chocolatier",
+  "subjectCategory": "chocolatier",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Whimsical chocolate factory on boxing morning. Anchor = chocolatier. treat is glyph-backed by the food pack and ribbon by the color pack (value ids are pack slugs); flavour is text-only; tray is the numeric axis (trays filled) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (tray/flavour/ribbon).",
+  "narrativeTemplate": "Copper kettles bubble and the whole factory smells of cocoa as {n} chocolatiers box up the morning's batch, and {owner} untangles the orders after a {mishap} sent the labels swirling.",
+  "flavorPools": {
+    "owner": ["Madame Truffle", "old Mr. Nib", "the factory owner"],
+    "mishap": ["overflowing fountain", "sneaky taste-test", "jammed conveyor"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Coco'; 'attribute' -> 'the chocolate maker' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "chocolatier",
+      "label": "Chocolatier",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "wilhelmina", "label": "Wilhelmina" },
+        { "id": "gustavo", "label": "Gustavo" },
+        { "id": "coco", "label": "Coco" },
+        { "id": "bruno", "label": "Bruno" },
+        { "id": "hazel", "label": "Hazel" },
+        { "id": "pim", "label": "Pim" }
+      ]
+    },
+    {
+      "id": "treat",
+      "label": "Treat",
+      "kind": "nominal",
+      "glyphPack": "food",
+      "valuePool": [
+        { "id": "chocolate", "label": "Chocolate bar", "phrase": "made the chocolate bars", "refPhrase": "chocolate maker" },
+        { "id": "cupcake", "label": "Cupcake", "phrase": "made the cupcakes", "refPhrase": "cupcake maker" },
+        { "id": "cookie", "label": "Cookie", "phrase": "made the cookies", "refPhrase": "cookie maker" },
+        { "id": "donut", "label": "Donut", "phrase": "made the donuts", "refPhrase": "donut maker" },
+        { "id": "icecream", "label": "Ice cream", "phrase": "made the ice cream", "refPhrase": "ice-cream maker" },
+        { "id": "gingerbread", "label": "Gingerbread", "phrase": "made the gingerbread", "refPhrase": "gingerbread maker" }
+      ]
+    },
+    {
+      "id": "tray",
+      "label": "Tray",
+      "kind": "numeric",
+      "unit": "trays",
+      "valuePool": [
+        { "id": "t4", "label": "4 trays", "magnitude": 4, "phrase": "filled 4 trays" },
+        { "id": "t6", "label": "6 trays", "magnitude": 6, "phrase": "filled 6 trays" },
+        { "id": "t8", "label": "8 trays", "magnitude": 8, "phrase": "filled 8 trays" },
+        { "id": "t10", "label": "10 trays", "magnitude": 10, "phrase": "filled 10 trays" },
+        { "id": "t12", "label": "12 trays", "magnitude": 12, "phrase": "filled 12 trays" },
+        { "id": "t14", "label": "14 trays", "magnitude": 14, "phrase": "filled 14 trays" }
+      ]
+    },
+    {
+      "id": "flavour",
+      "label": "Flavour",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "praline", "label": "Praline", "phrase": "flavoured it with praline", "refPhrase": "praline maker" },
+        { "id": "caramel", "label": "Caramel", "phrase": "flavoured it with caramel", "refPhrase": "caramel maker" },
+        { "id": "mint", "label": "Mint", "phrase": "flavoured it with mint", "refPhrase": "mint maker" },
+        { "id": "hazelnut", "label": "Hazelnut", "phrase": "flavoured it with hazelnut", "refPhrase": "hazelnut maker" },
+        { "id": "orange", "label": "Orange zest", "phrase": "flavoured it with orange zest", "refPhrase": "orange-zest maker" },
+        { "id": "mocha", "label": "Mocha", "phrase": "flavoured it with mocha", "refPhrase": "mocha maker" }
+      ]
+    },
+    {
+      "id": "ribbon",
+      "label": "Ribbon",
+      "kind": "nominal",
+      "glyphPack": "color",
+      "valuePool": [
+        { "id": "red", "label": "Red ribbon", "phrase": "tied the red ribbon", "refPhrase": "red-ribbon box" },
+        { "id": "blue", "label": "Blue ribbon", "phrase": "tied the blue ribbon", "refPhrase": "blue-ribbon box" },
+        { "id": "green", "label": "Green ribbon", "phrase": "tied the green ribbon", "refPhrase": "green-ribbon box" },
+        { "id": "yellow", "label": "Yellow ribbon", "phrase": "tied the yellow ribbon", "refPhrase": "yellow-ribbon box" },
+        { "id": "orange", "label": "Orange ribbon", "phrase": "tied the orange ribbon", "refPhrase": "orange-ribbon box" },
+        { "id": "purple", "label": "Purple ribbon", "phrase": "tied the purple ribbon", "refPhrase": "purple-ribbon box" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "tray",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} filled {delta} more trays than {b_ref}.",
+        "{a_ref} boxed {delta} trays above {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "tray",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} filled no fewer than {bound} trays.",
+        "{a_ref} boxed at least {bound} trays."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was made.",
+        "For {a_ref} the order read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

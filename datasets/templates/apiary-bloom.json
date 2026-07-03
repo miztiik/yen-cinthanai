@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "apiary-bloom",
+  "title": "The Apiary in Bloom",
+  "subjectNoun": "beekeeper",
+  "subjectCategory": "beekeeper",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Cozy summer apiary. Anchor = beekeeper. bloom carries per-value glyph overrides from the flowers pack (five wired to real slugs, lavender stays text - the pack has five glyphs, so the category is NOT glyphPack-backed); honey and stand are text-only; frame is the numeric axis at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (frame/honey/stand).",
+  "narrativeTemplate": "The afternoon hums warm and golden as {n} beekeepers lift the lids and check the supers, and {mentor} keeps the apiary book straight after a {mishap} jumbled the record cards.",
+  "flavorPools": {
+    "mentor": ["Grandpa Otto", "old Auntie Mel", "the apiary mentor"],
+    "mishap": ["gust off the meadow", "curious badger", "toppled smoker"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Marigold'; 'attribute' -> 'the rose hive' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "beekeeper",
+      "label": "Beekeeper",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "marigold", "label": "Marigold" },
+        { "id": "basil", "label": "Basil" },
+        { "id": "saffron", "label": "Saffron" },
+        { "id": "rowan", "label": "Rowan" },
+        { "id": "clemmie", "label": "Clemmie" },
+        { "id": "fenn", "label": "Fenn" }
+      ]
+    },
+    {
+      "id": "bloom",
+      "label": "Bloom",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "rose", "label": "Roses", "phrase": "worked the roses", "refPhrase": "rose hive", "glyph": "flowers.rose" },
+        { "id": "tulips", "label": "Tulips", "phrase": "worked the tulips", "refPhrase": "tulip hive", "glyph": "flowers.tulips" },
+        { "id": "sunflower", "label": "Sunflowers", "phrase": "worked the sunflowers", "refPhrase": "sunflower hive", "glyph": "flowers.sunflower" },
+        { "id": "jasmine", "label": "Jasmine", "phrase": "worked the jasmine", "refPhrase": "jasmine hive", "glyph": "flowers.jasmine" },
+        { "id": "hibiscus", "label": "Hibiscus", "phrase": "worked the hibiscus", "refPhrase": "hibiscus hive", "glyph": "flowers.hibiscus" },
+        { "id": "lavender", "label": "Lavender", "phrase": "worked the lavender", "refPhrase": "lavender hive" }
+      ]
+    },
+    {
+      "id": "frame",
+      "label": "Frame",
+      "kind": "numeric",
+      "unit": "frames",
+      "valuePool": [
+        { "id": "fr4", "label": "4 frames", "magnitude": 4, "phrase": "drew 4 frames" },
+        { "id": "fr6", "label": "6 frames", "magnitude": 6, "phrase": "drew 6 frames" },
+        { "id": "fr8", "label": "8 frames", "magnitude": 8, "phrase": "drew 8 frames" },
+        { "id": "fr9", "label": "9 frames", "magnitude": 9, "phrase": "drew 9 frames" },
+        { "id": "fr10", "label": "10 frames", "magnitude": 10, "phrase": "drew 10 frames" },
+        { "id": "fr12", "label": "12 frames", "magnitude": 12, "phrase": "drew 12 frames" }
+      ]
+    },
+    {
+      "id": "honey",
+      "label": "Honey",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "clover", "label": "Clover", "phrase": "bottled the clover honey", "refPhrase": "clover-honey keeper" },
+        { "id": "wildflower", "label": "Wildflower", "phrase": "bottled the wildflower honey", "refPhrase": "wildflower-honey keeper" },
+        { "id": "orangeblossom", "label": "Orange blossom", "phrase": "bottled the orange-blossom honey", "refPhrase": "orange-blossom keeper" },
+        { "id": "heather", "label": "Heather", "phrase": "bottled the heather honey", "refPhrase": "heather-honey keeper" },
+        { "id": "buckwheat", "label": "Buckwheat", "phrase": "bottled the buckwheat honey", "refPhrase": "buckwheat-honey keeper" },
+        { "id": "acacia", "label": "Acacia", "phrase": "bottled the acacia honey", "refPhrase": "acacia-honey keeper" }
+      ]
+    },
+    {
+      "id": "stand",
+      "label": "Stand",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "orchardrow", "label": "Orchard Row", "phrase": "kept the stand at Orchard Row", "refPhrase": "Orchard Row keeper" },
+        { "id": "willowend", "label": "Willow End", "phrase": "kept the stand at Willow End", "refPhrase": "Willow End keeper" },
+        { "id": "sunnyledge", "label": "Sunny Ledge", "phrase": "kept the stand at Sunny Ledge", "refPhrase": "Sunny Ledge keeper" },
+        { "id": "lindenwalk", "label": "Linden Walk", "phrase": "kept the stand at Linden Walk", "refPhrase": "Linden Walk keeper" },
+        { "id": "beechhollow", "label": "Beech Hollow", "phrase": "kept the stand at Beech Hollow", "refPhrase": "Beech Hollow keeper" },
+        { "id": "hazelbank", "label": "Hazel Bank", "phrase": "kept the stand at Hazel Bank", "refPhrase": "Hazel Bank keeper" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "frame",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} drew {delta} more frames than {b_ref}.",
+        "{a_ref} pulled {delta} frames above {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "frame",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} drew no fewer than {bound} frames.",
+        "{a_ref} pulled at least {bound} frames."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the book read {x_label} or {y_label} - just one held."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "id": "polar-station",
+  "title": "The Polar Station",
+  "subjectNoun": "researcher",
+  "subjectCategory": "researcher",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. Light-mystery arctic research station in the polar night. Anchor = researcher. role is glyph-backed by the occupation pack and flask by the drinks pack (value ids are pack slugs); instrument is text-only; sample is the numeric axis at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (sample/instrument/flask).",
+  "narrativeTemplate": "The long polar night presses on the huts as {n} researchers compare notes over the storm's roar, and {chief} works out who did what after a {mishap} scrambled the duty board.",
+  "flavorPools": {
+    "chief": ["Commander Frost", "old Dr. Vane", "the station chief"],
+    "mishap": ["power flicker", "sudden whiteout", "frozen relay"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Ingrid'; 'attribute' -> 'the glaciologist' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "researcher",
+      "label": "Researcher",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "ingrid", "label": "Ingrid" },
+        { "id": "yusuf", "label": "Yusuf" },
+        { "id": "petra", "label": "Petra" },
+        { "id": "lena", "label": "Lena" },
+        { "id": "bjorn", "label": "Bjorn" },
+        { "id": "anouk", "label": "Anouk" }
+      ]
+    },
+    {
+      "id": "role",
+      "label": "Role",
+      "kind": "nominal",
+      "glyphPack": "occupation",
+      "valuePool": [
+        { "id": "biologist", "label": "Biologist", "phrase": "tagged the seals", "refPhrase": "biologist" },
+        { "id": "chemist", "label": "Chemist", "phrase": "tested the meltwater", "refPhrase": "chemist" },
+        { "id": "engineer", "label": "Engineer", "phrase": "kept the generator running", "refPhrase": "engineer" },
+        { "id": "photographer", "label": "Photographer", "phrase": "shot the aurora", "refPhrase": "photographer" },
+        { "id": "scientist", "label": "Glaciologist", "phrase": "drilled the ice cores", "refPhrase": "glaciologist" },
+        { "id": "astronomer", "label": "Astronomer", "phrase": "charted the polar sky", "refPhrase": "astronomer" }
+      ]
+    },
+    {
+      "id": "sample",
+      "label": "Sample",
+      "kind": "numeric",
+      "unit": "samples",
+      "valuePool": [
+        { "id": "s4", "label": "4 samples", "magnitude": 4, "phrase": "logged 4 samples" },
+        { "id": "s6", "label": "6 samples", "magnitude": 6, "phrase": "logged 6 samples" },
+        { "id": "s9", "label": "9 samples", "magnitude": 9, "phrase": "logged 9 samples" },
+        { "id": "s12", "label": "12 samples", "magnitude": 12, "phrase": "logged 12 samples" },
+        { "id": "s15", "label": "15 samples", "magnitude": 15, "phrase": "logged 15 samples" },
+        { "id": "s18", "label": "18 samples", "magnitude": 18, "phrase": "logged 18 samples" }
+      ]
+    },
+    {
+      "id": "instrument",
+      "label": "Instrument",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "seismograph", "label": "Seismograph", "phrase": "minded the seismograph", "refPhrase": "seismograph keeper" },
+        { "id": "magnetometer", "label": "Magnetometer", "phrase": "minded the magnetometer", "refPhrase": "magnetometer keeper" },
+        { "id": "radiosonde", "label": "Radiosonde", "phrase": "minded the radiosonde", "refPhrase": "radiosonde keeper" },
+        { "id": "spectrometer", "label": "Spectrometer", "phrase": "minded the spectrometer", "refPhrase": "spectrometer keeper" },
+        { "id": "anemometer", "label": "Anemometer", "phrase": "minded the anemometer", "refPhrase": "anemometer keeper" },
+        { "id": "barograph", "label": "Barograph", "phrase": "minded the barograph", "refPhrase": "barograph keeper" }
+      ]
+    },
+    {
+      "id": "flask",
+      "label": "Flask",
+      "kind": "nominal",
+      "glyphPack": "drinks",
+      "valuePool": [
+        { "id": "coffee", "label": "Black coffee", "phrase": "kept a flask of black coffee", "refPhrase": "black-coffee drinker" },
+        { "id": "tea", "label": "Spiced tea", "phrase": "kept a flask of spiced tea", "refPhrase": "spiced-tea drinker" },
+        { "id": "milk", "label": "Warm milk", "phrase": "kept a flask of warm milk", "refPhrase": "warm-milk drinker" },
+        { "id": "juice", "label": "Berry juice", "phrase": "kept a flask of berry juice", "refPhrase": "berry-juice drinker" },
+        { "id": "soda", "label": "Cream soda", "phrase": "kept a flask of cream soda", "refPhrase": "cream-soda drinker" },
+        { "id": "water", "label": "Meltwater", "phrase": "kept a flask of meltwater", "refPhrase": "meltwater drinker" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "sample",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} logged {delta} more samples than {b_ref}.",
+        "{a_ref} filed {delta} samples above {b_ref}."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "sample",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} logged no fewer than {bound} samples.",
+        "{a_ref} filed at least {bound} samples."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} came down to {x_label} or {y_label}, and only one checked out.",
+        "For {a_ref} the log read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

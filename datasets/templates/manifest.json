@@ -199,6 +199,141 @@
       "kind": "library",
       "status": "live",
       "verifiedSha": "20d4d409ae92328f4467c095389567bd773fdb19dae58c05997ee886ba5421dc"
+    },
+    {
+      "id": "reef-dive",
+      "file": "reef-dive.json",
+      "title": "The Reef Survey",
+      "tone": "whimsical",
+      "kind": "reef",
+      "status": "live",
+      "verifiedSha": "e52fd865318e3e41d91789e6bda105439dc9b78ca50ca455c1e4f055f55fce0b"
+    },
+    {
+      "id": "desert-caravan",
+      "file": "desert-caravan.json",
+      "title": "The Desert Caravan",
+      "tone": "cozy",
+      "kind": "desert",
+      "status": "live",
+      "verifiedSha": "3d3df58b8ad2b1e339b41c09d30fe9e4001d7568577cbf383523ec06c993575f"
+    },
+    {
+      "id": "polar-station",
+      "file": "polar-station.json",
+      "title": "The Polar Station",
+      "tone": "light-mystery",
+      "kind": "arctic",
+      "status": "live",
+      "verifiedSha": "7765df84e0071804f35f8247f4f7415b2ade25d69a1ba444441c922f67fb7ad8"
+    },
+    {
+      "id": "jousting-tourney",
+      "file": "jousting-tourney.json",
+      "title": "The Jousting Tourney",
+      "tone": "witty",
+      "kind": "joust",
+      "status": "live",
+      "verifiedSha": "bcc23d80671acc72504e80a5e51baa78d16f0c431ef20815bbd23617ff5f8495"
+    },
+    {
+      "id": "clockwork-workshop",
+      "file": "clockwork-workshop.json",
+      "title": "The Clockwork Workshop",
+      "tone": "whimsical",
+      "kind": "steampunk",
+      "status": "live",
+      "verifiedSha": "791618d2c578c13daf70aa6905c5484b170c071d956e2c89cb433496e96af74d"
+    },
+    {
+      "id": "farmhouse-table",
+      "file": "farmhouse-table.json",
+      "title": "The Farmhouse Table",
+      "tone": "cozy",
+      "kind": "farmhouse",
+      "status": "live",
+      "verifiedSha": "26c0aaadb4cc06439f1400db5cfff9b3a9a0e44ddc00338eb3cddd85ca328345"
+    },
+    {
+      "id": "esports-arena",
+      "file": "esports-arena.json",
+      "title": "The Esports Arena",
+      "tone": "witty",
+      "kind": "esports",
+      "status": "live",
+      "verifiedSha": "f430da3c13c5f0bdcae8051b0f9afc717c04420900fd887163f3d9c5337d3df6"
+    },
+    {
+      "id": "ski-lodge",
+      "file": "ski-lodge.json",
+      "title": "The Ski Lodge",
+      "tone": "cozy",
+      "kind": "ski-lodge",
+      "status": "live",
+      "verifiedSha": "e8f4abbd252eadf198ff0a0addc98d851cdece4c9aeb4df779b04eba3479c632"
+    },
+    {
+      "id": "speakeasy-jazz",
+      "file": "speakeasy-jazz.json",
+      "title": "The Hidden Jazz Club",
+      "tone": "light-mystery",
+      "kind": "speakeasy",
+      "status": "live",
+      "verifiedSha": "ffced960d52298048211cb203a4fedd6b07104db63b6d855ac66add8c61a6a6e"
+    },
+    {
+      "id": "pottery-studio",
+      "file": "pottery-studio.json",
+      "title": "The Pottery Studio",
+      "tone": "witty",
+      "kind": "pottery",
+      "status": "live",
+      "verifiedSha": "cdee26ea31714154a32c4de4086d1e6c3b6e9e1f04c8cc1d085946c34753817e"
+    },
+    {
+      "id": "balloon-fiesta",
+      "file": "balloon-fiesta.json",
+      "title": "The Balloon Fiesta",
+      "tone": "whimsical",
+      "kind": "ballooning",
+      "status": "live",
+      "verifiedSha": "338d9e34aff898969692b08c1cb0e60a43e2bcdc4e115739e806603c1ed94060"
+    },
+    {
+      "id": "archaeology-dig",
+      "file": "archaeology-dig.json",
+      "title": "The Archaeology Dig",
+      "tone": "light-mystery",
+      "kind": "archaeology",
+      "status": "live",
+      "verifiedSha": "14dd30e9df609018653cadce07f6a8fb7f233be00b393978e595082a7cb0dff4"
+    },
+    {
+      "id": "chocolate-factory",
+      "file": "chocolate-factory.json",
+      "title": "The Chocolate Factory",
+      "tone": "whimsical",
+      "kind": "confectionery",
+      "status": "live",
+      "verifiedSha": "62cbc34d8ba7c5cc4ca3067fb007d05a0676fe46c037e1864a8cc49d2134b766"
+    },
+    {
+      "id": "tram-depot",
+      "file": "tram-depot.json",
+      "title": "The Tram Depot",
+      "tone": "witty",
+      "kind": "tram",
+      "status": "live",
+      "verifiedSha": "033c1c8fb1248deda3341844d0650973a967bc75559fa64a533933b1cf24edcc"
+    },
+    {
+      "id": "apiary-bloom",
+      "file": "apiary-bloom.json",
+      "title": "The Apiary in Bloom",
+      "tone": "cozy",
+      "kind": "apiary",
+      "status": "live",
+      "verifiedSha": "a9f427b659c17b89031f89cd78886a8026b4c4930ef17b600d501cdd74aa66d0"
     }
   ]
 }
