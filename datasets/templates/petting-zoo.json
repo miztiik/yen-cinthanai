@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "petting-zoo",
+  "title": "The Petting Zoo",
+  "subjectNoun": "child",
+  "subjectCategory": "child",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A cozy morning at a children's petting zoo. Anchor = child. animal is glyph-backed by the creatures pack (value ids are pack slugs); pen and sticker are text-only; scoop is the numeric axis (scoops of feed) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (scoop/pen/sticker).",
+  "narrativeTemplate": "Straw and giggles fill the yard as {n} children go from gate to gate, and {host} sorts out whose morning was whose after a {mishap} upset the ticket basket.",
+  "flavorPools": {
+    "host": ["keeper Posy", "old Tomas", "the yard steward"],
+    "mishap": ["escaped duckling", "spilled pail", "gust through the barn"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Mila'; 'attribute' -> 'the goat feeder' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "child",
+      "label": "Child",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "mila", "label": "Mila" },
+        { "id": "arlo", "label": "Arlo" },
+        { "id": "zaina", "label": "Zaina" },
+        { "id": "theo", "label": "Theo" },
+        { "id": "yui", "label": "Yui" },
+        { "id": "pablo", "label": "Pablo" }
+      ]
+    },
+    {
+      "id": "animal",
+      "label": "Animal",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "goat", "label": "Goat", "phrase": "fed the goat", "refPhrase": "goat feeder" },
+        { "id": "sheep", "label": "Sheep", "phrase": "fed the sheep", "refPhrase": "sheep feeder" },
+        { "id": "rabbit", "label": "Rabbit", "phrase": "fed the rabbit", "refPhrase": "rabbit feeder" },
+        { "id": "cow", "label": "Calf", "phrase": "fed the calf", "refPhrase": "calf feeder" },
+        { "id": "horse", "label": "Pony", "phrase": "fed the pony", "refPhrase": "pony feeder" },
+        { "id": "deer", "label": "Fawn", "phrase": "fed the fawn", "refPhrase": "fawn feeder" }
+      ]
+    },
+    {
+      "id": "scoop",
+      "label": "Scoop",
+      "kind": "numeric",
+      "unit": "scoops",
+      "valuePool": [
+        { "id": "scoop2", "label": "2 scoops", "magnitude": 2, "phrase": "gave out 2 scoops" },
+        { "id": "scoop4", "label": "4 scoops", "magnitude": 4, "phrase": "gave out 4 scoops" },
+        { "id": "scoop6", "label": "6 scoops", "magnitude": 6, "phrase": "gave out 6 scoops" },
+        { "id": "scoop8", "label": "8 scoops", "magnitude": 8, "phrase": "gave out 8 scoops" },
+        { "id": "scoop10", "label": "10 scoops", "magnitude": 10, "phrase": "gave out 10 scoops" },
+        { "id": "scoop12", "label": "12 scoops", "magnitude": 12, "phrase": "gave out 12 scoops" }
+      ]
+    },
+    {
+      "id": "pen",
+      "label": "Pen",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "haypen", "label": "Hay Pen", "phrase": "visited the Hay Pen", "refPhrase": "Hay Pen visitor" },
+        { "id": "cloverpen", "label": "Clover Pen", "phrase": "visited the Clover Pen", "refPhrase": "Clover Pen visitor" },
+        { "id": "willowpen", "label": "Willow Pen", "phrase": "visited the Willow Pen", "refPhrase": "Willow Pen visitor" },
+        { "id": "meadowpen", "label": "Meadow Pen", "phrase": "visited the Meadow Pen", "refPhrase": "Meadow Pen visitor" },
+        { "id": "barnpen", "label": "Barn Pen", "phrase": "visited the Barn Pen", "refPhrase": "Barn Pen visitor" },
+        { "id": "brookpen", "label": "Brook Pen", "phrase": "visited the Brook Pen", "refPhrase": "Brook Pen visitor" }
+      ]
+    },
+    {
+      "id": "sticker",
+      "label": "Sticker",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "starsticker", "label": "Star Sticker", "phrase": "earned the Star Sticker", "refPhrase": "Star Sticker child" },
+        { "id": "pawsticker", "label": "Paw Sticker", "phrase": "earned the Paw Sticker", "refPhrase": "Paw Sticker child" },
+        { "id": "sunsticker", "label": "Sun Sticker", "phrase": "earned the Sun Sticker", "refPhrase": "Sun Sticker child" },
+        { "id": "leafsticker", "label": "Leaf Sticker", "phrase": "earned the Leaf Sticker", "refPhrase": "Leaf Sticker child" },
+        { "id": "bellsticker", "label": "Bell Sticker", "phrase": "earned the Bell Sticker", "refPhrase": "Bell Sticker child" },
+        { "id": "heartsticker", "label": "Heart Sticker", "phrase": "earned the Heart Sticker", "refPhrase": "Heart Sticker child" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "scoop",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} gave out {delta} more scoops than {b_ref}.",
+        "{a_ref} gave out {delta} more scoops than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "scoop",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} gave out no fewer than {bound} scoops.",
+        "{a_ref} gave out at least {bound} scoops."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the chart read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "record-store",
+  "title": "The Record Store",
+  "subjectNoun": "shopper",
+  "subjectCategory": "shopper",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A light-mystery hour in a cramped vinyl record store. Anchor = shopper. genre is text-only (no glyph pack fits music styles); label and format are text-only; crate is the numeric axis (crates flipped) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (crate/label/format).",
+  "narrativeTemplate": "Warm vinyl crackle drifts from the counter speakers as {n} shoppers thumb through the racks, and {host} works out whose stack was whose after a {mishap} toppled the listening stools.",
+  "flavorPools": {
+    "host": ["clerk Dizzy", "old Marlowe", "the shop owner"],
+    "mishap": ["skipping needle", "power hum", "sneeze in the stacks"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Cleo'; 'attribute' -> 'the jazz digger' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "shopper",
+      "label": "Shopper",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "cleo", "label": "Cleo" },
+        { "id": "amos", "label": "Amos" },
+        { "id": "juno", "label": "Juno" },
+        { "id": "ravi", "label": "Ravi" },
+        { "id": "greta", "label": "Greta" },
+        { "id": "milo", "label": "Milo" }
+      ]
+    },
+    {
+      "id": "genre",
+      "label": "Genre",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "jazz", "label": "Jazz", "phrase": "dug through the jazz", "refPhrase": "jazz digger" },
+        { "id": "soul", "label": "Soul", "phrase": "dug through the soul", "refPhrase": "soul digger" },
+        { "id": "folk", "label": "Folk", "phrase": "dug through the folk", "refPhrase": "folk digger" },
+        { "id": "blues", "label": "Blues", "phrase": "dug through the blues", "refPhrase": "blues digger" },
+        { "id": "swing", "label": "Swing", "phrase": "dug through the swing", "refPhrase": "swing digger" },
+        { "id": "bossa", "label": "Bossa", "phrase": "dug through the bossa", "refPhrase": "bossa digger" }
+      ]
+    },
+    {
+      "id": "crate",
+      "label": "Crate",
+      "kind": "numeric",
+      "unit": "crates",
+      "valuePool": [
+        { "id": "crate2", "label": "2 crates", "magnitude": 2, "phrase": "flipped 2 crates" },
+        { "id": "crate4", "label": "4 crates", "magnitude": 4, "phrase": "flipped 4 crates" },
+        { "id": "crate6", "label": "6 crates", "magnitude": 6, "phrase": "flipped 6 crates" },
+        { "id": "crate8", "label": "8 crates", "magnitude": 8, "phrase": "flipped 8 crates" },
+        { "id": "crate10", "label": "10 crates", "magnitude": 10, "phrase": "flipped 10 crates" },
+        { "id": "crate12", "label": "12 crates", "magnitude": 12, "phrase": "flipped 12 crates" }
+      ]
+    },
+    {
+      "id": "label",
+      "label": "Label",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "bluebird", "label": "Bluebird", "phrase": "collected the Bluebird", "refPhrase": "Bluebird collector" },
+        { "id": "moonstone", "label": "Moonstone", "phrase": "collected the Moonstone", "refPhrase": "Moonstone collector" },
+        { "id": "riverbend", "label": "Riverbend", "phrase": "collected the Riverbend", "refPhrase": "Riverbend collector" },
+        { "id": "skylark", "label": "Skylark", "phrase": "collected the Skylark", "refPhrase": "Skylark collector" },
+        { "id": "coral", "label": "Coral", "phrase": "collected the Coral", "refPhrase": "Coral collector" },
+        { "id": "tangerine", "label": "Tangerine", "phrase": "collected the Tangerine", "refPhrase": "Tangerine collector" }
+      ]
+    },
+    {
+      "id": "format",
+      "label": "Format",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "vinyl", "label": "Vinyl", "phrase": "bought the Vinyl", "refPhrase": "Vinyl buyer" },
+        { "id": "cassette", "label": "Cassette", "phrase": "bought the Cassette", "refPhrase": "Cassette buyer" },
+        { "id": "reel", "label": "Reel", "phrase": "bought the Reel", "refPhrase": "Reel buyer" },
+        { "id": "shellac", "label": "Shellac", "phrase": "bought the Shellac", "refPhrase": "Shellac buyer" },
+        { "id": "acetate", "label": "Acetate", "phrase": "bought the Acetate", "refPhrase": "Acetate buyer" },
+        { "id": "eighttrack", "label": "Eight-track", "phrase": "bought the Eight-track", "refPhrase": "Eight-track buyer" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "crate",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} flipped {delta} more crates than {b_ref}.",
+        "{a_ref} flipped {delta} more crates than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "crate",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} flipped no fewer than {bound} crates.",
+        "{a_ref} flipped at least {bound} crates."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the sleeve read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

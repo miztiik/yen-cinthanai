@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "weather-station",
+  "title": "The Weather Station",
+  "subjectNoun": "observer",
+  "subjectCategory": "observer",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A light-mystery night at a remote ridge-top weather station. Anchor = observer. ride is glyph-backed by the transport pack (value ids are pack slugs); instrument and shift are text-only; reading is the numeric axis (readings logged) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (reading/instrument/shift).",
+  "narrativeTemplate": "Wind hammers the shutters of the ridge hut as {n} observers compare their notes by lamplight, and {host} untangles whose record was whose after a {mishap} sent the loose papers flying.",
+  "flavorPools": {
+    "host": ["chief Rourke", "old Halvard", "the relief officer"],
+    "mishap": ["gust through the vent", "flickering lamp", "iced-over door"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Wren'; 'attribute' -> 'the jeep rider' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "observer",
+      "label": "Observer",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "wren", "label": "Wren" },
+        { "id": "tomasz", "label": "Tomasz" },
+        { "id": "adaeze", "label": "Adaeze" },
+        { "id": "salvo", "label": "Salvo" },
+        { "id": "hedda", "label": "Hedda" },
+        { "id": "kai", "label": "Kai" }
+      ]
+    },
+    {
+      "id": "ride",
+      "label": "Ride",
+      "kind": "nominal",
+      "glyphPack": "transport",
+      "valuePool": [
+        { "id": "jeep", "label": "Jeep", "phrase": "arrived by the jeep", "refPhrase": "jeep rider" },
+        { "id": "helicopter", "label": "Helicopter", "phrase": "arrived by the helicopter", "refPhrase": "helicopter rider" },
+        { "id": "motorcycle", "label": "Motorbike", "phrase": "arrived by the motorbike", "refPhrase": "motorbike rider" },
+        { "id": "train", "label": "Rail Trolley", "phrase": "arrived by the rail trolley", "refPhrase": "rail-trolley rider" },
+        { "id": "bicycle", "label": "Bicycle", "phrase": "arrived by the bicycle", "refPhrase": "bicycle rider" },
+        { "id": "van", "label": "Supply Van", "phrase": "arrived by the supply van", "refPhrase": "supply-van rider" }
+      ]
+    },
+    {
+      "id": "reading",
+      "label": "Reading",
+      "kind": "numeric",
+      "unit": "readings",
+      "valuePool": [
+        { "id": "reading3", "label": "3 readings", "magnitude": 3, "phrase": "logged 3 readings" },
+        { "id": "reading5", "label": "5 readings", "magnitude": 5, "phrase": "logged 5 readings" },
+        { "id": "reading7", "label": "7 readings", "magnitude": 7, "phrase": "logged 7 readings" },
+        { "id": "reading9", "label": "9 readings", "magnitude": 9, "phrase": "logged 9 readings" },
+        { "id": "reading11", "label": "11 readings", "magnitude": 11, "phrase": "logged 11 readings" },
+        { "id": "reading13", "label": "13 readings", "magnitude": 13, "phrase": "logged 13 readings" }
+      ]
+    },
+    {
+      "id": "instrument",
+      "label": "Instrument",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "barometer", "label": "Barometer", "phrase": "minded the Barometer", "refPhrase": "Barometer reader" },
+        { "id": "anemometer", "label": "Anemometer", "phrase": "minded the Anemometer", "refPhrase": "Anemometer reader" },
+        { "id": "hygrometer", "label": "Hygrometer", "phrase": "minded the Hygrometer", "refPhrase": "Hygrometer reader" },
+        { "id": "thermograph", "label": "Thermograph", "phrase": "minded the Thermograph", "refPhrase": "Thermograph reader" },
+        { "id": "raingauge", "label": "Rain Gauge", "phrase": "minded the Rain Gauge", "refPhrase": "Rain Gauge reader" },
+        { "id": "sundial", "label": "Sundial", "phrase": "minded the Sundial", "refPhrase": "Sundial reader" }
+      ]
+    },
+    {
+      "id": "shift",
+      "label": "Shift",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "dawnwatch", "label": "Dawn Watch", "phrase": "stood the Dawn Watch", "refPhrase": "Dawn Watch observer" },
+        { "id": "stormwatch", "label": "Storm Watch", "phrase": "stood the Storm Watch", "refPhrase": "Storm Watch observer" },
+        { "id": "fogwatch", "label": "Fog Watch", "phrase": "stood the Fog Watch", "refPhrase": "Fog Watch observer" },
+        { "id": "frostwatch", "label": "Frost Watch", "phrase": "stood the Frost Watch", "refPhrase": "Frost Watch observer" },
+        { "id": "windwatch", "label": "Wind Watch", "phrase": "stood the Wind Watch", "refPhrase": "Wind Watch observer" },
+        { "id": "nightwatch", "label": "Night Watch", "phrase": "stood the Night Watch", "refPhrase": "Night Watch observer" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "reading",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} logged {delta} more readings than {b_ref}.",
+        "{a_ref} logged {delta} more readings than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "reading",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} logged no fewer than {bound} readings.",
+        "{a_ref} logged at least {bound} readings."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the log read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

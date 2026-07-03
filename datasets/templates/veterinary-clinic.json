@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "veterinary-clinic",
+  "title": "The Veterinary Clinic",
+  "subjectNoun": "owner",
+  "subjectCategory": "owner",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical morning in a busy small-animal veterinary clinic. Anchor = owner. patient is glyph-backed by the creatures pack (value ids are pack slugs); room and remedy are text-only; visit is the numeric axis (visits booked) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (visit/room/remedy).",
+  "narrativeTemplate": "Paws patter on the lino as {n} owners settle their nervous companions, and {host} works out whose morning was whose after a {mishap} sent the appointment cards flying.",
+  "flavorPools": {
+    "host": ["nurse Priya", "old Docherty", "the front-desk vet"],
+    "mishap": ["escaped hamster", "toppled scale", "sudden yowl"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Fern'; 'attribute' -> 'the dog owner' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "owner",
+      "label": "Owner",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "fern", "label": "Fern" },
+        { "id": "hassan", "label": "Hassan" },
+        { "id": "marta", "label": "Marta" },
+        { "id": "ewan", "label": "Ewan" },
+        { "id": "sora", "label": "Sora" },
+        { "id": "gil", "label": "Gil" }
+      ]
+    },
+    {
+      "id": "patient",
+      "label": "Patient",
+      "kind": "nominal",
+      "glyphPack": "creatures",
+      "valuePool": [
+        { "id": "dog", "label": "Dog", "phrase": "brought the dog", "refPhrase": "dog owner" },
+        { "id": "cat", "label": "Cat", "phrase": "brought the cat", "refPhrase": "cat owner" },
+        { "id": "rabbit", "label": "Rabbit", "phrase": "brought the rabbit", "refPhrase": "rabbit owner" },
+        { "id": "mouse", "label": "Mouse", "phrase": "brought the mouse", "refPhrase": "mouse owner" },
+        { "id": "fish", "label": "Fish", "phrase": "brought the fish", "refPhrase": "fish owner" },
+        { "id": "frog", "label": "Frog", "phrase": "brought the frog", "refPhrase": "frog owner" }
+      ]
+    },
+    {
+      "id": "visit",
+      "label": "Visit",
+      "kind": "numeric",
+      "unit": "visits",
+      "valuePool": [
+        { "id": "visit2", "label": "2 visits", "magnitude": 2, "phrase": "booked 2 visits" },
+        { "id": "visit4", "label": "4 visits", "magnitude": 4, "phrase": "booked 4 visits" },
+        { "id": "visit6", "label": "6 visits", "magnitude": 6, "phrase": "booked 6 visits" },
+        { "id": "visit8", "label": "8 visits", "magnitude": 8, "phrase": "booked 8 visits" },
+        { "id": "visit10", "label": "10 visits", "magnitude": 10, "phrase": "booked 10 visits" },
+        { "id": "visit12", "label": "12 visits", "magnitude": 12, "phrase": "booked 12 visits" }
+      ]
+    },
+    {
+      "id": "room",
+      "label": "Room",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "examroom", "label": "Exam Room", "phrase": "waited in the Exam Room", "refPhrase": "Exam Room owner" },
+        { "id": "recoveryroom", "label": "Recovery Room", "phrase": "waited in the Recovery Room", "refPhrase": "Recovery Room owner" },
+        { "id": "xrayroom", "label": "X-ray Room", "phrase": "waited in the X-ray Room", "refPhrase": "X-ray Room owner" },
+        { "id": "dentalroom", "label": "Dental Room", "phrase": "waited in the Dental Room", "refPhrase": "Dental Room owner" },
+        { "id": "surgeryroom", "label": "Surgery Room", "phrase": "waited in the Surgery Room", "refPhrase": "Surgery Room owner" },
+        { "id": "waitingroom", "label": "Waiting Room", "phrase": "waited in the Waiting Room", "refPhrase": "Waiting Room owner" }
+      ]
+    },
+    {
+      "id": "remedy",
+      "label": "Remedy",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "drops", "label": "Drops", "phrase": "collected the Drops", "refPhrase": "Drops owner" },
+        { "id": "tonic", "label": "Tonic", "phrase": "collected the Tonic", "refPhrase": "Tonic owner" },
+        { "id": "salve", "label": "Salve", "phrase": "collected the Salve", "refPhrase": "Salve owner" },
+        { "id": "bandage", "label": "Bandage", "phrase": "collected the Bandage", "refPhrase": "Bandage owner" },
+        { "id": "powder", "label": "Powder", "phrase": "collected the Powder", "refPhrase": "Powder owner" },
+        { "id": "vitamins", "label": "Vitamins", "phrase": "collected the Vitamins", "refPhrase": "Vitamins owner" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "visit",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} booked {delta} more visits than {b_ref}.",
+        "{a_ref} booked {delta} more visits than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "visit",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} booked no fewer than {bound} visits.",
+        "{a_ref} booked at least {bound} visits."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the chart read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

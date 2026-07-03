@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "pickle-works",
+  "title": "The Pickle Works",
+  "subjectNoun": "cook",
+  "subjectCategory": "cook",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A cozy little workshop where the last jars of the season are put up. Anchor = cook. vegetable is glyph-backed by the vegetables pack (value ids are pack slugs); crock and spice are text-only; jar is the numeric axis (jars filled) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (jar/crock/spice).",
+  "narrativeTemplate": "Vinegar tang fills the little workshop as {n} cooks seal the last batch, and {host} works out whose shelf was whose after a {mishap} scattered the paper labels.",
+  "flavorPools": {
+    "host": ["Auntie Mira", "old Fen", "the works foreman"],
+    "mishap": ["draught from the cellar", "wobbly stool", "cat on the counter"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Priya'; 'attribute' -> 'the cabbage pickler' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "cook",
+      "label": "Cook",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "priya", "label": "Priya" },
+        { "id": "matteo", "label": "Matteo" },
+        { "id": "gretchen", "label": "Gretchen" },
+        { "id": "omar", "label": "Omar" },
+        { "id": "hana", "label": "Hana" },
+        { "id": "bram", "label": "Bram" }
+      ]
+    },
+    {
+      "id": "vegetable",
+      "label": "Vegetable",
+      "kind": "nominal",
+      "glyphPack": "vegetables",
+      "valuePool": [
+        { "id": "cabbage", "label": "Cabbage", "phrase": "pickled the cabbage", "refPhrase": "cabbage pickler" },
+        { "id": "carrot", "label": "Carrot", "phrase": "pickled the carrot", "refPhrase": "carrot pickler" },
+        { "id": "beet", "label": "Beetroot", "phrase": "pickled the beetroot", "refPhrase": "beetroot pickler" },
+        { "id": "chili", "label": "Chilli", "phrase": "pickled the chilli", "refPhrase": "chilli pickler" },
+        { "id": "bellpepper", "label": "Bell Pepper", "phrase": "pickled the bell pepper", "refPhrase": "bell-pepper pickler" },
+        { "id": "eggplant", "label": "Aubergine", "phrase": "pickled the aubergine", "refPhrase": "aubergine pickler" }
+      ]
+    },
+    {
+      "id": "jar",
+      "label": "Jar",
+      "kind": "numeric",
+      "unit": "jars",
+      "valuePool": [
+        { "id": "jar3", "label": "3 jars", "magnitude": 3, "phrase": "filled 3 jars" },
+        { "id": "jar5", "label": "5 jars", "magnitude": 5, "phrase": "filled 5 jars" },
+        { "id": "jar7", "label": "7 jars", "magnitude": 7, "phrase": "filled 7 jars" },
+        { "id": "jar9", "label": "9 jars", "magnitude": 9, "phrase": "filled 9 jars" },
+        { "id": "jar11", "label": "11 jars", "magnitude": 11, "phrase": "filled 11 jars" },
+        { "id": "jar13", "label": "13 jars", "magnitude": 13, "phrase": "filled 13 jars" }
+      ]
+    },
+    {
+      "id": "crock",
+      "label": "Crock",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "oakcrock", "label": "Oak Crock", "phrase": "used the Oak Crock", "refPhrase": "Oak Crock keeper" },
+        { "id": "stonecrock", "label": "Stone Crock", "phrase": "used the Stone Crock", "refPhrase": "Stone Crock keeper" },
+        { "id": "claycrock", "label": "Clay Crock", "phrase": "used the Clay Crock", "refPhrase": "Clay Crock keeper" },
+        { "id": "coppercrock", "label": "Copper Crock", "phrase": "used the Copper Crock", "refPhrase": "Copper Crock keeper" },
+        { "id": "glasscrock", "label": "Glass Crock", "phrase": "used the Glass Crock", "refPhrase": "Glass Crock keeper" },
+        { "id": "elmcrock", "label": "Elm Crock", "phrase": "used the Elm Crock", "refPhrase": "Elm Crock keeper" }
+      ]
+    },
+    {
+      "id": "spice",
+      "label": "Spice",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "dill", "label": "Dill", "phrase": "seasoned with the dill", "refPhrase": "dill maker" },
+        { "id": "clove", "label": "Clove", "phrase": "seasoned with the clove", "refPhrase": "clove maker" },
+        { "id": "mustard", "label": "Mustard seed", "phrase": "seasoned with the mustard seed", "refPhrase": "mustard-seed maker" },
+        { "id": "caraway", "label": "Caraway", "phrase": "seasoned with the caraway", "refPhrase": "caraway maker" },
+        { "id": "bay", "label": "Bay leaf", "phrase": "seasoned with the bay leaf", "refPhrase": "bay-leaf maker" },
+        { "id": "peppercorn", "label": "Peppercorn", "phrase": "seasoned with the peppercorn", "refPhrase": "peppercorn maker" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "jar",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} filled {delta} more jars than {b_ref}.",
+        "{a_ref} filled {delta} more jars than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "jar",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} filled no fewer than {bound} jars.",
+        "{a_ref} filled at least {bound} jars."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the tally read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

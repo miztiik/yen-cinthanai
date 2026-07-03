@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "id": "birdwatching",
+  "title": "The Birdwatching Hide",
+  "subjectNoun": "watcher",
+  "subjectCategory": "watcher",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A whimsical dawn at a marshland birdwatching hide. Anchor = watcher. bird is text-only (no glyph pack fits wild species); hide and lens are text-only; sighting is the numeric axis (sightings logged) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (sighting/hide/lens).",
+  "narrativeTemplate": "Mist lifts off the marsh at first light as {n} watchers steady themselves against the rail, and {host} sorts out whose dawn was whose after a {mishap} rustled the reeds too soon.",
+  "flavorPools": {
+    "host": ["warden Efua", "old Nockford", "the reserve guide"],
+    "mishap": ["snapped twig", "sudden downpour", "buzzing midge"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Ren'; 'attribute' -> 'the kingfisher spotter' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "watcher",
+      "label": "Watcher",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "ren", "label": "Ren" },
+        { "id": "callum", "label": "Callum" },
+        { "id": "priti", "label": "Priti" },
+        { "id": "elias", "label": "Elias" },
+        { "id": "maja", "label": "Maja" },
+        { "id": "obi", "label": "Obi" }
+      ]
+    },
+    {
+      "id": "bird",
+      "label": "Bird",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "kingfisher", "label": "Kingfisher", "phrase": "spotted the kingfisher", "refPhrase": "kingfisher spotter" },
+        { "id": "heron", "label": "Heron", "phrase": "spotted the heron", "refPhrase": "heron spotter" },
+        { "id": "warbler", "label": "Warbler", "phrase": "spotted the warbler", "refPhrase": "warbler spotter" },
+        { "id": "lapwing", "label": "Lapwing", "phrase": "spotted the lapwing", "refPhrase": "lapwing spotter" },
+        { "id": "kestrel", "label": "Kestrel", "phrase": "spotted the kestrel", "refPhrase": "kestrel spotter" },
+        { "id": "wren", "label": "Wren", "phrase": "spotted the wren", "refPhrase": "wren spotter" }
+      ]
+    },
+    {
+      "id": "sighting",
+      "label": "Sighting",
+      "kind": "numeric",
+      "unit": "sightings",
+      "valuePool": [
+        { "id": "sighting3", "label": "3 sightings", "magnitude": 3, "phrase": "logged 3 sightings" },
+        { "id": "sighting5", "label": "5 sightings", "magnitude": 5, "phrase": "logged 5 sightings" },
+        { "id": "sighting7", "label": "7 sightings", "magnitude": 7, "phrase": "logged 7 sightings" },
+        { "id": "sighting9", "label": "9 sightings", "magnitude": 9, "phrase": "logged 9 sightings" },
+        { "id": "sighting11", "label": "11 sightings", "magnitude": 11, "phrase": "logged 11 sightings" },
+        { "id": "sighting13", "label": "13 sightings", "magnitude": 13, "phrase": "logged 13 sightings" }
+      ]
+    },
+    {
+      "id": "hide",
+      "label": "Hide",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "reedhide", "label": "Reed Hide", "phrase": "waited in the Reed Hide", "refPhrase": "Reed Hide watcher" },
+        { "id": "oakhide", "label": "Oak Hide", "phrase": "waited in the Oak Hide", "refPhrase": "Oak Hide watcher" },
+        { "id": "cliffhide", "label": "Cliff Hide", "phrase": "waited in the Cliff Hide", "refPhrase": "Cliff Hide watcher" },
+        { "id": "marshhide", "label": "Marsh Hide", "phrase": "waited in the Marsh Hide", "refPhrase": "Marsh Hide watcher" },
+        { "id": "willowhide", "label": "Willow Hide", "phrase": "waited in the Willow Hide", "refPhrase": "Willow Hide watcher" },
+        { "id": "towerhide", "label": "Tower Hide", "phrase": "waited in the Tower Hide", "refPhrase": "Tower Hide watcher" }
+      ]
+    },
+    {
+      "id": "lens",
+      "label": "Lens",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "binoculars", "label": "Compact Binoculars", "phrase": "carried the Compact Binoculars", "refPhrase": "Compact Binoculars watcher" },
+        { "id": "spottingscope", "label": "Spotting Scope", "phrase": "carried the Spotting Scope", "refPhrase": "Spotting Scope watcher" },
+        { "id": "zoomlens", "label": "Zoom Lens", "phrase": "carried the Zoom Lens", "refPhrase": "Zoom Lens watcher" },
+        { "id": "fieldglasses", "label": "Field Glasses", "phrase": "carried the Field Glasses", "refPhrase": "Field Glasses watcher" },
+        { "id": "monocular", "label": "Monocular", "phrase": "carried the Monocular", "refPhrase": "Monocular watcher" },
+        { "id": "telephoto", "label": "Telephoto", "phrase": "carried the Telephoto", "refPhrase": "Telephoto watcher" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "sighting",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} logged {delta} more sightings than {b_ref}.",
+        "{a_ref} logged {delta} more sightings than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "sighting",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} logged no fewer than {bound} sightings.",
+        "{a_ref} logged at least {bound} sightings."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the logbook read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

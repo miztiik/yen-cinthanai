@@ -739,6 +739,168 @@
       "kind": "paintstudio",
       "status": "live",
       "verifiedSha": "6f916384b1ae130fd1304a1853119f7a02043a872ded0a31828d612d73c6eab1"
+    },
+    {
+      "id": "hot-spring",
+      "file": "hot-spring.json",
+      "title": "The Hot Spring",
+      "tone": "cozy",
+      "kind": "hotspring",
+      "status": "live",
+      "verifiedSha": "1f7079267d0345ebbce85e3f6b93ab84e46ca3290b5a5d2f18ac56b3fe6e1448"
+    },
+    {
+      "id": "pickle-works",
+      "file": "pickle-works.json",
+      "title": "The Pickle Works",
+      "tone": "cozy",
+      "kind": "pickleworks",
+      "status": "live",
+      "verifiedSha": "84a7cf3fcba9d6c42fcbdefaae01ae845b2cfbb49bb3a4f05412d53bb183e07b"
+    },
+    {
+      "id": "campground",
+      "file": "campground.json",
+      "title": "The Campground",
+      "tone": "cozy",
+      "kind": "campground",
+      "status": "live",
+      "verifiedSha": "2c994f703a6e5e18b671419cabc8b5896ed092859a4e1a661d985d6e67892407"
+    },
+    {
+      "id": "petting-zoo",
+      "file": "petting-zoo.json",
+      "title": "The Petting Zoo",
+      "tone": "cozy",
+      "kind": "pettingzoo",
+      "status": "live",
+      "verifiedSha": "a783e6a36cb06011eb9a2ed41637036c4c3085e1849f1e8e17a0d6a1b195acef"
+    },
+    {
+      "id": "laundromat",
+      "file": "laundromat.json",
+      "title": "The Laundromat",
+      "tone": "witty",
+      "kind": "laundromat",
+      "status": "live",
+      "verifiedSha": "01242158fba94f7ec6447072b7efb6d1f8afa3f2ea5e8f10c6c0c71c4b53e675"
+    },
+    {
+      "id": "gymnasium",
+      "file": "gymnasium.json",
+      "title": "The Gymnasium",
+      "tone": "witty",
+      "kind": "gymnasium",
+      "status": "live",
+      "verifiedSha": "869181fe8ac110786e35d31e2b5fe98dcebd371e0bfa349f1e71a4441db2afa0"
+    },
+    {
+      "id": "radio-station",
+      "file": "radio-station.json",
+      "title": "The Radio Station",
+      "tone": "witty",
+      "kind": "radiostation",
+      "status": "live",
+      "verifiedSha": "c189ee8414aadc9f320f869e07999a8ee88d9379b2c999e72176f71e2ba52673"
+    },
+    {
+      "id": "mini-golf",
+      "file": "mini-golf.json",
+      "title": "The Mini-Golf Course",
+      "tone": "witty",
+      "kind": "minigolf",
+      "status": "live",
+      "verifiedSha": "052d4c08b12f2c890fe94240d5b0e47cbba83d05d1b465f82730c15602b26dce"
+    },
+    {
+      "id": "antiques-shop",
+      "file": "antiques-shop.json",
+      "title": "The Antiques Shop",
+      "tone": "light-mystery",
+      "kind": "antiques",
+      "status": "live",
+      "verifiedSha": "0873a7d8f1438eee33602367dfc724967f45b0b647486766cc32d247bdd6ebcb"
+    },
+    {
+      "id": "flea-market",
+      "file": "flea-market.json",
+      "title": "The Flea Market",
+      "tone": "light-mystery",
+      "kind": "fleamarket",
+      "status": "live",
+      "verifiedSha": "168d9f1091a9ee9fb0347d8af6e3492ee900f3b00116c7d1b6ae27e27a6212eb"
+    },
+    {
+      "id": "record-store",
+      "file": "record-store.json",
+      "title": "The Record Store",
+      "tone": "light-mystery",
+      "kind": "recordstore",
+      "status": "live",
+      "verifiedSha": "a39c051efa8208ce82764b6dff8112f69d15c441d65968dfd0e1cb03751d8116"
+    },
+    {
+      "id": "weather-station",
+      "file": "weather-station.json",
+      "title": "The Weather Station",
+      "tone": "light-mystery",
+      "kind": "weatherstation",
+      "status": "live",
+      "verifiedSha": "a1e96b92566d0f7eb67cc71e6fca89721dca8c9aa3dfe8c7b1d188217a62b6f3"
+    },
+    {
+      "id": "map-room",
+      "file": "map-room.json",
+      "title": "The Map Room",
+      "tone": "light-mystery",
+      "kind": "maproom",
+      "status": "live",
+      "verifiedSha": "6ab7f523ae8fffcdcaea677c46c03f9b8c19a914ae753df2099bd4904a7176a3"
+    },
+    {
+      "id": "veterinary-clinic",
+      "file": "veterinary-clinic.json",
+      "title": "The Veterinary Clinic",
+      "tone": "whimsical",
+      "kind": "vetclinic",
+      "status": "live",
+      "verifiedSha": "cf3aa82ef0710d058369fd8508d6282fa713eb69adb2db319783389cb1a88655"
+    },
+    {
+      "id": "arcade",
+      "file": "arcade.json",
+      "title": "The Arcade",
+      "tone": "whimsical",
+      "kind": "arcade",
+      "status": "live",
+      "verifiedSha": "ff3502c65f8c4852b437aa3edfac01d7d815598e5af032b74169328ee03a1090"
+    },
+    {
+      "id": "fireworks-show",
+      "file": "fireworks-show.json",
+      "title": "The Fireworks Show",
+      "tone": "whimsical",
+      "kind": "fireworks",
+      "status": "live",
+      "verifiedSha": "b09e50b35c3c3e5232180301696bfc073751f4f1ad88a13ee296dbd40e28fddb"
+    },
+    {
+      "id": "birdwatching",
+      "file": "birdwatching.json",
+      "title": "The Birdwatching Hide",
+      "tone": "whimsical",
+      "kind": "birdwatching",
+      "status": "live",
+      "verifiedSha": "f224259675950c85292207f99f9cf944e6d3adb7b6ce2f03250aaf635fc87aa1"
+    },
+    {
+      "id": "ice-rink",
+      "file": "ice-rink.json",
+      "title": "The Ice Rink",
+      "tone": "whimsical",
+      "kind": "icerink",
+      "status": "live",
+      "verifiedSha": "332b6a8742691c4678de3df2b32abbf0e6634d2221e1b498558ae5eab409c4e0"
     }
   ]
 }

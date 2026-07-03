@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "map-room",
+  "title": "The Map Room",
+  "subjectNoun": "mapmaker",
+  "subjectCategory": "mapmaker",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A light-mystery evening in a candlelit cartographers' map room. Anchor = mapmaker. landmark is glyph-backed by the vacation pack (value ids are pack slugs); chart and ink are text-only; voyage is the numeric axis (voyages logged) at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (voyage/chart/ink).",
+  "narrativeTemplate": "Rolled parchment covers every table as {n} mapmakers bend over their work by candlelight, and {host} puzzles out whose commission was whose after a {mishap} spilled across the drafting desk.",
+  "flavorPools": {
+    "host": ["archivist Pell", "old Bartholomew", "the guild warden"],
+    "mishap": ["draught through the arch", "guttering candle", "knocked compass"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Isolde'; 'attribute' -> 'the Eiffel Tower mapper' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "mapmaker",
+      "label": "Mapmaker",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "isolde", "label": "Isolde" },
+        { "id": "cormac", "label": "Cormac" },
+        { "id": "neave", "label": "Neave" },
+        { "id": "tobiah", "label": "Tobiah" },
+        { "id": "linnea", "label": "Linnea" },
+        { "id": "ravi", "label": "Ravi" }
+      ]
+    },
+    {
+      "id": "landmark",
+      "label": "Landmark",
+      "kind": "nominal",
+      "glyphPack": "vacation",
+      "valuePool": [
+        { "id": "eiffeltower", "label": "Eiffel Tower", "phrase": "charted the Eiffel Tower", "refPhrase": "Eiffel Tower mapper" },
+        { "id": "bigben", "label": "Big Ben", "phrase": "charted the Big Ben", "refPhrase": "Big Ben mapper" },
+        { "id": "colosseum", "label": "Colosseum", "phrase": "charted the Colosseum", "refPhrase": "Colosseum mapper" },
+        { "id": "pyramid", "label": "Pyramid", "phrase": "charted the Pyramid", "refPhrase": "Pyramid mapper" },
+        { "id": "tajmahal", "label": "Taj Mahal", "phrase": "charted the Taj Mahal", "refPhrase": "Taj Mahal mapper" },
+        { "id": "stonehenge", "label": "Stonehenge", "phrase": "charted the Stonehenge", "refPhrase": "Stonehenge mapper" }
+      ]
+    },
+    {
+      "id": "voyage",
+      "label": "Voyage",
+      "kind": "numeric",
+      "unit": "voyages",
+      "valuePool": [
+        { "id": "voyage2", "label": "2 voyages", "magnitude": 2, "phrase": "logged 2 voyages" },
+        { "id": "voyage4", "label": "4 voyages", "magnitude": 4, "phrase": "logged 4 voyages" },
+        { "id": "voyage6", "label": "6 voyages", "magnitude": 6, "phrase": "logged 6 voyages" },
+        { "id": "voyage8", "label": "8 voyages", "magnitude": 8, "phrase": "logged 8 voyages" },
+        { "id": "voyage10", "label": "10 voyages", "magnitude": 10, "phrase": "logged 10 voyages" },
+        { "id": "voyage12", "label": "12 voyages", "magnitude": 12, "phrase": "logged 12 voyages" }
+      ]
+    },
+    {
+      "id": "chart",
+      "label": "Chart",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "coastlinechart", "label": "Coastline Chart", "phrase": "drew the Coastline Chart", "refPhrase": "Coastline Chart hand" },
+        { "id": "riverchart", "label": "River Chart", "phrase": "drew the River Chart", "refPhrase": "River Chart hand" },
+        { "id": "mountainchart", "label": "Mountain Chart", "phrase": "drew the Mountain Chart", "refPhrase": "Mountain Chart hand" },
+        { "id": "desertchart", "label": "Desert Chart", "phrase": "drew the Desert Chart", "refPhrase": "Desert Chart hand" },
+        { "id": "islandchart", "label": "Island Chart", "phrase": "drew the Island Chart", "refPhrase": "Island Chart hand" },
+        { "id": "deltachart", "label": "Delta Chart", "phrase": "drew the Delta Chart", "refPhrase": "Delta Chart hand" }
+      ]
+    },
+    {
+      "id": "ink",
+      "label": "Ink",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "sepia", "label": "Sepia", "phrase": "worked in the Sepia", "refPhrase": "Sepia hand" },
+        { "id": "indigo", "label": "Indigo", "phrase": "worked in the Indigo", "refPhrase": "Indigo hand" },
+        { "id": "crimson", "label": "Crimson", "phrase": "worked in the Crimson", "refPhrase": "Crimson hand" },
+        { "id": "umber", "label": "Umber", "phrase": "worked in the Umber", "refPhrase": "Umber hand" },
+        { "id": "verdigris", "label": "Verdigris", "phrase": "worked in the Verdigris", "refPhrase": "Verdigris hand" },
+        { "id": "cobalt", "label": "Cobalt", "phrase": "worked in the Cobalt", "refPhrase": "Cobalt hand" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "voyage",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} logged {delta} more voyages than {b_ref}.",
+        "{a_ref} logged {delta} more voyages than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "voyage",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} logged no fewer than {bound} voyages.",
+        "{a_ref} logged at least {bound} voyages."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the index read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
