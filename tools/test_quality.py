@@ -340,10 +340,10 @@ def test_rebuild_is_byte_identical_easy(easy_build: g.StoryBuild) -> None:
     assert rebuilt.model_dump(by_alias=True) == easy_build.manifest.model_dump(by_alias=True)
 
 
-# The served archive dates (deterministic, known in-band) sweep the full 8 x 4 cross-product.
+# The served archive dates (deterministic, known in-band) sweep the full 9 x 4 cross-product.
 SWEEP_DATES = [
-    "2026-06-25", "2026-06-26", "2026-06-27", "2026-06-28",
-    "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02",
+    "2026-06-25", "2026-06-26", "2026-06-27", "2026-06-28", "2026-06-29",
+    "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-03",
 ]
 
 
