@@ -8,7 +8,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadSave, persistSave, validateSave, freshSave, dayKey } from "../../src/state/save.svelte";
-import type { Save, Tier, SaveShapeId, DayStatus } from "../../src/contracts/save";
+import type { Save, Tier, ShapeId, DayStatus } from "../../src/contracts/save";
 
 const here = fileURLToPath(new URL(".", import.meta.url));
 const read = (f: string) => readFileSync(resolve(here, `../fixtures/${f}`), "utf8");
@@ -97,7 +97,7 @@ describe("composite day keying (dayKey)", () => {
   });
 
   it("keeps two same-date, different-tier days as separate slots", () => {
-    const mk = (tier: Tier, shapeId: SaveShapeId) => ({
+    const mk = (tier: Tier, shapeId: ShapeId) => ({
       date: "2026-07-01", tier, shapeId, status: "won" as DayStatus,
       placements: {}, attempts: 0, solveMs: 1000, hintsUsed: 0, stars: 2,
     });
@@ -118,7 +118,7 @@ describe("composite day keying (dayKey)", () => {
   it("prunes the oldest DATE slot under quota, never today", () => {
     const today = "2026-07-01";
     const s = freshSave();
-    const add = (date: string, tier: Tier, shapeId: SaveShapeId, status: DayStatus) => {
+    const add = (date: string, tier: Tier, shapeId: ShapeId, status: DayStatus) => {
       s.days[dayKey(date, tier, shapeId)] = {
         date, tier, shapeId, status, placements: {}, attempts: 0, solveMs: 1, hintsUsed: 0, stars: 1,
       };
