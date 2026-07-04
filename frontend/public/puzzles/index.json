@@ -1,32 +1,60 @@
 {
-  "builtAt": "2026-07-03T00:00:00Z",
-  "generatedSeed": "2026-07-03",
+  "builtAt": "2026-07-04T00:00:00Z",
+  "generatedSeed": "2026-07-04",
   "puzzles": [
+    {
+      "date": "2026-06-24",
+      "file": "2026-06-24-easy.json",
+      "sha": "e6623d6ec879062b61a1bd974b723471f84733161deea384c00f103f512c608b",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-24",
+      "file": "2026-06-24-standard.json",
+      "sha": "539012dedc2f9176e8f24234d291e7f67d767133621addf212d4edc656b86e9e",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-24",
+      "file": "2026-06-24-sharp.json",
+      "sha": "c5d673cd683f96bf5235314204caa881c2e21952f15108392e415f2a0d24fa35",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-24",
+      "file": "2026-06-24-expert.json",
+      "sha": "39bbdbe1b66c870ebceda82bfc9692358b595524edf50664ec3161b14a8f8ae2",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
     {
       "date": "2026-06-25",
       "file": "2026-06-25-easy.json",
-      "sha": "be813a45875d5f5b06672ce601b8a002a30ac4e65b0f272ffdfc0e217e093cf9",
+      "sha": "8db592de897e4008274edb199a87675e75043ae9945ad7515a8cb92b457bf4a5",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-06-25",
       "file": "2026-06-25-standard.json",
-      "sha": "5931563bc7d0685dbb23138f015d30029ce28d4716ce7aa04e592a28d0338118",
+      "sha": "f146501d317c2066fc877458f71a4a9452e8eed4a5f8b9dfa66b73c37b078db0",
       "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-06-25",
       "file": "2026-06-25-sharp.json",
-      "sha": "0c10d888ae5f4c9666576be58382f4988983ae55644473d9046cc134e9bfe740",
+      "sha": "aa60117cb80c840e8fbd521b31cc4124666a80e95cbb2ae0a5fd7fa686390c55",
       "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-06-25",
       "file": "2026-06-25-expert.json",
-      "sha": "ffd4aa43809b001c854695aae79fa15c275db0138281b2efd2c3ad5ca32a9689",
+      "sha": "f025bb45874fd2794e607c205d8980d511305f9a7cc50be09849bf5c82b500b1",
       "shapeId": "grid",
       "tier": "expert"
     },
@@ -89,28 +117,28 @@
     {
       "date": "2026-06-28",
       "file": "2026-06-28-easy.json",
-      "sha": "768b42c18974fb7d96849e84c80f3b4803727c7057620c6fb5abac0883e6a101",
+      "sha": "81294b312785f6f8a53a9519e6e4825d9086938ff5457ae34a7320bf87f90227",
       "shapeId": "grid",
       "tier": "easy"
     },
     {
       "date": "2026-06-28",
       "file": "2026-06-28-standard.json",
-      "sha": "e9ccd971c51bad628c7aa55d043ec8056eeb6b65ef5169953666a50610224a7b",
+      "sha": "9912e910d8fdb1f7c3472c3cfb1623dc5b69ca5f1522b144f5ccc8b28b316458",
       "shapeId": "grid",
       "tier": "standard"
     },
     {
       "date": "2026-06-28",
       "file": "2026-06-28-sharp.json",
-      "sha": "3a326a018e1746cd1fc840c1b73d63a8a682bae0fab0e33d301b90df9fb97e86",
+      "sha": "222a8d20dd1a6d099fb54eef420880d28e748e7454e2b06f6b63cf876193ddec",
       "shapeId": "grid",
       "tier": "sharp"
     },
     {
       "date": "2026-06-28",
       "file": "2026-06-28-expert.json",
-      "sha": "fa24ae17aae7dae46194b612baba7fd1e0e9490bd9eb0989f20584be22e2e84e",
+      "sha": "81abb276d6405ae13acd186ebb6e910d6a38fd31b9ca147834752f6c8d0d605c",
       "shapeId": "grid",
       "tier": "expert"
     },
@@ -251,6 +279,34 @@
       "date": "2026-07-03",
       "file": "2026-07-03-expert.json",
       "sha": "6c9e44be7b6585e39066e731d0dc6f3d45c9aa33554c71899f12a9117a6508f1",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-07-04",
+      "file": "2026-07-04-easy.json",
+      "sha": "f4840966a3cb57e408a5f8e73f5e97a7a8bff182b4583402d72898d40738d0df",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-07-04",
+      "file": "2026-07-04-standard.json",
+      "sha": "74dc0b54d3e054de9e96b267b479f8b0ec461b9532cda42d86fec568c0f5aead",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-07-04",
+      "file": "2026-07-04-sharp.json",
+      "sha": "dc8ca9d24ffe73fe9a4fa2e84f963421e2b40374eee5ad12c873a3ea2f6bc0f0",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-07-04",
+      "file": "2026-07-04-expert.json",
+      "sha": "26a2065e61f7bc805f7fc16f7ff056a7bf0af0778d3d4a647bde4a3942a5db40",
       "shapeId": "grid",
       "tier": "expert"
     }
