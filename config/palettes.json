@@ -15,12 +15,12 @@
       "label": "Hearth",
       "light": {
         "accent": "#0f766e",
-        "bg": "#f4ecdd",
+        "bg": "#efe8e0",
         "gold": "#a8781e",
-        "ink": "#3a2f26",
+        "ink": "#33291f",
         "near": "#b5610e",
         "satisfy": "#15803d",
-        "surface": "#fffaf1",
+        "surface": "#fbf7f1",
         "violate": "#c53a2d"
       }
     },

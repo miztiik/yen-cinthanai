@@ -78,8 +78,8 @@
     {#if glyph}
       <Glyph ref={glyph} size={Math.round(size * 0.68)} />
     {:else}
-      <span class="relative flex items-center justify-center rounded-full bg-accent" style={`width:${Math.round(size * 0.52)}px;height:${Math.round(size * 0.52)}px`} aria-hidden="true">
-        <span style={`display:block;width:${Math.round(size * 0.13)}px;height:${Math.round(size * 0.24)}px;border:solid var(--bg);border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-${Math.round(size * 0.05)}px`}></span>
+      <span class="flex items-center justify-center rounded-full bg-accent text-bg" style={`width:${Math.round(size * 0.52)}px;height:${Math.round(size * 0.52)}px`} aria-hidden="true">
+        <Glyph ref="ui.check" size={Math.round(size * 0.34)} tint />
       </span>
     {/if}
   {:else if state === "manualX" || state === "autoX"}

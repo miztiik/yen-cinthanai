@@ -14,6 +14,7 @@ import {
   impliedX,
   mergeGridPlacements,
   parseCellKey,
+  staircase,
   type GridEndpoint,
 } from "../../src/lib/grid";
 import { nearestCentre, magnetTranslate, type CellCentre } from "../../src/lib/drag";
@@ -123,5 +124,27 @@ describe("magnet targeting for grid cells", () => {
 
   it("eases the drag toward the captured cell centre", () => {
     expect(magnetTranslate(40, 0, 0, 0, { cx: 100, cy: 0 }, 0.5)).toEqual({ tx: 70, ty: 0 });
+  });
+});
+
+describe("staircase (fused logic-grid layout)", () => {
+  const cats = gridCategories(board); // 3 bijective categories (the printed-grid case)
+
+  it("puts the anchor row across every column, then steps down", () => {
+    const s = staircase(cats);
+    expect(s.cols).toHaveLength(cats.length - 1);
+    expect(s.rows).toHaveLength(cats.length - 1);
+    expect(s.present[0].every((p) => p)).toBe(true); // anchor row pairs with every column
+    const cells = s.present.flat().filter(Boolean).length;
+    expect(cells).toBe(gridBlocks(cats).length); // one present block per unordered pair
+  });
+
+  it("leaves the self-pair corner blank (bottom-right of the 3-cat staircase)", () => {
+    const s = staircase(cats);
+    expect(s.present[1][s.cols.length - 1]).toBe(false);
+  });
+
+  it("renders nothing below two categories", () => {
+    expect(staircase(cats.slice(0, 1))).toEqual({ cols: [], rows: [], present: [] });
   });
 });

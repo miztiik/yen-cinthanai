@@ -88,7 +88,7 @@
       class="rounded-lg bg-surface px-2 py-1 disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       aria-label={copy.prevBlock}
       onclick={() => onnav(-1)}
-    >&lt;</button>
+    ><span class="inline-block -scale-x-100"><Glyph ref="ui.chevron" size={16} tint /></span></button>
     <span class="font-semibold">
       {block.rowCat.label} <span class="opacity-50">/</span> {block.colCat.label}
       <span class="ml-1 opacity-50 tabular-nums">({index + 1}/{blocks.length})</span>
@@ -98,7 +98,7 @@
       class="rounded-lg bg-surface px-2 py-1 disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       aria-label={copy.nextBlock}
       onclick={() => onnav(1)}
-    >&gt;</button>
+    ><Glyph ref="ui.chevron" size={16} tint /></button>
   </header>
 
   <div class="overflow-x-auto" bind:this={container}>

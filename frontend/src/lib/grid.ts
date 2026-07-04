@@ -83,6 +83,30 @@ export function gridBlocks(cats: AttributeCategory[]): GridBlock[] {
   return out;
 }
 
+/** The classic fused logic-grid ("staircase") layout for a desktop full-grid view. */
+export interface StaircaseLayout {
+  cols: AttributeCategory[]; // C1..Cn-1 (left -> right)
+  rows: AttributeCategory[]; // C0, Cn-1..C2 (top -> bottom)
+  present: boolean[][]; // present[r][c] for rows[r] x cols[c]
+}
+
+/** Fold [C0..Cn-1] (anchor first) into the printed logic-grid staircase: columns are every
+ *  category except the anchor (manifest order); rows are the anchor then the rest in reversed
+ *  manifest order, so the anchor row pairs with every column and each later row pairs only
+ *  with the columns below its own index - the descending stair, blank bottom-right corner.
+ *  A cell (rows[r] value x cols[c] value) resolves to the SAME `cellKey` as its block, so this
+ *  is a pure layout over the store (no model change). n<2 renders nothing. */
+export function staircase(cats: AttributeCategory[]): StaircaseLayout {
+  const n = cats.length;
+  if (n < 2) return { cols: [], rows: [], present: [] };
+  const cols = cats.slice(1);
+  const rows: AttributeCategory[] = [cats[0]];
+  for (let r = 1; r <= n - 2; r++) rows.push(cats[n - r]);
+  const present = rows.map((_row, r) => cols.map((_col, c) => (r === 0 ? true : c + 1 < n - r)));
+  return { cols, rows, present };
+}
+
+
 /** The cells of a block (rowCat.values x colCat.values), row-major. */
 export function blockCells(block: GridBlock): GridCellRef[] {
   const out: GridCellRef[] = [];

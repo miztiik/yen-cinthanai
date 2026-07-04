@@ -11,6 +11,7 @@
   import ClueList from "./ClueList.svelte";
   import NotesGrid from "./NotesGrid.svelte";
   import GridMap from "./GridMap.svelte";
+  import GridMatrix from "./GridMatrix.svelte";
   import ResultCard from "./ResultCard.svelte";
   import Glyph from "../lib/Glyph.svelte";
   import { route, homeHref, navigate } from "../lib/router.svelte";
@@ -134,6 +135,7 @@
   let activeBlock = $state(0);
   let vw = $state(typeof window !== "undefined" ? window.innerWidth : 1024); // real width at init (no mount reflow)
   const cellSize = $derived(vw >= 1024 ? 68 : vw >= 640 ? 54 : 44);
+  const desktop = $derived(vw >= 1024);
   const blocks = $derived(game ? gridBlocks(gridCategories(game.board)) : []);
   const gridCopy = $derived(copy.grid ?? GRID_COPY_FALLBACK);
   const hasShared = $derived(!!game && game.board.columns.some((c) => c.cardinality === "shared"));
@@ -145,19 +147,19 @@
 
 <svelte:window bind:innerWidth={vw} />
 
-<main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-5xl" : "max-w-md"}`}>
+<main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-7xl" : "max-w-md"}`}>
   <header class="flex items-center justify-between gap-2 text-sm">
     <a class="flex items-center rounded-lg p-1.5 opacity-80 transition-transform active:scale-95" href={homeHref()} aria-label="back" onclick={(e) => { e.preventDefault(); navigate(""); }}>
       <Glyph ref="ui.back" size={18} tint />
     </a>
-    <div class="flex items-center gap-2 rounded-full border border-ink/10 bg-surface px-3 py-1.5 shadow-sm">
+    <div class="flex items-center gap-2 rounded-full border border-ink/10 bg-surface px-3 py-1.5 shadow-e1">
       <span class="uppercase tracking-wide opacity-70">{game?.m.tier ?? ""}</span>
       <span class="opacity-25">/</span>
       <span class="tabular-nums opacity-80">{Math.floor(elapsed / 1000)}s</span>
       {#if game && game.attemptsLeft >= 0}<span class="opacity-25">/</span><span class="tabular-nums opacity-80" aria-label="attempts left">try {game.attemptsLeft}</span>{/if}
     </div>
     <button
-      class="rounded-lg border border-ink/10 bg-surface px-3 py-1.5 font-medium shadow-sm transition-transform active:scale-95 disabled:opacity-30"
+      class="rounded-lg border border-ink/10 bg-surface px-3 py-1.5 font-medium shadow-e1 transition-transform active:scale-95 disabled:opacity-30"
       disabled={!game || game.locked || hintsLeft === 0}
       onclick={() => game?.hint()}>hint{hintsLeft >= 0 ? ` ${hintsLeft}` : ""}</button>
   </header>
@@ -183,11 +185,15 @@
     <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-center">
       <div class="flex min-w-0 flex-col gap-4">
         {#if storyMode && blocks.length > 0}
-          <section class="flex justify-center">
-            <NotesGrid {game} block={blocks[activeBlock]} {blocks} index={activeBlock} copy={gridCopy} size={cellSize} {snap} onnav={navBlock} />
-          </section>
-          {#if blocks.length > 1}
-            <GridMap {game} {blocks} active={activeBlock} copy={gridCopy} onselect={(i) => (activeBlock = i)} />
+          {#if desktop}
+            <GridMatrix {game} cats={gridCategories(game.board)} copy={gridCopy} />
+          {:else}
+            <section class="flex justify-center">
+              <NotesGrid {game} block={blocks[activeBlock]} {blocks} index={activeBlock} copy={gridCopy} size={cellSize} {snap} onnav={navBlock} />
+            </section>
+            {#if blocks.length > 1}
+              <GridMap {game} {blocks} active={activeBlock} copy={gridCopy} onselect={(i) => (activeBlock = i)} />
+            {/if}
           {/if}
           {#if hasShared}
             <section class="flex justify-center"><SlotBoard {game} topology={shape?.topology ?? "matrix"} revealed={game.revealed} {pulse} /></section>

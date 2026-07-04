@@ -64,7 +64,7 @@
 
 <div class="fixed inset-0 z-20 flex items-center justify-center bg-black/70 p-6" role="dialog" aria-modal="true" aria-label={variant === "win" ? "solved" : "result"}>
   <div
-    class="flex w-full max-w-xs flex-col items-center gap-4 rounded-2xl border border-ink/10 bg-surface p-8 text-center shadow-2xl shadow-black/40"
+    class="flex w-full max-w-xs flex-col items-center gap-4 rounded-2xl border border-ink/10 bg-surface p-8 text-center shadow-e4"
     class:ring-4={hero}
     class:ring-gold={hero}
   >

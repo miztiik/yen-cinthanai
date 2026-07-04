@@ -18,6 +18,16 @@
   --color-gold: var(--gold);
 }
 
+/* Static elevation scale (Jony): one shadow family so the deduction plane reads as one
+   surface and the story panel stops floating. e1 = story/clues/grid/HUD, e2 = primary CTA,
+   e4 = modal over scrim. Fixed values (not palette-swapped). Generates shadow-e1..e4. */
+@theme {
+  --shadow-e1: 0 1px 2px rgb(0 0 0 / 0.16);
+  --shadow-e2: 0 2px 6px rgb(0 0 0 / 0.18), 0 1px 2px rgb(0 0 0 / 0.12);
+  --shadow-e3: 0 8px 20px rgb(0 0 0 / 0.24);
+  --shadow-e4: 0 18px 44px rgb(0 0 0 / 0.42);
+}
+
 :root {
   /* bootstrap fallback = config/palettes.json [palette.hearth.dark] */
   --bg: #1b1512;
@@ -33,9 +43,9 @@
 
 :root[data-theme="light"] {
   /* bootstrap fallback = config/palettes.json [palette.hearth.light] */
-  --bg: #f4ecdd;
-  --surface: #fffaf1;
-  --ink: #3a2f26;
+  --bg: #efe8e0;
+  --surface: #fbf7f1;
+  --ink: #33291f;
   --accent: #0f766e;
   --satisfy: #15803d;
   --violate: #c53a2d;
@@ -60,14 +70,24 @@ body {
 body::before {
   content: "";
   position: fixed;
-  inset: 0;
+  inset: -35%;
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(60% 55% at 50% -10%, color-mix(in oklab, var(--gold) 26%, transparent), transparent 70%),
-    radial-gradient(52% 46% at 106% 108%, color-mix(in oklab, var(--near) 20%, transparent), transparent 66%),
-    radial-gradient(46% 42% at -6% 100%, color-mix(in oklab, var(--accent) 10%, transparent), transparent 70%),
-    var(--bg);
+    radial-gradient(50% 45% at 30% 20%, color-mix(in oklab, var(--accent) 14%, transparent), transparent 70%),
+    radial-gradient(48% 44% at 80% 28%, color-mix(in oklab, var(--gold) 16%, transparent), transparent 70%),
+    radial-gradient(52% 48% at 66% 88%, color-mix(in oklab, var(--near) 14%, transparent), transparent 72%),
+    radial-gradient(46% 42% at 16% 82%, color-mix(in oklab, var(--accent) 10%, transparent), transparent 70%);
+  background-color: var(--bg);
+  animation: ambient-drift 240s ease-in-out infinite alternate;
+}
+@keyframes ambient-drift {
+  from {
+    transform: translate3d(-2.5%, -1.5%, 0) rotate(-0.6deg) scale(1.06);
+  }
+  to {
+    transform: translate3d(2.5%, 1.5%, 0) rotate(0.6deg) scale(1.1);
+  }
 }
 
 /* A faint logic-grid motif behind everything - thematically the game's own surface, and

@@ -7,7 +7,7 @@
 </script>
 
 {#if story}
-  <section class="rounded-2xl border border-ink/10 bg-surface px-4 py-3 text-sm leading-relaxed text-ink shadow-lg shadow-black/20">
+  <section class="rounded-2xl border border-ink/10 bg-surface px-4 py-3 text-sm leading-relaxed text-ink shadow-e1">
     <p>{story}</p>
   </section>
 {/if}
