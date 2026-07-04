@@ -8,7 +8,8 @@
   // See docs/concepts/core-loop.md, docs/concepts/ui-shell.md, grid.ts staircase().
   import GridCell from "./GridCell.svelte";
   import Glyph from "../lib/Glyph.svelte";
-  import { staircase, cellKey, cellState } from "../lib/grid";
+  import { staircase, cellKey, cellState, glyphComplete } from "../lib/grid";
+  import { glyphExists } from "../lib/glyphs";
   import type { GridCopy } from "../lib/config";
   import type { AttributeCategory, AttributeValue } from "../contracts/manifest";
   import type { Game } from "../state/play.svelte";
@@ -18,6 +19,9 @@
   const layout = $derived(staircase(cats));
   const ticks = $derived(new Set(Object.keys(game.gridTicks)));
   const manualX = $derived(new Set(Object.keys(game.gridManualX)));
+  // Per-axis glyph completeness: an axis shows images only if ALL its values have art, else the
+  // whole axis falls back to green checks (no mix). Auto-upgrades when the missing art is added.
+  const glyphCats = $derived(new Set(cats.filter((c) => glyphComplete(c, glyphExists)).map((c) => c.id)));
 
   interface Leaf {
     cat: AttributeCategory;
@@ -46,6 +50,13 @@
   }
   function ariaAt(rv: AttributeValue, cv: AttributeValue, key: string): string {
     return copy.cell.replace("{row}", rv.label).replace("{col}", cv.label).replace("{state}", copy.state[cellState(key, ticks, manualX)]);
+  }
+  /** The cell's decorative glyph under the no-mix rule: prefer the column axis's glyph, else the
+   *  row axis's - but only from an axis whose every value has art (else null -> green check). */
+  function cellGlyph(rc: AttributeCategory, rv: AttributeValue, cc: AttributeCategory, cv: AttributeValue): string | null {
+    if (glyphCats.has(cc.id) && cv.glyph) return cv.glyph;
+    if (glyphCats.has(rc.id) && rv.glyph) return rv.glyph;
+    return null;
   }
   function present(r: number, c: number): boolean {
     return !!layout.present[r]?.[c];
@@ -118,7 +129,7 @@
             {/if}
             <th scope="row" class="whitespace-nowrap py-px pr-2 text-right text-xs font-medium">
               <span class="inline-flex items-center justify-end gap-1">
-                {#if rv.glyph}<Glyph ref={rv.glyph} label={rv.label} size={Math.round(size * 0.42)} />{/if}
+                {#if glyphCats.has(rc.id) && rv.glyph}<Glyph ref={rv.glyph} label={rv.label} size={Math.round(size * 0.42)} />{/if}
                 <span>{rv.label}</span>
               </span>
             </th>
@@ -133,7 +144,7 @@
                       cellKey={key}
                       block={`${rc.id}|${cc.id}`}
                       state={cellState(key, ticks, manualX)}
-                      glyph={cv.glyph || rv.glyph || null}
+                      glyph={cellGlyph(rc, rv, cc, cv)}
                       ariaLabel={ariaAt(rv, cv, key)}
                       tabindex={gr === active.gr && gc === active.gc ? 0 : -1}
                       {size}

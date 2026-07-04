@@ -51,6 +51,13 @@ export function glyphLabel(ref: string): string {
   return e.label;
 }
 
+/** True when a "pack.slug" ref resolves to a baked image (never throws). Lets a category decide
+ *  whether EVERY value has art (render glyphs) or fall back to text - so we never mix images and
+ *  green checks in one axis, and an axis auto-upgrades to images the moment its art is added. */
+export function glyphExists(ref: string): boolean {
+  return !!entryOf(ref);
+}
+
 /** Glyph packs whose art is landscape (e.g. national flags) and renders as a rounded-rect
  *  CHIP rather than the square/circular Puck crop. Pack-level - never per value or country. */
 export const CHIP_PACKS = new Set<string>(["flags"]);

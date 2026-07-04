@@ -74,6 +74,14 @@ export function gridCategories(board: BoardModel): AttributeCategory[] {
   return [board.anchor, ...board.columns.filter((c) => c.cardinality === "bijective")];
 }
 
+/** A category renders glyph images only when EVERY value resolves to an existing image;
+ *  otherwise the whole axis falls back to text / green-checks - never a mix of images and
+ *  checks in one axis. `exists` is the glyph-registry membership test (glyphs.ts glyphExists),
+ *  injected so this module stays DOM- and asset-free (unit-testable). */
+export function glyphComplete(cat: AttributeCategory, exists: (ref: string) => boolean): boolean {
+  return cat.values.length > 0 && cat.values.every((v) => !!v.glyph && exists(v.glyph));
+}
+
 /** Every category-pair block, in a stable order (manifest order, i < j). */
 export function gridBlocks(cats: AttributeCategory[]): GridBlock[] {
   const out: GridBlock[] = [];

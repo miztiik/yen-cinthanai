@@ -9,7 +9,8 @@
   // Chrome is Tailwind; the only image is the glyph. See TODO story-first-pivot sec 8.
   import GridCell from "./GridCell.svelte";
   import Glyph from "../lib/Glyph.svelte";
-  import { blockCells, cellState, type GridBlock } from "../lib/grid";
+  import { blockCells, cellState, glyphComplete, type GridBlock } from "../lib/grid";
+  import { glyphExists } from "../lib/glyphs";
   import type { GridCopy } from "../lib/config";
   import type { AttributeValue } from "../contracts/manifest";
   import type { Game } from "../state/play.svelte";
@@ -47,6 +48,9 @@
   const cells = $derived(blockCells(block)); // row-major, matches DOM order of the buttons
   const ticks = $derived(new Set(Object.keys(game.gridTicks)));
   const manualX = $derived(new Set(Object.keys(game.gridManualX)));
+  // No-mix glyph rule: each axis shows images only when ALL its values have art, else text.
+  const rowGlyphs = $derived(glyphComplete(block.rowCat, glyphExists));
+  const colGlyphs = $derived(glyphComplete(block.colCat, glyphExists));
 
   function stateAt(rv: AttributeValue, cv: AttributeValue) {
     return cellState(keyAt(rv, cv), ticks, manualX);
@@ -117,7 +121,7 @@
           <tr>
             <th scope="row" class="pr-1 text-right text-xs font-medium">
               <span class="inline-flex select-none items-center gap-1">
-                {#if rv.glyph}<Glyph ref={rv.glyph} label={rv.label} size={Math.round(size * 0.5)} />{/if}
+                {#if rowGlyphs && rv.glyph}<Glyph ref={rv.glyph} label={rv.label} size={Math.round(size * 0.5)} />{/if}
                 <span>{rv.label}</span>
               </span>
             </th>
@@ -128,7 +132,7 @@
                   cellKey={keyAt(rv, cv)}
                   block={block.id}
                   state={stateAt(rv, cv)}
-                  glyph={cv.glyph || null}
+                  glyph={colGlyphs && cv.glyph ? cv.glyph : null}
                   ariaLabel={ariaAt(rv, cv)}
                   tabindex={idx === activeCell ? 0 : -1}
                   {size}

@@ -9,6 +9,7 @@ import {
   cellKey,
   cellState,
   endpointKey,
+  glyphComplete,
   gridBlocks,
   gridCategories,
   impliedX,
@@ -19,6 +20,7 @@ import {
 } from "../../src/lib/grid";
 import { nearestCentre, magnetTranslate, type CellCentre } from "../../src/lib/drag";
 import type { PuzzleManifest } from "../../src/contracts/manifest";
+import type { AttributeCategory } from "../../src/contracts/manifest";
 import type { Placements } from "../../src/contracts/save";
 
 // Real fixture: 3 bijective categories (drink, animal, position); position is ordinal so
@@ -146,5 +148,33 @@ describe("staircase (fused logic-grid layout)", () => {
 
   it("renders nothing below two categories", () => {
     expect(staircase(cats.slice(0, 1))).toEqual({ cols: [], rows: [], present: [] });
+  });
+});
+
+describe("glyphComplete (no-mix render gate)", () => {
+  const cat = (glyphs: (string | undefined)[]): AttributeCategory => ({
+    id: "c",
+    label: "C",
+    kind: "nominal",
+    anchor: false,
+    cardinality: "bijective",
+    values: glyphs.map((g, i) => ({ id: `v${i}`, glyph: g ?? "", label: `v${i}` })),
+  });
+  const exists = (ref: string) => ref === "flowers.rose" || ref === "flowers.tulips";
+
+  it("is complete only when every value resolves to an existing image", () => {
+    expect(glyphComplete(cat(["flowers.rose", "flowers.tulips"]), exists)).toBe(true);
+  });
+
+  it("is incomplete when any value has no glyph (a mix -> whole axis falls back to text)", () => {
+    expect(glyphComplete(cat(["flowers.rose", ""]), exists)).toBe(false);
+  });
+
+  it("is incomplete when a glyph ref has no image file", () => {
+    expect(glyphComplete(cat(["flowers.rose", "flowers.poppies"]), exists)).toBe(false);
+  });
+
+  it("is incomplete for an empty category", () => {
+    expect(glyphComplete(cat([]), exists)).toBe(false);
   });
 });
