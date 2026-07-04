@@ -1,91 +1,7 @@
 {
-  "builtAt": "2026-07-03T00:00:00Z",
-  "generatedSeed": "2026-07-03",
+  "builtAt": "2026-07-04T00:00:00Z",
+  "generatedSeed": "2026-07-04",
   "puzzles": [
-    {
-      "date": "2026-06-25",
-      "file": "2026-06-25-easy.json",
-      "sha": "be813a45875d5f5b06672ce601b8a002a30ac4e65b0f272ffdfc0e217e093cf9",
-      "shapeId": "grid",
-      "tier": "easy"
-    },
-    {
-      "date": "2026-06-25",
-      "file": "2026-06-25-standard.json",
-      "sha": "5931563bc7d0685dbb23138f015d30029ce28d4716ce7aa04e592a28d0338118",
-      "shapeId": "grid",
-      "tier": "standard"
-    },
-    {
-      "date": "2026-06-25",
-      "file": "2026-06-25-sharp.json",
-      "sha": "0c10d888ae5f4c9666576be58382f4988983ae55644473d9046cc134e9bfe740",
-      "shapeId": "grid",
-      "tier": "sharp"
-    },
-    {
-      "date": "2026-06-25",
-      "file": "2026-06-25-expert.json",
-      "sha": "ffd4aa43809b001c854695aae79fa15c275db0138281b2efd2c3ad5ca32a9689",
-      "shapeId": "grid",
-      "tier": "expert"
-    },
-    {
-      "date": "2026-06-26",
-      "file": "2026-06-26-easy.json",
-      "sha": "3a164a9f7199b78c70c11e981d94db35c35ac99cb095172385bef81e8cfeb3c8",
-      "shapeId": "grid",
-      "tier": "easy"
-    },
-    {
-      "date": "2026-06-26",
-      "file": "2026-06-26-standard.json",
-      "sha": "f61aad3ef57e36d1fbe448355541b4ba6d7eb7037a817d51dbea0c79b2efe5f4",
-      "shapeId": "grid",
-      "tier": "standard"
-    },
-    {
-      "date": "2026-06-26",
-      "file": "2026-06-26-sharp.json",
-      "sha": "2479cfca2a369356b8c64030b62a2d4d8da33ce8384bd5ab1c909dc96925cd3f",
-      "shapeId": "grid",
-      "tier": "sharp"
-    },
-    {
-      "date": "2026-06-26",
-      "file": "2026-06-26-expert.json",
-      "sha": "0c6370d7e7dfe9332a9cfc05e8d28cb4b5bd307da5faffbd3de7867645f0f5ba",
-      "shapeId": "grid",
-      "tier": "expert"
-    },
-    {
-      "date": "2026-06-27",
-      "file": "2026-06-27-easy.json",
-      "sha": "5b2e7add96d7399bc4da1362e082a09d3b7ab08872e279e2284f4f7278e5f63c",
-      "shapeId": "grid",
-      "tier": "easy"
-    },
-    {
-      "date": "2026-06-27",
-      "file": "2026-06-27-standard.json",
-      "sha": "a3864f76bcdc043ecbcb6d50426dcb508e386383b6eb4559db637f171719483c",
-      "shapeId": "grid",
-      "tier": "standard"
-    },
-    {
-      "date": "2026-06-27",
-      "file": "2026-06-27-sharp.json",
-      "sha": "fcae7de748ecff88e0fede2b922cf629e84e3e66352c2f78c5ab493c75fce4fe",
-      "shapeId": "grid",
-      "tier": "sharp"
-    },
-    {
-      "date": "2026-06-27",
-      "file": "2026-06-27-expert.json",
-      "sha": "ed278b4c05c5bca9ab7763fc66325b2a1cfa596b24d16be0f915e3c084b6b196",
-      "shapeId": "grid",
-      "tier": "expert"
-    },
     {
       "date": "2026-06-28",
       "file": "2026-06-28-easy.json",
@@ -251,6 +167,34 @@
       "date": "2026-07-03",
       "file": "2026-07-03-expert.json",
       "sha": "6c9e44be7b6585e39066e731d0dc6f3d45c9aa33554c71899f12a9117a6508f1",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-07-04",
+      "file": "2026-07-04-easy.json",
+      "sha": "f4840966a3cb57e408a5f8e73f5e97a7a8bff182b4583402d72898d40738d0df",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-07-04",
+      "file": "2026-07-04-standard.json",
+      "sha": "74dc0b54d3e054de9e96b267b479f8b0ec461b9532cda42d86fec568c0f5aead",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-07-04",
+      "file": "2026-07-04-sharp.json",
+      "sha": "dc8ca9d24ffe73fe9a4fa2e84f963421e2b40374eee5ad12c873a3ea2f6bc0f0",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-07-04",
+      "file": "2026-07-04-expert.json",
+      "sha": "26a2065e61f7bc805f7fc16f7ff056a7bf0af0778d3d4a647bde4a3942a5db40",
       "shapeId": "grid",
       "tier": "expert"
     }
