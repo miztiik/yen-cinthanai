@@ -116,6 +116,16 @@ export function impliedX(key: string, ticks: ReadonlySet<string>): boolean {
   return false;
 }
 
+/** Two cell keys COLLIDE when they sit in the same block and share at least one endpoint
+ *  (same row, same column, or the same cell) - the existing ticks a new positive must
+ *  displace so a block keeps one tick per row and column (mirrors the token board swap). */
+export function collides(a: string, b: string): boolean {
+  const pa = parseCellKey(a);
+  const pb = parseCellKey(b);
+  if (blockId(pa[0].cat, pa[1].cat) !== blockId(pb[0].cat, pb[1].cat)) return false;
+  return sharedEndpoints(pa, pb) >= 1;
+}
+
 /** Derive one cell's state from the authored marks. tick > manualX > autoX > blank.
  *  Manual-X wins over auto-X so a hand elimination never gets silently reclassified. */
 export function cellState(

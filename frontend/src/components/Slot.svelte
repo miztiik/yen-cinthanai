@@ -32,7 +32,7 @@
   data-slot-cat={cat}
   aria-label={glyph ? label : `empty ${cat}`}
   onclick={ontap}
-  class={`rounded-full transition-transform duration-150 ${pulse ? "animate-pulse" : ""}`}
+  class={`flex place-self-center items-center justify-center rounded-full transition-transform duration-150 ${pulse ? "animate-pulse" : ""}`}
 >
   <Puck ref={glyph} {label} {state} {locked} />
 </button>

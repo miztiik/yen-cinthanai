@@ -10,7 +10,6 @@
   import GridCell from "./GridCell.svelte";
   import Glyph from "../lib/Glyph.svelte";
   import { blockCells, cellState, type GridBlock } from "../lib/grid";
-  import { draggable, type DragHandlers } from "../lib/drag";
   import type { GridCopy } from "../lib/config";
   import type { AttributeValue } from "../contracts/manifest";
   import type { Game } from "../state/play.svelte";
@@ -60,18 +59,6 @@
       .replace("{row}", rv.label)
       .replace("{col}", cv.label)
       .replace("{state}", copy.state[stateAt(rv, cv)]);
-  }
-
-  // Row-header drag handle: dropping it into a cell ticks that cell (the magnet retargets
-  // to this block's cell centres, snapshot at pointerdown). Pointer-only; keyboard ticks
-  // via a focused cell + Enter, so the handle stays out of the tab order (tabindex -1).
-  function handlers(): DragHandlers {
-    return {
-      cellBlock: block.id,
-      onTap: () => {},
-      onDropCell: (key) => game.gridDrop(key),
-      snap: { radius: size * snap.radius_factor, ease: snap.ease },
-    };
   }
 
   function focusCell(idx: number) {
@@ -129,13 +116,7 @@
         {#each rows as rv (rv.id)}
           <tr>
             <th scope="row" class="pr-1 text-right text-xs font-medium">
-              <span
-                use:draggable={handlers()}
-                tabindex="-1"
-                role="button"
-                aria-label={rv.label}
-                class="inline-flex cursor-grab touch-none select-none items-center gap-1 rounded-full active:cursor-grabbing"
-              >
+              <span class="inline-flex select-none items-center gap-1">
                 {#if rv.glyph}<Glyph ref={rv.glyph} label={rv.label} size={Math.round(size * 0.5)} />{/if}
                 <span>{rv.label}</span>
               </span>
@@ -154,11 +135,11 @@
                   locked={game.locked}
                   ontap={() => {
                     activeCell = idx;
-                    game.gridTap(keyAt(rv, cv));
+                    game.gridCycle(keyAt(rv, cv));
                   }}
                   ontick={() => {
                     activeCell = idx;
-                    game.gridDrop(keyAt(rv, cv));
+                    game.gridCycle(keyAt(rv, cv));
                   }}
                   onmove={moveFrom}
                 />

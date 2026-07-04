@@ -19,28 +19,28 @@
 }
 
 :root {
-  /* bootstrap fallback = config/palettes.toml [palette.midnight.dark] */
-  --bg: #0b1220;
-  --surface: #1e293b;
-  --ink: #e2e8f0;
-  --accent: #10b981;
-  --satisfy: #34d399;
-  --violate: #fb7185;
-  --near: #fbbf24;
-  --gold: #fcd34d;
+  /* bootstrap fallback = config/palettes.json [palette.hearth.dark] */
+  --bg: #1b1512;
+  --surface: #2a211b;
+  --ink: #f2e7d8;
+  --accent: #3cb9a4;
+  --satisfy: #5cc873;
+  --violate: #f2685a;
+  --near: #f4a63c;
+  --gold: #eaca7f;
   color-scheme: dark;
 }
 
 :root[data-theme="light"] {
-  /* bootstrap fallback = config/palettes.toml [palette.midnight.light] */
-  --bg: #eef2f7;
-  --surface: #ffffff;
-  --ink: #0f172a;
-  --accent: #0f9d6b;
-  --satisfy: #059669;
-  --violate: #e11d48;
-  --near: #b45309;
-  --gold: #b8860b;
+  /* bootstrap fallback = config/palettes.json [palette.hearth.light] */
+  --bg: #f4ecdd;
+  --surface: #fffaf1;
+  --ink: #3a2f26;
+  --accent: #0f766e;
+  --satisfy: #15803d;
+  --violate: #c53a2d;
+  --near: #b5610e;
+  --gold: #a8781e;
   color-scheme: light;
 }
 
@@ -50,6 +50,40 @@ body {
   min-height: 100dvh;
   background-color: var(--bg);
   color: var(--ink);
+  font-family: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Modern shell: a fixed, composited two-tone aurora mesh behind everything. Painted once
+   (position: fixed) so it never repaints on scroll (Carmack: no scroll-linked jank). A cool
+   accent bloom top-left + a warm gold bloom bottom-right give the page depth without a flat
+   wash; both are token-tied so they restyle on a theme/palette swap. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 55% at 50% -10%, color-mix(in oklab, var(--gold) 26%, transparent), transparent 70%),
+    radial-gradient(52% 46% at 106% 108%, color-mix(in oklab, var(--near) 20%, transparent), transparent 66%),
+    radial-gradient(46% 42% at -6% 100%, color-mix(in oklab, var(--accent) 10%, transparent), transparent 70%),
+    var(--bg);
+}
+
+/* A faint logic-grid motif behind everything - thematically the game's own surface, and
+   the "meaningful glyph in the background". Pure CSS lines (no image), masked to fade out
+   at the edges so it never competes with content. Fixed + composited over the aurora
+   blooms; token-tied so it restyles on a theme swap. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(color-mix(in oklab, var(--ink) 8%, transparent) 1.4px, transparent 1.6px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(135% 90% at 50% 0%, #000 28%, transparent 78%);
+  mask-image: radial-gradient(135% 90% at 50% 0%, #000 28%, transparent 78%);
 }
 
 /* Reduced-motion: drop transforms/animations to instant. Set via lib/motion.ts or
@@ -88,4 +122,42 @@ img {
   -webkit-user-drag: none;
   -webkit-touch-callout: none;
   user-select: none;
+}
+
+/* Home wordmark: the "Yen Cinthanai" lockup. The gradient is painted onto the glyphs
+   (background-clip: text) and drifts via background-position ONLY - no layout, no reflow,
+   compositor-friendly. Two hues (accent -> warm near/gold midpoint -> accent) so the pan
+   is seamless and mildly intriguing, never a rainbow. The tokens tie it to the live
+   palette so it restyles on a theme swap. Reduced-motion (the rules above) zeroes the
+   duration, freezing a static periwinkle->brass fill. Degrades to solid ink where
+   background-clip:text is unsupported. */
+.wordmark {
+  font-family: "Jost Variable", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  background-image: linear-gradient(
+    100deg,
+    var(--accent) 0%,
+    color-mix(in oklab, var(--near) 60%, var(--gold)) 45%,
+    var(--accent) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: drift 16s linear infinite;
+}
+@keyframes drift {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
+}
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .wordmark {
+    color: var(--ink);
+    -webkit-text-fill-color: currentColor;
+  }
 }

@@ -64,22 +64,22 @@
 
 <div class="fixed inset-0 z-20 flex items-center justify-center bg-black/70 p-6" role="dialog" aria-modal="true" aria-label={variant === "win" ? "solved" : "result"}>
   <div
-    class="flex w-full max-w-xs flex-col items-center gap-4 rounded-2xl bg-surface p-8 text-center"
+    class="flex w-full max-w-xs flex-col items-center gap-4 rounded-2xl border border-ink/10 bg-surface p-8 text-center shadow-2xl shadow-black/40"
     class:ring-4={hero}
     class:ring-gold={hero}
   >
-    {#if hero}<p class="text-xs font-bold uppercase tracking-widest text-gold" aria-label="new best">crown - personal best</p>{/if}
+    {#if hero}<p class="flex items-center justify-center gap-1.5 text-xs font-bold uppercase tracking-widest text-gold" aria-label="new best"><Glyph ref="ui.crown" size={14} tint />personal best</p>{/if}
     <Glyph ref={shapeGlyph} label="result" size={48} />
-    <p class="flex gap-1 text-2xl" class:text-gold={hero} aria-label={`${stars} of 3 stars`}>
-      {#each [1, 2, 3] as s (s)}<span class:opacity-25={stars < s}>{stars >= s ? "*" : "."}</span>{/each}
+    <p class="flex gap-1.5" class:text-gold={hero} class:text-accent={!hero} aria-label={`${stars} of 3 stars`}>
+      {#each [1, 2, 3] as s (s)}<span class:opacity-20={stars < s} class:text-ink={stars < s}><Glyph ref="ui.star" size={26} tint /></span>{/each}
     </p>
     <p class="text-2xl font-bold" class:text-gold={hero}>{phrase}</p>
 
     <div class="flex w-full justify-around text-sm tabular-nums opacity-80">
       <span aria-label="time">{secs}s</span>
-      <span aria-label="wrong">w{wrong}</span>
-      <span aria-label="hints">h{hintsUsed}</span>
-      <span aria-label="streak">flame {streak}</span>
+      <span aria-label={`${wrong} wrong`}>{wrong} wrong</span>
+      <span aria-label={`${hintsUsed} hints`}>{hintsUsed} hints</span>
+      <span class="flex items-center gap-1" aria-label={`streak ${streak}`}><span class="text-near"><Glyph ref="ui.flame" size={14} tint /></span>{streak}</span>
     </div>
 
     <!-- spoiler-safe progress: stars only, never a slot. -->

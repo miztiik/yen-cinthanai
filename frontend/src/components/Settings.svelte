@@ -1,12 +1,12 @@
 <script lang="ts">
-  // Settings hub: Audio, Look, Data, Credits (4 groups, ui-shell.md). Sound is
-  // mute-default; every change persists to save.settings and takes effect at once
-  // (audio reconfigured, motion flag stamped). Data exports/clears the save. Credits
-  // names asset licenses (config/copy.toml). Chrome only - Tailwind, transform/opacity.
+  // Settings hub: Audio, Look, Data (3 groups, ui-shell.md). Sound is mute-default; every
+  // change persists to save.settings and takes effect at once (audio reconfigured, motion
+  // flag stamped). Data exports/clears the save. Credits removed - assets are original/CC0.
+  // Chrome only - Tailwind, transform/opacity.
   import { homeHref, navigate } from "../lib/router.svelte";
   import { loadSave, updateSettings } from "../state/save.svelte";
   import type { PuckSize } from "../contracts/save";
-  import { loadCopy, loadPalettes, type CopyBags, type Palettes } from "../lib/config";
+  import { loadPalettes, type Palettes } from "../lib/config";
   import { configureAudio, play } from "../lib/audio";
   import { applyMotion } from "../lib/motion";
   import { applyTheme } from "../lib/theme";
@@ -14,12 +14,10 @@
   const TODAY = new Date().toISOString().slice(0, 10);
 
   let s = $state(loadSave().settings);
-  let copy = $state<CopyBags>({ success: [], encourage: [], hero: [] });
-  // Theme modes + palettes are config-driven (config/palettes.toml), never hardcoded.
+  // Theme modes + palettes are config-driven (config/palettes.json), never hardcoded.
   let themes = $state<string[]>(["light", "dark", "system"]);
   let palettes = $state<string[]>([]);
   let palConfig = $state<Palettes | null>(null);
-  loadCopy().then((c) => (copy = c));
   loadPalettes().then((p) => {
     palConfig = p;
     themes = p.themes;
@@ -64,7 +62,7 @@
   <section class="rounded-2xl bg-surface p-4">
     <h2 class="mb-3 text-xs uppercase tracking-widest opacity-60">audio</h2>
     <label class="flex items-center justify-between py-2"><span>sound</span>
-      <button class="rounded-full px-4 py-1 text-sm font-bold active:scale-95 transition-transform" class:bg-accent={s.sound} class:text-black={s.sound} class:bg-bg={!s.sound} onclick={() => setSound(!s.sound)}>{s.sound ? "on" : "off"}</button>
+      <button class="rounded-full px-4 py-1 text-sm font-bold active:scale-95 transition-transform" class:bg-accent={s.sound} class:text-bg={s.sound} class:bg-bg={!s.sound} onclick={() => setSound(!s.sound)}>{s.sound ? "on" : "off"}</button>
     </label>
     <label class="flex items-center justify-between gap-4 py-2"><span>volume</span>
       <input class="flex-1" type="range" min="0" max="1" step="0.1" value={s.volume} disabled={!s.sound} oninput={(e) => setVol(+e.currentTarget.value)} aria-label="volume" />
@@ -84,7 +82,7 @@
       </select>
     </label>
     <label class="flex items-center justify-between py-2"><span>reduced motion</span>
-      <button class="rounded-full px-4 py-1 text-sm font-bold active:scale-95 transition-transform" class:bg-accent={s.reducedMotion} class:text-black={s.reducedMotion} class:bg-bg={!s.reducedMotion} onclick={() => { s.reducedMotion = !s.reducedMotion; save(); }}>{s.reducedMotion ? "on" : "off"}</button>
+      <button class="rounded-full px-4 py-1 text-sm font-bold active:scale-95 transition-transform" class:bg-accent={s.reducedMotion} class:text-bg={s.reducedMotion} class:bg-bg={!s.reducedMotion} onclick={() => { s.reducedMotion = !s.reducedMotion; save(); }}>{s.reducedMotion ? "on" : "off"}</button>
     </label>
     <label class="flex items-center justify-between py-2"><span>puck size</span>
       <select class="rounded-lg bg-bg px-3 py-1" value={s.puckSize} onchange={(e) => { s.puckSize = e.currentTarget.value as PuckSize; save(); }} aria-label="puck size">
@@ -99,11 +97,5 @@
       <button class="flex-1 rounded-xl bg-bg px-4 py-2 active:scale-95 transition-transform" onclick={exportSave}>export</button>
       <button class="flex-1 rounded-xl bg-violate px-4 py-2 font-semibold active:scale-95 transition-transform" onclick={resetSave}>reset</button>
     </div>
-  </section>
-
-  <section class="rounded-2xl bg-surface p-4 text-sm opacity-80">
-    <h2 class="mb-3 text-xs uppercase tracking-widest opacity-60">credits</h2>
-    <p>{copy.credits?.intro ?? "All glyphs original art."}</p>
-    <p class="opacity-60">{copy.credits?.license ?? "CC0 - no third-party assets."}</p>
   </section>
 </main>

@@ -12,12 +12,12 @@
   import NotesGrid from "./NotesGrid.svelte";
   import GridMap from "./GridMap.svelte";
   import ResultCard from "./ResultCard.svelte";
+  import Glyph from "../lib/Glyph.svelte";
   import { route, homeHref, navigate } from "../lib/router.svelte";
   import { loadBank, loadManifest, pickEntry } from "../lib/loader";
-  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, gridCellPx, gridUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, ANSWER_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type GridCopy } from "../lib/config";
-  import { gridBlocks, gridCategories } from "../lib/grid";
-  import { answerGrid } from "../lib/answer";
+  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
+  import { gridBlocks, gridCategories } from "../lib/grid";
   import { isHero } from "../lib/scoring";
   import { buildShareCard, shareText, type ShareCopy } from "../contracts/share";
   import { configureAudio, play } from "../lib/audio";
@@ -49,12 +49,6 @@
   setContext("puckSize", () => puck);
   setContext("snap", () => snap);
 
-  // Cross-out grid chrome (Row 7): cell edge + magnet + copy, and the open block index.
-  let gridCopy = $state<GridCopy>(GRID_COPY_FALLBACK);
-  let gridCell = $state(40);
-  let gridSnap = $state({ radius_factor: 0.9, ease: 0.6 });
-  let activeBlock = $state(0);
-
   /** Tier from /play/<tier>, default standard; resumes last if just /play. */
   function wantedTier(): Tier {
     const seg = route().split("/")[2] as Tier;
@@ -84,9 +78,6 @@
       puck = puckPreset(ui, sv.settings.puckSize);
       snap = ui.snap;
       soft = softFeedback(ui);
-      gridCopy = copy.grid ?? GRID_COPY_FALLBACK;
-      gridCell = gridCellPx(ui, sv.settings.puckSize);
-      gridSnap = gridUi(ui).snap;
       game = new Game(m, dial, prior);
       tick();
     } catch (e) {
@@ -137,24 +128,36 @@
   const glow = $derived(!!game && !game.locked && idleMs > pace.idle_glow_s * 1000);
   const submitLabel = $derived(game?.dial.feedback === "submit-binary" ? "submit" : "check");
   const storyMode = $derived(!!game?.m.story); // story-first: text ClueList replaces the glyph ClueChip strip
-  // Cross-out grid blocks (bijective category pairs) for story mode; empty otherwise, so
-  // a legacy manifest keeps the SlotBoard. activeBlock wraps via navBlock / GridMap taps.
-  const blocks = $derived(game && storyMode ? gridBlocks(gridCategories(game.board)) : []);
-  const activeBlockObj = $derived(blocks.length ? blocks[Math.min(activeBlock, blocks.length - 1)] : null);
+  // Grid-primary surface (story puzzles): the cross-out grid - a GridMap navigator + a
+  // NotesGrid block editor - is the B-prime deduction surface. SlotBoard + Pool stay only
+  // when a shared-cardinality column exists (Decision 7). See core-loop.md, lib/grid.ts.
+  let activeBlock = $state(0);
+  let vw = $state(typeof window !== "undefined" ? window.innerWidth : 1024); // real width at init (no mount reflow)
+  const cellSize = $derived(vw >= 1024 ? 68 : vw >= 640 ? 54 : 44);
+  const blocks = $derived(game ? gridBlocks(gridCategories(game.board)) : []);
+  const gridCopy = $derived(copy.grid ?? GRID_COPY_FALLBACK);
+  const hasShared = $derived(!!game && game.board.columns.some((c) => c.cardinality === "shared"));
   function navBlock(dir: 1 | -1) {
     if (blocks.length) activeBlock = (activeBlock + dir + blocks.length) % blocks.length;
   }
   start();
 </script>
 
-<main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-3xl" : "max-w-md"}`}>
-  <header class="flex items-center justify-between text-sm">
-    <a href={homeHref()} aria-label="back" onclick={(e) => { e.preventDefault(); navigate(""); }}>back</a>
-    <span class="uppercase tracking-wide opacity-70">{game?.m.tier ?? ""}</span>
-    <span class="tabular-nums opacity-70">{Math.floor(elapsed / 1000)}s</span>
-    {#if game && game.attemptsLeft >= 0}<span class="tabular-nums opacity-70" aria-label="attempts left">try {game.attemptsLeft}</span>{/if}
+<svelte:window bind:innerWidth={vw} />
+
+<main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-5xl" : "max-w-md"}`}>
+  <header class="flex items-center justify-between gap-2 text-sm">
+    <a class="flex items-center rounded-lg p-1.5 opacity-80 transition-transform active:scale-95" href={homeHref()} aria-label="back" onclick={(e) => { e.preventDefault(); navigate(""); }}>
+      <Glyph ref="ui.back" size={18} tint />
+    </a>
+    <div class="flex items-center gap-2 rounded-full border border-ink/10 bg-surface px-3 py-1.5 shadow-sm">
+      <span class="uppercase tracking-wide opacity-70">{game?.m.tier ?? ""}</span>
+      <span class="opacity-25">/</span>
+      <span class="tabular-nums opacity-80">{Math.floor(elapsed / 1000)}s</span>
+      {#if game && game.attemptsLeft >= 0}<span class="opacity-25">/</span><span class="tabular-nums opacity-80" aria-label="attempts left">try {game.attemptsLeft}</span>{/if}
+    </div>
     <button
-      class="rounded-lg px-2 disabled:opacity-30"
+      class="rounded-lg border border-ink/10 bg-surface px-3 py-1.5 font-medium shadow-sm transition-transform active:scale-95 disabled:opacity-30"
       disabled={!game || game.locked || hintsLeft === 0}
       onclick={() => game?.hint()}>hint{hintsLeft >= 0 ? ` ${hintsLeft}` : ""}</button>
   </header>
@@ -179,12 +182,17 @@
 
     <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-center">
       <div class="flex min-w-0 flex-col gap-4">
-        {#if storyMode && activeBlockObj}
-          <section><GridMap {game} {blocks} active={activeBlock} copy={gridCopy} onselect={(i) => (activeBlock = i)} /></section>
+        {#if storyMode && blocks.length > 0}
           <section class="flex justify-center">
-            <NotesGrid {game} block={activeBlockObj} {blocks} index={activeBlock} copy={gridCopy} size={gridCell} snap={gridSnap} onnav={navBlock} />
+            <NotesGrid {game} block={blocks[activeBlock]} {blocks} index={activeBlock} copy={gridCopy} size={cellSize} {snap} onnav={navBlock} />
           </section>
-          <section class="flex justify-center"><Pool {game} only="shared" /></section>
+          {#if blocks.length > 1}
+            <GridMap {game} {blocks} active={activeBlock} copy={gridCopy} onselect={(i) => (activeBlock = i)} />
+          {/if}
+          {#if hasShared}
+            <section class="flex justify-center"><SlotBoard {game} topology={shape?.topology ?? "matrix"} revealed={game.revealed} {pulse} /></section>
+            <section class="flex justify-center"><Pool {game} /></section>
+          {/if}
         {:else}
           <section class="flex justify-center"><SlotBoard {game} topology={shape?.topology ?? "matrix"} revealed={game.revealed} {pulse} /></section>
           <section class="flex justify-center"><Pool {game} /></section>
@@ -226,9 +234,6 @@
         streak={loadSave().streak.count}
         shapeGlyph={shape?.glyph ?? "abstract.grid"}
         {share}
-        answer={answerGrid(game.board, game.m.solution)}
-        answerHeading={copy.answer?.heading ?? ANSWER_COPY_FALLBACK.heading}
-        answerCaption={copy.answer?.caption ?? ANSWER_COPY_FALLBACK.caption}
         onhome={() => navigate("")}
         onstats={() => navigate("stats")}
       />

@@ -1,12 +1,12 @@
 # Core Loop
 
-**Last Updated**: 2026-06-29
+**Last Updated**: 2026-07-04
 
 The verb, cadence, shapes, and tiers of yen-cinthanai - the rules that do not change per screen. Frozen v1 spec; tuning numbers live in [difficulty-and-scoring.md](difficulty-and-scoring.md).
 
 ## The verb
 
-Drag a token into a slot to commit a deduction; the pool runs dry, clues glow, the board locks when every slot is correct. Tap-token-then-tap-slot is the mobile-equal fallback. One verb across every shape and tier.
+Tap a cross-out grid cell to cycle it: blank -> X (a negative guess) -> tick (the positive guess, shown as the glyph) -> blank. Ticking auto-X's the rest of that row and column (the bijective elimination), and the board locks when the ticks reconstruct the one solution. Click, tap, and Enter/Space are the same verb on mouse, touch, and keyboard. The token board (drag a token into a slot) survives only for a shared-cardinality category. One verb across every tier.
 
 ## The abstraction (one engine, many skins)
 
@@ -27,7 +27,7 @@ One headline puzzle per day = the ritual + the shared artifact. PLAY is one tap,
 
 ## First 60 seconds (Easy grid cold-open)
 
-3 entities x 2 nominal categories, bijective, clue types eq+ends only. Move one is a single eq one token satisfies. Player wins by ~34s; the verb is taught by playing, no tutorial screen. Mixed cardinality and indirect clues graduate at Standard+.
+3 entities x 2 nominal categories, bijective, clue types eq+ends only. The first grid block is already open; the player taps a cell to eliminate (X), then a second tap on the forced cell confirms it (tick) and fires the auto-X cascade - the verb is taught by playing, no tutorial screen. Player wins by ~34s. Mixed cardinality and indirect clues graduate at Standard+.
 
 ## Hints
 

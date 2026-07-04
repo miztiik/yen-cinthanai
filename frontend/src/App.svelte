@@ -53,16 +53,23 @@
 {:else}
   <main class="min-h-dvh flex flex-col items-center justify-center gap-8 p-6 text-center">
     <header class="flex w-full max-w-sm items-center justify-between text-sm opacity-70">
-      <a class="tabular-nums" href="stats" onclick={(e) => { e.preventDefault(); navigate("stats"); }}>flame {streak}</a>
+      <a class="flex items-center gap-1 tabular-nums" href="stats" aria-label={`streak ${streak}`} onclick={(e) => { e.preventDefault(); navigate("stats"); }}>
+        <span class="text-near"><Glyph ref="ui.flame" size={16} tint /></span>{streak}
+      </a>
       <a class="tabular-nums" href="stats" onclick={(e) => { e.preventDefault(); navigate("stats"); }}>best {best ? `${Math.round(best / 1000)}s` : "-"}</a>
-      <a href="settings" aria-label="settings" onclick={(e) => { e.preventDefault(); navigate("settings"); }}>gear</a>
+      <a href="settings" aria-label="settings" onclick={(e) => { e.preventDefault(); navigate("settings"); }}><Glyph ref="ui.gear" label="settings" size={20} tint /></a>
     </header>
 
-    <h1 class="text-3xl font-semibold tracking-tight">yen-cinthanai</h1>
+    <div class="flex flex-col items-center gap-2">
+      <h1 class="wordmark text-balance leading-[1.05] tracking-[0.01em] text-[clamp(3rem,16vw,6rem)]">
+        Yen<br />Cinthanai
+      </h1>
+      <p class="text-balance text-sm opacity-70 sm:text-base">A quiet mystery for a curious mind.</p>
+    </div>
 
     {#if route() === "/"}
       <button
-        class="rounded-2xl px-12 py-5 text-xl font-bold uppercase tracking-wide bg-accent text-black active:scale-95 transition-transform"
+        class="rounded-2xl px-12 py-5 text-xl font-bold uppercase tracking-wide bg-accent text-bg active:scale-95 transition-transform"
         onclick={play}>play</button>
       <a class="text-sm underline opacity-70" href="puzzles" onclick={(e) => { e.preventDefault(); navigate("puzzles"); }}>more puzzles</a>
     {:else if route() === "/puzzles"}

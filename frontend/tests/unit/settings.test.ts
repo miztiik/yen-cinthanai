@@ -21,10 +21,10 @@ describe("settings", () => {
     expect(s.sound).toBe(false);
     expect(s.volume).toBe(0);
   });
-  it("default theme follows system, palette is midnight", () => {
+  it("default theme is light, palette is hearth", () => {
     const s = freshSave().settings;
-    expect(s.theme).toBe("system");
-    expect(s.palette).toBe("midnight");
+    expect(s.theme).toBe("light");
+    expect(s.palette).toBe("hearth");
   });
   it("persist and reload", () => {
     updateSettings({ sound: true, volume: 0.6, reducedMotion: true }, "2026-06-29");

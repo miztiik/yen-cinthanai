@@ -9,10 +9,21 @@
   // unknown ref.
   import { glyphPath } from "./glyphs";
 
-  let { ref, label = "", size = 24, fill = false }: { ref: string; label?: string; size?: number; fill?: boolean } = $props();
+  // `tint` renders the glyph as a CSS mask filled with currentColor (theme-tinted mono
+  // chrome icons - the ui.* pack), so a gear/flame/star adopts text-ink/gold/accent and dims
+  // via opacity, unlike a plain <img> which cannot recolour. Content glyphs stay <img>.
+  let { ref, label = "", size = 24, fill = false, tint = false }: { ref: string; label?: string; size?: number; fill?: boolean; tint?: boolean } = $props();
 </script>
 
-{#if fill}
+{#if tint}
+  <span
+    class="inline-block shrink-0 align-middle"
+    role="img"
+    aria-label={label || undefined}
+    aria-hidden={label ? undefined : "true"}
+    style={`width:${size}px;height:${size}px;background-color:currentColor;-webkit-mask:url('${glyphPath(ref)}') center/contain no-repeat;mask:url('${glyphPath(ref)}') center/contain no-repeat`}
+  ></span>
+{:else if fill}
   <img class="block h-full w-full object-cover" src={glyphPath(ref)} alt={label} draggable={false} />
 {:else}
   <img
