@@ -80,6 +80,33 @@ describe("submit tier (Expert)", () => {
   });
 });
 
+describe("reset + retry (story/grid mode)", () => {
+  it("reset clears BOTH token placements and the cross-out grid marks", () => {
+    const g = new Game(m, STD);
+    g.place("e0", COL, E0_VAL);
+    g.gridTicks["farmer:e0|animal:a"] = true; // a positive tick
+    g.gridManualX["farmer:e1|animal:b"] = true; // a hand elimination
+    g.checked = true;
+    g.reset();
+    expect(g.placements).toEqual({});
+    expect(Object.keys(g.gridTicks)).toHaveLength(0);
+    expect(Object.keys(g.gridManualX)).toHaveLength(0);
+    expect(g.checked).toBe(false);
+  });
+
+  it("retry after a spent attempt cap restores the budget and clears the board", () => {
+    const g = new Game(m, SUBMIT); // attempts: 1
+    g.place("e0", COL, E1_VAL); // wrong seat
+    g.check();
+    expect(g.attemptsLeft).toBe(0); // cap spent -> the fail card would show
+    g.retry();
+    expect(g.attemptsLeft).toBe(1); // fresh run, not stuck re-failing
+    expect(g.placements).toEqual({});
+    expect(g.checked).toBe(false);
+    expect(g.locked).toBe(false);
+  });
+});
+
 describe("brag-cost", () => {
   it("a hint forces the next step and caps to 1 star, no best-time", () => {
     const g = new Game(m, STD);

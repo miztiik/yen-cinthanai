@@ -7,7 +7,7 @@
   // in value coords, clamped to the staircase prefix. Phone keeps NotesGrid + GridMap.
   // See docs/concepts/core-loop.md, docs/concepts/ui-shell.md, grid.ts staircase().
   import GridCell from "./GridCell.svelte";
-  import Glyph from "../lib/Glyph.svelte";
+  import GlyphSeat from "./GlyphSeat.svelte";
   import { staircase, cellKey, cellState, glyphComplete } from "../lib/grid";
   import { glyphExists } from "../lib/glyphs";
   import type { GridCopy } from "../lib/config";
@@ -113,7 +113,10 @@
       <tr>
         {#each colLeaves as cl (cl.cat.id + cl.v.id)}
           <th scope="col" class={`h-28 align-bottom pb-1 text-xs font-medium opacity-80 ${cl.lastInGroup ? "border-r-2 border-ink/15" : ""}`}>
-            <span class="mx-auto block [writing-mode:vertical-rl]">{cl.v.label}</span>
+            <span class="flex h-full flex-col items-center justify-end gap-1.5">
+              <span class="[writing-mode:vertical-rl]">{cl.v.label}</span>
+              {#if glyphCats.has(cl.cat.id) && cl.v.glyph}<GlyphSeat ref={cl.v.glyph} label={cl.v.label} d={Math.round(size * 0.62)} />{/if}
+            </span>
           </th>
         {/each}
       </tr>
@@ -128,8 +131,8 @@
               </th>
             {/if}
             <th scope="row" class="whitespace-nowrap py-px pr-2 text-right text-xs font-medium">
-              <span class="inline-flex items-center justify-end gap-1">
-                {#if glyphCats.has(rc.id) && rv.glyph}<Glyph ref={rv.glyph} label={rv.label} size={Math.round(size * 0.42)} />{/if}
+              <span class="inline-flex items-center justify-end gap-1.5">
+                {#if glyphCats.has(rc.id) && rv.glyph}<GlyphSeat ref={rv.glyph} label={rv.label} d={Math.round(size * 0.62)} />{/if}
                 <span>{rv.label}</span>
               </span>
             </th>

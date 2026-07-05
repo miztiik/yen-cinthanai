@@ -11,8 +11,10 @@
   import { applyMotion } from "./lib/motion";
   import { applyTheme } from "./lib/theme";
   import { applyAmbient } from "./lib/ambient";
+  import { nextPlayableTier } from "./lib/scoring";
   import type { Tier } from "./contracts/save";
 
+  const TODAY = new Date().toISOString().slice(0, 10);
   const save = loadSave();
   const best = save.hero.bestMs;
   const streak = save.streak.count;
@@ -29,11 +31,14 @@
     difficulty = difficultyUi(ui);
   });
 
-  // The tier PLAY will resume (first-ever = easy). Re-read on navigation so returning from a
-  // just-played puzzle reflects the level it set.
+  // The tier PLAY will launch. First-ever = easy; a returning player resumes their last
+  // tier UNLESS today's puzzle for it is already solved, in which case PLAY advances to the
+  // next unsolved tier so it always lands on a playable puzzle (never a solved result card).
+  // Re-read on navigation + once difficulty config loads (its order drives the advance).
   const currentTier = $derived.by((): Tier => {
     route();
-    return loadSave().settings.lastTier ?? "easy";
+    const sv = loadSave();
+    return nextPlayableTier(sv.days, TODAY, difficulty.order, sv.settings.lastTier ?? "easy") as Tier;
   });
   // The standardized difficulty colour for the current tier (drives the pill name).
   const tierHue = $derived(difficulty.colors[currentTier] ?? "var(--accent)");
@@ -44,7 +49,7 @@
   }
 
   function play() {
-    navigate("play");
+    navigate(`play/${currentTier}`);
   }
 </script>
 
@@ -88,6 +93,7 @@
       <button
         class="inline-flex min-h-11 items-center gap-2.5 rounded-full border border-ink/10 bg-surface px-4 py-2 text-sm font-semibold shadow-e1 transition-transform active:scale-95"
         aria-label={`difficulty ${currentTier}, tap to change`}
+        title={`difficulty: ${currentTier}`}
         onclick={() => (pickerOpen = true)}
       >
         <TierMeter tier={currentTier} {difficulty} height={16} label={false} />

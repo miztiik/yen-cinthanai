@@ -9,6 +9,7 @@
   // Chrome is Tailwind; the only image is the glyph. See TODO story-first-pivot sec 8.
   import GridCell from "./GridCell.svelte";
   import Glyph from "../lib/Glyph.svelte";
+  import GlyphSeat from "./GlyphSeat.svelte";
   import { blockCells, cellState, glyphComplete, type GridBlock } from "../lib/grid";
   import { glyphExists } from "../lib/glyphs";
   import type { GridCopy } from "../lib/config";
@@ -110,7 +111,12 @@
         <tr>
           <th scope="col"><span class="sr-only">{block.rowCat.label}</span></th>
           {#each cols as cv (cv.id)}
-            <th scope="col" class="px-1 text-center text-xs font-medium opacity-70" style={`width:${size}px`}>{cv.label}</th>
+            <th scope="col" class="px-1 text-center text-xs font-medium opacity-70" style={`width:${size}px`}>
+              <span class="flex flex-col items-center gap-1">
+                {#if colGlyphs && cv.glyph}<GlyphSeat ref={cv.glyph} label={cv.label} d={Math.round(size * 0.62)} />{/if}
+                <span>{cv.label}</span>
+              </span>
+            </th>
           {/each}
         </tr>
       </thead>
@@ -118,8 +124,8 @@
         {#each rows as rv (rv.id)}
           <tr>
             <th scope="row" class="pr-1 text-right text-xs font-medium">
-              <span class="inline-flex select-none items-center gap-1">
-                {#if rowGlyphs && rv.glyph}<Glyph ref={rv.glyph} label={rv.label} size={Math.round(size * 0.5)} />{/if}
+              <span class="inline-flex select-none items-center gap-1.5">
+                {#if rowGlyphs && rv.glyph}<GlyphSeat ref={rv.glyph} label={rv.label} d={Math.round(size * 0.62)} />{/if}
                 <span>{rv.label}</span>
               </span>
             </th>
