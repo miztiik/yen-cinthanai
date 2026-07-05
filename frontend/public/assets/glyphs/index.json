@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-03T04:49:09Z",
+  "generatedAt": "2026-07-04T18:31:26Z",
   "packs": {
     "abstract": {
       "between": {
@@ -2029,6 +2029,44 @@
       "yacht": {
         "file": "transport/yacht.svg",
         "label": "Yacht"
+      }
+    },
+    "ui": {
+      "back": {
+        "file": "ui/back.svg",
+        "label": "Back"
+      },
+      "check": {
+        "file": "ui/check.svg",
+        "label": "Check"
+      },
+      "chevron": {
+        "file": "ui/chevron.svg",
+        "label": "Chevron"
+      },
+      "crown": {
+        "file": "ui/crown.svg",
+        "label": "Crown"
+      },
+      "flame": {
+        "file": "ui/flame.svg",
+        "label": "Flame"
+      },
+      "gear": {
+        "file": "ui/gear.svg",
+        "label": "Gear"
+      },
+      "sliders": {
+        "file": "ui/sliders.svg",
+        "label": "Sliders"
+      },
+      "star": {
+        "file": "ui/star.svg",
+        "label": "Star"
+      },
+      "timer": {
+        "file": "ui/timer.svg",
+        "label": "Timer"
       }
     },
     "vacation": {

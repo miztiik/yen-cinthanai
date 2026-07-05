@@ -8,7 +8,7 @@ import type { PuzzleManifest } from "../contracts/manifest";
 import type { DayState, DayNotes, Placements, Save } from "../contracts/save";
 import { buildBoard, type BoardModel } from "../lib/board";
 import { evaluate, type PuzzleEval } from "../lib/validate";
-import { mergeGridPlacements } from "../lib/grid";
+import { mergeGridPlacements, collides } from "../lib/grid";
 import { type Feedback, type TierDial } from "../lib/config";
 import { computeStars } from "../lib/scoring";
 import { loadSave, persistSave, recordWin, dayKey } from "./save.svelte";
@@ -37,17 +37,14 @@ export class Game {
   stars = $state(0);
   checked = $state(false); // last CHECK revealed feedback (non-realtime tiers)
   lastMoveMs = $state(0); // for stuck-moment pacing
-  // Manual clue strikes: player-driven, reversible, LOCAL to this session. Not in
-  // toDayState/save this row - Row 7 persists via DayState.notes.struckClues. See
-  // lib/clues.ts + components/ClueList.svelte.
+  // Manual clue strikes: player-driven, reversible; persisted via DayState.notes.struckClues
+  // (buildNotes) and restored in the constructor. See lib/clues.ts + components/ClueList.svelte.
   struck = $state<Record<string, boolean>>({});
-  // Cross-out grid authored marks (Row 7): the only two states the player AUTHORS. The
-  // other two (auto-X, blank) are DERIVED per cell by grid.ts cellState - never stored,
-  // never auto-ticked. Plain objects act as sets so Svelte 5's deep proxy tracks add /
-  // delete. Both persist to DayState.notes; the anchor-naming ticks also reconstruct into
-  // placements at eval time (mergeGridPlacements) so the grid drives the win (Decision 7).
-  gridTicks = $state<Record<string, true>>({});
-  gridManualX = $state<Record<string, true>>({});
+  // Cross-out grid marks (B-prime): only the two AUTHORED sets are stored - a TICK (the
+  // positive) and a MANUAL-X (a hand elimination). Auto-X + blank are DERIVED (grid.ts).
+  // Both persist via DayState.notes; a present key = marked (removed, never set false).
+  gridTicks = $state<Record<string, boolean>>({});
+  gridManualX = $state<Record<string, boolean>>({});
 
   constructor(m: PuzzleManifest, dial: TierDial, prior?: DayState) {
     this.m = m;
@@ -59,13 +56,11 @@ export class Game {
     this.locked = prior?.status === "won";
     this.solveMs = prior?.solveMs ?? 0;
     this.stars = prior?.stars ?? 0;
+    this.gridTicks = recFrom(prior?.notes?.scratchTicks);
+    this.gridManualX = recFrom(prior?.notes?.manualX);
+    this.struck = recFrom(prior?.notes?.struckClues);
     this.startedMs = Date.now();
     this.lastMoveMs = Date.now();
-    if (prior?.notes) {
-      for (const k of prior.notes.scratchTicks ?? []) this.gridTicks[k] = true;
-      for (const k of prior.notes.manualX ?? []) this.gridManualX[k] = true;
-      for (const id of prior.notes.struckClues ?? []) this.struck[id] = true;
-    }
   }
 
   /** Realtime tiers colour as you play; harder tiers stay neutral until CHECK. */
@@ -77,14 +72,11 @@ export class Game {
     return this.live || this.checked || this.locked;
   }
   get evalState(): PuzzleEval {
-    // The cross-out grid contributes to the win exactly like the token board: its ticks
-    // that name the anchor reconstruct into placements. When no cell is ticked the merge
-    // is skipped and this is byte-identical to the legacy token-only eval (no regression).
-    const tickKeys = Object.keys(this.gridTicks);
-    const place = tickKeys.length
-      ? mergeGridPlacements(this.board, this.placements, new Set(tickKeys))
+    const ticks = Object.keys(this.gridTicks);
+    const placements = ticks.length
+      ? mergeGridPlacements(this.board, this.placements, new Set(ticks))
       : this.placements;
-    return evaluate(this.m, this.board, place);
+    return evaluate(this.m, this.board, placements);
   }
   /** Hints left (-1 unlimited); attempts left (-1 unlimited) per tier dial. */
   get hintsLeft(): number {
@@ -174,26 +166,26 @@ export class Game {
     this.lastMoveMs = Date.now();
   }
 
-  /** Toggle a manual clue strike (reversible, never required). Local this session. */
+  /** Toggle a manual clue strike (reversible, never required). */
   toggleStruck(id: string): void {
     this.struck[id] = !this.struck[id];
   }
 
-  /** Drop a glyph into a grid cell: TICK it (the positive) and clear any manual-X there.
-   *  Auto-X of the rest of the block's row/col is DERIVED (grid.ts), never stored, and we
-   *  NEVER auto-tick another cell - the last-cell-standing aha is the player's to find. */
+  /** B-prime verb: drop a glyph into a cell = TICK the positive. Displaces any tick in the
+   *  same block sharing a row or column (one positive per line), clears a prior manual-X on
+   *  the cell, and lets the derived auto-X do the elimination. Realtime tiers may win now. */
   gridDrop(key: string): void {
     if (this.locked) return;
+    for (const k of Object.keys(this.gridTicks)) if (collides(key, k)) delete this.gridTicks[k];
     delete this.gridManualX[key];
     this.gridTicks[key] = true;
-    this.selected = null;
     this.lastMoveMs = Date.now();
     this.checked = false;
     this.settle();
   }
 
-  /** Tap a grid cell: clear its tick if ticked, else toggle a manual-X. Removing a tick
-   *  reverts only the auto-X it implied (derived); a manual-X in the same row/col survives. */
+  /** Tap a cell = toggle a MANUAL-X (a hand elimination); tapping a ticked cell clears the
+   *  tick. Present key = marked; a toggled-off mark is removed so notes never carries false. */
   gridTap(key: string): void {
     if (this.locked) return;
     if (this.gridTicks[key]) delete this.gridTicks[key];
@@ -201,6 +193,25 @@ export class Game {
     else this.gridManualX[key] = true;
     this.lastMoveMs = Date.now();
     this.checked = false;
+  }
+
+  /** The grid's one verb: tap/click/Enter/Space CYCLES a cell blank -> X -> tick -> blank.
+   *  X-first so the reflex first tap is a cheap, local eliminate (the -ve guess) and the
+   *  auto-X cascade is a deliberate second tap to the tick (the +ve guess = the glyph).
+   *  Auto-X cells are authored-blank, so they cycle straight to a manual-X. */
+  gridCycle(key: string): void {
+    if (this.locked) return;
+    if (this.gridTicks[key]) {
+      delete this.gridTicks[key]; // tick -> blank
+      this.lastMoveMs = Date.now();
+      this.checked = false;
+    } else if (this.gridManualX[key]) {
+      this.gridDrop(key); // X -> tick (clears the X, displaces line collisions, cascades auto-X)
+    } else {
+      this.gridManualX[key] = true; // blank / auto-X -> X
+      this.lastMoveMs = Date.now();
+      this.checked = false;
+    }
   }
 
   /** Lock + score on a complete correct board. Stars: brag-cost via hintsUsed. */
@@ -236,16 +247,28 @@ export function toDayState(g: Game): DayState {
   return day;
 }
 
-/** Collect the grid + clue bookkeeping into notes, OMITTING it entirely when nothing is
- *  marked so a legacy DayState stays byte-identical (backward-compatible - schemas.md). */
+/** Present keys of a mark record (true only) - the array form persisted in notes. */
+function keysOf(r: Record<string, boolean>): string[] {
+  return Object.keys(r).filter((k) => r[k]);
+}
+
+/** A mark record rebuilt from a persisted string[] (each present key = marked). */
+function recFrom(keys?: string[]): Record<string, boolean> {
+  const r: Record<string, boolean> = {};
+  for (const k of keys ?? []) r[k] = true;
+  return r;
+}
+
+/** The optional notes block; undefined when nothing is marked, so an unmarked day stays
+ *  byte-identical to a legacy save. */
 function buildNotes(g: Game): DayNotes | undefined {
-  const manualX = Object.keys(g.gridManualX);
-  const scratchTicks = Object.keys(g.gridTicks);
-  const struckClues = Object.keys(g.struck).filter((id) => g.struck[id]);
-  if (!manualX.length && !scratchTicks.length && !struckClues.length) return undefined;
+  const scratchTicks = keysOf(g.gridTicks);
+  const manualX = keysOf(g.gridManualX);
+  const struckClues = keysOf(g.struck);
+  if (!scratchTicks.length && !manualX.length && !struckClues.length) return undefined;
   const notes: DayNotes = {};
-  if (manualX.length) notes.manualX = manualX;
   if (scratchTicks.length) notes.scratchTicks = scratchTicks;
+  if (manualX.length) notes.manualX = manualX;
   if (struckClues.length) notes.struckClues = struckClues;
   return notes;
 }

@@ -7,9 +7,10 @@
 // fallback (core-loop.md). The glyph <img> is non-draggable (Glyph.svelte + app.css) so
 // the browser's native image-drag never hijacks this pointer-drag. transform + opacity
 // only. Two target kinds share the same magnet math: SLOT centres ([data-slot-*], the
-// token board) and CELL centres ([data-cell-*], the cross-out grid); for the grid the
-// candidate cell centres are SNAPSHOT at pointerdown, scoped to the active block, so the
-// magnet never re-queries mid-drag (Row 7, Decision 6). Pointer Events only, no
+// token board) and CELL centres ([data-cell-*], the cross-out grid); BOTH kinds are
+// SNAPSHOT at pointerdown (cells scoped to the active block, slots to the dragged token's
+// category) so the magnet never re-queries or re-measures the DOM mid-drag - no per-move
+// forced reflow (Row 7, Decision 6; extended to slots). Pointer Events only, no
 // non-passive touchmove. The play store owns placement + selection; the magnet's
 // radius/ease come from config, nothing hardcoded.
 
@@ -133,6 +134,7 @@ export function draggable(node: HTMLElement, h: DragHandlers) {
   let moved = false;
   let captured: Centre | null = null;
   let cellSnapshot: CellCentre[] = []; // scoped to the active block, taken at pointerdown
+  let slotSnapshot: SlotCentre[] = []; // scoped to handlers.cat, taken at pointerdown
 
   function highlight(next: Centre | null) {
     if (captured?.el === next?.el) return;
@@ -148,8 +150,7 @@ export function draggable(node: HTMLElement, h: DragHandlers) {
     let target: Centre | null = null;
     if (handlers.snap) {
       if (handlers.cellBlock) target = nearestCentre(cx0 + dx, cy0 + dy, cellSnapshot, handlers.snap.radius);
-      else if (handlers.cat)
-        target = nearestCentre(cx0 + dx, cy0 + dy, slotCentres(handlers.cat), handlers.snap.radius);
+      else if (handlers.cat) target = nearestCentre(cx0 + dx, cy0 + dy, slotSnapshot, handlers.snap.radius);
     }
     highlight(target);
     const { tx, ty } = magnetTranslate(dx, dy, cx0, cy0, target, handlers.snap?.ease ?? 0);
@@ -206,6 +207,7 @@ export function draggable(node: HTMLElement, h: DragHandlers) {
     cy0 = r.top + r.height / 2;
     moved = false;
     cellSnapshot = handlers.cellBlock ? cellCentres(handlers.cellBlock) : [];
+    slotSnapshot = !handlers.cellBlock && handlers.cat ? slotCentres(handlers.cat) : [];
     node.setPointerCapture(e.pointerId);
     node.style.willChange = "transform";
     node.classList.add("z-50", "opacity-90");

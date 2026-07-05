@@ -18,29 +18,39 @@
   --color-gold: var(--gold);
 }
 
+/* Static elevation scale (Jony): one shadow family so the deduction plane reads as one
+   surface and the story panel stops floating. e1 = story/clues/grid/HUD, e2 = primary CTA,
+   e4 = modal over scrim. Fixed values (not palette-swapped). Generates shadow-e1..e4. */
+@theme {
+  --shadow-e1: 0 1px 2px rgb(0 0 0 / 0.16);
+  --shadow-e2: 0 2px 6px rgb(0 0 0 / 0.18), 0 1px 2px rgb(0 0 0 / 0.12);
+  --shadow-e3: 0 8px 20px rgb(0 0 0 / 0.24);
+  --shadow-e4: 0 18px 44px rgb(0 0 0 / 0.42);
+}
+
 :root {
-  /* bootstrap fallback = config/palettes.toml [palette.midnight.dark] */
-  --bg: #0b1220;
-  --surface: #1e293b;
-  --ink: #e2e8f0;
-  --accent: #10b981;
-  --satisfy: #34d399;
-  --violate: #fb7185;
-  --near: #fbbf24;
-  --gold: #fcd34d;
+  /* bootstrap fallback = config/palettes.json [palette.hearth.dark] */
+  --bg: #1b1512;
+  --surface: #2a211b;
+  --ink: #f2e7d8;
+  --accent: #3cb9a4;
+  --satisfy: #5cc873;
+  --violate: #f2685a;
+  --near: #f4a63c;
+  --gold: #eaca7f;
   color-scheme: dark;
 }
 
 :root[data-theme="light"] {
-  /* bootstrap fallback = config/palettes.toml [palette.midnight.light] */
-  --bg: #eef2f7;
-  --surface: #ffffff;
-  --ink: #0f172a;
-  --accent: #0f9d6b;
-  --satisfy: #059669;
-  --violate: #e11d48;
-  --near: #b45309;
-  --gold: #b8860b;
+  /* bootstrap fallback = config/palettes.json [palette.hearth.light] */
+  --bg: #efe8e0;
+  --surface: #fbf7f1;
+  --ink: #33291f;
+  --accent: #0f766e;
+  --satisfy: #15803d;
+  --violate: #c53a2d;
+  --near: #b5610e;
+  --gold: #a8781e;
   color-scheme: light;
 }
 
@@ -50,6 +60,50 @@ body {
   min-height: 100dvh;
   background-color: var(--bg);
   color: var(--ink);
+  font-family: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Modern shell: a fixed, composited two-tone aurora mesh behind everything. Painted once
+   (position: fixed) so it never repaints on scroll (Carmack: no scroll-linked jank). A cool
+   accent bloom top-left + a warm gold bloom bottom-right give the page depth without a flat
+   wash; both are token-tied so they restyle on a theme/palette swap. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -35%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(50% 45% at 30% 20%, color-mix(in oklab, var(--accent) 14%, transparent), transparent 70%),
+    radial-gradient(48% 44% at 80% 28%, color-mix(in oklab, var(--gold) 16%, transparent), transparent 70%),
+    radial-gradient(52% 48% at 66% 88%, color-mix(in oklab, var(--near) 14%, transparent), transparent 72%),
+    radial-gradient(46% 42% at 16% 82%, color-mix(in oklab, var(--accent) 10%, transparent), transparent 70%);
+  background-color: var(--bg);
+  animation: ambient-drift 240s ease-in-out infinite alternate;
+}
+@keyframes ambient-drift {
+  from {
+    transform: translate3d(-2.5%, -1.5%, 0) rotate(-0.6deg) scale(1.06);
+  }
+  to {
+    transform: translate3d(2.5%, 1.5%, 0) rotate(0.6deg) scale(1.1);
+  }
+}
+
+/* A faint logic-grid motif behind everything - thematically the game's own surface, and
+   the "meaningful glyph in the background". Pure CSS lines (no image), masked to fade out
+   at the edges so it never competes with content. Fixed + composited over the aurora
+   blooms; token-tied so it restyles on a theme swap. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(color-mix(in oklab, var(--ink) 8%, transparent) 1.4px, transparent 1.6px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(135% 90% at 50% 0%, #000 28%, transparent 78%);
+  mask-image: radial-gradient(135% 90% at 50% 0%, #000 28%, transparent 78%);
 }
 
 /* Reduced-motion: drop transforms/animations to instant. Set via lib/motion.ts or
@@ -88,4 +142,42 @@ img {
   -webkit-user-drag: none;
   -webkit-touch-callout: none;
   user-select: none;
+}
+
+/* Home wordmark: the "Yen Cinthanai" lockup. The gradient is painted onto the glyphs
+   (background-clip: text) and drifts via background-position ONLY - no layout, no reflow,
+   compositor-friendly. Two hues (accent -> warm near/gold midpoint -> accent) so the pan
+   is seamless and mildly intriguing, never a rainbow. The tokens tie it to the live
+   palette so it restyles on a theme swap. Reduced-motion (the rules above) zeroes the
+   duration, freezing a static periwinkle->brass fill. Degrades to solid ink where
+   background-clip:text is unsupported. */
+.wordmark {
+  font-family: "Jost Variable", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  background-image: linear-gradient(
+    100deg,
+    var(--accent) 0%,
+    color-mix(in oklab, var(--near) 60%, var(--gold)) 45%,
+    var(--accent) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: drift 16s linear infinite;
+}
+@keyframes drift {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
+}
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .wordmark {
+    color: var(--ink);
+    -webkit-text-fill-color: currentColor;
+  }
 }

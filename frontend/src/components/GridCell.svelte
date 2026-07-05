@@ -78,7 +78,9 @@
     {#if glyph}
       <Glyph ref={glyph} size={Math.round(size * 0.68)} />
     {:else}
-      <span class="block rounded-full bg-accent" style={`width:${Math.round(size * 0.44)}px;height:${Math.round(size * 0.44)}px`} aria-hidden="true"></span>
+      <span class="flex items-center justify-center rounded-full bg-accent text-bg" style={`width:${Math.round(size * 0.52)}px;height:${Math.round(size * 0.52)}px`} aria-hidden="true">
+        <Glyph ref="ui.check" size={Math.round(size * 0.34)} tint />
+      </span>
     {/if}
   {:else if state === "manualX" || state === "autoX"}
     <span class={`relative block ${state === "autoX" ? "opacity-40" : "opacity-90"}`} style={`width:${Math.round(size * 0.5)}px;height:${Math.round(size * 0.5)}px`} aria-hidden="true">

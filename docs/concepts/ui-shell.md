@@ -7,7 +7,7 @@ Screens, components, glyphs, tokens. Mid-tier Android portrait (~390x844). Tailw
 ## Screens
 
 - Landing: PLAY (one tap, resumes last), gear, flame+best, "more puzzles" drawer handle. No tier picker, no tutorial.
-- Board: back | tier | timer | hints | gear; scroll clue strip; category-header grid (entity=row, slot=cell); pool empties per column; thumb zone hint/check/reset. Seating reuses frame.
+- Board: back | tier | timer | hints; story cold-open + numbered clue list; the cross-out grid (GridMap navigator + NotesGrid one-block editor) is the primary deduction surface; the token SlotBoard + pool appear only for a shared-cardinality category; thumb zone reset/check.
 - End-card (held = screenshot): bag phrase + time/wrong/hints + streak + spoiler-safe bar + SHARE. Hero = gold tint + crown.
 - Fail-card: encourage phrase + progress + reveal(opt-in)/retry.
 - Settings: Audio, Look, Data, Credits (4 groups, sound mute-default).
@@ -36,7 +36,7 @@ Heterogeneous-source icons are normalized by seating each inside ONE standard ci
 
 ## Components (metadata-driven)
 
-Puck (the universal circular frame), Token, Slot, SlotBoard, Pool, ClueChip, StoryPanel, ClueList, ClueRow, HUDBar, ActionBar, ResultCard, ShareBar, StatTile, SettingsRow (+ BottomSheet primitive). No per-screen bespoke; one Puck is the single circle used by token + filled slot + seat. Story-first manifests render StoryPanel + ClueList (text) in place of the ClueChip strip.
+Puck (the universal circular frame), Token, Slot, SlotBoard, Pool, GridMap, NotesGrid, GridCell, ClueChip, StoryPanel, ClueList, ClueRow, HUDBar, ActionBar, ResultCard, ShareBar, StatTile, SettingsRow (+ BottomSheet primitive). No per-screen bespoke; one Puck is the single circle used by token + filled slot + seat. Story-first manifests render StoryPanel + ClueList (text) + the cross-out grid (GridMap + NotesGrid) as the primary surface; the token SlotBoard + Pool remain only for a shared-cardinality column.
 
 ## Tailwind tokens
 

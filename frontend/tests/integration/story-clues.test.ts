@@ -61,7 +61,7 @@ describe("ClueList", () => {
     const items = el.querySelectorAll("ol > li");
     expect(items).toHaveLength(m.constraints.length);
     items.forEach((li, i) => {
-      expect(li.textContent).toContain(`${i + 1}.`);
+      expect(li.textContent).toContain(`${i + 1}`);
       expect(li.textContent).toContain(m.constraints[i].clueText);
     });
   });

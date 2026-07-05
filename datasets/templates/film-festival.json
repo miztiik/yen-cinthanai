@@ -7,8 +7,8 @@
   "ordinalAxis": false,
   "minTier": "easy",
   "maxTier": "expert",
-  "note": "SAMPLE authoring template (original content). Light-mystery cinema festival. Anchor = director. genre + venue are text-only; award has no category glyphPack (the medals pack holds only gold/silver/bronze) but three of its values carry a per-value medal glyph override so the covered prizes decorate while the rest stay text; slot is the numeric axis (screening order). The narrativeTemplate is setting flavor only and never names a sliced category (slot/venue/award). Numeric cat sits at index 2 so it survives the standard 3-category slice.",
-  "narrativeTemplate": "The little riverside film festival is winding into its final evening, and {n} directors are gathered in the lobby while {curator}, who programmes the whole event, tries to reconstruct the running order after the {mishap} shuffled the printed cards.",
+  "note": "SAMPLE authoring template (original content). Light-mystery cinema festival. Anchor = director. genre + venue are text-only; award has no category glyphPack (the medals pack holds only gold/silver/bronze) but three of its values carry a per-value medal glyph override so the covered prizes decorate while the rest stay text (until the other three prize images exist the grid falls back to text for the whole award axis - never a mix); reel is the numeric axis (film length in reels - a quantity with a unit, like every other numeric axis). The narrativeTemplate is setting flavor only and never names a sliced category (reel/venue/award). Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "narrativeTemplate": "The little riverside film festival is winding into its final evening, and {n} directors are gathered in the lobby while {curator}, who programmes the whole event, pieces the projection notes back together after the {mishap} scattered the printed cards.",
   "flavorPools": {
     "curator": ["Ms. Alderton", "old Beaumont", "the festival curator"],
     "mishap": ["projector glitch", "gust through the foyer", "sudden power cut"]
@@ -46,16 +46,17 @@
       ]
     },
     {
-      "id": "slot",
-      "label": "Slot",
+      "id": "reel",
+      "label": "Reels",
       "kind": "numeric",
+      "unit": "reels",
       "valuePool": [
-        { "id": "slot1", "label": "Slot 1", "magnitude": 1, "phrase": "screened in slot 1" },
-        { "id": "slot2", "label": "Slot 2", "magnitude": 2, "phrase": "screened in slot 2" },
-        { "id": "slot3", "label": "Slot 3", "magnitude": 3, "phrase": "screened in slot 3" },
-        { "id": "slot4", "label": "Slot 4", "magnitude": 4, "phrase": "screened in slot 4" },
-        { "id": "slot5", "label": "Slot 5", "magnitude": 5, "phrase": "screened in slot 5" },
-        { "id": "slot6", "label": "Slot 6", "magnitude": 6, "phrase": "screened in slot 6" }
+        { "id": "reel1", "label": "1 reel", "magnitude": 1, "phrase": "ran 1 reel" },
+        { "id": "reel2", "label": "2 reels", "magnitude": 2, "phrase": "ran 2 reels" },
+        { "id": "reel3", "label": "3 reels", "magnitude": 3, "phrase": "ran 3 reels" },
+        { "id": "reel4", "label": "4 reels", "magnitude": 4, "phrase": "ran 4 reels" },
+        { "id": "reel5", "label": "5 reels", "magnitude": 5, "phrase": "ran 5 reels" },
+        { "id": "reel6", "label": "6 reels", "magnitude": 6, "phrase": "ran 6 reels" }
       ]
     },
     {
@@ -103,19 +104,19 @@
       ]
     },
     "numDiff": {
-      "appliesTo": "slot",
+      "appliesTo": "reel",
       "minTier": "standard",
       "variants": [
-        "{a_ref}'s slot came {delta} later than {b_ref}'s.",
-        "{a_ref} was {delta} further down the running order than {b_ref}."
+        "{a_ref}'s film ran {delta} more reels than {b_ref}'s.",
+        "{a_ref} ran {delta} more reels than {b_ref}."
       ]
     },
     "threshold": {
-      "appliesTo": "slot",
+      "appliesTo": "reel",
       "minTier": "sharp",
       "variants": [
-        "{a_ref} screened no earlier than slot {bound}.",
-        "{a_ref} was slotted no sooner than {bound}."
+        "{a_ref} ran no fewer than {bound} reels.",
+        "{a_ref}'s film ran at least {bound} reels."
       ]
     },
     "oneOf": {

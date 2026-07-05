@@ -13,22 +13,16 @@ import { Game, saveProgress } from "../../src/state/play.svelte";
 import { loadSave, dayKey } from "../../src/state/save.svelte";
 
 const here = fileURLToPath(new URL(".", import.meta.url));
-// The play-store loop runs against the SERVED story bank now that the frontend solves it:
-// board.ts honours the anchor:true identity and validate.ts evaluates the numeric + compound
-// clue types. The 2026-06-29 standard puzzle carries eq/neq + a numDiff clue, so filling its
-// solution exercises load -> place -> win end to end against a real shipped puzzle.
 const m = JSON.parse(
   readFileSync(resolve(here, "../../public/puzzles/2026-06-29-standard.json"), "utf8"),
 ) as PuzzleManifest;
-// Easy stays served (all-direct eq-only grid). Same calendar date -> the composite-day streak
-// stays 1 while standard + easy persist as their own tier slots.
 const mEasy = JSON.parse(
   readFileSync(resolve(here, "../../public/puzzles/2026-06-29-easy.json"), "utf8"),
 ) as PuzzleManifest;
 
-// Dimensions are auto-discovered + date-seeded, so the test must not assume which packs were
-// picked. Derive a fillable bijective column (never the anchor identity) + sample values.
-const COL = m.categories.list.find((c) => !c.anchor && c.cardinality !== "shared")!.id;
+// Dimensions are auto-discovered + date-seeded, so the test must not assume which packs
+// were picked. Derive a fillable bijective column + sample values from the loaded puzzle.
+const COL = m.categories.list.find((c) => c.kind !== "ordinal" && c.cardinality !== "shared")!.id;
 const E0_VAL = m.solution["e0"][COL];
 const E1_VAL = m.solution["e1"][COL]; // belongs to another seat -> a wrong value on e0
 

@@ -74,6 +74,14 @@ export function gridCategories(board: BoardModel): AttributeCategory[] {
   return [board.anchor, ...board.columns.filter((c) => c.cardinality === "bijective")];
 }
 
+/** A category renders glyph images only when EVERY value resolves to an existing image;
+ *  otherwise the whole axis falls back to text / green-checks - never a mix of images and
+ *  checks in one axis. `exists` is the glyph-registry membership test (glyphs.ts glyphExists),
+ *  injected so this module stays DOM- and asset-free (unit-testable). */
+export function glyphComplete(cat: AttributeCategory, exists: (ref: string) => boolean): boolean {
+  return cat.values.length > 0 && cat.values.every((v) => !!v.glyph && exists(v.glyph));
+}
+
 /** Every category-pair block, in a stable order (manifest order, i < j). */
 export function gridBlocks(cats: AttributeCategory[]): GridBlock[] {
   const out: GridBlock[] = [];
@@ -82,6 +90,30 @@ export function gridBlocks(cats: AttributeCategory[]): GridBlock[] {
       out.push({ id: blockId(cats[i].id, cats[j].id), rowCat: cats[i], colCat: cats[j] });
   return out;
 }
+
+/** The classic fused logic-grid ("staircase") layout for a desktop full-grid view. */
+export interface StaircaseLayout {
+  cols: AttributeCategory[]; // C1..Cn-1 (left -> right)
+  rows: AttributeCategory[]; // C0, Cn-1..C2 (top -> bottom)
+  present: boolean[][]; // present[r][c] for rows[r] x cols[c]
+}
+
+/** Fold [C0..Cn-1] (anchor first) into the printed logic-grid staircase: columns are every
+ *  category except the anchor (manifest order); rows are the anchor then the rest in reversed
+ *  manifest order, so the anchor row pairs with every column and each later row pairs only
+ *  with the columns below its own index - the descending stair, blank bottom-right corner.
+ *  A cell (rows[r] value x cols[c] value) resolves to the SAME `cellKey` as its block, so this
+ *  is a pure layout over the store (no model change). n<2 renders nothing. */
+export function staircase(cats: AttributeCategory[]): StaircaseLayout {
+  const n = cats.length;
+  if (n < 2) return { cols: [], rows: [], present: [] };
+  const cols = cats.slice(1);
+  const rows: AttributeCategory[] = [cats[0]];
+  for (let r = 1; r <= n - 2; r++) rows.push(cats[n - r]);
+  const present = rows.map((_row, r) => cols.map((_col, c) => (r === 0 ? true : c + 1 < n - r)));
+  return { cols, rows, present };
+}
+
 
 /** The cells of a block (rowCat.values x colCat.values), row-major. */
 export function blockCells(block: GridBlock): GridCellRef[] {
@@ -114,6 +146,16 @@ export function impliedX(key: string, ticks: ReadonlySet<string>): boolean {
     if (sharedEndpoints(cell, tp) === 1) return true;
   }
   return false;
+}
+
+/** Two cell keys COLLIDE when they sit in the same block and share at least one endpoint
+ *  (same row, same column, or the same cell) - the existing ticks a new positive must
+ *  displace so a block keeps one tick per row and column (mirrors the token board swap). */
+export function collides(a: string, b: string): boolean {
+  const pa = parseCellKey(a);
+  const pb = parseCellKey(b);
+  if (blockId(pa[0].cat, pa[1].cat) !== blockId(pb[0].cat, pb[1].cat)) return false;
+  return sharedEndpoints(pa, pb) >= 1;
 }
 
 /** Derive one cell's state from the authored marks. tick > manualX > autoX > blank.

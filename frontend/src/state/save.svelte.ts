@@ -4,22 +4,20 @@
 // hero/streak) -> caller. Write: prune oldest under QuotaExceededError, today
 // never pruned. ASCII, no game logic.
 
-import type { Save, DayState, Tier, SaveShapeId, DayStatus, Settings } from "../contracts/save";
+import type { Save, DayState, Tier, ShapeId, DayStatus, Settings } from "../contracts/save";
 import { updateHero, updateStreak } from "../lib/scoring";
 
 const SAVE_KEY = "yen-cinthanai/save";
 const TARGET_VERSION = 1;
 
 const TIERS: readonly Tier[] = ["easy", "standard", "sharp", "expert"];
-// Matrix-only writes grid, but a day persisted before the retirement may carry a legacy
-// shapeId - accept them on READ so an old save is not dropped and its dayKey stays valid.
-const READABLE_SHAPES: readonly SaveShapeId[] = ["grid", "seating-row", "round-table"];
+const SHAPES: readonly ShapeId[] = ["grid", "seating-row", "round-table"];
 const STATUSES: readonly DayStatus[] = ["unplayed", "playing", "won", "lost"];
 
 /** Composite day-slot key: one slot per (date, tier, shape) so multiple tiers/shapes
  *  the same calendar day coexist instead of overwriting one slot. Older date-only saves
  *  normalize to this on read (validateSave), so schemaVersion stays 1 (backward compat). */
-export function dayKey(date: string, tier: Tier, shapeId: SaveShapeId): string {
+export function dayKey(date: string, tier: Tier, shapeId: ShapeId): string {
   return `${date}|${tier}|${shapeId}`;
 }
 
@@ -32,8 +30,8 @@ export function freshSave(): Save {
     settings: {
       sound: false,
       volume: 0,
-      theme: "system",
-      palette: "midnight",
+      theme: "light",
+      palette: "hearth",
       reducedMotion: false,
       puckSize: "medium",
     },
@@ -56,14 +54,19 @@ function migrate(raw: Record<string, unknown>): Record<string, unknown> {
   return cur;
 }
 
-/** Loose shape check for the optional day notes (Row 7): each field, when present, is an
- *  array of strings. `undefined` passes so older saves without notes still validate. */
-function isNotes(v: unknown): boolean {
-  if (v === undefined) return true;
-  if (typeof v !== "object" || v === null) return false;
-  const o = v as Record<string, unknown>;
-  const arr = (x: unknown) => x === undefined || (Array.isArray(x) && x.every((s) => typeof s === "string"));
-  return arr(o.manualX) && arr(o.scratchTicks) && arr(o.struckClues);
+const isStringArray = (v: unknown): boolean => Array.isArray(v) && v.every((x) => typeof x === "string");
+
+/** A notes block is valid when every present field is a string[]; absent is fine (older
+ *  save). A malformed notes fails the day so it is dropped rather than half-loaded. */
+function isNotes(n: unknown): boolean {
+  if (n === undefined) return true;
+  if (typeof n !== "object" || n === null) return false;
+  const o = n as Record<string, unknown>;
+  return (
+    (o.manualX === undefined || isStringArray(o.manualX)) &&
+    (o.scratchTicks === undefined || isStringArray(o.scratchTicks)) &&
+    (o.struckClues === undefined || isStringArray(o.struckClues))
+  );
 }
 
 function isDay(d: unknown): d is DayState {
@@ -72,7 +75,7 @@ function isDay(d: unknown): d is DayState {
   return (
     typeof o.date === "string" &&
     TIERS.includes(o.tier as Tier) &&
-    READABLE_SHAPES.includes(o.shapeId as SaveShapeId) &&
+    SHAPES.includes(o.shapeId as ShapeId) &&
     STATUSES.includes(o.status as DayStatus) &&
     typeof o.placements === "object" &&
     o.placements !== null &&
