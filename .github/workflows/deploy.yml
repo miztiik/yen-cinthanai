@@ -1,10 +1,16 @@
 name: deploy
 
 # Build today's bank, bake config, and publish the static bundle to GitHub Pages.
+# Gated on CI: this runs only AFTER the "ci" workflow concludes success on master,
+# so a red build (failing typecheck / lint / test / pytest) never deploys. The
+# workflow_dispatch trigger is a manual escape hatch that bypasses the gate for a
+# forced re-deploy.
 # Static-first: no runtime backend. base = /yen-cinthanai/. See docs/how-to/
 # ship-to-github-pages.md and docs/architecture/runtime/stack-and-bundle.md.
 on:
-  push:
+  workflow_run:
+    workflows: ["ci"]
+    types: [completed]
     branches: [master]
   workflow_dispatch:
 
@@ -19,9 +25,15 @@ concurrency:
 
 jobs:
   build:
+    # Only when CI passed (workflow_run path) or on a manual dispatch. If this is
+    # skipped, the deploy job (needs: build) is skipped too and nothing publishes.
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Build the exact commit CI validated (falls back to the dispatched ref).
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
