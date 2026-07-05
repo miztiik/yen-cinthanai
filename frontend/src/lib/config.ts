@@ -159,11 +159,30 @@ export interface GridUi {
   cell: { small: number; medium: number; large: number };
   snap: { radius_factor: number; ease: number };
 }
+/** Whole-app background shell timing (config/ui.json [ambient]). driftSeconds = the slow
+ *  transform drift of aurora layer A; shiftSeconds = the warm opacity cross-fade cycle of
+ *  layer B ("a minute or two to notice"); shiftDepth = layer B peak opacity 0..1. Applied
+ *  at runtime as CSS custom properties by lib/ambient.ts; app.css keyframes read the vars. */
+export interface AmbientUi {
+  driftSeconds: number;
+  shiftSeconds: number;
+  shiftDepth: number;
+}
+/** Difficulty (tier) chrome (config/ui.json [difficulty]). order = tiers low-to-high (a
+ *  tier's index+1 is its ascending-bar rank in the TierMeter); colors maps a tier id to the
+ *  CSS colour its bars are filled with - the cross-app standardized ramp (hex green->yellow
+ *  ->orange->red, shared with the sibling app), or a var(--token). */
+export interface DifficultyUi {
+  order: string[];
+  colors: Record<string, string>;
+}
 export interface UiConfig {
   puck: { default: PuckSize; small: PuckPreset; medium: PuckPreset; large: PuckPreset };
   snap: { radius_factor: number; ease: number };
   clue?: ClueUi;
   grid?: GridUi;
+  ambient?: AmbientUi;
+  difficulty?: DifficultyUi;
 }
 
 /** Soft-feedback fallback: easy (realtime-names) + standard (count-wrong) auto-dim. */
@@ -173,6 +192,20 @@ const SOFT_FEEDBACK_FALLBACK: Feedback[] = ["realtime-names", "count-wrong"];
 const GRID_UI_FALLBACK: GridUi = {
   cell: { small: 34, medium: 40, large: 48 },
   snap: { radius_factor: 0.9, ease: 0.6 },
+};
+
+/** Fail-soft ambient shell timing (mirrors config/ui.json [ambient]). */
+const AMBIENT_UI_FALLBACK: AmbientUi = {
+  driftSeconds: 240,
+  shiftSeconds: 150,
+  shiftDepth: 0.55,
+};
+
+/** Fail-soft difficulty chrome (mirrors config/ui.json [difficulty]). Colours are the
+ *  cross-app standardized difficulty ramp (green -> yellow -> orange -> red). */
+const DIFFICULTY_UI_FALLBACK: DifficultyUi = {
+  order: ["easy", "standard", "sharp", "expert"],
+  colors: { easy: "#22c55e", standard: "#eab308", sharp: "#f97316", expert: "#ef4444" },
 };
 
 const UI_FALLBACK: UiConfig = {
@@ -185,6 +218,8 @@ const UI_FALLBACK: UiConfig = {
   snap: { radius_factor: 1.4, ease: 0.55 },
   clue: { autoDimFeedback: SOFT_FEEDBACK_FALLBACK },
   grid: GRID_UI_FALLBACK,
+  ambient: AMBIENT_UI_FALLBACK,
+  difficulty: DIFFICULTY_UI_FALLBACK,
 };
 
 /** Puck sizing + drag-magnet tunables (config/ui.toml). Fail-soft to bootstrap sizes. */
@@ -206,6 +241,27 @@ export function softFeedback(ui: UiConfig): Feedback[] {
 /** Cross-out grid tunables (config-driven, fail-soft). */
 export function gridUi(ui: UiConfig): GridUi {
   return ui.grid ?? GRID_UI_FALLBACK;
+}
+
+/** Ambient shell timing (config-driven, fail-soft). */
+export function ambientUi(ui: UiConfig): AmbientUi {
+  return ui.ambient ?? AMBIENT_UI_FALLBACK;
+}
+
+/** Difficulty chrome (config-driven, fail-soft). */
+export function difficultyUi(ui: UiConfig): DifficultyUi {
+  return ui.difficulty ?? DIFFICULTY_UI_FALLBACK;
+}
+
+/** 1-based rank of a tier (its ascending-bar count); 0 when the tier is unknown. */
+export function tierRank(ui: UiConfig, tier: string): number {
+  return difficultyUi(ui).order.indexOf(tier) + 1;
+}
+
+/** The CSS colour a tier's bars are filled with (a hex from the standardized ramp, or a
+ *  var(--token)); fail-soft to the accent token. */
+export function tierColor(ui: UiConfig, tier: string): string {
+  return difficultyUi(ui).colors[tier] ?? "var(--accent)";
 }
 
 /** Square cell edge (px) for the player's puck-size preset. */

@@ -13,10 +13,12 @@
   import GridMap from "./GridMap.svelte";
   import GridMatrix from "./GridMatrix.svelte";
   import ResultCard from "./ResultCard.svelte";
+  import TierMeter from "./TierMeter.svelte";
+  import DifficultyPicker from "./DifficultyPicker.svelte";
   import Glyph from "../lib/Glyph.svelte";
   import { route, homeHref, navigate } from "../lib/router.svelte";
   import { loadBank, loadManifest, pickEntry } from "../lib/loader";
-  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback } from "../lib/config";
+  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, difficultyUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type DifficultyUi } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { gridBlocks, gridCategories } from "../lib/grid";
   import { isHero } from "../lib/scoring";
@@ -24,7 +26,7 @@
   import { configureAudio, play } from "../lib/audio";
   import { applyMotion } from "../lib/motion";
   import { Game, saveProgress, toDayState } from "../state/play.svelte";
-  import { loadSave, dayKey } from "../state/save.svelte";
+  import { loadSave, dayKey, updateSettings } from "../state/save.svelte";
   import type { Tier } from "../contracts/save";
 
   const TODAY = new Date().toISOString().slice(0, 10);
@@ -47,30 +49,37 @@
   // glyph scale together with no hardcoded px. Resolved in start() once save + ui load.
   let puck = $state<PuckPreset>({ diameter: 52, glyph: 0.64 });
   let snap = $state({ radius_factor: 1.4, ease: 0.55 });
+  // Difficulty switcher (config-driven colour-coded bars). Populated in start() from ui.json.
+  let difficulty = $state<DifficultyUi>(difficultyUi({} as never));
+  let pickerOpen = $state(false);
   setContext("puckSize", () => puck);
   setContext("snap", () => snap);
 
-  /** Tier from /play/<tier>, default standard; resumes last if just /play. */
-  function wantedTier(): Tier {
+  /** Tier from /play/<tier>; else the player's last-played tier; else easy (first-ever
+   *  cold-open). PLAY navigates to bare /play, so a returning player resumes their level. */
+  function wantedTier(fallback?: Tier): Tier {
     const seg = route().split("/")[2] as Tier;
-    return ALLOWED.includes(seg) ? seg : "standard";
+    if (ALLOWED.includes(seg)) return seg;
+    return fallback && ALLOWED.includes(fallback) ? fallback : "easy";
   }
 
   async function start() {
     try {
-      const tier = wantedTier();
+      const sv = loadSave();
+      const tier = wantedTier(sv.settings.lastTier);
       const bank = await loadBank();
       const entry =
         bank.puzzles.find((p) => p.date === TODAY && p.tier === tier) ??
         bank.puzzles.find((p) => p.tier === tier) ??
         pickEntry(bank, bank.puzzles[0].date, bank.puzzles[0].tier);
       const m = await loadManifest(entry.file);
+      // Remember the level we actually loaded so bare PLAY resumes it next time.
+      if (sv.settings.lastTier !== m.tier) updateSettings({ lastTier: m.tier }, TODAY);
       const tiers = await loadTiers();
       const dial: TierDial = tiers[m.tier] ?? { par_s: 240, hints: -1, attempts: -1, feedback: "realtime-names" };
       copy = await loadCopy();
       pace = await loadPace();
       shape = shapeOf(await loadShapes(), m.shapeId);
-      const sv = loadSave();
       const prior = sv.days[dayKey(m.puzzleId, m.tier, m.shapeId)];
       heroBaseline = { ...sv.hero };
       configureAudio(sv.settings.sound, sv.settings.volume);
@@ -79,6 +88,7 @@
       puck = puckPreset(ui, sv.settings.puckSize);
       snap = ui.snap;
       soft = softFeedback(ui);
+      difficulty = difficultyUi(ui);
       game = new Game(m, dial, prior);
       tick();
     } catch (e) {
@@ -152,9 +162,14 @@
     <a class="flex items-center rounded-lg p-1.5 opacity-80 transition-transform active:scale-95" href={homeHref()} aria-label="back" onclick={(e) => { e.preventDefault(); navigate(""); }}>
       <Glyph ref="ui.back" size={18} tint />
     </a>
+    <button
+      class="flex min-h-11 items-center gap-1.5 rounded-full border border-ink/10 bg-surface px-3 py-1.5 shadow-e1 transition-transform active:scale-95"
+      aria-label={`difficulty ${game?.m.tier ?? ""}, tap to change`}
+      onclick={() => (pickerOpen = true)}
+    >
+      {#if game}<TierMeter tier={game.m.tier} {difficulty} height={14} label={false} />{/if}
+    </button>
     <div class="flex items-center gap-2 rounded-full border border-ink/10 bg-surface px-3 py-1.5 shadow-e1">
-      <span class="uppercase tracking-wide opacity-70">{game?.m.tier ?? ""}</span>
-      <span class="opacity-25">/</span>
       <span class="tabular-nums opacity-80">{Math.floor(elapsed / 1000)}s</span>
       {#if game && game.attemptsLeft >= 0}<span class="opacity-25">/</span><span class="tabular-nums opacity-80" aria-label="attempts left">try {game.attemptsLeft}</span>{/if}
     </div>
@@ -261,5 +276,14 @@
     {/if}
   {:else}
     <p class="opacity-60">loading...</p>
+  {/if}
+
+  {#if pickerOpen && game}
+    <DifficultyPicker
+      current={game.m.tier}
+      {difficulty}
+      onpick={(t) => { pickerOpen = false; if (game && t !== game.m.tier) navigate(`play/${t}`); }}
+      onclose={() => (pickerOpen = false)}
+    />
   {/if}
 </main>

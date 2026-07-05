@@ -1,6 +1,20 @@
 {
+  "ambient": {
+    "driftSeconds": 240,
+    "shiftSeconds": 150,
+    "shiftDepth": 0.55
+  },
   "clue": {
     "autoDimFeedback": ["realtime-names", "count-wrong"]
+  },
+  "difficulty": {
+    "order": ["easy", "standard", "sharp", "expert"],
+    "colors": {
+      "easy": "#22c55e",
+      "standard": "#eab308",
+      "sharp": "#f97316",
+      "expert": "#ef4444"
+    }
   },
   "grid": {
     "cell": {

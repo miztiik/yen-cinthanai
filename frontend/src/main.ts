@@ -1,6 +1,7 @@
 import { mount } from "svelte";
 import { registerSW } from "virtual:pwa-register";
 import "@fontsource-variable/jost";
+import "@fontsource-variable/josefin-sans";
 import "@fontsource-variable/inter";
 import "./app.css";
 import App from "./App.svelte";
