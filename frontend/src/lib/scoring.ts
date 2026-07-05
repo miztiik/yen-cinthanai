@@ -79,3 +79,20 @@ export function recentSolveMs(days: Record<string, DayState>, window: number): n
 export function wonOnDate(days: Record<string, DayState>, date: string): boolean {
   return Object.values(days).some((d) => d.date === date && d.status === "won");
 }
+
+/** Did today's puzzle for a SPECIFIC tier end won? Per-tier variant of wonOnDate, used to
+ *  decide whether PLAY should resume a tier or move past it. */
+export function wonTierOnDate(days: Record<string, DayState>, date: string, tier: string): boolean {
+  return Object.values(days).some((d) => d.date === date && d.tier === tier && d.status === "won");
+}
+
+/** The tier the landing PLAY button should launch so it always lands on a PLAYABLE puzzle,
+ *  never resuming into a solved board's result card: the player's last tier when today's
+ *  puzzle for it is still unsolved (resume an in-progress solve), else the first tier in
+ *  `order` not yet won today (the next challenge), else - when every tier is solved today -
+ *  the last tier (PLAY then shows its result, the honest "done for today"). Pure; `order`
+ *  is the difficulty ramp (config/ui.json [difficulty].order). */
+export function nextPlayableTier(days: Record<string, DayState>, date: string, order: string[], last: string): string {
+  if (!wonTierOnDate(days, date, last)) return last;
+  return order.find((t) => !wonTierOnDate(days, date, t)) ?? last;
+}

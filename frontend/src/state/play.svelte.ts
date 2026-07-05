@@ -158,12 +158,30 @@ export class Game {
     if (this.attemptsLeft !== 0) this.attempts += 1;
   }
 
+  /** Clear the board back to a blank slate mid-solve: token placements AND the cross-out
+   *  grid marks (ticks + manual-X), so RESET works in story/grid mode too (the grid keeps
+   *  its state in gridTicks/gridManualX, not placements). Attempts + timer are untouched -
+   *  this is "I made a mess", not "give me a fresh run". Clue strikes are a reading aid, left
+   *  as-is. */
   reset(): void {
     if (this.locked) return;
     this.placements = {};
+    this.gridTicks = {};
+    this.gridManualX = {};
     this.selected = null;
     this.checked = false;
     this.lastMoveMs = Date.now();
+  }
+
+  /** Fresh run after the attempt cap is spent (the fail card's RETRY): clear the board +
+   *  marks, restore the full attempt budget, and restart the timer so the next solve is
+   *  clean. Without the attempts reset a rebuild from the saved day would re-fail instantly.
+   *  Never touches a locked win. */
+  retry(): void {
+    if (this.locked) return;
+    this.reset();
+    this.attempts = 0;
+    this.startedMs = Date.now();
   }
 
   /** Toggle a manual clue strike (reversible, never required). */

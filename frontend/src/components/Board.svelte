@@ -21,7 +21,7 @@
   import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, difficultyUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type DifficultyUi } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { gridBlocks, gridCategories } from "../lib/grid";
-  import { isHero } from "../lib/scoring";
+  import { isHero, nextPlayableTier } from "../lib/scoring";
   import { buildShareCard, shareText, type ShareCopy } from "../contracts/share";
   import { configureAudio, play } from "../lib/audio";
   import { applyMotion } from "../lib/motion";
@@ -66,7 +66,9 @@
   async function start() {
     try {
       const sv = loadSave();
-      const tier = wantedTier(sv.settings.lastTier);
+      // Explicit /play/<tier> wins; a bare /play advances past any tier already solved today
+      // so a direct entry lands on a playable puzzle, matching the landing PLAY button.
+      const tier = wantedTier(nextPlayableTier(sv.days, TODAY, ALLOWED, sv.settings.lastTier ?? "easy") as Tier);
       const bank = await loadBank();
       const entry =
         bank.puzzles.find((p) => p.date === TODAY && p.tier === tier) ??
@@ -98,7 +100,10 @@
 
   function tick() {
     if (!game) return;
-    if (!game.locked) {
+    // Stop the clock once play is over: a win (locked) OR a spent attempt cap (the fail card).
+    // attemptsLeft is -1 when unlimited, so realtime/easy keeps ticking; only an exhausted
+    // cap (=== 0) freezes the time the fail card reports.
+    if (!game.locked && game.attemptsLeft !== 0) {
       elapsed = Date.now() - game.startedMs;
       idleMs = Date.now() - game.lastMoveMs;
     }
@@ -158,23 +163,34 @@
 <svelte:window bind:innerWidth={vw} />
 
 <main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-7xl" : "max-w-md"}`}>
-  <header class="flex items-center justify-between gap-2 text-sm">
-    <a class="flex items-center rounded-lg p-1.5 opacity-80 transition-transform active:scale-95" href={homeHref()} aria-label="back" onclick={(e) => { e.preventDefault(); navigate(""); }}>
+  <!-- One centered island bar (never spans the wide board): back | difficulty | timer | hint,
+       grouped by hairline dividers so it reads as a single control, not four floating pills. -->
+  <header class="mx-auto flex w-fit max-w-full items-center gap-0.5 rounded-full border border-ink/10 bg-surface px-1 py-1 text-sm shadow-e1">
+    <a class="grid h-11 w-11 place-items-center rounded-full opacity-80 transition-transform active:scale-95" href={homeHref()} aria-label="back" onclick={(e) => { e.preventDefault(); navigate(""); }}>
       <Glyph ref="ui.back" size={18} tint />
     </a>
+    <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
     <button
-      class="flex min-h-11 items-center gap-1.5 rounded-full border border-ink/10 bg-surface px-3 py-1.5 shadow-e1 transition-transform active:scale-95"
+      class="flex min-h-11 items-center gap-2 rounded-full px-3 transition-transform active:scale-95"
       aria-label={`difficulty ${game?.m.tier ?? ""}, tap to change`}
+      title={game ? `difficulty: ${game.m.tier}` : undefined}
       onclick={() => (pickerOpen = true)}
     >
-      {#if game}<TierMeter tier={game.m.tier} {difficulty} height={14} label={false} />{/if}
+      {#if game}
+        <TierMeter tier={game.m.tier} {difficulty} height={14} label={false} />
+        <span class="hidden capitalize sm:inline" style={`color:${difficulty.colors[game.m.tier] ?? "var(--accent)"}`}>{game.m.tier}</span>
+        <span class="opacity-40"><Glyph ref="ui.chevron" size={12} tint /></span>
+      {/if}
     </button>
-    <div class="flex items-center gap-2 rounded-full border border-ink/10 bg-surface px-3 py-1.5 shadow-e1">
+    <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
+    <div class="flex min-h-11 items-center gap-1.5 px-3">
+      <span class="opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
       <span class="tabular-nums opacity-80">{Math.floor(elapsed / 1000)}s</span>
       {#if game && game.attemptsLeft >= 0}<span class="opacity-25">/</span><span class="tabular-nums opacity-80" aria-label="attempts left">try {game.attemptsLeft}</span>{/if}
     </div>
+    <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
     <button
-      class="rounded-lg border border-ink/10 bg-surface px-3 py-1.5 font-medium shadow-e1 transition-transform active:scale-95 disabled:opacity-30"
+      class="min-h-11 rounded-full px-3 font-medium transition-transform active:scale-95 disabled:opacity-30"
       disabled={!game || game.locked || hintsLeft === 0}
       onclick={() => game?.hint()}>hint{hintsLeft >= 0 ? ` ${hintsLeft}` : ""}</button>
   </header>
@@ -236,7 +252,7 @@
     </div>
 
     {#if game.checked && !game.locked}
-      <p class="text-center text-sm text-violate">
+      <p class="mx-auto flex w-fit items-center gap-2 rounded-full border border-violate/30 bg-violate/10 px-4 py-1.5 text-center text-sm font-medium text-violate" role="status">
         {game.dial.feedback === "count-wrong"
           ? `${game.m.constraints.filter((c) => game?.evalState.clues[c.id] === "violate").length} clues off`
           : "not yet - keep deducing"}
@@ -271,7 +287,7 @@
         share=""
         onhome={() => navigate("")}
         onstats={() => navigate("stats")}
-        onretry={() => start()}
+        onretry={() => game?.retry()}
       />
     {/if}
   {:else}

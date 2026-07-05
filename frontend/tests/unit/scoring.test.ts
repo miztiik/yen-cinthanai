@@ -7,6 +7,7 @@ import type { TierDial } from "../../src/lib/config";
 import type { Streak, Hero, DayState } from "../../src/contracts/save";
 import {
   computeStars, parMs, dayGap, updateStreak, updateHero, isHero, recentSolveMs, wonOnDate,
+  wonTierOnDate, nextPlayableTier,
 } from "../../src/lib/scoring";
 
 const STD: TierDial = { par_s: 240, hints: 2, attempts: 3, feedback: "count-wrong" };
@@ -71,5 +72,41 @@ describe("wonOnDate (7-day dots)", () => {
     expect(wonOnDate(days, "2026-07-01")).toBe(true); // one of the day's slots won
     expect(wonOnDate(days, "2026-06-30")).toBe(false); // only a loss that day
     expect(wonOnDate(days, "2026-06-29")).toBe(false); // no slot at all
+  });
+});
+
+describe("nextPlayableTier (PLAY always lands on a playable puzzle)", () => {
+  const ORDER = ["easy", "standard", "sharp", "expert"];
+  const T = "2026-07-05";
+  const day = (date: string, tier: string, status: string): DayState => ({
+    date, tier: tier as DayState["tier"], shapeId: "grid" as DayState["shapeId"],
+    status: status as DayState["status"], placements: {}, attempts: 0, solveMs: 1, hintsUsed: 0, stars: 1,
+  });
+
+  it("resumes the last tier while today's puzzle for it is unsolved", () => {
+    expect(nextPlayableTier({}, T, ORDER, "easy")).toBe("easy"); // first-ever
+    const mid = { a: day(T, "standard", "playing") };
+    expect(nextPlayableTier(mid, T, ORDER, "standard")).toBe("standard"); // resume in-progress
+  });
+
+  it("advances to the next unsolved tier once the last is won today", () => {
+    const days = { a: day(T, "easy", "won") };
+    expect(nextPlayableTier(days, T, ORDER, "easy")).toBe("standard");
+  });
+
+  it("skips every tier already solved today", () => {
+    const days = { a: day(T, "easy", "won"), b: day(T, "standard", "won") };
+    expect(nextPlayableTier(days, T, ORDER, "easy")).toBe("sharp");
+  });
+
+  it("falls back to the last tier when all are solved today (shows its result)", () => {
+    const days = Object.fromEntries(ORDER.map((t) => [t, day(T, t, "won")]));
+    expect(nextPlayableTier(days, T, ORDER, "expert")).toBe("expert");
+  });
+
+  it("a win on a PRIOR day never blocks today's tier", () => {
+    const days = { a: day("2026-07-04", "easy", "won") };
+    expect(nextPlayableTier(days, T, ORDER, "easy")).toBe("easy");
+    expect(wonTierOnDate(days, T, "easy")).toBe(false);
   });
 });
