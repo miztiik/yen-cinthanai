@@ -11,7 +11,7 @@ Screens, components, glyphs, tokens. Mid-tier Android portrait (~390x844). Tailw
 - End-card (held = screenshot): bag phrase + time/wrong/hints + streak + spoiler-safe bar + SHARE. Hero = gold tint + crown.
 - Fail-card: encourage phrase + progress + reveal(opt-in)/retry.
 - Settings: Sound, Appearance, Display, Data (sound mute-default; the Display group toggles color / glyphs / text labels, mirrored by the in-puzzle display sheet - see Board).
-- Stats: a bento grid (bounded max-w-3xl, phone-to-desktop) - a flame day-streak hero tile, best + solved, a solve-time sparkline, a 7-day weekday calendar (a won day is a filled dot carrying a star, a missed day a quiet outline - never a scold, today ringed for orientation), and a gold stars-earned tile. One `StatTile` primitive; hierarchy from tile size + one gold accent, not decoration. No shame UI.
+- Stats: a bento grid (bounded max-w-3xl, phone-to-desktop) - a flame day-streak hero tile, best + solved, a solve-time sparkline, a 7-day weekday calendar (a won day is a filled dot carrying a star, a missed day a quiet outline - never a scold, today ringed for orientation; each shipped day's dot is a tap-to-play button that opens that day at the player's tier - won-that-day, else last-played, else standard - and a day outside the rolling window stays non-interactive), and a gold stars-earned tile. One `StatTile` primitive; hierarchy from tile size + one gold accent, not decoration. No shame UI.
 - Shape-drawer: tier + shape, behind PLAY, own route (clean back). Grid (the story matrix) is the only live shape; the seating-row/round-table positional engine is retired (matrix-only, Row 9d) - see [../architecture/generator/pipeline.md](../architecture/generator/pipeline.md).
 
 ## Route grammar
