@@ -82,6 +82,13 @@ export function glyphComplete(cat: AttributeCategory, exists: (ref: string) => b
   return cat.values.length > 0 && cat.values.every((v) => !!v.glyph && exists(v.glyph));
 }
 
+/** Whether an axis renders value glyph art: the player's `glyphs` display toggle AND full art
+ *  coverage (no-mix). `glyphs` off forces the axis to text - the display-mode hook over the
+ *  glyphComplete gate. Pure (exists injected), so it stays unit-testable. */
+export function axisGlyphs(glyphsOn: boolean, cat: AttributeCategory, exists: (ref: string) => boolean): boolean {
+  return glyphsOn && glyphComplete(cat, exists);
+}
+
 /** Every category-pair block, in a stable order (manifest order, i < j). */
 export function gridBlocks(cats: AttributeCategory[]): GridBlock[] {
   const out: GridBlock[] = [];

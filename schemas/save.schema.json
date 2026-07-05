@@ -22,6 +22,12 @@
       "date": "2026-07-02",
       "change": "Additive DayState.notes{manualX,scratchTicks,struckClues} (cross-out grid + clue-strip bookkeeping; schemaVersion unchanged). Omitted when empty.",
       "why": "Row 7 grid bookkeeping; endpoint-keyed scratch state is OPTIONAL so saves without it still validate and load."
+    },
+    {
+      "version": 1,
+      "date": "2026-07-05",
+      "change": "Additive settings.display{color,glyphs,labels} (in-puzzle display mode; schemaVersion unchanged). Absent in older saves; deep-merged to the default {true,true,true} on read and clamped so at least one of glyphs/labels stays on.",
+      "why": "An in-puzzle display/clarity toggle (color/glyphs/text) reachable from the board + Settings; additive-optional so old saves keep loading with no version bump."
     }
   ],
   "$defs": {
@@ -29,6 +35,16 @@
     "shapeId": { "type": "string", "enum": ["grid", "seating-row", "round-table"] },
     "dayStatus": { "type": "string", "enum": ["unplayed", "playing", "won", "lost"] },
     "puckSize": { "type": "string", "enum": ["small", "medium", "large"] },
+    "displaySettings": {
+      "type": "object",
+      "properties": {
+        "color": { "type": "boolean" },
+        "glyphs": { "type": "boolean" },
+        "labels": { "type": "boolean" }
+      },
+      "required": ["color", "glyphs", "labels"],
+      "additionalProperties": false
+    },
     "stringList": { "type": "array", "items": { "type": "string" } },
     "dayNotes": {
       "type": "object",
@@ -106,7 +122,8 @@
         "theme": { "type": "string" },
         "palette": { "type": "string" },
         "reducedMotion": { "type": "boolean" },
-        "puckSize": { "$ref": "#/$defs/puckSize" }
+        "puckSize": { "$ref": "#/$defs/puckSize" },
+        "display": { "$ref": "#/$defs/displaySettings" }
       },
       "required": ["sound", "volume", "theme", "palette", "reducedMotion"],
       "additionalProperties": false

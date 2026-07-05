@@ -31,6 +31,14 @@ export function navigate(target: string): void {
   globalThis.history?.pushState({}, "", hrefFor(_route));
 }
 
+/** Canonicalize the address bar in place (replaceState, no new history entry) WITHOUT
+ *  touching the reactive route - so unfurling an alias URL (/play/<tier>) to its dated form
+ *  (/play/<date>/<tier>) on load does not remount the screen or add a BACK trap. The route
+ *  string stays the alias for this render; the next popstate/navigate re-syncs it. */
+export function syncLocation(target: string): void {
+  globalThis.history?.replaceState({}, "", hrefFor("/" + target.replace(/^\/+/, "")));
+}
+
 if (typeof globalThis.addEventListener === "function") {
   globalThis.addEventListener("popstate", () => {
     _route = toRoute(globalThis.location.pathname);

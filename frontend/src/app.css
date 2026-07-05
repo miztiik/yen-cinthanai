@@ -28,6 +28,18 @@
   --shadow-e4: 0 18px 44px rgb(0 0 0 / 0.42);
 }
 
+/* Display mode "color off" (Settings > Display + the in-puzzle display sheet): neutralize the
+   state/accent hues to ink so the board reads monochrome. State stays legible via non-colour
+   cues (ring shape, check/slash glyph, position) - colour-is-one-signal. Overrides the source
+   tokens, so the @theme-inline colour utilities follow with no layout change. */
+.display-mono {
+  --accent: var(--ink);
+  --satisfy: var(--ink);
+  --violate: var(--ink);
+  --near: var(--ink);
+  --gold: var(--ink);
+}
+
 :root {
   /* bootstrap fallback = config/palettes.json [palette.hearth.dark] */
   --bg: #1b1512;

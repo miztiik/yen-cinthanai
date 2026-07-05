@@ -8,13 +8,25 @@
   import { homeHref, navigate } from "../lib/router.svelte";
   import { loadSave } from "../state/save.svelte";
   import { loadPace } from "../lib/config";
+  import { loadBank } from "../lib/loader";
+  import { playPath } from "../lib/play-route";
+  import { reviewTarget } from "../lib/review";
   import { recentSolveMs, wonOnDate } from "../lib/scoring";
   import Glyph from "../lib/Glyph.svelte";
   import StatTile from "./StatTile.svelte";
+  import type { BankIndex } from "../contracts/bank";
 
   const save = loadSave();
   let window = $state(10);
   loadPace().then((p) => (window = p.stats_window));
+  // Bank index (async): tells which week days are still shipped (rolling window) so their dot
+  // becomes a tap-to-play button. Tolerant - if it fails to load, dots stay non-interactive.
+  let bank = $state<BankIndex | null>(null);
+  loadBank().then((b) => (bank = b)).catch(() => {});
+  function openDay(date: string) {
+    const t = bank && reviewTarget(save, bank, date);
+    if (t) navigate(playPath(date, t.tier));
+  }
 
   const times = $derived(recentSolveMs(save.days, window));
   const peak = $derived(Math.max(1, ...times));
@@ -66,15 +78,19 @@
       <p class="text-xs uppercase tracking-wide opacity-60">last 7 days</p>
       <div class="flex justify-between">
         {#each week as d, i (d.date)}
-          <div class="flex flex-col items-center gap-1.5">
-            <div
-              class={`grid h-8 w-8 place-items-center rounded-full ${d.won ? "bg-accent text-bg" : "ring-1 ring-ink/15"} ${i === week.length - 1 ? "ring-2 ring-ink/40" : ""}`}
-              aria-label={d.won ? `${d.date} solved` : `${d.date} open`}
-            >
-              {#if d.won}<Glyph ref="ui.star" size={13} tint />{/if}
+          {@const target = bank ? reviewTarget(save, bank, d.date) : undefined}
+          {@const ring = `grid h-8 w-8 place-items-center rounded-full ${d.won ? "bg-accent text-bg" : "ring-1 ring-ink/15"} ${i === week.length - 1 ? "ring-2 ring-ink/40" : ""}`}
+          {#if target}
+            <button class="flex flex-col items-center gap-1.5 rounded-xl p-1 transition-transform active:scale-95" aria-label={`play ${d.date}`} onclick={() => openDay(d.date)}>
+              <span class={ring}>{#if d.won}<Glyph ref="ui.star" size={13} tint />{/if}</span>
+              <span class="text-[10px] uppercase opacity-40">{d.wd}</span>
+            </button>
+          {:else}
+            <div class="flex flex-col items-center gap-1.5 p-1">
+              <span class={ring} aria-label={d.won ? `${d.date} solved` : `${d.date}`}>{#if d.won}<Glyph ref="ui.star" size={13} tint />{/if}</span>
+              <span class="text-[10px] uppercase opacity-40">{d.wd}</span>
             </div>
-            <span class="text-[10px] uppercase opacity-40">{d.wd}</span>
-          </div>
+          {/if}
         {/each}
       </div>
     </section>

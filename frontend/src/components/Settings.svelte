@@ -47,6 +47,10 @@
   function setPalette(p: string) { s.palette = p; save(); play("place"); }
   function setPuck(z: PuckSize) { s.puckSize = z; save(); }
   function toggleMotion() { s.reducedMotion = !s.reducedMotion; save(); }
+  function setColor(on: boolean) { s.display = { ...s.display, color: on }; save(); }
+  // Invariant: keep at least one of glyphs/labels on so a board value always renders.
+  function setGlyphs(on: boolean) { s.display = { ...s.display, glyphs: on, labels: on ? s.display.labels : true }; save(); }
+  function setLabels(on: boolean) { s.display = { ...s.display, labels: on, glyphs: on ? s.display.glyphs : true }; save(); }
   /** A palette's bg + accent for the resolved scheme (the swatch preview colours). */
   function swatch(id: string): { bg: string; accent: string } {
     const set = palConfig?.palette[id]?.[resolveScheme(s.theme)];
@@ -135,6 +139,30 @@
             <button role="radio" aria-checked={s.puckSize === z.id} class={`flex-1 rounded-lg px-2 py-1.5 text-sm transition-colors ${s.puckSize === z.id ? "bg-accent text-bg font-semibold shadow-e1" : "text-ink/60"}`} onclick={() => setPuck(z.id)}>{z.label}</button>
           {/each}
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="overflow-hidden rounded-2xl bg-surface shadow-e1">
+    <h2 class="px-4 pt-3 pb-1 text-xs font-semibold text-ink/50">Display</h2>
+    <div class="divide-y divide-ink/10 px-4">
+      <div class="flex min-h-11 items-center justify-between gap-4 py-2">
+        <span>Color</span>
+        <button role="switch" aria-checked={s.display.color} aria-label="color" class={`relative h-7 w-12 shrink-0 rounded-full transition-colors ${s.display.color ? "bg-accent" : "bg-ink/15"}`} onclick={() => setColor(!s.display.color)}>
+          <span class={`absolute left-0.5 top-0.5 h-6 w-6 rounded-full bg-bg shadow-e1 ring-1 ring-ink/10 transition-transform ${s.display.color ? "translate-x-5" : ""}`}></span>
+        </button>
+      </div>
+      <div class="flex min-h-11 items-center justify-between gap-4 py-2">
+        <span>Glyphs</span>
+        <button role="switch" aria-checked={s.display.glyphs} aria-label="glyphs" class={`relative h-7 w-12 shrink-0 rounded-full transition-colors ${s.display.glyphs ? "bg-accent" : "bg-ink/15"}`} onclick={() => setGlyphs(!s.display.glyphs)}>
+          <span class={`absolute left-0.5 top-0.5 h-6 w-6 rounded-full bg-bg shadow-e1 ring-1 ring-ink/10 transition-transform ${s.display.glyphs ? "translate-x-5" : ""}`}></span>
+        </button>
+      </div>
+      <div class="flex min-h-11 items-center justify-between gap-4 py-2">
+        <span>Text labels</span>
+        <button role="switch" aria-checked={s.display.labels} aria-label="text labels" class={`relative h-7 w-12 shrink-0 rounded-full transition-colors ${s.display.labels ? "bg-accent" : "bg-ink/15"}`} onclick={() => setLabels(!s.display.labels)}>
+          <span class={`absolute left-0.5 top-0.5 h-6 w-6 rounded-full bg-bg shadow-e1 ring-1 ring-ink/10 transition-transform ${s.display.labels ? "translate-x-5" : ""}`}></span>
+        </button>
       </div>
     </div>
   </section>

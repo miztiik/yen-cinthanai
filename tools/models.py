@@ -155,6 +155,12 @@ class Streak(_Strict):
     skipsLeft: int
 
 
+class DisplaySettings(_Strict):
+    color: bool = True
+    glyphs: bool = True
+    labels: bool = True
+
+
 class Settings(_Strict):
     sound: bool
     volume: int
@@ -162,6 +168,7 @@ class Settings(_Strict):
     palette: str
     reducedMotion: bool
     puckSize: PuckSize = "medium"
+    display: DisplaySettings = Field(default_factory=DisplaySettings)
 
 
 class Save(_Strict):

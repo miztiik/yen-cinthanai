@@ -7,13 +7,15 @@
   // a roving tabindex (arrow keys move focus, Enter ticks, Space crosses out). Ticking is
   // the B-prime verb; auto-X of the rest of the row/col is derived (grid.ts), never stored.
   // Chrome is Tailwind; the only image is the glyph. See TODO story-first-pivot sec 8.
+  import { getContext } from "svelte";
   import GridCell from "./GridCell.svelte";
   import Glyph from "../lib/Glyph.svelte";
   import GlyphSeat from "./GlyphSeat.svelte";
-  import { blockCells, cellState, glyphComplete, type GridBlock } from "../lib/grid";
+  import { blockCells, cellState, axisGlyphs, type GridBlock } from "../lib/grid";
   import { glyphExists } from "../lib/glyphs";
   import type { GridCopy } from "../lib/config";
   import type { AttributeValue } from "../contracts/manifest";
+  import type { DisplaySettings } from "../contracts/save";
   import type { Game } from "../state/play.svelte";
 
   let {
@@ -48,8 +50,11 @@
   const ticks = $derived(new Set(Object.keys(game.gridTicks)));
   const manualX = $derived(new Set(Object.keys(game.gridManualX)));
   // No-mix glyph rule: each axis shows images only when ALL its values have art, else text.
-  const rowGlyphs = $derived(glyphComplete(block.rowCat, glyphExists));
-  const colGlyphs = $derived(glyphComplete(block.colCat, glyphExists));
+  // Display mode: the player's `glyphs` toggle gates this - glyphs off forces the axis to text.
+  const display = getContext<(() => DisplaySettings) | undefined>("display");
+  const glyphsOn = $derived(display?.().glyphs ?? true);
+  const rowGlyphs = $derived(axisGlyphs(glyphsOn, block.rowCat, glyphExists));
+  const colGlyphs = $derived(axisGlyphs(glyphsOn, block.colCat, glyphExists));
 
   function stateAt(rv: AttributeValue, cv: AttributeValue) {
     return cellState(keyAt(rv, cv), ticks, manualX);

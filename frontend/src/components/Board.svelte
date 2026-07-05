@@ -15,9 +15,13 @@
   import ResultCard from "./ResultCard.svelte";
   import TierMeter from "./TierMeter.svelte";
   import DifficultyPicker from "./DifficultyPicker.svelte";
+  import DayNav from "./DayNav.svelte";
+  import DisplaySheet from "./DisplaySheet.svelte";
   import Glyph from "../lib/Glyph.svelte";
-  import { route, homeHref, navigate } from "../lib/router.svelte";
-  import { loadBank, loadManifest, pickEntry } from "../lib/loader";
+  import { route, homeHref, navigate, syncLocation } from "../lib/router.svelte";
+  import { loadBank, loadManifest, pickEntry, hasEntry } from "../lib/loader";
+  import { parsePlay, playPath, dayNeighbors } from "../lib/play-route";
+  import { formatDay } from "../lib/dates";
   import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, difficultyUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type DifficultyUi } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { gridBlocks, gridCategories } from "../lib/grid";
@@ -27,7 +31,7 @@
   import { applyMotion } from "../lib/motion";
   import { Game, saveProgress, toDayState } from "../state/play.svelte";
   import { loadSave, dayKey, updateSettings } from "../state/save.svelte";
-  import type { Tier } from "../contracts/save";
+  import type { Tier, DisplaySettings } from "../contracts/save";
 
   const TODAY = new Date().toISOString().slice(0, 10);
   const ALLOWED: Tier[] = ["easy", "standard", "sharp", "expert"];
@@ -39,6 +43,9 @@
   let shape = $state<ShapeDef | null>(null);
   let soft = $state<Feedback[]>(["realtime-names", "count-wrong"]); // dials that may auto-dim a satisfied clue
   let error = $state("");
+  let notice = $state(""); // non-blocking note when a requested day is not in the shipped bank
+  let currentDate = $state(TODAY);      // the day currently loaded (drives the day nav + label)
+  let tierDates = $state<string[]>([]); // ascending dates shipped for the loaded tier
   let elapsed = $state(0);
   let idleMs = $state(0);
   let hero = $state(false);
@@ -52,29 +59,42 @@
   // Difficulty switcher (config-driven colour-coded bars). Populated in start() from ui.json.
   let difficulty = $state<DifficultyUi>(difficultyUi({} as never));
   let pickerOpen = $state(false);
+  // Display mode (color/glyphs/labels): provided to the grid via context, toggled in-puzzle by
+  // the DisplaySheet, persisted to save.settings.display. Defaults reproduce today's behaviour.
+  let display = $state<DisplaySettings>({ color: true, glyphs: true, labels: true });
+  let displayOpen = $state(false);
   setContext("puckSize", () => puck);
   setContext("snap", () => snap);
-
-  /** Tier from /play/<tier>; else the player's last-played tier; else easy (first-ever
-   *  cold-open). PLAY navigates to bare /play, so a returning player resumes their level. */
-  function wantedTier(fallback?: Tier): Tier {
-    const seg = route().split("/")[2] as Tier;
-    if (ALLOWED.includes(seg)) return seg;
-    return fallback && ALLOWED.includes(fallback) ? fallback : "easy";
-  }
+  setContext("display", () => display);
 
   async function start() {
     try {
       const sv = loadSave();
-      // Explicit /play/<tier> wins; a bare /play advances past any tier already solved today
-      // so a direct entry lands on a playable puzzle, matching the landing PLAY button.
-      const tier = wantedTier(nextPlayableTier(sv.days, TODAY, ALLOWED, sv.settings.lastTier ?? "easy") as Tier);
       const bank = await loadBank();
-      const entry =
-        bank.puzzles.find((p) => p.date === TODAY && p.tier === tier) ??
-        bank.puzzles.find((p) => p.tier === tier) ??
-        pickEntry(bank, bank.puzzles[0].date, bank.puzzles[0].tier);
+      // Resolve {date, tier} from the URL (date-first canonical /play/<date>/<tier>). Tier:
+      // explicit segment, else last tier, else easy. A bare /play (no tier) advances past any
+      // tier already solved today so a direct entry lands on a playable puzzle (matches the
+      // landing PLAY button). Date: explicit segment when the bank holds it, else today.
+      const want = parsePlay(route());
+      const tier: Tier = want.tier ?? (nextPlayableTier(sv.days, TODAY, ALLOWED, sv.settings.lastTier ?? "easy") as Tier);
+      const wantDate = want.date && hasEntry(bank, want.date, tier) ? want.date : TODAY;
+      // Prefer the exact day+tier; else the newest shipped day for this tier (a link to a day
+      // aged out of the rolling window - or a future date - lands on the latest, never errors);
+      // else the first bank entry.
+      let entry = bank.puzzles.find((p) => p.date === wantDate && p.tier === tier);
+      if (!entry) {
+        const forTier = bank.puzzles.filter((p) => p.tier === tier);
+        entry = forTier.length
+          ? forTier.reduce((a, b) => (a.date >= b.date ? a : b))
+          : pickEntry(bank, bank.puzzles[0].date, bank.puzzles[0].tier);
+        if (want.date) notice = "That day isn't available - showing the latest puzzle.";
+      }
       const m = await loadManifest(entry.file);
+      currentDate = entry.date;
+      tierDates = bank.puzzles.filter((p) => p.tier === m.tier).map((p) => p.date).sort();
+      // Unfurl the address bar to the canonical dated URL without a remount, so a bare/alias
+      // entry becomes linkable + bookmarkable to this exact day. See play-route.ts.
+      if (route() !== "/" + playPath(entry.date, m.tier)) syncLocation(playPath(entry.date, m.tier));
       // Remember the level we actually loaded so bare PLAY resumes it next time.
       if (sv.settings.lastTier !== m.tier) updateSettings({ lastTier: m.tier }, TODAY);
       const tiers = await loadTiers();
@@ -86,6 +106,7 @@
       heroBaseline = { ...sv.hero };
       configureAudio(sv.settings.sound, sv.settings.volume);
       applyMotion(sv.settings.reducedMotion);
+      display = sv.settings.display;
       const ui = await loadUi();
       puck = puckPreset(ui, sv.settings.puckSize);
       snap = ui.snap;
@@ -157,12 +178,25 @@
   function navBlock(dir: 1 | -1) {
     if (blocks.length) activeBlock = (activeBlock + dir + blocks.length) % blocks.length;
   }
+
+  // Day navigation: carets move within the loaded tier's shipped days; next is absent at today
+  // (the newest shipped day), prev at the oldest. See docs/concepts/ui-shell.md.
+  const neighbors = $derived(dayNeighbors(tierDates, currentDate));
+  const dayLabel = $derived(currentDate === TODAY ? "Today" : formatDay(currentDate));
+  function goToDay(to: string | undefined) {
+    if (game && to) navigate(playPath(to, game.m.tier));
+  }
+  function setDisplay(next: DisplaySettings) {
+    display = next;
+    updateSettings({ display: next }, TODAY);
+  }
+
   start();
 </script>
 
 <svelte:window bind:innerWidth={vw} />
 
-<main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-7xl" : "max-w-md"}`}>
+<main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-7xl" : "max-w-md"} ${display.color ? "" : "display-mono"}`}>
   <!-- One centered island bar (never spans the wide board): back | difficulty | timer | hint,
        grouped by hairline dividers so it reads as a single control, not four floating pills. -->
   <header class="mx-auto flex w-fit max-w-full items-center gap-0.5 rounded-full border border-ink/10 bg-surface px-1 py-1 text-sm shadow-e1">
@@ -193,7 +227,19 @@
       class="min-h-11 rounded-full px-3 font-medium transition-transform active:scale-95 disabled:opacity-30"
       disabled={!game || game.locked || hintsLeft === 0}
       onclick={() => game?.hint()}>hint{hintsLeft >= 0 ? ` ${hintsLeft}` : ""}</button>
+    <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
+    <button class="grid h-11 w-11 place-items-center rounded-full opacity-80 transition-transform active:scale-95" aria-label="display options" onclick={() => (displayOpen = true)}>
+      <Glyph ref="ui.gear" size={18} tint />
+    </button>
   </header>
+
+  {#if game}
+    <DayNav label={dayLabel} hasPrev={!!neighbors.prev} hasNext={!!neighbors.next} onprev={() => goToDay(neighbors.prev)} onnext={() => goToDay(neighbors.next)} />
+  {/if}
+
+  {#if notice}
+    <p class="mx-auto w-fit rounded-full bg-surface px-3 py-1 text-xs opacity-70 shadow-e1" role="status">{notice}</p>
+  {/if}
 
   {#if error}
     <p class="text-violate">could not load: {error}</p>
@@ -298,8 +344,12 @@
     <DifficultyPicker
       current={game.m.tier}
       {difficulty}
-      onpick={(t) => { pickerOpen = false; if (game && t !== game.m.tier) navigate(`play/${t}`); }}
+      onpick={(t) => { pickerOpen = false; if (game && t !== game.m.tier) navigate(playPath(currentDate, t as Tier)); }}
       onclose={() => (pickerOpen = false)}
     />
+  {/if}
+
+  {#if displayOpen}
+    <DisplaySheet {display} onchange={setDisplay} onclose={() => (displayOpen = false)} />
   {/if}
 </main>
