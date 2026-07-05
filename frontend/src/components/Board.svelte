@@ -16,8 +16,9 @@
   import TierMeter from "./TierMeter.svelte";
   import DifficultyPicker from "./DifficultyPicker.svelte";
   import Glyph from "../lib/Glyph.svelte";
-  import { route, homeHref, navigate } from "../lib/router.svelte";
-  import { loadBank, loadManifest, pickEntry } from "../lib/loader";
+  import { route, homeHref, navigate, syncLocation } from "../lib/router.svelte";
+  import { loadBank, loadManifest, pickEntry, hasEntry } from "../lib/loader";
+  import { parsePlay, playPath } from "../lib/play-route";
   import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, difficultyUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type DifficultyUi } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { gridBlocks, gridCategories } from "../lib/grid";
@@ -39,6 +40,7 @@
   let shape = $state<ShapeDef | null>(null);
   let soft = $state<Feedback[]>(["realtime-names", "count-wrong"]); // dials that may auto-dim a satisfied clue
   let error = $state("");
+  let notice = $state(""); // non-blocking note when a requested day is not in the shipped bank
   let elapsed = $state(0);
   let idleMs = $state(0);
   let hero = $state(false);
@@ -55,26 +57,32 @@
   setContext("puckSize", () => puck);
   setContext("snap", () => snap);
 
-  /** Tier from /play/<tier>; else the player's last-played tier; else easy (first-ever
-   *  cold-open). PLAY navigates to bare /play, so a returning player resumes their level. */
-  function wantedTier(fallback?: Tier): Tier {
-    const seg = route().split("/")[2] as Tier;
-    if (ALLOWED.includes(seg)) return seg;
-    return fallback && ALLOWED.includes(fallback) ? fallback : "easy";
-  }
-
   async function start() {
     try {
       const sv = loadSave();
-      // Explicit /play/<tier> wins; a bare /play advances past any tier already solved today
-      // so a direct entry lands on a playable puzzle, matching the landing PLAY button.
-      const tier = wantedTier(nextPlayableTier(sv.days, TODAY, ALLOWED, sv.settings.lastTier ?? "easy") as Tier);
       const bank = await loadBank();
-      const entry =
-        bank.puzzles.find((p) => p.date === TODAY && p.tier === tier) ??
-        bank.puzzles.find((p) => p.tier === tier) ??
-        pickEntry(bank, bank.puzzles[0].date, bank.puzzles[0].tier);
+      // Resolve {date, tier} from the URL (date-first canonical /play/<date>/<tier>). Tier:
+      // explicit segment, else last tier, else easy. A bare /play (no tier) advances past any
+      // tier already solved today so a direct entry lands on a playable puzzle (matches the
+      // landing PLAY button). Date: explicit segment when the bank holds it, else today.
+      const want = parsePlay(route());
+      const tier: Tier = want.tier ?? (nextPlayableTier(sv.days, TODAY, ALLOWED, sv.settings.lastTier ?? "easy") as Tier);
+      const wantDate = want.date && hasEntry(bank, want.date, tier) ? want.date : TODAY;
+      // Prefer the exact day+tier; else the newest shipped day for this tier (a link to a day
+      // aged out of the rolling window - or a future date - lands on the latest, never errors);
+      // else the first bank entry.
+      let entry = bank.puzzles.find((p) => p.date === wantDate && p.tier === tier);
+      if (!entry) {
+        const forTier = bank.puzzles.filter((p) => p.tier === tier);
+        entry = forTier.length
+          ? forTier.reduce((a, b) => (a.date >= b.date ? a : b))
+          : pickEntry(bank, bank.puzzles[0].date, bank.puzzles[0].tier);
+        if (want.date) notice = "That day isn't available - showing the latest puzzle.";
+      }
       const m = await loadManifest(entry.file);
+      // Unfurl the address bar to the canonical dated URL without a remount, so a bare/alias
+      // entry becomes linkable + bookmarkable to this exact day. See play-route.ts.
+      if (route() !== "/" + playPath(entry.date, m.tier)) syncLocation(playPath(entry.date, m.tier));
       // Remember the level we actually loaded so bare PLAY resumes it next time.
       if (sv.settings.lastTier !== m.tier) updateSettings({ lastTier: m.tier }, TODAY);
       const tiers = await loadTiers();
@@ -194,6 +202,10 @@
       disabled={!game || game.locked || hintsLeft === 0}
       onclick={() => game?.hint()}>hint{hintsLeft >= 0 ? ` ${hintsLeft}` : ""}</button>
   </header>
+
+  {#if notice}
+    <p class="mx-auto w-fit rounded-full bg-surface px-3 py-1 text-xs opacity-70 shadow-e1" role="status">{notice}</p>
+  {/if}
 
   {#if error}
     <p class="text-violate">could not load: {error}</p>

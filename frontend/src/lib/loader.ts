@@ -56,6 +56,17 @@ export function pickEntry(bank: BankIndex, date: string, tier: Tier): BankEntry 
   return e;
 }
 
+/** All distinct puzzle dates present in the bank, ascending. Drives the day-caret bounds
+ *  and the Stats-calendar "is this day playable" check (the rolling window floor/ceiling). */
+export function bankDates(bank: BankIndex): string[] {
+  return [...new Set(bank.puzzles.map((p) => p.date))].sort();
+}
+
+/** Does the bank hold a manifest for this date+tier? */
+export function hasEntry(bank: BankIndex, date: string, tier: Tier): boolean {
+  return bank.puzzles.some((p) => p.date === date && p.tier === tier);
+}
+
 /** Fetch a single manifest file. */
 export async function loadManifest(file: string): Promise<PuzzleManifest> {
   const raw = await fetchJson(puzzleUrl(file));

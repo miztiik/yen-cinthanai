@@ -7,7 +7,8 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadBank, pickEntry, loadManifest, loadPuzzle } from "../../src/lib/loader";
+import { loadBank, pickEntry, loadManifest, loadPuzzle, bankDates, hasEntry } from "../../src/lib/loader";
+import { parsePlay, playPath } from "../../src/lib/play-route";
 
 const here = fileURLToPath(new URL(".", import.meta.url));
 const pub = resolve(here, "../../public/puzzles");
@@ -58,5 +59,29 @@ describe("loader", () => {
   it("throws on a missing entry", async () => {
     const bank = await loadBank();
     expect(() => pickEntry(bank, "1999-01-01", "expert")).toThrow();
+  });
+});
+
+describe("bank day-navigation helpers", () => {
+  it("bankDates are sorted, unique, and include the generated seed", async () => {
+    const bank = await loadBank();
+    const dates = bankDates(bank);
+    expect(dates).toEqual([...dates].sort());
+    expect(new Set(dates).size).toBe(dates.length);
+    expect(dates).toContain(bank.generatedSeed);
+  });
+
+  it("hasEntry is true for a shipped day+tier, false otherwise", async () => {
+    const bank = await loadBank();
+    expect(hasEntry(bank, bank.generatedSeed, "standard")).toBe(true);
+    expect(hasEntry(bank, "1999-01-01", "standard")).toBe(false);
+  });
+
+  it("every shipped entry round-trips through the date-first canonical URL", async () => {
+    const bank = await loadBank();
+    for (const p of bank.puzzles) {
+      expect(playPath(p.date, p.tier)).toBe(`play/${p.date}/${p.tier}`);
+      expect(parsePlay("/" + playPath(p.date, p.tier))).toEqual({ date: p.date, tier: p.tier });
+    }
   });
 });

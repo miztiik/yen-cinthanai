@@ -14,6 +14,20 @@ Screens, components, glyphs, tokens. Mid-tier Android portrait (~390x844). Tailw
 - Stats: a bento grid (bounded max-w-3xl, phone-to-desktop) - a flame day-streak hero tile, best + solved, a solve-time sparkline, a 7-day weekday calendar (a won day is a filled dot carrying a star, a missed day a quiet outline - never a scold, today ringed for orientation), and a gold stars-earned tile. One `StatTile` primitive; hierarchy from tile size + one gold accent, not decoration. No shame UI.
 - Shape-drawer: tier + shape, behind PLAY, own route (clean back). Grid (the story matrix) is the only live shape; the seating-row/round-table positional engine is retired (matrix-only, Row 9d) - see [../architecture/generator/pipeline.md](../architecture/generator/pipeline.md).
 
+## Route grammar
+
+The whole URL surface is `/` (landing), `/stats`, `/settings`, and the play routes. The canonical play route is DATE-FIRST: `/play/<date>/<tier>` (`<date>` = `YYYY-MM-DD` UTC, `<tier>` in easy|standard|sharp|expert), aligned with the served file `puzzles/<date>-<tier>.json` and the save slot key `<date>|<tier>|<shapeId>` (`state/save.svelte::dayKey`). `/play/<tier>` and bare `/play` are retained ALIASES meaning "today's <tier>" / "today's next playable tier"; on load the Board resolves the day and unfurls the address bar to the dated form via `lib/router.svelte::syncLocation` (a `replaceState` that touches only the address bar - no remount, no BACK trap). Parsing (`lib/play-route.ts::parsePlay`) is order-tolerant; the builder (`playPath`) is always date-first. A dated link to a day the shipped bank no longer holds (aged past the rolling window, or a future date) falls back to the newest puzzle for that tier with a quiet notice - never a hard error. `TODAY` is UTC everywhere (loader, Stats, save), so the dated permalink is device-clock-independent and offline/share-stable. Day-to-day movement plus the "which day am I on" label live on the Board (see Screens).
+
+### Design rationale
+
+The URL is a contract read by the player (bookmark/share) and by the next build (resolve). Date-first makes the URL speak the bank's own key language (`date` + `tier`), the only two source-of-truth segments; `puzzleId`/`scenarioId`/`shapeId`/`file` stay derived and never appear in the URL. The dated permalink is the offline-stable form: a bookmarked dated link resolves from a stale cached bank index, whereas the bare alias dereferences through the device clock and can hard-fail at the UTC day boundary offline. Authority: User (day navigation + linkable dated URL), Carmack (canonicalize via replaceState; UTC determinism), Fowler (additive grammar; aliases grandfathered).
+
+### Rejected alternatives
+
+- Tier-only URL `/play/<tier>` as canonical - not linkable to a specific day and inverts the date-first layout the served files + save key already use. Kept only as an alias. (User)
+- Opaque `puzzleId` in the URL (`/play/<tier>/<puzzleId>`) - a second source of truth that rots against the bank index when ids re-mint; no reverse id->file index exists. (Fowler)
+- Hash routing (`#/play/...`) - uglier share URLs, murkier service-worker navigation; the existing `404.html` SPA mirror already boots history deep links. (Carmack)
+
 ## Feedback (transform/opacity)
 
 satisfy ring+check 180ms; violate slash+shake 120ms; near amber pulse; locked solid. Easy names clue, Standard count, Sharp/Expert binary. reduced-motion -> opacity-only. Colour never alone.
