@@ -13,11 +13,11 @@ Fire STOP-AND-SURFACE when the next action would do ANY of these to an artifact 
 - **Substitute** - ship Z instead of the X the user named, even if Z is better.
 - **Scope-narrow** - deliver a strict subset (e.g. 9 of 13 indicators, 1 of 31 states) and call the request done.
 
-It does NOT fire for ordinary ambiguity (which column type, which test tier, how to name a helper). Resolve those by consulting the row's named authority per [CLAUDE.md](../../CLAUDE.md) section 0a, applying the verdict, and proceeding.
+It does NOT fire for ordinary ambiguity (which column type, which test tier, how to name a helper). Resolve those by consulting the row's named authority (the authority table in [guardrails.md](../agents/guardrails.md); CLAUDE.md section 14 names the roster), applying the verdict, and proceeding.
 
 ## What to do
 
-1. **Stop.** Do not ship the reinterpreted/downgraded/substituted/narrowed version. Do not ask an agent how to proceed - no agent can approve a contract change the user owns (section 0a: user approval supersedes every agent).
+1. **Stop.** Do not ship the reinterpreted/downgraded/substituted/narrowed version. Do not ask an agent how to proceed - no agent can approve a contract change the user owns (CLAUDE.md section 0: user approval supersedes every agent).
 2. **Set the plan-doc row** status to `BLOCKED-NEEDS-SIGNOFF`.
 3. **Write a Scope-change ledger row** in the active plan-doc (a plain markdown table - NO schema enum, NO catalogue field). Columns:
 
@@ -38,6 +38,6 @@ A plan-doc cannot be declared complete while any Scope-change ledger row has an 
 
 ## See also
 
-- [CLAUDE.md](../../CLAUDE.md) section 0a (user approval supersedes every agent), section 9 (Definition of Done), section 10 (Anti-Patterns)
+- [CLAUDE.md](../../CLAUDE.md) section 0 (user approval supersedes every agent), section 9 (Definition of Done), section 10 (Anti-Patterns)
 - [docs/how-to/distill-a-plan.md](distill-a-plan.md)
 - [docs/how-to/ship-a-pr.md](ship-a-pr.md)

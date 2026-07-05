@@ -32,6 +32,16 @@ def test_manifest_validates(built: g.StoryBuild) -> None:
     assert m.story and m.scenarioId and m.subjectNoun and m.variant == 1
 
 
+def test_env_weights_come_from_config() -> None:
+    # Holy Law #6: the difficulty ENV weights live in config/dials.json (scorer.env), not in code.
+    # Isolate ENV by zeroing size/depth/indir, then pin the two tier extremes against real config.
+    env = g.load_config("dials", CONFIG_DIR)["scorer"]["env"]
+    tiers = g.load_config("tiers", CONFIG_DIR)
+    easy, expert = tiers["easy"], tiers["expert"]
+    assert g.difficulty(easy, 0, 0, 0, 0, 0, env) == 0        # unlimited/unlimited/realtime-names -> 0+0+0
+    assert g.difficulty(expert, 0, 0, 0, 0, 0, env) == 34     # 1/0/submit-binary -> 12+10+12
+
+
 def test_uniqueness_holds(built: g.StoryBuild) -> None:
     assert g.is_unique(built.cats, built.entities, built.clues, built.seed)
 

@@ -39,14 +39,16 @@ When a user authorises an agent to execute a plan-doc autonomously (verbatim man
 
 - **AUTO** every row: execute the work, run the Definition of Done (`CLAUDE.md` section 9), `gh pr merge --squash --delete-branch`, advance to the next row. No DRAFT-PR-and-wait state. No mid-row CONSULT-USER pause.
 - **Personas** (custom agents) MAY be dispatched as Explore subagents to gather facts; their verdicts inform the agent's action  -  they are not a request-for-approval surface.
-- **ESCALATE only** for genuine triggers: a new ADR proposal, an unresolved persona conflict, a Level-5 trigger (`CLAUDE.md` section 6), or a 3x cost overrun. Otherwise AUTO.
+- **ESCALATE only** for genuine triggers: a new architecture-decision proposal (a `## Design rationale` that would change a contract), an unresolved persona conflict, a Level-5 trigger (`CLAUDE.md` section 6), or a 3x cost overrun. Otherwise AUTO.
 - **When user is unavailable mid-execution**, stay in scope, progress the in-flight mandate, do not invent new scope or contract existing scope.
 
-This stanza is the canonical reference for "what autonomy means in yen-cinthanai plan execution". Plan-docs that need the long-form version cite this doc rather than re-explaining.
+This stanza is the canonical reference for the autonomy POLICY ("what autonomy means in yen-cinthanai plan execution" - AUTO by default, when to escalate). The step-by-step orchestrator MECHANICS (subagent-PR topology, worktree isolation, parallel fan-out, closure) live in [`../how-to/execute-a-plan.md`](../how-to/execute-a-plan.md). Plan-docs cite these docs rather than re-explaining.
 
 ## See also
 
 - [`guardrails.md`](guardrails.md) - the rules every persona must honour.
+- [`../how-to/author-a-plan.md`](../how-to/author-a-plan.md) - authoring an execution-ready plan-doc.
+- [`../how-to/execute-a-plan.md`](../how-to/execute-a-plan.md) - the orchestrator execution contract.
 - [`../concepts/core-loop.md`](../concepts/core-loop.md) - the game verb and moment-to-moment loop.
 - [`../../.github/agents/`](../../.github/agents/) - the five persona advisors that run this ritual.
 - [`../../CLAUDE.md`](../../CLAUDE.md) - the engineering contract.

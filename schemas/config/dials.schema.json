@@ -16,6 +16,12 @@
       "date": "2026-07-02",
       "change": "Retired the legacy seating-engine knobs: seed_salt, tier{nominal,shape,shared}, and the positional clue weights{}. Only max_reseeds, template_rev, and story{weights,share_cap} remain (the story-first matrix path).",
       "why": "The seating-row/round-table engine + its glyph-manifest category builder are retired (Row 9d matrix-only), so their build-only knobs are dead config and are removed."
+    },
+    {
+      "version": 3,
+      "date": "2026-07-05",
+      "change": "Added scorer.env{attempts,hints,feedback}->intWeights: the difficulty ENV dial-weight tables moved out of tools/generate.py (_ATT/_HINT/_FB). Keys are the tiers.json dial values (attempts/hints int-as-string, feedback the literal string).",
+      "why": "Holy Law #6 - difficulty balance numbers are tunable and must live in config/, not hardcoded in the scorer. difficulty-and-scoring.md remains their meaning-contract; dials is now their home (alongside story.weights)."
     }
   ],
   "$defs": {
@@ -35,8 +41,25 @@
       "required": ["weights", "share_cap"],
       "additionalProperties": true
     },
+    "scorer": {
+      "type": "object",
+      "properties": {
+        "env": {
+          "type": "object",
+          "properties": {
+            "attempts": { "$ref": "#/$defs/intWeights" },
+            "hints": { "$ref": "#/$defs/intWeights" },
+            "feedback": { "$ref": "#/$defs/intWeights" }
+          },
+          "required": ["attempts", "hints", "feedback"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["env"],
+      "additionalProperties": true
+    },
     "template_rev": { "type": "integer" }
   },
-  "required": ["max_reseeds", "template_rev", "story"],
+  "required": ["max_reseeds", "template_rev", "story", "scorer"],
   "additionalProperties": true
 }

@@ -1,6 +1,6 @@
 # Core Loop
 
-**Last Updated**: 2026-07-04
+**Last Updated**: 2026-07-05
 
 The verb, cadence, shapes, and tiers of yen-cinthanai - the rules that do not change per screen. Frozen v1 spec; tuning numbers live in [difficulty-and-scoring.md](difficulty-and-scoring.md).
 
@@ -23,7 +23,7 @@ The hard part is the solver-driven generator (uniqueness + minimal-clue prune), 
 
 ## Cadence
 
-One headline puzzle per day = the ritual + the shared artifact. PLAY is one tap, resumes last-played. Four tiers (Easy/Standard/Sharp/Expert) and shapes live in a "more puzzles" drawer; the front door never asks the player to choose. Daily reset 00:00 UTC.
+One headline puzzle per day = the ritual + the shared artifact. PLAY is one tap: the first-ever play opens the Easy cold-open, otherwise it resumes the player's last-played tier (persisted in `settings.lastTier`). The four tiers (Easy/Standard/Sharp/Expert) are difficulty DIALS of the one game, not separate modes; they are chosen from a colour-coded difficulty sheet reached from a badge under PLAY or from the board - there is no separate "more puzzles" drawer, and the front door never asks the player to choose. Daily reset 00:00 UTC.
 
 ## First 60 seconds (Easy grid cold-open)
 
@@ -38,4 +38,3 @@ Free and unlimited but they cost the brag: any hint excludes the day from best-t
 - [difficulty-and-scoring.md](difficulty-and-scoring.md) - tier dials, scorer, stars, streak, copy.
 - [ui-shell.md](ui-shell.md) - screens and components.
 - [../architecture/contracts/schemas.md](../architecture/contracts/schemas.md) - manifest/save/bank/share.
-- [../../TODO/2026-06-29-system-design.md](../../TODO/2026-06-29-system-design.md) - plan-doc.

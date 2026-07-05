@@ -5,7 +5,7 @@ datasets/: the category value pools (the dimension source) and the scenario
 templates (narrative + clue templates). These are BUILD-TIME inputs only - not
 wired into tools/generate.py yet. The emitted PuzzleManifest lives in models.py.
 
-See TODO/2026-07-01-story-first-pivot.md, datasets/categories.json and
+See docs/architecture/generator/pipeline.md, datasets/categories.json and
 datasets/templates/weekend-market.json.
 """
 
