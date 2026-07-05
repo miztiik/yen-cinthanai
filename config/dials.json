@@ -12,5 +12,12 @@
     },
     "share_cap": 0.8
   },
+  "scorer": {
+    "env": {
+      "attempts": { "-1": 0, "3": 4, "2": 8, "1": 12 },
+      "hints": { "-1": 0, "2": 3, "1": 6, "0": 10 },
+      "feedback": { "realtime-names": 0, "count-wrong": 4, "binary-check": 8, "submit-binary": 12 }
+    }
+  },
   "template_rev": 1
 }

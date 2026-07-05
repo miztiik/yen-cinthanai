@@ -89,9 +89,10 @@ def test_p2_single_clue_eq_opener(story: tuple) -> None:
 def test_p4_difficulty_in_band(story: tuple) -> None:
     m, d = story
     tiers = g.load_config("tiers", CONFIG_DIR)[TIER]
+    env = g.load_config("dials", CONFIG_DIR)["scorer"]["env"]
     lo, hi = tiers["band"]
     indirect = sum(1 for c in m.constraints if c.type in g.INDIRECT_TYPES)
-    recomputed = g.difficulty(tiers, len(m.entities), m.categories.n, len(m.constraints), indirect, len(m.hintTrace))
+    recomputed = g.difficulty(tiers, len(m.entities), m.categories.n, len(m.constraints), indirect, len(m.hintTrace), env)
     assert recomputed == d
     assert lo <= recomputed <= hi
 

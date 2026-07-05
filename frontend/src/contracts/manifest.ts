@@ -1,7 +1,6 @@
 // PuzzleManifest v2 - bundle-shipped (rewrite-in-place, no migration). Matrix-only (grid) +
 // story-first: the seating/round-table engine is retired (Row 9d). See
-// docs/architecture/contracts/schemas.md and TODO/2026-06-29-system-design.md sec 5.
-// Types only; no logic here. BankIndex -> bank.ts, ShareCard -> share.ts.
+// docs/architecture/contracts/schemas.md. Types only; no logic here. BankIndex -> bank.ts, ShareCard -> share.ts.
 
 import type { Tier, ShapeId } from "./save";
 

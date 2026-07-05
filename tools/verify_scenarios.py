@@ -9,14 +9,13 @@ scenarios - bounded regardless of catalog size.
 The content-address of a scenario's verification is its `scenario_fingerprint`:
 
     scenario_fingerprint(id) = sha256( canonical-JSON(template) + generator_fingerprint() )
-    generator_fingerprint()  = sha256( bytes of tools/{generate,corpus,translator,models}.py
-                                       + config/{tiers,dials}.json )
+    generator_fingerprint()  = sha256( GENERATOR_VERSION + canonical-JSON(config/{tiers,dials}.json) )
 
 so the stamp invalidates when either the scenario TEMPLATE changes (its meaning, not its whitespace -
-the template is canonicalized first) or the GENERATOR changes (any source that can alter what the
-scenario generates). The fingerprint excludes this module and the test files (they do not affect the
-generated output). It is stable across the author's machine and CI because the repo commits LF
-(git autocrlf=input), so a stamp made locally matches the checkout CI verifies against.
+the template is canonicalized first), a config VALUE changes (a band, a weight - config is content-
+hashed), or an output-affecting generator-source change bumps GENERATOR_VERSION. A comment or a
+behaviour-preserving refactor of the .py sources does NOT re-stamp the catalog (the old raw-byte hash
+did). It is stable across the author's machine and CI because config is content-addressed, not byte-hashed.
 
 `verify_one(id)` is the shared verification primitive - it generates the scenario at EVERY tier and
 asserts the story-first invariants (P1 zero-guess, difficulty in band, schemaVersion 2, eq toehold, a
@@ -55,31 +54,34 @@ TEMPLATES_DIR = _ROOT / "datasets" / "templates"
 VERIFY_DATE = "2026-07-01"
 VERIFY_VARIANT = 1
 
-# The generator sources whose bytes define a "generator version": a byte change to any of these can
-# alter what a scenario generates, so it must invalidate every scenario's stamp. This module and the
-# test files are DELIBERATELY excluded - they do not affect the generated output. POSIX-relative to
-# the repo root; concatenated in this fixed order.
-_FINGERPRINT_SOURCES = (
-    "tools/generate.py",
-    "tools/corpus.py",
-    "tools/translator.py",
-    "tools/models.py",
-    "config/tiers.json",
-    "config/dials.json",
-)
+# GENERATOR_VERSION is the explicit behaviour version of the generator SOURCES
+# (tools/{generate,corpus,translator,models}.py). BUMP IT when a source change alters what a scenario
+# GENERATES - a new/removed clue type, a changed acceptance rule, a different render. A comment, a
+# rename, or a behaviour-preserving refactor does NOT bump it, so it does not re-stamp the ~100-
+# scenario catalog. A missed bump is still caught: tools/test_generate.py generates + invariant-checks
+# the fixture date at every tier on EVERY run, so the stamp is a catalog-sweep cache, not the only
+# gate. (Explicit-version over raw-byte hashing: an AI-agent-authored casual game does not need the
+# byte-hash's coarse "re-stamp on any edit" tax.)
+GENERATOR_VERSION = 1
+
+# Config inputs that feed generation, content-hashed (canonicalized JSON) so a reformat is free but a
+# value change - a tier band, a clue weight, an ENV weight - moves the fingerprint.
+_FINGERPRINT_CONFIG = ("config/tiers.json", "config/dials.json")
 
 
 # --- content-address (fingerprint) ----------------------------------------------
 
 
 def generator_fingerprint(root: Path = _ROOT) -> str:
-    """sha256 over the concatenated raw bytes of the generator sources, in the fixed order above.
-    Deterministic and stable cross-platform: the repo commits LF (git autocrlf=input), so a stamp
-    made on the author's machine hashes the same bytes CI checks out. A change to any listed source
-    invalidates every scenario's stamp (the safe, coarse-grained default)."""
+    """sha256 over GENERATOR_VERSION + the canonical JSON of the config inputs. Replaces the old raw-
+    byte hash of the .py sources (which re-stamped the whole catalog on any edit, even a comment).
+    Config is content-addressed (canonicalized), so file formatting is irrelevant and only VALUES move
+    the fingerprint; bump GENERATOR_VERSION for an output-affecting generator-source change."""
     h = hashlib.sha256()
-    for rel in _FINGERPRINT_SOURCES:
-        h.update((root / rel).read_bytes())
+    h.update(f"v{GENERATOR_VERSION}".encode("ascii"))
+    for rel in _FINGERPRINT_CONFIG:
+        obj = json.loads((root / rel).read_text(encoding="ascii"))
+        h.update(json.dumps(obj, sort_keys=True, ensure_ascii=True, separators=(",", ":")).encode("ascii"))
     return h.hexdigest()
 
 

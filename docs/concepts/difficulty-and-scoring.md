@@ -1,6 +1,6 @@
 # Difficulty and Scoring
 
-**Last Updated**: 2026-06-29
+**Last Updated**: 2026-07-05
 
 The difficulty scorer, tier bands, stars, streak, and celebration copy. Tunable values live in `config/`; this doc is the contract for what they mean.
 
@@ -17,7 +17,13 @@ ENV   = ATT + HINT + FB
   FB   realtime-names=0 count=4 binary-check=8 submit-binary=12
 ```
 
+The ATT/HINT/FB weight tables above are the meaning-contract; their numeric values live in `config/dials.json` under `scorer.env` (Holy Law #6), read by `difficulty()` in the generator - not hardcoded.
+
 A generated puzzle whose D is outside the tier band is rejected and reseeded - the calibration gate, not a vibe.
+
+## Switching tier (on-board, lossless)
+
+Difficulty is a returning-player dial, placed where "too easy / too hard" is actually felt: the board (and the landing) show a colour-coded difficulty badge that opens a sheet of all four tiers. Picking one loads that tier's puzzle. Switching is LOSSLESS by construction - each `(date, tier, shape)` has its own save slot (`dayKey`), so parking one tier and loading another never destroys marks; switch back and the marks are intact. This doubles as a sanctioned anti-frustration exit (drop a tier instead of rage-quitting) with no dark pattern - no confirm, no nag, no lost work. The last-loaded tier is remembered (`settings.lastTier`) so bare PLAY resumes it.
 
 | Tier | band | E x C | N | indir | attempts | hints | feedback | PAR |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -45,7 +51,9 @@ skipsLeft = 1, refills each Monday 00:00 UTC. Miss a day with a skip -> burn it,
 
 ## Stuck-moment
 
-Idle 12s pulse next token (free, uncounted); idle 25s glow the clue chip; wrong x2 same slot highlight conflicting clue; wrong x4 offer replay-confidence. Never sell, never timer-wall.
+The intended anti-frustration behaviour: idle 12s pulse next token (free, uncounted); idle 25s glow the clue chip; wrong x2 same slot highlight conflicting clue; wrong x4 offer replay-confidence. Never sell, never timer-wall.
+
+NOTE (2026-07-05): the runtime does not yet implement these idle / wrong-count reactions - there is no idle or wrong-count handler in `frontend/src` today. This section is the specification for that behaviour; wire it against the play state, then delete this note.
 
 ## Copy bags (config/copy.toml)
 

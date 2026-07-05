@@ -2,7 +2,7 @@
 
 **Last Updated**: 2026-07-04
 
-This is the rules-only digest every persona must honour. It restates `CLAUDE.md` constraints in one place so an agent can scan the constraints quickly and so other docs (ADRs, agent files, code reviews) can link to specific rules. The authoritative source remains [`CLAUDE.md`](../../CLAUDE.md); if this doc and `CLAUDE.md` disagree, `CLAUDE.md` wins and this digest gets updated.
+This is the rules-only digest every persona must honour. It restates `CLAUDE.md` constraints in one place so an agent can scan the constraints quickly and so other docs (design-rationale sections, agent files, code reviews) can link to specific rules. The authoritative source remains [`CLAUDE.md`](../../CLAUDE.md); if this doc and `CLAUDE.md` disagree, `CLAUDE.md` wins and this digest gets updated.
 
 Loaded by [`bootstrap.md`](bootstrap.md) as part of every persona's startup ritual.
 
@@ -27,7 +27,7 @@ Adding a sixth persona requires a distinct altitude not already covered; two per
 1. **Static-first production.** The deployed game is a static bundle on GitHub Pages. No production backend. Everything the game needs at runtime ships in the bundle.
 2. **The player's phone is the architecture.** Every runtime decision is measured against a mid-tier Android (Snapdragon 6-series, 4GB RAM, ~2022) over patchy 4G: input-to-photon < 50ms, sustained 60fps. Ship the richer game first, then optimize (code-split, lazy-load, WASM, asset compression) only when the target device drops below 60fps. No fixed byte cap.
 3. **Contracts before logic.** Every persisted shape - save format, level data, asset manifest - gets a typed schema before logic is written.
-4. **docs/ = agent memory, not ADR sprawl.** Gameplay rules, UI shape, tuning knobs, and subsystem contracts live in `docs/concepts/`, `docs/how-to/`, or `docs/architecture/<area>/`. A new file under `docs/architecture/decisions/` only for an actively explored choice with a real rejected alternative, cross-system consequences, and non-trivial reversal cost.
+4. **docs/ = agent memory; a decision lives on the page it impacts.** Gameplay rules, UI shape, tuning knobs, and subsystem contracts live in `docs/concepts/`, `docs/how-to/`, or `docs/architecture/<area>/`. A choice that clears the bar (real rejected alternative, cross-system consequences, non-trivial reversal cost) becomes a `## Design rationale` / `## Rejected alternatives` section on the living doc it impacts - no ADR file, no `docs/architecture/decisions/` directory.
 5. **Structural fixes only.** No band-aids, no monkey patches, no "temporary" hacks. Escalate the correction level instead.
 6. **No hardcoding.** Tunable knobs (game-balance numbers, asset paths, difficulty thresholds) live in `config/`; schema-validated.
 7. **No mocks unless asked.** Real implementations and real fixtures. Mocks only on explicit request or for a genuinely untestable external boundary (`fetch` in loader unit tests, a WASM module).
@@ -75,7 +75,7 @@ In-memory `Path` objects for local I/O may stay platform-native; the rule applie
 - `frontend/src/` MUST NOT depend on a runtime backend service - there is none in production.
 - `tools/` (the Python build-time pipeline: OR-Tools solver, glyph + asset bake) is the only writer of pipeline output under `frontend/public/`. The game reads only pipeline output, never raw `assets/` sources.
 - Game / domain code MUST NOT import build tools.
-- Long compute (physics step, pathfinding, procedural generation, the puzzle solver) runs in a Web Worker; the main thread keeps painting.
+- Long compute in the browser (any future physics step, pathfinding, or procedural generation) runs in a Web Worker; the main thread keeps painting. The puzzle solver is build-time (Python in `tools/`), so it never runs on the runtime thread.
 - The game canvas is one DOM element styled by Tailwind to fit its container. Tailwind does NOT style canvas internals - those are the renderer's job.
 
 ## Schema versioning (rules only - see `CLAUDE.md` section 11 for full spec)

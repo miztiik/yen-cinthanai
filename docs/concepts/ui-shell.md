@@ -1,18 +1,18 @@
 # UI Shell
 
-**Last Updated**: 2026-07-02
+**Last Updated**: 2026-07-05
 
 Screens, components, glyphs, tokens. Mid-tier Android portrait (~390x844). Tailwind for chrome only; canvas/board internals excluded. Glyph packs are auto-discovered from the asset tree (the GlyphManifest; 12+ and growing). Visual clarity (colour-is-one-signal), not a11y tooling.
 
 ## Screens
 
-- Landing: PLAY (one tap, resumes last), gear, flame+best, "more puzzles" drawer handle. No tier picker, no tutorial.
-- Board: back | tier | timer | hints; story cold-open + numbered clue list; the cross-out grid (GridMap navigator + NotesGrid one-block editor) is the primary deduction surface; the token SlotBoard + pool appear only for a shared-cardinality category; thumb zone reset/check.
+- Landing: PLAY (one tap; first-ever = Easy cold-open, else resumes the last-played tier), gear, flame+best, and a colour-coded difficulty badge (the ascending-bars TierMeter) bound directly under PLAY as one CTA cluster. Tapping the badge opens the difficulty sheet. No separate "more puzzles" drawer, no tier picker screen, no tutorial. The single-line "Yen Cinthanai" wordmark is a container-query lockup (fits one line from phone to desktop).
+- Board: back | difficulty badge | timer | hints; story cold-open + numbered clue list; the cross-out grid (GridMap navigator + NotesGrid one-block editor) is the primary deduction surface; the token SlotBoard + pool appear only for a shared-cardinality category; thumb zone reset/check. The tier readout is the same tappable colour-coded difficulty badge (word-less; the level name is taught in the sheet), so difficulty is switchable in-place - lossless, since each (date,tier,shape) keeps its own save slot.
 - End-card (held = screenshot): bag phrase + time/wrong/hints + streak + spoiler-safe bar + SHARE. Hero = gold tint + crown.
 - Fail-card: encourage phrase + progress + reveal(opt-in)/retry.
 - Settings: Audio, Look, Data, Credits (4 groups, sound mute-default).
 - Stats: flame/best/solved, sparkline, 7-day dots (x=skip). No shame UI.
-- Shape-drawer: tier + shape, behind PLAY, own route (clean back); grid/seating/round-table all live.
+- Shape-drawer: tier + shape, behind PLAY, own route (clean back). Grid (the story matrix) is the only live shape; the seating-row/round-table positional engine is retired (matrix-only, Row 9d) - see [../architecture/generator/pipeline.md](../architecture/generator/pipeline.md).
 
 ## Feedback (transform/opacity)
 
@@ -36,11 +36,17 @@ Heterogeneous-source icons are normalized by seating each inside ONE standard ci
 
 ## Components (metadata-driven)
 
-Puck (the universal circular frame), Token, Slot, SlotBoard, Pool, GridMap, NotesGrid, GridCell, ClueChip, StoryPanel, ClueList, ClueRow, HUDBar, ActionBar, ResultCard, ShareBar, StatTile, SettingsRow (+ BottomSheet primitive). No per-screen bespoke; one Puck is the single circle used by token + filled slot + seat. Story-first manifests render StoryPanel + ClueList (text) + the cross-out grid (GridMap + NotesGrid) as the primary surface; the token SlotBoard + Pool remain only for a shared-cardinality column.
+Puck (the universal circular frame), Token, Slot, SlotBoard, Pool, GridMap, NotesGrid, GridCell, ClueChip, StoryPanel, ClueList, ClueRow, ActionBar, ResultCard, ShareBar, StatTile, SettingsRow (+ BottomSheet primitive). No per-screen bespoke; one Puck is the single circle used by token + filled slot + seat. Story-first manifests render StoryPanel + ClueList (text) + the cross-out grid (GridMap + NotesGrid) as the primary surface; the token SlotBoard + Pool remain only for a shared-cardinality column.
 
 ## Tailwind tokens
 
 colors bg/surface/ink/accent/satisfy/violate/near/gold (CSS vars, palette-swappable); space 4-32, targets >=48; radii 8/16; motion 120/180 transform+opacity. Config-driven (D16).
+
+## Ambient shell + difficulty badge
+
+The whole-app background is a fixed, composited two-layer aurora (app.css): layer A (`body::before`) slowly transform-drifts; layer B (`html::before`) is a warmer bloom set whose OPACITY cross-fades over minutes so the palette appears to shift imperceptibly - transform + opacity only, so an animation that runs forever costs the compositor ~nothing (never `background-position` / `@property`-stop / `filter`, which repaint a full-viewport layer every frame). Both layers are token-tied (restyle on a palette swap); the timing (`driftSeconds` / `shiftSeconds` / `shiftDepth`) is config-driven in `config/ui.json [ambient]`, applied by `lib/ambient.ts` as CSS custom properties; reduced-motion zeroes it to a static warm field.
+
+Difficulty is a colour-coded `TierMeter` (a row of ascending bars, `rank` filled in the tier's token colour) - the bar COUNT carries the level so the word is dropped from the badge (colour never alone; the aria-label + the sheet's names carry it for a screen reader). It is chrome (tokenized `<div>`/`<span>` bars, the ResultCard progress-bar precedent), NOT a glyph icon, so Holy Law #10 is untouched. Order + per-tier colour live in `config/ui.json [difficulty]`. The `DifficultyPicker` sheet (bottom on phone, centered on desktop) lists every tier as name + bars and hands the pick back to the caller, which loads that tier's puzzle.
 
 ## See also
 

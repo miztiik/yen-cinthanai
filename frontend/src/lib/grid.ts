@@ -11,7 +11,7 @@
 // the same block shares this cell's row or column - one endpoint) and BLANK. We NEVER
 // auto-TICK a cell (only ever auto-X) so the last-cell-standing aha is preserved, and
 // auto-X SKIPS a manual-X (manual-X survives, since it lives in its own authored set).
-// See TODO/2026-07-01-story-first-pivot.md sec 8 (Decisions 1-4) and core-loop.md.
+// See docs/concepts/core-loop.md.
 
 import type { AttributeCategory } from "../contracts/manifest";
 import type { BoardModel } from "./board";

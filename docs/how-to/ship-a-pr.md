@@ -2,9 +2,9 @@
 
 **Last Updated**: 2026-06-07
 
-The end-to-end runbook for taking a worker branch from "ready to commit" to "merged + cleaned up". Procedural counterpart to [CLAUDE.md](../../CLAUDE.md) §8 (Git Hygiene) + §9 (Definition of Done) + §12 (UI Verification).
+The end-to-end runbook for taking a worker branch from "ready to commit" to "merged + cleaned up". Procedural counterpart to [CLAUDE.md](../../CLAUDE.md) section 8 (Git Hygiene) + section 9 (Definition of Done) + section 12 (UI Verification).
 
-The runbook is stack-agnostic on purpose: yen-cinthanai has not yet picked its build tool, test runner, or component layer (CLAUDE.md §3 says those land alongside the first real PR). The git mechanics and the 2-commit-then-squash pattern apply today; the specific gate commands fill in once the stack lands.
+The runbook is stack-agnostic on purpose: yen-cinthanai has not yet picked its build tool, test runner, or component layer (CLAUDE.md section 3 says those land alongside the first real PR). The git mechanics and the 2-commit-then-squash pattern apply today; the specific gate commands fill in once the stack lands.
 
 ## When to run
 
@@ -12,7 +12,7 @@ For any PR you author. The mechanics scale - a one-line typo fix runs the same s
 
 ## Inputs
 
-- A correction-level assessment per [CLAUDE.md](../../CLAUDE.md) §6 (Level 0 / 1 / 2 / 3 / 4 / 5). Level 5 stops here for design consultation.
+- A correction-level assessment per [CLAUDE.md](../../CLAUDE.md) section 6 (Level 0 / 1 / 2 / 3 / 4 / 5). Level 5 stops here for design consultation.
 - Branch name in the form `<type>/<scope>-<slug>` (e.g. `feat/level-1-prototype`, `chore/asset-pipeline-skeleton`, `docs/save-format-schema`).
 
 ## Pre-flight
@@ -73,19 +73,19 @@ git commit -m "stamp(<scope>): PR #NNN"
 git push
 ```
 
-Do not create a new architecture decision as a routine PR stamp. Update the living doc that owns the current shape. Create a new file under `docs/architecture/decisions/` only when this PR actively explored and rejected a real architecture alternative with non-trivial reversal cost.
+Do not record an architecture decision as a routine PR stamp. Update the living doc that owns the current shape. When this PR actively explored and rejected a real architecture alternative with non-trivial reversal cost, add a `## Design rationale` / `## Rejected alternatives` section to that same living doc - there is no `docs/architecture/decisions/` directory.
 
 ## The Definition-of-Done gates
 
-Run the gates appropriate to the surface before merge. Reference: [CLAUDE.md](../../CLAUDE.md) §9 (DoD) + §12 (UI Verification) + §13 (Test Coverage Policy).
+Run the gates appropriate to the surface before merge. Reference: [CLAUDE.md](../../CLAUDE.md) section 9 (DoD) + section 12 (UI Verification) + section 13 (Test Coverage Policy).
 
-The gate _commands_ depend on the stack picks (build tool, test runner, type-check tool, lint), which land alongside the first real PR per CLAUDE.md §3. The gate _categories_ are stable:
+The gate _commands_ depend on the stack picks (build tool, test runner, type-check tool, lint), which land alongside the first real PR per CLAUDE.md section 3. The gate _categories_ are stable:
 
 1. **Schema / contract validation** - every persisted shape (save format, level data, asset manifest) validates against its schema.
-2. **Unit + contract tests** - per CLAUDE.md §13. Real fixtures, no mocks.
+2. **Unit + contract tests** - per CLAUDE.md section 13. Real fixtures, no mocks.
 3. **Integration + e2e tests** - if the change touches the render loop, physics, or asset load.
 4. **Lint + type-check** - zero-warning policy.
-5. **Browser smoke** - per CLAUDE.md §12. For any runtime change: dev server up, navigate affected routes, console clean, perf check on a mid-tier Android profile if the change touches render / physics / asset load.
+5. **Browser smoke** - per CLAUDE.md section 12. For any runtime change: dev server up, navigate affected routes, console clean, perf check on a mid-tier Android profile if the change touches render / physics / asset load.
 
 Once the stack is picked, this section gets the actual commands inline.
 
@@ -163,6 +163,6 @@ If the PR taught you something durable - a new pattern, a gotcha, a generalisabl
 
 ## See also
 
-- [CLAUDE.md](../../CLAUDE.md) §8 (Git Hygiene), §9 (Definition of Done), §12 (UI Verification), §13 (Test Coverage Policy)
+- [CLAUDE.md](../../CLAUDE.md) section 8 (Git Hygiene), section 9 (Definition of Done), section 12 (UI Verification), section 13 (Test Coverage Policy)
 - [distill-a-plan.md](distill-a-plan.md) - what to do with the lessons a PR produced
 - [../reference/documentation-structure.md](../reference/documentation-structure.md) - which doc tier the distilled content belongs in

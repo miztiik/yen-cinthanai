@@ -88,12 +88,6 @@ def _definite(status: int) -> int:
         )
     return status
 
-# Difficulty ENV dial weights (docs/concepts/difficulty-and-scoring.md). Keyed by
-# the config/tiers.json dial values; no magic numbers escape this table.
-_ATT = {-1: 0, 3: 4, 2: 8, 1: 12}
-_HINT = {-1: 0, 2: 3, 1: 6, 0: 10}
-_FB = {"realtime-names": 0, "count-wrong": 4, "binary-check": 8, "submit-binary": 12}
-
 
 # --- config ---------------------------------------------------------------------
 
@@ -537,11 +531,13 @@ def _clue_ids_for(clues: list[Clue], cat: str, val: str) -> list[str]:
 # --- difficulty scorer ----------------------------------------------------------
 
 
-def difficulty(tier_dial: dict, entities: int, n_cats: int, n_clues: int, indirect: int, depth: int) -> int:
+def difficulty(tier_dial: dict, entities: int, n_cats: int, n_clues: int, indirect: int, depth: int, env: dict) -> int:
     size = entities * n_cats
     indir = round(20 * indirect / n_clues) if n_clues else 0
-    env = _ATT[tier_dial["attempts"]] + _HINT[tier_dial["hints"]] + _FB[tier_dial["feedback"]]
-    return size + depth + indir + env
+    e = (env["attempts"][str(tier_dial["attempts"])]
+         + env["hints"][str(tier_dial["hints"])]
+         + env["feedback"][tier_dial["feedback"]])
+    return size + depth + indir + e
 
 
 # --- emit manifest --------------------------------------------------------------
@@ -726,7 +722,7 @@ def build_story(
         clues = select_minimal(cats, entities, cand, story["weights"], seed, rng)
         hints = hint_trace(cats, entities, clues, sol, seed)
         indirect = sum(1 for c in clues if c[0] in INDIRECT_TYPES)
-        d = difficulty(tiers, entities, len(cats), len(clues), indirect, len(hints))
+        d = difficulty(tiers, entities, len(cats), len(clues), indirect, len(hints), dials["scorer"]["env"])
         log.append({"attempt": attempt, "clues": len(clues), "indirect": indirect, "depth": len(hints), "D": d})
         if _story_acceptable(clues, hints, d, band, share_cap, numeric_types, full_depth, indir_band):
             m = to_story_manifest(

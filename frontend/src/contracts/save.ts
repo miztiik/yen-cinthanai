@@ -1,5 +1,5 @@
-// Save v1 - the only migrating surface. See docs/architecture/contracts/schemas.md
-// and TODO/2026-06-29-system-design.md sec 5.3. Types only; no logic here.
+// Save v1 - the only migrating surface. See docs/architecture/contracts/schemas.md.
+// Types only; no logic here.
 
 export type Tier = "easy" | "standard" | "sharp" | "expert";
 export type ShapeId = "grid" | "seating-row" | "round-table";
@@ -50,6 +50,9 @@ export interface Settings {
   palette: string;
   reducedMotion: boolean;
   puckSize: PuckSize;
+  /** Last-played difficulty, so PLAY resumes it (first-ever play = easy cold-open).
+   *  Additive-optional: an older save without it still loads (schemaVersion stays 1). */
+  lastTier?: Tier;
 }
 
 export interface Save {

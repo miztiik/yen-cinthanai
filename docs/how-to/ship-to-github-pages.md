@@ -1,19 +1,8 @@
 # How To Ship To GitHub Pages
 
-**Last Updated**: 2026-07-05
+**Last Updated**: 2026-06-28
 
 Use this runbook when changing routing, deployment, PWA metadata, service-worker behaviour, or URLs that need to work under the GitHub Pages project base path.
-
-## Deploy Pipeline (CI gate)
-
-Deployment is chained behind CI so a red build never publishes:
-
-- On every push to `master`, the `ci` workflow runs (typecheck, lint, test, `npm run build`, and the generator pytest suite).
-- The `deploy` workflow triggers on `workflow_run` of `ci` and only proceeds when the CI run concluded `success`. It builds the exact commit CI validated (`github.event.workflow_run.head_sha`) and publishes `frontend/dist` to Pages.
-- If CI fails, the deploy run's `build` job is skipped, `deploy` (which `needs: build`) is skipped too, and the previously live bundle stays up.
-- `workflow_dispatch` on the `deploy` workflow is a manual escape hatch that bypasses the CI gate for a forced re-deploy. Use it only when you have separately confirmed the build is green.
-
-Consequence: master must be green for new content to reach the live site. A stale lint or test failure on `master` blocks all deploys until it is fixed.
 
 ## Base Path Rules
 
@@ -51,7 +40,5 @@ Service-worker changes require browser smoke in a production-like build because 
 
 ## See also
 
-- [../concepts/multi-game-shell.md](../concepts/multi-game-shell.md) - shell routing and game loading.
-- [../architecture/decisions/0001-routing-path-with-404-fallback.md](../architecture/decisions/0001-routing-path-with-404-fallback.md) - path-routing decision.
-- [../architecture/decisions/0010-gh-pages-base-path-override.md](../architecture/decisions/0010-gh-pages-base-path-override.md) - Vite base-path decision.
-- [../architecture/decisions/0015-service-worker-pwa.md](../architecture/decisions/0015-service-worker-pwa.md) - service-worker decision.
+- [../architecture/runtime/stack-and-bundle.md](../architecture/runtime/stack-and-bundle.md) - the runtime stack, PWA/offline contract, and base-path handling this runbook deploys (where the routing and service-worker rationale lives).
+- [../concepts/ui-shell.md](../concepts/ui-shell.md) - the screens and routing the SPA fallback serves.

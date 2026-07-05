@@ -26,7 +26,7 @@ For each finding in the closed row's narrative, apply the routing rules in [../r
 | Current gameplay rule, UI shape, tuning invariant, or cross-subsystem vocabulary                                         | **Concept doc** under `docs/concepts/<slug>.md`                | "How does the daily board seed work?" -> `docs/concepts/`                  |
 | Current shape / layout / contract of one subsystem                                                                       | **Subsystem doc** under `docs/architecture/<area>/<slug>.md`   | "How is the save format laid out on disk?" -> `docs/architecture/save-format/layout.md`          |
 | Operator runbook / step-by-step procedure                                                                                | **How-to doc** under `docs/how-to/<verb>-<slug>.md`            | "How do I tune a game-feel knob?" -> `docs/how-to/`                            |
-| Architecture choice with actively explored rejected alternatives + non-trivial reversal cost + cross-system consequences | **Architecture decision** under `docs/architecture/decisions/` | "Why Rapier WASM instead of cannon-es for the physics engine?" -> architecture decision + doc link |
+| Architecture choice with actively explored rejected alternatives + non-trivial reversal cost + cross-system consequences | **`## Design rationale` / `## Rejected alternatives` section on the impacted subsystem / concept doc** (no ADR file, no `decisions/` dir) | "Why Rapier WASM instead of cannon-es?" -> a rationale section on the runtime subsystem doc |
 | Agent-only execution lesson (gotcha, recurring trap, tool quirk)                                                         | **`/memories/lessons.md`** (memory tool)                       | "the cosmetic gh-merge confirmation pattern"; "PowerShell BOM bites `git commit -F`"            |
 | Per-PR audit trail                                                                                                       | **Stays in the plan-doc `CLOSED` sub-section**                 | Diff stat, gate results, discoveries specific to this PR's execution                              |
 
@@ -78,33 +78,24 @@ This preserves the audit trail (someone reading the plan-doc later sees what was
 
 Use the memory tool. Findings that are about _how to do agent work_ (PR-shipping gotchas, command-line quirks, parallelisation traps, recurring failure modes) belong in user memory, not in `docs/`. The line is: `docs/` is for project knowledge a developer would read; `/memories/lessons.md` is for agent execution craft.
 
-### Step 5 - declare the plan-doc closed
+### Step 5 - delete the plan-doc
 
-When the last live row closes, append a final block:
+When the last live row closes and every finding is distilled (steps 1-4), DELETE the plan-doc. Git history - the merge commits, the branch names, `git log --follow <path>` - is the durable "what was tried, in what order, by which PR" record; a finished plan-doc left in `TODO/` is stale clutter a future reader mistakes for live work. The distilled findings in `docs/` are the live knowledge, and this repo is authored by AI agents against git, so the version-control history IS the tree-ring artifact - a second copy in `TODO/` earns nothing.
 
-```
-## Plan complete
-
-Closed YYYY-MM-DD. All rows merged. Distillation complete:
-- Row X.Y -> [target](path)
-- Row X.Z -> [target](path)
-- ...
-
-Plan-doc remains as the audit ledger; do not edit further. New work starts a new plan-doc.
-```
-
-Do NOT delete the plan-doc. It is the durable record of what was tried, in what order, by which PR - a tree-ring artifact. The distilled findings are the live knowledge; the plan-doc is the history of how they came to be.
+Before deleting, confirm every durable finding has a canonical home (step 2) and repoint any code comment or doc that cited a plan-doc section to that home, so the deletion leaves no dangling reference.
 
 ## Anti-patterns
 
 - **Plan-doc as the only home for a finding.** A future agent searching `docs/` for the topic will not find the plan-doc; plan-docs are not browseable knowledge. If the finding is durable, lift it to `docs/`.
 - **Re-distillation in a later PR.** Once a finding is in `docs/`, later PRs that touch the same area edit the doc directly. Do not re-lift the same finding from a new plan-doc.
-- **Distilling speculation.** Only distill what shipped. A considered approach we did not take goes in a living doc's rejected-experiment note unless it is a costly architecture choice that earns a new decision record.
+- **Distilling speculation.** Only distill what shipped. A considered approach we did not take goes in a living doc's rejected-experiment note; a costly architecture choice earns a `## Rejected alternatives` section on the doc it impacts, not a separate record.
 - **Editorial bloat in the lifted doc.** The target doc gets a sentence or two, not the plan-doc's full narrative. If the lifted text is longer than the doc it joins, you are pasting, not distilling.
 - **Skipping the back-reference step.** Without the pointer, the plan-doc reads like the finding vanished. The pointer is a one-liner; do it.
 
 ## See also
 
+- [author-a-plan.md](author-a-plan.md) - authoring the plan-doc this runbook later closes.
+- [execute-a-plan.md](execute-a-plan.md) - the orchestrator contract that runs the plan before closure.
 - [ship-a-pr.md](ship-a-pr.md) - the PR lifecycle whose `CLOSED` sub-sections are this runbook's input.
-- [CLAUDE.md](../../CLAUDE.md) §5 (Documentation Discipline) - the rules every distilled doc must honour.
+- [CLAUDE.md](../../CLAUDE.md) section 5 (Documentation Discipline) - the rules every distilled doc must honour.
 - [../reference/documentation-structure.md](../reference/documentation-structure.md) - the Diataxis tier definitions and the doc-class routing contract.
