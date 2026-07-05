@@ -23,7 +23,9 @@ A generated puzzle whose D is outside the tier band is rejected and reseeded - t
 
 ## Switching tier (on-board, lossless)
 
-Difficulty is a returning-player dial, placed where "too easy / too hard" is actually felt: the board (and the landing) show a colour-coded difficulty badge that opens a sheet of all four tiers. Picking one loads that tier's puzzle. Switching is LOSSLESS by construction - each `(date, tier, shape)` has its own save slot (`dayKey`), so parking one tier and loading another never destroys marks; switch back and the marks are intact. This doubles as a sanctioned anti-frustration exit (drop a tier instead of rage-quitting) with no dark pattern - no confirm, no nag, no lost work. The last-loaded tier is remembered (`settings.lastTier`) so bare PLAY resumes it.
+## Switching tier (on-board, lossless)
+
+Difficulty is a returning-player dial, placed where "too easy / too hard" is actually felt: the board (and the landing) show a colour-coded difficulty badge - the cross-app STANDARDIZED ramp (green #22c55e -> yellow #eab308 -> orange #f97316 -> red #ef4444) - that opens a sheet of all four tiers. Picking one loads that tier's puzzle. Switching is LOSSLESS by construction - each `(date, tier, shape)` has its own save slot (`dayKey`), so parking one tier and loading another never destroys marks; switch back and the marks are intact. This doubles as a sanctioned anti-frustration exit (drop a tier instead of rage-quitting) with no dark pattern - no confirm, no nag, no lost work. The last-loaded tier is remembered (`settings.lastTier`) so bare PLAY resumes it (first-ever = easy).
 
 | Tier | band | E x C | N | indir | attempts | hints | feedback | PAR |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |

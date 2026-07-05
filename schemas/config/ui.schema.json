@@ -10,6 +10,12 @@
       "date": "2026-07-02",
       "change": "Initial machine-checkable formalization of config/ui.json: puck{default,small,medium,large{diameter,glyph}}, snap{ease,radius_factor}, plus additive clue{autoDimFeedback[]} and grid{cell,snap} blocks.",
       "why": "UI geometry is baked and shipped, so a malformed puck diameter or snap radius must fail fast (CLAUDE.md #6); feature rows add UI blocks, so extra keys stay tolerant."
+    },
+    {
+      "version": 2,
+      "date": "2026-07-05",
+      "change": "Additive ambient{driftSeconds,shiftSeconds,shiftDepth} block (imperceptible warm background shell timing) + difficulty{order,colors} block (the ascending-bars TierMeter rank order + per-tier fill colour token) for the on-board / landing difficulty switcher.",
+      "why": "Shell animation timing and the difficulty colour-coding must be human-edited knobs, not hardcoded (CLAUDE.md #6); both are applied as CSS/chrome from config so they tune without a code change."
     }
   ],
   "$defs": {
@@ -29,6 +35,27 @@
         "radius_factor": { "type": "number" }
       },
       "required": ["ease", "radius_factor"],
+      "additionalProperties": false
+    },
+    "ambientSpec": {
+      "type": "object",
+      "description": "Whole-app background shell timing. driftSeconds = the slow transform drift of aurora layer A; shiftSeconds = the warm opacity cross-fade cycle of layer B (set to 90-180 for 'a minute or two to notice'); shiftDepth = layer B peak opacity 0..1 (keep <=0.6 so the morph stays subtle).",
+      "properties": {
+        "driftSeconds": { "type": "number", "exclusiveMinimum": 0 },
+        "shiftSeconds": { "type": "number", "exclusiveMinimum": 0 },
+        "shiftDepth": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "required": ["driftSeconds", "shiftSeconds", "shiftDepth"],
+      "additionalProperties": false
+    },
+    "difficultySpec": {
+      "type": "object",
+      "description": "Difficulty (tier) chrome for the ascending-bars TierMeter. order = tiers low-to-high; a tier's index+1 in order is its filled-bar count (rank). colors maps a tier id to the CSS colour used to fill its bars - the cross-app standardized difficulty ramp (hex, e.g. #22c55e green .. #ef4444 red, shared with the sibling app), or a var(--token). The bar COUNT carries the level (a non-colour signal), so the word may be dropped from the badge.",
+      "properties": {
+        "order": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "colors": { "type": "object", "additionalProperties": { "type": "string" } }
+      },
+      "required": ["order", "colors"],
       "additionalProperties": false
     }
   },
@@ -62,7 +89,9 @@
         "snap": { "$ref": "#/$defs/snapSpec" }
       },
       "additionalProperties": true
-    }
+    },
+    "ambient": { "$ref": "#/$defs/ambientSpec" },
+    "difficulty": { "$ref": "#/$defs/difficultySpec" }
   },
   "required": ["puck", "snap"],
   "additionalProperties": true

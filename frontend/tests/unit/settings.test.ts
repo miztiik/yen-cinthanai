@@ -40,4 +40,9 @@ describe("settings", () => {
     expect(s.theme).toBe("dark");
     expect(s.palette).toBe("ember");
   });
+  it("lastTier persists so PLAY resumes the level (first-ever is undefined)", () => {
+    expect(freshSave().settings.lastTier).toBeUndefined();
+    updateSettings({ lastTier: "sharp" }, "2026-06-29");
+    expect(loadSave().settings.lastTier).toBe("sharp");
+  });
 });

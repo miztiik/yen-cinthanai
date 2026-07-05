@@ -54,19 +54,26 @@
   color-scheme: light;
 }
 
+html {
+  background-color: var(--bg);
+}
 html,
 body {
   margin: 0;
   min-height: 100dvh;
-  background-color: var(--bg);
   color: var(--ink);
   font-family: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Modern shell: a fixed, composited two-tone aurora mesh behind everything. Painted once
-   (position: fixed) so it never repaints on scroll (Carmack: no scroll-linked jank). A cool
-   accent bloom top-left + a warm gold bloom bottom-right give the page depth without a flat
-   wash; both are token-tied so they restyle on a theme/palette swap. */
+/* Modern shell: a fixed, composited aurora behind everything, built from TWO token-tied
+   layers that cross-fade so the warmth breathes imperceptibly (config/ui.json [ambient],
+   applied by lib/ambient.ts). Layer A (body::before) is the base bloom set, slowly
+   transform-drifting (position, never colour) over var(--ambient-drift-s). Layer B
+   (html::before) is a WARMER bloom set whose OPACITY cross-fades in and out over minutes
+   (var(--ambient-shift-s)) so the palette appears to shift with no per-frame repaint - only
+   transform + opacity touch the compositor (Carmack: no scroll/paint jank). The opaque base
+   colour lives on <html> (above) so layer B - painted behind body - is never occluded.
+   reduced-motion (below) zeroes the durations, freezing a static warm field. */
 body::before {
   content: "";
   position: fixed;
@@ -78,8 +85,7 @@ body::before {
     radial-gradient(48% 44% at 80% 28%, color-mix(in oklab, var(--gold) 16%, transparent), transparent 70%),
     radial-gradient(52% 48% at 66% 88%, color-mix(in oklab, var(--near) 14%, transparent), transparent 72%),
     radial-gradient(46% 42% at 16% 82%, color-mix(in oklab, var(--accent) 10%, transparent), transparent 70%);
-  background-color: var(--bg);
-  animation: ambient-drift 240s ease-in-out infinite alternate;
+  animation: ambient-drift var(--ambient-drift-s, 240s) ease-in-out infinite alternate;
 }
 @keyframes ambient-drift {
   from {
@@ -87,6 +93,33 @@ body::before {
   }
   to {
     transform: translate3d(2.5%, 1.5%, 0) rotate(0.6deg) scale(1.1);
+  }
+}
+
+/* Layer B: a warmer bloom set (near + gold heavy) that opacity cross-fades over minutes,
+   giving the whole app a slow, imperceptible warm shift. Painted behind layer A (it is an
+   <html> pseudo-element, so it sits under transparent <body>) and blends up through A's
+   translucent blooms. Opacity only - compositor-cheap; frozen invisible under reduced-motion.
+   Peak opacity + cycle length are config-driven (config/ui.json [ambient]). */
+html::before {
+  content: "";
+  position: fixed;
+  inset: -35%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 52% at 24% 32%, color-mix(in oklab, var(--near) 22%, transparent), transparent 72%),
+    radial-gradient(52% 48% at 80% 66%, color-mix(in oklab, var(--gold) 24%, transparent), transparent 72%),
+    radial-gradient(50% 46% at 58% 16%, color-mix(in oklab, var(--gold) 16%, transparent), transparent 70%);
+  opacity: 0;
+  animation: ambient-shift var(--ambient-shift-s, 150s) ease-in-out infinite alternate;
+}
+@keyframes ambient-shift {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: var(--ambient-shift-depth, 0.55);
   }
 }
 
@@ -107,7 +140,12 @@ body::after {
 }
 
 /* Reduced-motion: drop transforms/animations to instant. Set via lib/motion.ts or
-   the OS preference. Colour-is-one-signal so removing motion never hides state. */
+   the OS preference. Colour-is-one-signal so removing motion never hides state. The root's
+   OWN pseudo-elements (html::before layer B) need explicit selectors - `[data-motion] *`
+   only matches DESCENDANTS, and html is not its own descendant. */
+[data-motion="reduce"],
+[data-motion="reduce"]::before,
+[data-motion="reduce"]::after,
 [data-motion="reduce"] *,
 [data-motion="reduce"] *::before,
 [data-motion="reduce"] *::after {
@@ -144,21 +182,28 @@ img {
   user-select: none;
 }
 
-/* Home wordmark: the "Yen Cinthanai" lockup. The gradient is painted onto the glyphs
-   (background-clip: text) and drifts via background-position ONLY - no layout, no reflow,
-   compositor-friendly. Two hues (accent -> warm near/gold midpoint -> accent) so the pan
-   is seamless and mildly intriguing, never a rainbow. The tokens tie it to the live
-   palette so it restyles on a theme swap. Reduced-motion (the rules above) zeroes the
-   duration, freezing a static periwinkle->brass fill. Degrades to solid ink where
+/* Home wordmark: the "Yen Cinthanai" lockup. Standardized with the sibling app (yen-doku):
+   a thin, tall Josefin Sans face, uppercase + tracked, painted with the shared 7-stop rainbow
+   (sky -> indigo -> violet -> pink -> rose -> amber -> sky) via background-clip:text. The
+   gradient loops seamlessly (last stop == first) and drifts via background-position ONLY -
+   the element is small so the pan repaint is negligible (Carmack). This wordmark gradient is
+   INTENTIONALLY fixed (a cross-app brand mark), not palette-tied. Reduced-motion (the rules
+   above) zeroes the duration, freezing a static fill. Degrades to solid ink where
    background-clip:text is unsupported. */
 .wordmark {
-  font-family: "Jost Variable", ui-sans-serif, system-ui, sans-serif;
-  font-weight: 300;
+  font-family: "Josefin Sans Variable", "Jost Variable", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 200;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   background-image: linear-gradient(
-    100deg,
-    var(--accent) 0%,
-    color-mix(in oklab, var(--near) 60%, var(--gold)) 45%,
-    var(--accent) 100%
+    120deg,
+    #38bdf8 0%,
+    #818cf8 16%,
+    #a78bfa 32%,
+    #f472b6 48%,
+    #fb7185 64%,
+    #fbbf24 80%,
+    #38bdf8 100%
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;
