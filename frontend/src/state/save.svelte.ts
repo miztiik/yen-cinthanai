@@ -34,6 +34,7 @@ export function freshSave(): Save {
       palette: "hearth",
       reducedMotion: false,
       puckSize: "medium",
+      display: { color: true, glyphs: true, labels: true },
     },
   };
 }
@@ -87,6 +88,16 @@ function isDay(d: unknown): d is DayState {
   );
 }
 
+/** Merge stored settings over defaults; the nested display object is deep-merged (so an older
+ *  save without it - or a partial one - still yields a full display) and clamped to the
+ *  invariant that at least one of glyphs/labels stays on. */
+function mergeSettings(base: Settings, raw: unknown): Settings {
+  const r = (typeof raw === "object" && raw !== null ? raw : {}) as Partial<Settings>;
+  const display = { ...base.display, ...(r.display ?? {}) };
+  if (!display.glyphs && !display.labels) display.labels = true;
+  return { ...base, ...r, display };
+}
+
 /** Validate: drop malformed days; hero/streak/settings survive (fall back fresh). */
 export function validateSave(raw: Record<string, unknown>): Save {
   const base = freshSave();
@@ -100,7 +111,7 @@ export function validateSave(raw: Record<string, unknown>): Save {
     days,
     hero: { ...base.hero, ...(raw.hero as object) },
     streak: { ...base.streak, ...(raw.streak as object) },
-    settings: { ...base.settings, ...(raw.settings as object) },
+    settings: mergeSettings(base.settings, raw.settings),
   };
 }
 

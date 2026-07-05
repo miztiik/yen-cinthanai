@@ -8,6 +8,15 @@ export type DayStatus = "unplayed" | "playing" | "won" | "lost";
 /** Puck (token/slot circle) size preset; a player setting, scaled from config/ui.toml. */
 export type PuckSize = "small" | "medium" | "large";
 
+/** How board values render - a display/clarity setting (Settings > Display + the in-puzzle
+ *  display sheet). color: use the difficulty/state hues; glyphs: show glyph art; labels: show
+ *  text labels. Invariant: at least one of glyphs/labels is true (a value must render). */
+export interface DisplaySettings {
+  color: boolean;
+  glyphs: boolean;
+  labels: boolean;
+}
+
 /** entity id -> category id -> value id. */
 export type Placements = Record<string, Record<string, string>>;
 
@@ -50,6 +59,9 @@ export interface Settings {
   palette: string;
   reducedMotion: boolean;
   puckSize: PuckSize;
+  /** Display/clarity mode (color, glyphs, labels). Additive-optional: an older save without
+   *  it still loads and is defaulted on read (schemaVersion stays 1). */
+  display: DisplaySettings;
   /** Last-played difficulty, so PLAY resumes it (first-ever play = easy cold-open).
    *  Additive-optional: an older save without it still loads (schemaVersion stays 1). */
   lastTier?: Tier;
