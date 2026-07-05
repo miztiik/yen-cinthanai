@@ -6,12 +6,14 @@
   // auto-X derives (grid.ts). No drag (tap-cycle only). Roving focus spans the whole matrix
   // in value coords, clamped to the staircase prefix. Phone keeps NotesGrid + GridMap.
   // See docs/concepts/core-loop.md, docs/concepts/ui-shell.md, grid.ts staircase().
+  import { getContext } from "svelte";
   import GridCell from "./GridCell.svelte";
   import GlyphSeat from "./GlyphSeat.svelte";
-  import { staircase, cellKey, cellState, glyphComplete } from "../lib/grid";
+  import { staircase, cellKey, cellState, axisGlyphs } from "../lib/grid";
   import { glyphExists } from "../lib/glyphs";
   import type { GridCopy } from "../lib/config";
   import type { AttributeCategory, AttributeValue } from "../contracts/manifest";
+  import type { DisplaySettings } from "../contracts/save";
   import type { Game } from "../state/play.svelte";
 
   let { game, cats, copy, size = 40 }: { game: Game; cats: AttributeCategory[]; copy: GridCopy; size?: number } = $props();
@@ -21,7 +23,10 @@
   const manualX = $derived(new Set(Object.keys(game.gridManualX)));
   // Per-axis glyph completeness: an axis shows images only if ALL its values have art, else the
   // whole axis falls back to green checks (no mix). Auto-upgrades when the missing art is added.
-  const glyphCats = $derived(new Set(cats.filter((c) => glyphComplete(c, glyphExists)).map((c) => c.id)));
+  // Display mode: the player's `glyphs` toggle gates this - glyphs off forces the axis to text.
+  const display = getContext<(() => DisplaySettings) | undefined>("display");
+  const glyphsOn = $derived(display?.().glyphs ?? true);
+  const glyphCats = $derived(new Set(cats.filter((c) => axisGlyphs(glyphsOn, c, glyphExists)).map((c) => c.id)));
 
   interface Leaf {
     cat: AttributeCategory;

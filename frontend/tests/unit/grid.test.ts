@@ -10,6 +10,7 @@ import {
   cellState,
   endpointKey,
   glyphComplete,
+  axisGlyphs,
   gridBlocks,
   gridCategories,
   impliedX,
@@ -31,6 +32,32 @@ const board = buildBoard(m);
 
 const ep = (cat: string, val: string): GridEndpoint => ({ cat, val });
 const K = (a: GridEndpoint, b: GridEndpoint) => cellKey(a, b);
+
+describe("axisGlyphs (display glyphs toggle over the no-mix gate)", () => {
+  const cat: AttributeCategory = {
+    id: "animal",
+    label: "Animal",
+    kind: "nominal",
+    anchor: false,
+    cardinality: "bijective",
+    values: [
+      { id: "cat", glyph: "animals.cat", label: "Cat" },
+      { id: "dog", glyph: "animals.dog", label: "Dog" },
+    ],
+  };
+  const allArt = () => true;
+  const missingArt = (ref: string) => ref !== "animals.dog";
+
+  it("glyphs on + full art coverage -> glyphs", () => {
+    expect(axisGlyphs(true, cat, allArt)).toBe(true);
+  });
+  it("glyphs on + missing art -> text (no mix)", () => {
+    expect(axisGlyphs(true, cat, missingArt)).toBe(false);
+  });
+  it("glyphs off -> text even when art is complete", () => {
+    expect(axisGlyphs(false, cat, allArt)).toBe(false);
+  });
+});
 
 describe("cell keys + blocks", () => {
   it("normalizes a cell key so axis order does not matter", () => {

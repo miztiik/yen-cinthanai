@@ -16,6 +16,7 @@
   import TierMeter from "./TierMeter.svelte";
   import DifficultyPicker from "./DifficultyPicker.svelte";
   import DayNav from "./DayNav.svelte";
+  import DisplaySheet from "./DisplaySheet.svelte";
   import Glyph from "../lib/Glyph.svelte";
   import { route, homeHref, navigate, syncLocation } from "../lib/router.svelte";
   import { loadBank, loadManifest, pickEntry, hasEntry } from "../lib/loader";
@@ -30,7 +31,7 @@
   import { applyMotion } from "../lib/motion";
   import { Game, saveProgress, toDayState } from "../state/play.svelte";
   import { loadSave, dayKey, updateSettings } from "../state/save.svelte";
-  import type { Tier } from "../contracts/save";
+  import type { Tier, DisplaySettings } from "../contracts/save";
 
   const TODAY = new Date().toISOString().slice(0, 10);
   const ALLOWED: Tier[] = ["easy", "standard", "sharp", "expert"];
@@ -58,8 +59,13 @@
   // Difficulty switcher (config-driven colour-coded bars). Populated in start() from ui.json.
   let difficulty = $state<DifficultyUi>(difficultyUi({} as never));
   let pickerOpen = $state(false);
+  // Display mode (color/glyphs/labels): provided to the grid via context, toggled in-puzzle by
+  // the DisplaySheet, persisted to save.settings.display. Defaults reproduce today's behaviour.
+  let display = $state<DisplaySettings>({ color: true, glyphs: true, labels: true });
+  let displayOpen = $state(false);
   setContext("puckSize", () => puck);
   setContext("snap", () => snap);
+  setContext("display", () => display);
 
   async function start() {
     try {
@@ -100,6 +106,7 @@
       heroBaseline = { ...sv.hero };
       configureAudio(sv.settings.sound, sv.settings.volume);
       applyMotion(sv.settings.reducedMotion);
+      display = sv.settings.display;
       const ui = await loadUi();
       puck = puckPreset(ui, sv.settings.puckSize);
       snap = ui.snap;
@@ -179,13 +186,17 @@
   function goToDay(to: string | undefined) {
     if (game && to) navigate(playPath(to, game.m.tier));
   }
+  function setDisplay(next: DisplaySettings) {
+    display = next;
+    updateSettings({ display: next }, TODAY);
+  }
 
   start();
 </script>
 
 <svelte:window bind:innerWidth={vw} />
 
-<main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-7xl" : "max-w-md"}`}>
+<main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-7xl" : "max-w-md"} ${display.color ? "" : "display-mono"}`}>
   <!-- One centered island bar (never spans the wide board): back | difficulty | timer | hint,
        grouped by hairline dividers so it reads as a single control, not four floating pills. -->
   <header class="mx-auto flex w-fit max-w-full items-center gap-0.5 rounded-full border border-ink/10 bg-surface px-1 py-1 text-sm shadow-e1">
@@ -216,6 +227,10 @@
       class="min-h-11 rounded-full px-3 font-medium transition-transform active:scale-95 disabled:opacity-30"
       disabled={!game || game.locked || hintsLeft === 0}
       onclick={() => game?.hint()}>hint{hintsLeft >= 0 ? ` ${hintsLeft}` : ""}</button>
+    <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
+    <button class="grid h-11 w-11 place-items-center rounded-full opacity-80 transition-transform active:scale-95" aria-label="display options" onclick={() => (displayOpen = true)}>
+      <Glyph ref="ui.gear" size={18} tint />
+    </button>
   </header>
 
   {#if game}
@@ -329,8 +344,12 @@
     <DifficultyPicker
       current={game.m.tier}
       {difficulty}
-      onpick={(t) => { pickerOpen = false; if (game && t !== game.m.tier) navigate(playPath(currentDate, t)); }}
+      onpick={(t) => { pickerOpen = false; if (game && t !== game.m.tier) navigate(playPath(currentDate, t as Tier)); }}
       onclose={() => (pickerOpen = false)}
     />
+  {/if}
+
+  {#if displayOpen}
+    <DisplaySheet {display} onchange={setDisplay} onclose={() => (displayOpen = false)} />
   {/if}
 </main>
