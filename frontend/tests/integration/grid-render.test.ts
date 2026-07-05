@@ -102,7 +102,7 @@ describe("NotesGrid (one-block editor)", () => {
     const g = new Game(m, STD);
     const el = render(NotesGrid, {
       game: g, block, blocks, index: 0, copy: GRID_COPY_FALLBACK,
-      size: 40, snap: { radius_factor: 0.9, ease: 0.6 }, onnav: () => {},
+      size: 40, onnav: () => {},
     });
     expect(el.querySelector("table")).not.toBeNull();
     expect(el.querySelectorAll("th[scope='col']")).toHaveLength(block.colCat.values.length + 1); // + corner
@@ -114,7 +114,7 @@ describe("NotesGrid (one-block editor)", () => {
     const g = new Game(m, STD);
     const el = render(NotesGrid, {
       game: g, block, blocks, index: 0, copy: GRID_COPY_FALLBACK,
-      size: 40, snap: { radius_factor: 0.9, ease: 0.6 }, onnav: () => {},
+      size: 40, onnav: () => {},
     });
     const cell = el.querySelector("[data-cell-key]") as HTMLButtonElement;
     cell.click();

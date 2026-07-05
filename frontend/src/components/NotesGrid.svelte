@@ -22,7 +22,6 @@
     index,
     copy,
     size = 40,
-    snap,
     onnav,
   }: {
     game: Game;
@@ -31,7 +30,6 @@
     index: number;
     copy: GridCopy;
     size?: number;
-    snap: { radius_factor: number; ease: number };
     onnav: (dir: 1 | -1) => void;
   } = $props();
 

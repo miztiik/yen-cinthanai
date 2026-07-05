@@ -189,7 +189,7 @@
             <GridMatrix {game} cats={gridCategories(game.board)} copy={gridCopy} />
           {:else}
             <section class="flex justify-center">
-              <NotesGrid {game} block={blocks[activeBlock]} {blocks} index={activeBlock} copy={gridCopy} size={cellSize} {snap} onnav={navBlock} />
+              <NotesGrid {game} block={blocks[activeBlock]} {blocks} index={activeBlock} copy={gridCopy} size={cellSize} onnav={navBlock} />
             </section>
             {#if blocks.length > 1}
               <GridMap {game} {blocks} active={activeBlock} copy={gridCopy} onselect={(i) => (activeBlock = i)} />
