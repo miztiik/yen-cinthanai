@@ -197,15 +197,30 @@
 <svelte:window bind:innerWidth={vw} />
 
 <main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-7xl" : "max-w-md"} ${display.color ? "" : "display-mono"}`}>
-  <!-- One centered island bar (never spans the wide board): back | difficulty | timer | hint,
-       grouped by hairline dividers so it reads as a single control, not four floating pills. -->
-  <header class="mx-auto flex w-fit max-w-full items-center gap-0.5 rounded-full border border-ink/10 bg-surface px-1 py-1 text-sm shadow-e1">
-    <a class="grid h-11 w-11 place-items-center rounded-full opacity-80 transition-transform active:scale-95" href={homeHref()} aria-label="back" onclick={(e) => { e.preventDefault(); navigate(""); }}>
+  <!-- One centered island bar, re-zoned into THREE legible bands (2 dividers) so the eye reads
+       leave | live-solve | adjust, not a wall of look-alike carets. Caret grammar (ui-shell.md):
+       back is the ONLY bold arrowhead; a sheet-opener uses a DOWN-caret on a chip (never a
+       horizontal arrow); horizontal chevrons are reserved for DayNav's timeline below. -->
+  <header class="mx-auto flex w-fit max-w-full items-center gap-1 whitespace-nowrap rounded-full border border-ink/10 bg-surface px-1 py-1 text-sm shadow-e1">
+    <!-- LEAVE -->
+    <a class="grid h-11 w-11 place-items-center rounded-full text-ink/70 transition-transform active:scale-95" href={homeHref()} aria-label="back" onclick={(e) => { e.preventDefault(); navigate(""); }}>
       <Glyph ref="ui.back" size={18} tint />
     </a>
     <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
+    <!-- LIVE SOLVE: timer/try status + the hint action -->
+    <div class="flex min-h-11 items-center gap-1.5 px-2">
+      <span class="opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
+      <span class="tabular-nums opacity-80">{Math.floor(elapsed / 1000)}s</span>
+      {#if game && game.attemptsLeft >= 0}<span class="opacity-25">/</span><span class="tabular-nums opacity-80" aria-label="attempts left">try {game.attemptsLeft}</span>{/if}
+    </div>
     <button
-      class="flex min-h-11 items-center gap-2 rounded-full px-3 transition-transform active:scale-95"
+      class="min-h-11 rounded-full px-3 font-medium transition-transform active:scale-95 disabled:opacity-30"
+      disabled={!game || game.locked || hintsLeft === 0}
+      onclick={() => game?.hint()}>hint{hintsLeft >= 0 ? ` ${hintsLeft}` : ""}</button>
+    <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
+    <!-- ADJUST: difficulty chip (down-caret = opens a sheet) + display options -->
+    <button
+      class="flex min-h-11 items-center gap-2 rounded-full bg-ink/5 px-3 transition-transform active:scale-95"
       aria-label={`difficulty ${game?.m.tier ?? ""}, tap to change`}
       title={game ? `difficulty: ${game.m.tier}` : undefined}
       onclick={() => (pickerOpen = true)}
@@ -213,22 +228,10 @@
       {#if game}
         <TierMeter tier={game.m.tier} {difficulty} height={14} label={false} />
         <span class="hidden capitalize sm:inline" style={`color:${difficulty.colors[game.m.tier] ?? "var(--accent)"}`}>{game.m.tier}</span>
-        <span class="opacity-40"><Glyph ref="ui.chevron" size={12} tint /></span>
+        <span class="inline-flex rotate-90 opacity-50"><Glyph ref="ui.chevron" size={11} tint /></span>
       {/if}
     </button>
-    <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
-    <div class="flex min-h-11 items-center gap-1.5 px-3">
-      <span class="opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
-      <span class="tabular-nums opacity-80">{Math.floor(elapsed / 1000)}s</span>
-      {#if game && game.attemptsLeft >= 0}<span class="opacity-25">/</span><span class="tabular-nums opacity-80" aria-label="attempts left">try {game.attemptsLeft}</span>{/if}
-    </div>
-    <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
-    <button
-      class="min-h-11 rounded-full px-3 font-medium transition-transform active:scale-95 disabled:opacity-30"
-      disabled={!game || game.locked || hintsLeft === 0}
-      onclick={() => game?.hint()}>hint{hintsLeft >= 0 ? ` ${hintsLeft}` : ""}</button>
-    <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
-    <button class="grid h-11 w-11 place-items-center rounded-full opacity-80 transition-transform active:scale-95" aria-label="display options" onclick={() => (displayOpen = true)}>
+    <button class="grid h-11 w-11 place-items-center rounded-full text-ink/70 transition-transform active:scale-95" aria-label="display options" onclick={() => (displayOpen = true)}>
       <Glyph ref="ui.gear" size={18} tint />
     </button>
   </header>
