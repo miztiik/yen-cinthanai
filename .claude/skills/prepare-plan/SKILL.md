@@ -88,7 +88,7 @@ When this plan is in context and the instruction is "implement it", execute as t
 
 4. **Subagent brief budget.** A brief is: (a) the row's section verbatim, (b) this EXECUTION BLOCK verbatim, (c) the absolute worktree path, (d) a pointer to the `bootstrap` skill. NOT the whole plan-doc. Target <= 200 lines of input context. The subagent reads more from disk on demand; the orchestrator does not push it.
 
-5. **Persona debate converges to ONE ruling.** When a row hits a contested design call, run the authority personas (`gregor-hohpe`, `fowler`, `hans`, `max`, `jony`, `citizen-user`, `andre`) per CLAUDE.md section 0a in DEBATE - not parallel review. Bake the single written verdict into the row's Decisions table and proceed.
+5. **Persona debate converges to ONE ruling.** When a row hits a contested design call, run the authority personas (all custom agents) per CLAUDE.md section 0a in DEBATE - not parallel review. Bake the single written verdict into the row's Decisions table and proceed.
 
 6. **PR lifecycle.** Author per `docs/how-to/ship-a-pr.md`: 2-commit-then-squash, the 5-gate Definition-of-Done, browser-verify any frontend/admin runtime change. Tests ship with the row. Full suite green at merge. No new mocks unless asked. Pre-existing unrelated failures are not gating - document the baseline, do not block.
 
