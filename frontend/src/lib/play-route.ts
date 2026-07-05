@@ -30,3 +30,15 @@ export function parsePlay(route: string): PlayTarget {
 export function playPath(date: string, tier: Tier): string {
   return `play/${date}/${tier}`;
 }
+
+/** The adjacent days around `date` within an ascending date list. `prev`/`next` are undefined
+ *  at the ends - so the day carets disable at the oldest shipped day and at today (the newest).
+ *  A date absent from the list yields no neighbours. Pure; drives DayNav. */
+export function dayNeighbors(dates: string[], date: string): { prev?: string; next?: string } {
+  const i = dates.indexOf(date);
+  if (i < 0) return {};
+  return {
+    prev: i > 0 ? dates[i - 1] : undefined,
+    next: i < dates.length - 1 ? dates[i + 1] : undefined,
+  };
+}

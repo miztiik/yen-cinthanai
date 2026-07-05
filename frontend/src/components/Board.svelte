@@ -15,10 +15,12 @@
   import ResultCard from "./ResultCard.svelte";
   import TierMeter from "./TierMeter.svelte";
   import DifficultyPicker from "./DifficultyPicker.svelte";
+  import DayNav from "./DayNav.svelte";
   import Glyph from "../lib/Glyph.svelte";
   import { route, homeHref, navigate, syncLocation } from "../lib/router.svelte";
   import { loadBank, loadManifest, pickEntry, hasEntry } from "../lib/loader";
-  import { parsePlay, playPath } from "../lib/play-route";
+  import { parsePlay, playPath, dayNeighbors } from "../lib/play-route";
+  import { formatDay } from "../lib/dates";
   import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, difficultyUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type DifficultyUi } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { gridBlocks, gridCategories } from "../lib/grid";
@@ -41,6 +43,8 @@
   let soft = $state<Feedback[]>(["realtime-names", "count-wrong"]); // dials that may auto-dim a satisfied clue
   let error = $state("");
   let notice = $state(""); // non-blocking note when a requested day is not in the shipped bank
+  let currentDate = $state(TODAY);      // the day currently loaded (drives the day nav + label)
+  let tierDates = $state<string[]>([]); // ascending dates shipped for the loaded tier
   let elapsed = $state(0);
   let idleMs = $state(0);
   let hero = $state(false);
@@ -80,6 +84,8 @@
         if (want.date) notice = "That day isn't available - showing the latest puzzle.";
       }
       const m = await loadManifest(entry.file);
+      currentDate = entry.date;
+      tierDates = bank.puzzles.filter((p) => p.tier === m.tier).map((p) => p.date).sort();
       // Unfurl the address bar to the canonical dated URL without a remount, so a bare/alias
       // entry becomes linkable + bookmarkable to this exact day. See play-route.ts.
       if (route() !== "/" + playPath(entry.date, m.tier)) syncLocation(playPath(entry.date, m.tier));
@@ -165,6 +171,15 @@
   function navBlock(dir: 1 | -1) {
     if (blocks.length) activeBlock = (activeBlock + dir + blocks.length) % blocks.length;
   }
+
+  // Day navigation: carets move within the loaded tier's shipped days; next is absent at today
+  // (the newest shipped day), prev at the oldest. See docs/concepts/ui-shell.md.
+  const neighbors = $derived(dayNeighbors(tierDates, currentDate));
+  const dayLabel = $derived(currentDate === TODAY ? "Today" : formatDay(currentDate));
+  function goToDay(to: string | undefined) {
+    if (game && to) navigate(playPath(to, game.m.tier));
+  }
+
   start();
 </script>
 
@@ -202,6 +217,10 @@
       disabled={!game || game.locked || hintsLeft === 0}
       onclick={() => game?.hint()}>hint{hintsLeft >= 0 ? ` ${hintsLeft}` : ""}</button>
   </header>
+
+  {#if game}
+    <DayNav label={dayLabel} hasPrev={!!neighbors.prev} hasNext={!!neighbors.next} onprev={() => goToDay(neighbors.prev)} onnext={() => goToDay(neighbors.next)} />
+  {/if}
 
   {#if notice}
     <p class="mx-auto w-fit rounded-full bg-surface px-3 py-1 text-xs opacity-70 shadow-e1" role="status">{notice}</p>
@@ -310,7 +329,7 @@
     <DifficultyPicker
       current={game.m.tier}
       {difficulty}
-      onpick={(t) => { pickerOpen = false; if (game && t !== game.m.tier) navigate(`play/${t}`); }}
+      onpick={(t) => { pickerOpen = false; if (game && t !== game.m.tier) navigate(playPath(currentDate, t)); }}
       onclose={() => (pickerOpen = false)}
     />
   {/if}

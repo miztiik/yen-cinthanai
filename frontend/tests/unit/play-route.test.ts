@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parsePlay, playPath } from "../../src/lib/play-route";
+import { parsePlay, playPath, dayNeighbors } from "../../src/lib/play-route";
 import { addDays, formatDay, isIsoDate, todayUtc } from "../../src/lib/dates";
 
 describe("play-route grammar (date-first canonical)", () => {
@@ -62,5 +62,25 @@ describe("date helpers (UTC)", () => {
   it("formatDay is a short weekday + day + month label", () => {
     expect(formatDay("2026-06-29")).toMatch(/^[A-Z][a-z]{2} 29 Jun$/);
     expect(formatDay("2026-12-01")).toMatch(/^[A-Z][a-z]{2} 1 Dec$/);
+  });
+});
+
+describe("dayNeighbors (caret adjacency)", () => {
+  const week = ["2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02"];
+
+  it("a middle day has both neighbours", () => {
+    expect(dayNeighbors(week, "2026-06-30")).toEqual({ prev: "2026-06-29", next: "2026-07-01" });
+  });
+
+  it("the newest day (today) has no next - the next caret disables", () => {
+    expect(dayNeighbors(week, "2026-07-02")).toEqual({ prev: "2026-07-01", next: undefined });
+  });
+
+  it("the oldest day has no prev - the prev caret disables", () => {
+    expect(dayNeighbors(week, "2026-06-29")).toEqual({ prev: undefined, next: "2026-06-30" });
+  });
+
+  it("a date absent from the list has no neighbours", () => {
+    expect(dayNeighbors(week, "2026-01-01")).toEqual({});
   });
 });
