@@ -26,6 +26,7 @@
     onhome,
     onstats,
     onretry,
+    ondismiss,
   }: {
     variant?: "win" | "fail";
     hero?: boolean;
@@ -43,6 +44,7 @@
     onhome: () => void;
     onstats: () => void;
     onretry?: () => void;
+    ondismiss?: () => void;
   } = $props();
 
   let copied = $state(false);
@@ -60,11 +62,20 @@
     }
     setTimeout(() => (copied = false), 1600);
   }
+
+  // Held card, but never a trap: Escape (and a tap on the scrim) dismisses it to review the
+  // board underneath, mirroring DifficultyPicker/DisplaySheet. home/stats/retry/share stay.
+  function onkey(e: KeyboardEvent) {
+    if (e.key === "Escape") ondismiss?.();
+  }
 </script>
 
-<div class="fixed inset-0 z-20 flex items-center justify-center bg-black/70 p-6" role="dialog" aria-modal="true" aria-label={variant === "win" ? "solved" : "result"}>
+<svelte:window onkeydown={onkey} />
+
+<div class="fixed inset-0 z-20 flex items-center justify-center p-6" role="dialog" aria-modal="true" aria-label={variant === "win" ? "solved" : "result"}>
+  <button class="absolute inset-0 bg-black/70" aria-label="close" onclick={() => ondismiss?.()}></button>
   <div
-    class="flex w-full max-w-xs flex-col items-center gap-4 rounded-2xl border border-ink/10 bg-surface p-8 text-center shadow-e4"
+    class="relative flex w-full max-w-xs flex-col items-center gap-4 rounded-2xl border border-ink/10 bg-surface p-8 text-center shadow-e4"
     class:ring-4={hero}
     class:ring-gold={hero}
   >

@@ -63,6 +63,9 @@
   // the DisplaySheet, persisted to save.settings.display. Defaults reproduce today's behaviour.
   let display = $state<DisplaySettings>({ color: true, glyphs: true, labels: true });
   let displayOpen = $state(false);
+  // End-card (win/fail) dismissed to review the board underneath (scrim tap or Escape, like
+  // the other sheets). Reset on RETRY and on remount (Board is keyed on the route in App).
+  let resultDismissed = $state(false);
   setContext("puckSize", () => puck);
   setContext("snap", () => snap);
   setContext("display", () => display);
@@ -308,26 +311,36 @@
       {/if}
     </div>
 
-    <div class="mt-auto flex items-center justify-center gap-3 pt-2">
-      <button class="rounded-xl bg-surface px-4 py-2 disabled:opacity-30" disabled={game.locked} onclick={() => game?.reset()}>reset</button>
-      {#if !game.live}
-        <button
-          class="rounded-xl bg-accent px-5 py-2 font-semibold disabled:opacity-30"
-          disabled={game.locked || game.attemptsLeft === 0}
-          onclick={() => { game?.check(); if (game && !game.locked) play("violate"); else play("satisfy"); }}>{submitLabel}</button>
+    <!-- Thumb-zone action cluster (mt-auto pins it to the fold). The CHECK feedback sits
+         DIRECTLY ABOVE the buttons so it lands in view - never below the fold, where a first
+         CHECK's "not yet" was missed and a blind second tap burned the last attempt. A spent
+         cap swaps CHECK for RETRY here too, so dismissing the fail card (scrim/Escape) still
+         leaves a fresh run one tap away. See ui-shell.md. -->
+    <div class="mt-auto flex flex-col items-center gap-2 pt-2">
+      {#if game.checked && !game.locked && !failed}
+        <p class="flex w-fit items-center gap-2 rounded-full border border-violate/30 bg-violate/10 px-4 py-1.5 text-center text-sm font-medium text-violate" role="status">
+          {game.dial.feedback === "count-wrong"
+            ? `${game.m.constraints.filter((c) => game?.evalState.clues[c.id] === "violate").length} clues off`
+            : "not yet - keep deducing"}
+        </p>
       {/if}
-      <span class="tabular-nums text-sm opacity-60">{game.evalState.filled}/{game.evalState.total}</span>
+      <div class="flex items-center justify-center gap-3">
+        <button class="rounded-xl bg-surface px-4 py-2 disabled:opacity-30" disabled={game.locked} onclick={() => game?.reset()}>reset</button>
+        {#if !game.live}
+          {#if failed}
+            <button class="rounded-xl bg-accent px-5 py-2 font-semibold" onclick={() => { game?.retry(); resultDismissed = false; }}>retry</button>
+          {:else}
+            <button
+              class="rounded-xl bg-accent px-5 py-2 font-semibold disabled:opacity-30"
+              disabled={game.locked}
+              onclick={() => { game?.check(); if (game && !game.locked) play("violate"); else play("satisfy"); }}>{submitLabel}</button>
+          {/if}
+        {/if}
+        <span class="tabular-nums text-sm opacity-60">{game.evalState.filled}/{game.evalState.total}</span>
+      </div>
     </div>
 
-    {#if game.checked && !game.locked}
-      <p class="mx-auto flex w-fit items-center gap-2 rounded-full border border-violate/30 bg-violate/10 px-4 py-1.5 text-center text-sm font-medium text-violate" role="status">
-        {game.dial.feedback === "count-wrong"
-          ? `${game.m.constraints.filter((c) => game?.evalState.clues[c.id] === "violate").length} clues off`
-          : "not yet - keep deducing"}
-      </p>
-    {/if}
-
-    {#if game.locked}
+    {#if game.locked && !resultDismissed}
       <ResultCard
         variant="win"
         {hero}
@@ -341,8 +354,9 @@
         {share}
         onhome={() => navigate("")}
         onstats={() => navigate("stats")}
+        ondismiss={() => (resultDismissed = true)}
       />
-    {:else if failed}
+    {:else if failed && !resultDismissed}
       <ResultCard
         variant="fail"
         phrase={wonText}
@@ -355,7 +369,8 @@
         share=""
         onhome={() => navigate("")}
         onstats={() => navigate("stats")}
-        onretry={() => game?.retry()}
+        onretry={() => { game?.retry(); resultDismissed = false; }}
+        ondismiss={() => (resultDismissed = true)}
       />
     {/if}
   {:else}
