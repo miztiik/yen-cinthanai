@@ -60,7 +60,7 @@ The two PRNG salts in `tools/translator.py` (`_FLAVOR_SALT`, `_CLUE_SALT`) are f
 Two build-time helpers support the glyph pipeline, both under `tools/`, neither shipped to the runtime:
 
 - `wash_svg.py` - a wrapper over `npx svgo` that optimizes raw SVGs and enforces the per-file byte ceiling from `config/budgets.json` before a glyph enters `frontend/public/assets/glyphs/`.
-- `audit_glyphs.py` - a coverage auditor that reports, per scenario category, whether it is text-only, fully image-backed, or partially backfilled (text fallback), and prints the missing-glyph shopping list. Read-only; it gates nothing but surfaces gaps before a pack ships.
+- `audit_glyphs.py` - a coverage auditor that reports, per scenario category, whether it is text-only, fully image-backed, or partially backfilled (text fallback), and prints the missing-glyph shopping list. Read-only; it gates nothing but surfaces gaps before a pack ships. `--md` regenerates the snapshot in [../../reference/glyph-coverage.md](../../reference/glyph-coverage.md).
 
 Both are invoked by hand (or from a glyph-authoring flow), not by the daily bot.
 
@@ -76,5 +76,5 @@ cron `0 0 * * *` + dispatch -> setup-python -> backfill the last 7 days easy/sta
 
 - [../contracts/schemas.md](../contracts/schemas.md) - manifest/bank output.
 - [../../concepts/difficulty-and-scoring.md](../../concepts/difficulty-and-scoring.md) - reject-if-out-of-band.
-- [../../concepts/glyph-roadmap.md](../../concepts/glyph-roadmap.md) - scenario category -> glyph pack map + backfill gaps.
+- [../../reference/glyph-coverage.md](../../reference/glyph-coverage.md) - the central glyph doc: pack->category map, live coverage snapshot (complete/text/partial), and the exact art to close each open gap.
 - [../../how-to/ship-to-github-pages.md](../../how-to/ship-to-github-pages.md) - deploy.

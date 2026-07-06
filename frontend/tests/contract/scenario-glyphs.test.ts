@@ -3,7 +3,7 @@
 // (glyphPath throws on an unknown ref). Guards the row-9e mappings dish->food, drink->drinks,
 // vegetable->vegetables, ribbon->color, role->occupation, plus enough values for the largest tier.
 // Real files + the generated glyph manifest, no mocks. See datasets/templates/*.json,
-// docs/concepts/glyph-roadmap.md, tools/bake_glyphs.py, config/tiers.json.
+// docs/reference/glyph-coverage.md, tools/bake_glyphs.py, config/tiers.json.
 
 import { describe, it, expect } from "vitest";
 import { existsSync, readFileSync, readdirSync } from "node:fs";

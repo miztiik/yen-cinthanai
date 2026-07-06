@@ -11,7 +11,7 @@ Usage:
 
 Prints before/after bytes and flags anything still over the ceiling (nonzero exit if any
 remain over). Build-time only; requires Node + npx (svgo is fetched by npx on first use);
-never shipped to the browser bundle. See docs/concepts/glyph-roadmap.md.
+never shipped to the browser bundle. See docs/reference/glyph-coverage.md.
 """
 
 from __future__ import annotations

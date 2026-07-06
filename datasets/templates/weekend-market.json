@@ -84,7 +84,7 @@
         { "id": "tulips", "label": "Tulips", "phrase": "displayed the tulips", "refPhrase": "tulip grower", "glyph": "flowers.tulips" },
         { "id": "rose", "label": "Roses", "phrase": "displayed the roses", "refPhrase": "rose grower", "glyph": "flowers.rose" },
         { "id": "hibiscus", "label": "Hibiscus", "phrase": "displayed the hibiscus", "refPhrase": "hibiscus grower", "glyph": "flowers.hibiscus" },
-        { "id": "poppies", "label": "Poppies", "phrase": "displayed the poppies", "refPhrase": "poppy grower" }
+        { "id": "poppies", "label": "Poppies", "phrase": "displayed the poppies", "refPhrase": "poppy grower", "glyph": "flowers.poppies" }
       ]
     }
   ],

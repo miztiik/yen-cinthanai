@@ -15,10 +15,11 @@ file) and the value labels that still need art. The tail aggregates the distinct
 grouped by pack - the shopping list. Read-only; prints a report and exits non-zero if any
 category is `partial` (so CI/authors notice regressions). Run:
 
-    python -m tools.audit_glyphs            # human report
-    python -m tools.audit_glyphs --md       # markdown (for the TODO doc)
+    python -m tools.audit_glyphs            # human report (exit 1 if any category is partial)
+    python -m tools.audit_glyphs --md       # markdown snapshot for docs/reference/glyph-coverage.md
 
-See tools/generate.py `_value_glyph` (the resolution this mirrors) and docs/concepts/ui-shell.md.
+See tools/generate.py `_value_glyph` (the resolution this mirrors), docs/reference/glyph-coverage.md
+(the coverage snapshot this feeds) and docs/concepts/ui-shell.md.
 """
 
 from __future__ import annotations
@@ -126,11 +127,59 @@ def render_text(reports: list[CatReport]) -> tuple[str, int]:
     return "\n".join(lines), len(partial)
 
 
+def render_md(reports: list[CatReport]) -> str:
+    """Markdown coverage snapshot for docs/reference/glyph-coverage.md (regenerable body).
+
+    Emits the mechanical truth only - the counts, the partial categories, and any broken
+    file refs grouped by pack. The authored 'which art closes each gap' table lives in the
+    reference doc, so regenerating this block never clobbers the human close-list."""
+    partial = [r for r in reports if r.status == "partial"]
+    complete = sum(1 for r in reports if r.status == "complete")
+    text = sum(1 for r in reports if r.status == "text")
+    n_scen = len({r.scenario for r in reports})
+    lines: list[str] = []
+    lines.append(f"- Scenarios: {n_scen}; categories: {len(reports)}.")
+    lines.append(f"- complete (renders as glyph images): {complete}")
+    lines.append(f"- text (all green checks, by design): {text}")
+    lines.append(f"- partial (would mix -> whole axis falls back to text): {len(partial)}")
+    lines.append("")
+    if partial:
+        lines.append("| Scenario | Category | Missing image files | Values with no art |")
+        lines.append("| --- | --- | --- | --- |")
+        for r in sorted(partial, key=lambda x: (x.scenario, x.cat_id)):
+            miss = ", ".join(f"`{m}`" for m in sorted(set(r.missing_refs))) or "-"
+            tv = ", ".join(r.text_values) or "-"
+            lines.append(f"| {r.scenario} | {r.cat_label} ({r.cat_id}) | {miss} | {tv} |")
+        lines.append("")
+    by_pack: dict[str, set[str]] = defaultdict(set)
+    for r in partial:
+        for ref in r.missing_refs:
+            by_pack[ref.split(".", 1)[0]].add(ref)
+    if by_pack:
+        lines.append("Broken references (a template names a glyph with no shipped file), by pack:")
+        lines.append("")
+        for pack in sorted(by_pack):
+            lines.append(f"- `{pack}`: " + ", ".join(f"`{x}`" for x in sorted(by_pack[pack])))
+    else:
+        lines.append(
+            "No broken references: every glyph a template names has a shipped file. Each gap above "
+            "is a value carrying no glyph while its siblings do, which trips the whole axis to text."
+        )
+    return "\n".join(lines)
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Audit scenario glyph coverage (no-mix contract).")
-    ap.add_argument("--md", action="store_true", help="emit markdown for the TODO doc")
+    ap.add_argument(
+        "--md",
+        action="store_true",
+        help="emit a markdown snapshot for docs/reference/glyph-coverage.md (exit 0)",
+    )
     args = ap.parse_args(argv)
     reports = audit()
+    if args.md:
+        print(render_md(reports))
+        return 0
     report_text, n_partial = render_text(reports)
     print(report_text)
     return 1 if n_partial else 0

@@ -7,7 +7,7 @@
   "ordinalAxis": false,
   "minTier": "easy",
   "maxTier": "expert",
-  "note": "SAMPLE authoring template (original content). Light-mystery cinema festival. Anchor = director. genre + venue are text-only; award has no category glyphPack (the medals pack holds only gold/silver/bronze) but three of its values carry a per-value medal glyph override so the covered prizes decorate while the rest stay text (until the other three prize images exist the grid falls back to text for the whole award axis - never a mix); reel is the numeric axis (film length in reels - a quantity with a unit, like every other numeric axis). The narrativeTemplate is setting flavor only and never names a sliced category (reel/venue/award). Numeric cat sits at index 2 so it survives the standard 3-category slice.",
+  "note": "SAMPLE authoring template (original content). Light-mystery cinema festival. Anchor = director. genre + venue are text-only; award is glyph-backed by the `awards` pack - six numbered prize badges (the award-blank rosette compositing the abstract numerals num1..num6), so every value has a unique, ordered icon. Real-world honours like an audience or critics pick have no distinct emblem, so the axis is NUMBERED (First..Sixth Prize) rather than named - the badge number is the unique glyph. reel is the numeric axis (film length in reels - a quantity with a unit, like every other numeric axis). The narrativeTemplate is setting flavor only and never names a sliced category (reel/venue/award). Numeric cat sits at index 2 so it survives the standard 3-category slice.",
   "narrativeTemplate": "The little riverside film festival is winding into its final evening, and {n} directors are gathered in the lobby while {curator}, who programmes the whole event, pieces the projection notes back together after the {mishap} scattered the printed cards.",
   "flavorPools": {
     "curator": ["Ms. Alderton", "old Beaumont", "the festival curator"],
@@ -76,13 +76,14 @@
       "id": "award",
       "label": "Award",
       "kind": "nominal",
+      "glyphPack": "awards",
       "valuePool": [
-        { "id": "goldreel", "label": "Gold Reel", "phrase": "took the gold reel", "refPhrase": "gold-reel winner", "glyph": "medals.gold" },
-        { "id": "silverreel", "label": "Silver Reel", "phrase": "took the silver reel", "refPhrase": "silver-reel winner", "glyph": "medals.silver" },
-        { "id": "bronzereel", "label": "Bronze Reel", "phrase": "took the bronze reel", "refPhrase": "bronze-reel winner", "glyph": "medals.bronze" },
-        { "id": "audiencepick", "label": "Audience Pick", "phrase": "won the audience pick", "refPhrase": "audience favourite" },
-        { "id": "criticspick", "label": "Critics Pick", "phrase": "won the critics pick", "refPhrase": "critics favourite" },
-        { "id": "debutprize", "label": "Debut Prize", "phrase": "won the debut prize", "refPhrase": "debut winner" }
+        { "id": "award1", "label": "First Prize", "phrase": "took first prize", "refPhrase": "first-prize winner" },
+        { "id": "award2", "label": "Second Prize", "phrase": "took second prize", "refPhrase": "second-prize winner" },
+        { "id": "award3", "label": "Third Prize", "phrase": "took third prize", "refPhrase": "third-prize winner" },
+        { "id": "award4", "label": "Fourth Prize", "phrase": "took fourth prize", "refPhrase": "fourth-prize winner" },
+        { "id": "award5", "label": "Fifth Prize", "phrase": "took fifth prize", "refPhrase": "fifth-prize winner" },
+        { "id": "award6", "label": "Sixth Prize", "phrase": "took sixth prize", "refPhrase": "sixth-prize winner" }
       ]
     }
   ],

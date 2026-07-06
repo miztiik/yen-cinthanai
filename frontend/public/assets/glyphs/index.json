@@ -1,7 +1,11 @@
 {
-  "generatedAt": "2026-07-06T04:37:49Z",
+  "generatedAt": "2026-07-06T21:26:41Z",
   "packs": {
     "abstract": {
+      "awardblank": {
+        "file": "abstract/award-blank.svg",
+        "label": "Award blank"
+      },
       "between": {
         "file": "abstract/between.svg",
         "label": "Between"
@@ -45,6 +49,36 @@
       "seating": {
         "file": "abstract/seating.svg",
         "label": "Seating"
+      },
+      "shoppingcart": {
+        "file": "abstract/shopping-cart.svg",
+        "label": "Shopping cart"
+      }
+    },
+    "awards": {
+      "award1": {
+        "file": "awards/award1.svg",
+        "label": "Award 1"
+      },
+      "award2": {
+        "file": "awards/award2.svg",
+        "label": "Award 2"
+      },
+      "award3": {
+        "file": "awards/award3.svg",
+        "label": "Award 3"
+      },
+      "award4": {
+        "file": "awards/award4.svg",
+        "label": "Award 4"
+      },
+      "award5": {
+        "file": "awards/award5.svg",
+        "label": "Award 5"
+      },
+      "award6": {
+        "file": "awards/award6.svg",
+        "label": "Award 6"
       }
     },
     "clothes": {
@@ -214,6 +248,10 @@
       }
     },
     "creatures": {
+      "ant": {
+        "file": "creatures/ant.svg",
+        "label": "Ant"
+      },
       "bear": {
         "file": "creatures/bear.svg",
         "label": "Bear"
@@ -1462,6 +1500,10 @@
         "file": "flowers/jasmine.svg",
         "label": "Jasmine"
       },
+      "poppies": {
+        "file": "flowers/poppies.svg",
+        "label": "Poppies"
+      },
       "rose": {
         "file": "flowers/rose.svg",
         "label": "Rose"
@@ -1694,10 +1736,6 @@
       }
     },
     "occupation": {
-      "ant": {
-        "file": "occupation/ant.svg",
-        "label": "Ant"
-      },
       "astronomer": {
         "file": "occupation/astronomer.svg",
         "label": "Astronomer"
@@ -1786,6 +1824,10 @@
         "file": "occupation/photographer.svg",
         "label": "Photographer"
       },
+      "politician": {
+        "file": "occupation/politician.svg",
+        "label": "Politician"
+      },
       "rake": {
         "file": "occupation/rake.svg",
         "label": "Rake"
@@ -1825,6 +1867,28 @@
       "writer": {
         "file": "occupation/writer.svg",
         "label": "Writer"
+      }
+    },
+    "offices": {
+      "airport": {
+        "file": "offices/airport.svg",
+        "label": "Airport"
+      },
+      "factory": {
+        "file": "offices/factory.svg",
+        "label": "Factory"
+      },
+      "firestation": {
+        "file": "offices/fire-station.svg",
+        "label": "Fire station"
+      },
+      "government": {
+        "file": "offices/government.svg",
+        "label": "Government"
+      },
+      "hospital": {
+        "file": "offices/hospital.svg",
+        "label": "Hospital"
       }
     },
     "shapes": {
