@@ -197,48 +197,67 @@
 <svelte:window bind:innerWidth={vw} />
 
 <main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-7xl" : "max-w-md"} ${display.color ? "" : "display-mono"}`}>
-  <!-- One centered island bar, re-zoned into THREE legible bands (2 dividers) so the eye reads
-       leave | live-solve | adjust, not a wall of look-alike carets. Caret grammar (ui-shell.md):
-       back is the ONLY bold arrowhead; a sheet-opener uses a DOWN-caret on a chip (never a
-       horizontal arrow); horizontal chevrons are reserved for DayNav's timeline below. -->
-  <header class="mx-auto flex w-fit max-w-full items-center gap-1 whitespace-nowrap rounded-full border border-ink/10 bg-surface px-1 py-1 text-sm shadow-e1">
-    <!-- LEAVE -->
-    <a class="grid h-11 w-11 place-items-center rounded-full text-ink/70 transition-transform active:scale-95" href={homeHref()} aria-label="back" onclick={(e) => { e.preventDefault(); navigate(""); }}>
-      <Glyph ref="ui.back" size={18} tint />
-    </a>
-    <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
-    <!-- LIVE SOLVE: timer/try status + the hint action -->
-    <div class="flex min-h-11 items-center gap-1.5 px-2">
-      <span class="opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
-      <span class="tabular-nums opacity-80">{Math.floor(elapsed / 1000)}s</span>
-      {#if game && game.attemptsLeft >= 0}<span class="opacity-25">/</span><span class="tabular-nums opacity-80" aria-label="attempts left">try {game.attemptsLeft}</span>{/if}
+  <!-- One island PANEL: a controls row (leave | live-solve | adjust) folded together with the
+       day-nav underneath a hairline, so the chrome reads as a single object, not two stacked
+       strips. Live-solve is one metered cluster - timer | attempts | hint - each a glyph + count
+       divided by hairlines (no word labels; the aria-label + title name them). Caret grammar
+       (ui-shell.md): back is the ONLY bold arrowhead; the difficulty chip opens a sheet via a
+       DOWN-caret; the day row's thin light horizontal chevrons live in their OWN row so they
+       never twin the back arrow. -->
+  <header class="mx-auto flex w-fit max-w-full flex-col gap-1 rounded-3xl border border-ink/10 bg-surface px-1 py-1 text-sm shadow-e1">
+    <div class="flex items-center gap-1 whitespace-nowrap">
+      <!-- LEAVE -->
+      <a class="grid h-11 w-11 place-items-center rounded-full text-ink/70 transition-transform active:scale-95" href={homeHref()} aria-label="back" onclick={(e) => { e.preventDefault(); navigate(""); }}>
+        <Glyph ref="ui.back" size={18} tint />
+      </a>
+      <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
+      <!-- LIVE SOLVE: one metered cluster - timer | attempts | hint (glyph + count, hairline-divided) -->
+      <div class="flex min-h-11 items-center gap-1.5 px-1">
+        <span class="flex items-center gap-1">
+          <span class="opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
+          <span class="tabular-nums opacity-80">{Math.floor(elapsed / 1000)}s</span>
+        </span>
+        {#if game && game.attemptsLeft >= 0}
+          <span class="h-3.5 w-px bg-ink/15" aria-hidden="true"></span>
+          <span class="flex items-center gap-1 tabular-nums opacity-80" aria-label={`${game.attemptsLeft} attempts left`} title="attempts left">
+            <span class="opacity-50"><Glyph ref="ui.target" size={14} tint /></span>{game.attemptsLeft}
+          </span>
+        {/if}
+        <span class="h-3.5 w-px bg-ink/15" aria-hidden="true"></span>
+        <button
+          class="flex min-h-11 items-center gap-1 rounded-full px-2 font-medium tabular-nums transition-transform active:scale-95 disabled:opacity-30"
+          aria-label={hintsLeft >= 0 ? `use hint, ${hintsLeft} left` : "use hint"}
+          title="hint"
+          disabled={!game || game.locked || hintsLeft === 0}
+          onclick={() => game?.hint()}
+        >
+          <span class="opacity-70"><Glyph ref="ui.hint" size={16} tint /></span>{#if hintsLeft >= 0}{hintsLeft}{/if}
+        </button>
+      </div>
+      <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
+      <!-- ADJUST: difficulty chip (down-caret = opens a sheet) + display options -->
+      <button
+        class="flex min-h-11 items-center gap-2 rounded-full bg-ink/5 px-3 transition-transform active:scale-95"
+        aria-label={`difficulty ${game?.m.tier ?? ""}, tap to change`}
+        title={game ? `difficulty: ${game.m.tier}` : undefined}
+        onclick={() => (pickerOpen = true)}
+      >
+        {#if game}
+          <TierMeter tier={game.m.tier} {difficulty} height={14} label={false} />
+          <span class="hidden capitalize sm:inline" style={`color:${difficulty.colors[game.m.tier] ?? "var(--accent)"}`}>{game.m.tier}</span>
+          <span class="inline-flex rotate-90 opacity-50"><Glyph ref="ui.chevron" size={11} tint /></span>
+        {/if}
+      </button>
+      <button class="grid h-11 w-11 place-items-center rounded-full text-ink/70 transition-transform active:scale-95" aria-label="display options" onclick={() => (displayOpen = true)}>
+        <Glyph ref="ui.gear" size={18} tint />
+      </button>
     </div>
-    <button
-      class="min-h-11 rounded-full px-3 font-medium transition-transform active:scale-95 disabled:opacity-30"
-      disabled={!game || game.locked || hintsLeft === 0}
-      onclick={() => game?.hint()}>hint{hintsLeft >= 0 ? ` ${hintsLeft}` : ""}</button>
-    <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
-    <!-- ADJUST: difficulty chip (down-caret = opens a sheet) + display options -->
-    <button
-      class="flex min-h-11 items-center gap-2 rounded-full bg-ink/5 px-3 transition-transform active:scale-95"
-      aria-label={`difficulty ${game?.m.tier ?? ""}, tap to change`}
-      title={game ? `difficulty: ${game.m.tier}` : undefined}
-      onclick={() => (pickerOpen = true)}
-    >
-      {#if game}
-        <TierMeter tier={game.m.tier} {difficulty} height={14} label={false} />
-        <span class="hidden capitalize sm:inline" style={`color:${difficulty.colors[game.m.tier] ?? "var(--accent)"}`}>{game.m.tier}</span>
-        <span class="inline-flex rotate-90 opacity-50"><Glyph ref="ui.chevron" size={11} tint /></span>
-      {/if}
-    </button>
-    <button class="grid h-11 w-11 place-items-center rounded-full text-ink/70 transition-transform active:scale-95" aria-label="display options" onclick={() => (displayOpen = true)}>
-      <Glyph ref="ui.gear" size={18} tint />
-    </button>
+    {#if game}
+      <!-- DAY: same island, second row under a hairline (was a separate strip below the bar) -->
+      <span class="mx-2 h-px bg-ink/10" aria-hidden="true"></span>
+      <DayNav label={dayLabel} hasPrev={!!neighbors.prev} hasNext={!!neighbors.next} onprev={() => goToDay(neighbors.prev)} onnext={() => goToDay(neighbors.next)} />
+    {/if}
   </header>
-
-  {#if game}
-    <DayNav label={dayLabel} hasPrev={!!neighbors.prev} hasNext={!!neighbors.next} onprev={() => goToDay(neighbors.prev)} onnext={() => goToDay(neighbors.next)} />
-  {/if}
 
   {#if notice}
     <p class="mx-auto w-fit rounded-full bg-surface px-3 py-1 text-xs opacity-70 shadow-e1" role="status">{notice}</p>

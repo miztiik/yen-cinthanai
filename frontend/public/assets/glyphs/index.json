@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T18:31:26Z",
+  "generatedAt": "2026-07-06T04:37:49Z",
   "packs": {
     "abstract": {
       "between": {
@@ -2056,6 +2056,10 @@
         "file": "ui/gear.svg",
         "label": "Gear"
       },
+      "hint": {
+        "file": "ui/hint.svg",
+        "label": "Hint"
+      },
       "sliders": {
         "file": "ui/sliders.svg",
         "label": "Sliders"
@@ -2063,6 +2067,10 @@
       "star": {
         "file": "ui/star.svg",
         "label": "Star"
+      },
+      "target": {
+        "file": "ui/target.svg",
+        "label": "Target"
       },
       "timer": {
         "file": "ui/timer.svg",
