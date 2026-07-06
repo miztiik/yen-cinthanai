@@ -1,35 +1,7 @@
 {
-  "builtAt": "2026-07-05T00:00:00Z",
-  "generatedSeed": "2026-07-05",
+  "builtAt": "2026-07-06T00:00:00Z",
+  "generatedSeed": "2026-07-06",
   "puzzles": [
-    {
-      "date": "2026-06-29",
-      "file": "2026-06-29-easy.json",
-      "sha": "ff52e806d2528221760608d60a71d3dc8836957a9d207ada169b94aade4efbcc",
-      "shapeId": "grid",
-      "tier": "easy"
-    },
-    {
-      "date": "2026-06-29",
-      "file": "2026-06-29-standard.json",
-      "sha": "d77d83111b262040e11715a9f32ee2386b3c119c4c5c01832a16006b40ee7848",
-      "shapeId": "grid",
-      "tier": "standard"
-    },
-    {
-      "date": "2026-06-29",
-      "file": "2026-06-29-sharp.json",
-      "sha": "8cbeb67887ecb3b8e1613398897da7c42f3f4bca591ec0d01f9a8084d25c9a70",
-      "shapeId": "grid",
-      "tier": "sharp"
-    },
-    {
-      "date": "2026-06-29",
-      "file": "2026-06-29-expert.json",
-      "sha": "fc892bf60389893571d53ecf18ed83754d61c9bafaefee717bb2d56297fdf44c",
-      "shapeId": "grid",
-      "tier": "expert"
-    },
     {
       "date": "2026-06-30",
       "file": "2026-06-30-easy.json",
@@ -195,6 +167,34 @@
       "date": "2026-07-05",
       "file": "2026-07-05-expert.json",
       "sha": "35b15a0d9319731d90aa1999d3f132b708f010f2fd765d587c0e6de7c954a6af",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-07-06",
+      "file": "2026-07-06-easy.json",
+      "sha": "846b2e67f0dd4e3fe0ba3155384dd5e4d4e22d2ae35684034cdc6deddaf21a45",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-07-06",
+      "file": "2026-07-06-standard.json",
+      "sha": "90ea20eb2a1f5efa827cd003c3c530f6057d4024dd309bfece289b8884c171bf",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-07-06",
+      "file": "2026-07-06-sharp.json",
+      "sha": "0ca8c88e247f278d18c626d5b846d59a2dc0a939ba869a58d03ce3248b2ff78c",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-07-06",
+      "file": "2026-07-06-expert.json",
+      "sha": "51836290b1fecec63370e307ac8a562d842f2fe2454279fd7287438d8785a8da",
       "shapeId": "grid",
       "tier": "expert"
     }
