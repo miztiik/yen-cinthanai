@@ -27,7 +27,7 @@ def test_load_categories_parses_real_file() -> None:
     assert cats.schemaVersion == 1
     assert "fruit" in cats.categories and "year" in cats.categories
     fruit = cats.categories["fruit"]
-    assert fruit.kind == "nominal" and fruit.glyphPack == "food"
+    assert fruit.kind == "nominal" and fruit.glyphPack == "vegetables"
     year = cats.categories["year"]
     assert year.kind == "numeric" and year.unit == "CE"
     assert all(v.magnitude is not None for v in year.values)

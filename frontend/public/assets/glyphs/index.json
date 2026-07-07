@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-06T21:26:41Z",
+  "generatedAt": "2026-07-07T00:33:07Z",
   "packs": {
     "abstract": {
       "awardblank": {
@@ -2228,6 +2228,10 @@
         "file": "vegetables/apple.svg",
         "label": "Apple"
       },
+      "banana": {
+        "file": "vegetables/banana.svg",
+        "label": "Banana"
+      },
       "beet": {
         "file": "vegetables/beet.svg",
         "label": "Beet"
@@ -2247,6 +2251,10 @@
       "cherries": {
         "file": "vegetables/cherries.svg",
         "label": "Cherries"
+      },
+      "cherry": {
+        "file": "vegetables/cherry.svg",
+        "label": "Cherry"
       },
       "chili": {
         "file": "vegetables/chili.svg",

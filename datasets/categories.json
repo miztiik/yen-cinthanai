@@ -5,8 +5,8 @@
     "fruit": {
       "label": "Fruit",
       "kind": "nominal",
-      "glyphPack": "food",
-      "note": "GLYPH-BACKED example: value ids align with the food pack's slugs (extend to match public/assets/glyphs/food/*.svg).",
+      "glyphPack": "vegetables",
+      "note": "GLYPH-BACKED example: fruit art lives in the vegetables (produce) pack, so each value id is a vegetables-pack slug (apple, banana, cherry). The food pack is prepared dishes (bread, pizza), not produce - do not point fruit at it.",
       "values": [
         { "id": "apple", "label": "Apple" },
         { "id": "banana", "label": "Banana" },
