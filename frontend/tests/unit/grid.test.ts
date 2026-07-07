@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildBoard } from "../../src/lib/board";
+import type { BoardModel } from "../../src/lib/board";
 import {
   blockCells,
   blockId,
@@ -15,6 +16,7 @@ import {
   gridCategories,
   impliedX,
   mergeGridPlacements,
+  orderedValues,
   parseCellKey,
   staircase,
   type GridEndpoint,
@@ -77,6 +79,92 @@ describe("cell keys + blocks", () => {
   it("fills a block with rowValues x colValues cells", () => {
     const block = gridBlocks(gridCategories(board)).find((b) => b.id === blockId("drink", "animal"))!;
     expect(blockCells(block)).toHaveLength(16); // 4 x 4
+  });
+});
+
+describe("stable axis value order (render-time display sort)", () => {
+  const numeric: AttributeCategory = {
+    id: "boxes",
+    label: "Boxes",
+    kind: "numeric",
+    anchor: false,
+    cardinality: "bijective",
+    values: [
+      { id: "b9", glyph: "", label: "9 boxes", magnitude: 9 },
+      { id: "b3", glyph: "", label: "3 boxes", magnitude: 3 },
+      { id: "b13", glyph: "", label: "13 boxes", magnitude: 13 },
+      { id: "b5", glyph: "", label: "5 boxes", magnitude: 5 },
+    ],
+  };
+  const nominal: AttributeCategory = {
+    id: "name",
+    label: "Name",
+    kind: "nominal",
+    anchor: false,
+    cardinality: "bijective",
+    values: [
+      { id: "cara", glyph: "", label: "Cara" },
+      { id: "ana", glyph: "", label: "Ana" },
+      { id: "bo", glyph: "", label: "Bo" },
+    ],
+  };
+
+  it("sorts a numeric axis ascending by magnitude (9/3/13/5 -> 3/5/9/13)", () => {
+    expect(orderedValues(numeric).map((v) => v.magnitude)).toEqual([3, 5, 9, 13]);
+  });
+
+  it("sorts a nominal axis A->Z by label", () => {
+    expect(orderedValues(nominal).map((v) => v.label)).toEqual(["Ana", "Bo", "Cara"]);
+  });
+
+  it("natural-sorts numeric labels even without magnitude (9 before 13, not lexical)", () => {
+    const strBoxes: AttributeCategory = {
+      ...numeric,
+      values: [
+        { id: "b9", glyph: "", label: "9 boxes" },
+        { id: "b13", glyph: "", label: "13 boxes" },
+        { id: "b3", glyph: "", label: "3 boxes" },
+      ],
+    };
+    expect(orderedValues(strBoxes).map((v) => v.label)).toEqual(["3 boxes", "9 boxes", "13 boxes"]);
+  });
+
+  it("returns a COPY - never mutates the source manifest values", () => {
+    const before = numeric.values.map((v) => v.id);
+    orderedValues(numeric);
+    expect(numeric.values.map((v) => v.id)).toEqual(before);
+  });
+
+  it("gridCategories sorts non-anchor axes but keeps the anchor's entity-coupled order", () => {
+    const anchor: AttributeCategory = {
+      id: "pos",
+      label: "Position",
+      kind: "ordinal",
+      anchor: true,
+      cardinality: "bijective",
+      values: [
+        { id: "p3", glyph: "", label: "Third", magnitude: 3 },
+        { id: "p1", glyph: "", label: "First", magnitude: 1 },
+        { id: "p2", glyph: "", label: "Second", magnitude: 2 },
+      ],
+    };
+    const mini = { entities: [], anchor, columns: [numeric], values: [], wrap: false } as unknown as BoardModel;
+    const cats = gridCategories(mini);
+    // anchor stays in its authored (unsorted) order - value i -> entity i
+    expect(cats[0].values.map((v) => v.id)).toEqual(["p3", "p1", "p2"]);
+    // the non-anchor axis is display-sorted ascending by magnitude
+    expect(cats[1].values.map((v) => v.magnitude)).toEqual([3, 5, 9, 13]);
+  });
+
+  it("is logic-safe: a re-sorted axis yields the same block cell-key SET (id-keyed lookups)", () => {
+    const asc = gridBlocks(gridCategories(board));
+    const keysOf = (cats: AttributeCategory[]) =>
+      new Set(gridBlocks(cats).flatMap((b) => blockCells(b).map((c) => c.key)));
+    // reverse every non-anchor axis; the cell-key SET must be identical (keys are id-based)
+    const reversed = gridCategories(board).map((c, i) =>
+      i === 0 ? c : ({ ...c, values: [...c.values].reverse() } as AttributeCategory),
+    );
+    expect(keysOf(reversed)).toEqual(new Set(asc.flatMap((b) => blockCells(b).map((c) => c.key))));
   });
 });
 

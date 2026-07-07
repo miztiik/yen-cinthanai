@@ -13,7 +13,7 @@
 // auto-X SKIPS a manual-X (manual-X survives, since it lives in its own authored set).
 // See docs/concepts/core-loop.md.
 
-import type { AttributeCategory } from "../contracts/manifest";
+import type { AttributeCategory, AttributeValue } from "../contracts/manifest";
 import type { BoardModel } from "./board";
 import type { Placements } from "../contracts/save";
 
@@ -68,10 +68,37 @@ export function blockId(catA: string, catB: string): string {
   return [catA, catB].sort().join("|");
 }
 
+/** Compare two axis values for a stable DISPLAY order: numeric by `magnitude` when both carry
+ *  it (ascending), else natural-ascending by `label` (so "9 boxes" precedes "13 boxes" and
+ *  names read A->Z), with a final `id` tiebreak so the order is deterministic. Pure. */
+function compareValues(a: AttributeValue, b: AttributeValue): number {
+  if (typeof a.magnitude === "number" && typeof b.magnitude === "number" && a.magnitude !== b.magnitude) {
+    return a.magnitude - b.magnitude;
+  }
+  const byLabel = a.label.localeCompare(b.label, "en", { numeric: true, sensitivity: "base" });
+  return byLabel !== 0 ? byLabel : a.id.localeCompare(b.id);
+}
+
+/** A display-sorted COPY of a category's values (never mutates the manifest): numeric/ordinal
+ *  axes ascending by magnitude, nominal axes ascending by label, stable `id` tiebreak. This is
+ *  chrome, not puzzle content - every cell/solution lookup is id-keyed (`cellKey`/`blockCells`),
+ *  so re-ordering an axis is purely visual. */
+export function orderedValues(cat: AttributeCategory): AttributeValue[] {
+  return [...cat.values].sort(compareValues);
+}
+
 /** The bijective categories the grid covers: the anchor plus every bijective column
- *  (shared-cardinality categories stay token-only - Decision 7). */
+ *  (shared-cardinality categories stay token-only - Decision 7). The anchor keeps its
+ *  entity-coupled value order (value i -> entity i); every NON-anchor axis is returned with a
+ *  stable display-sorted `.values` (a shallow clone - the manifest is never mutated), so the
+ *  player scans a consistent ladder instead of the manifest's random sample order. */
 export function gridCategories(board: BoardModel): AttributeCategory[] {
-  return [board.anchor, ...board.columns.filter((c) => c.cardinality === "bijective")];
+  return [
+    board.anchor,
+    ...board.columns
+      .filter((c) => c.cardinality === "bijective")
+      .map((c) => ({ ...c, values: orderedValues(c) })),
+  ];
 }
 
 /** A category renders glyph images only when EVERY value resolves to an existing image;
