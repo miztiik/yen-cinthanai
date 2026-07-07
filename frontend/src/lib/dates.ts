@@ -27,3 +27,15 @@ export function formatDay(date: string): string {
   const mon = new Intl.DateTimeFormat("en-US", { month: "short", timeZone: "UTC" }).format(d);
   return `${wd} ${d.getUTCDate()} ${mon}`;
 }
+
+/** A live-timer clock label: `m:ss` (no unit) so the width does not jump as the elapsed seconds
+ *  cross the 1/2/3-digit boundaries (5s -> 21s -> 120s reflowed the row) - all 4 chars through
+ *  the first ten minutes. Past an hour it grows to `h:mm:ss` (active solve time rarely gets
+ *  there). e.g. 0:05, 0:21, 2:00, 12:30, 1:03:09. Negative clamps to 0, fractional floors. Pure. */
+export function formatClock(totalSeconds: number): string {
+  const s = Math.max(0, Math.floor(totalSeconds));
+  const hh = Math.floor(s / 3600);
+  const mm = Math.floor((s % 3600) / 60);
+  const ss = String(s % 60).padStart(2, "0");
+  return hh > 0 ? `${hh}:${String(mm).padStart(2, "0")}:${ss}` : `${mm}:${ss}`;
+}

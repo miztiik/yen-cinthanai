@@ -9,6 +9,7 @@ import type { DayState, DayNotes, Placements, Save } from "../contracts/save";
 import { buildBoard, type BoardModel } from "../lib/board";
 import { evaluate, type PuzzleEval } from "../lib/validate";
 import { mergeGridPlacements, collides } from "../lib/grid";
+import { ActiveClock } from "../lib/clock";
 import { type Feedback, type TierDial } from "../lib/config";
 import { computeStars } from "../lib/scoring";
 import { loadSave, persistSave, recordWin, dayKey } from "./save.svelte";
@@ -31,7 +32,10 @@ export class Game {
   selected = $state<Selection | null>(null);
   attempts = $state(0);
   hintsUsed = $state(0);
-  startedMs = $state(0);
+  // Active-time clock (lib/clock.ts): counts only the time the puzzle is on screen. The Board
+  // pauses it when the tab is hidden and resumes on return, so away-time never accrues. Plain
+  // field (not $state): the header polls elapsedMs each frame via the tick loop, not reactively.
+  private clock = new ActiveClock();
   solveMs = $state(0);
   locked = $state(false);
   stars = $state(0);
@@ -59,7 +63,7 @@ export class Game {
     this.gridTicks = recFrom(prior?.notes?.scratchTicks);
     this.gridManualX = recFrom(prior?.notes?.manualX);
     this.struck = recFrom(prior?.notes?.struckClues);
-    this.startedMs = Date.now();
+    if (!this.locked) this.clock.start(Date.now());
     this.lastMoveMs = Date.now();
   }
 
@@ -87,6 +91,27 @@ export class Game {
   }
   get bragged(): boolean {
     return this.hintsUsed > 0;
+  }
+
+  /** Active ms on this puzzle - wall time is NOT counted while the tab is hidden (the Board
+   *  pauses the clock on visibilitychange). Frozen at solveMs once the game is locked. */
+  get elapsedMs(): number {
+    return this.locked ? this.solveMs : this.clock.elapsed(Date.now());
+  }
+
+  /** Pause the active timer - the player left the tab / the window went hidden, so time away
+   *  stops accruing until they return. */
+  pause(): void {
+    this.clock.pause(Date.now());
+  }
+
+  /** Resume the active timer when the tab is visible again. Refreshes the stuck-pacing
+   *  baseline so a return does not instantly read as "idle". No-op once locked. */
+  resume(): void {
+    if (this.locked) return;
+    const now = Date.now();
+    this.clock.start(now);
+    this.lastMoveMs = now;
   }
 
   /** Values of a category still in the pool. Shared cats repeat, so never deplete. */
@@ -181,7 +206,7 @@ export class Game {
     if (this.locked) return;
     this.reset();
     this.attempts = 0;
-    this.startedMs = Date.now();
+    this.clock.reset(Date.now());
   }
 
   /** Toggle a manual clue strike (reversible, never required). */
@@ -236,7 +261,9 @@ export class Game {
   private win(): boolean {
     if (this.locked || !this.evalState.won) return false;
     this.locked = true;
-    this.solveMs = Date.now() - this.startedMs;
+    const now = Date.now();
+    this.solveMs = this.clock.elapsed(now);
+    this.clock.pause(now);
     this.stars = computeStars(this.solveMs, this.hintsUsed, this.attempts, this.dial);
     return true;
   }

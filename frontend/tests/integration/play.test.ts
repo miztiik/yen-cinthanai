@@ -3,7 +3,7 @@
 // attempts; a hint costs the brag (stars 1, no best-time). Fake localStorage at the
 // boundary; no other mocks. Covers load -> solve -> win, tier dials, brag-cost, resume.
 
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -160,5 +160,50 @@ describe("composite day slots (multi-tier same day)", () => {
     expect(s.days[kStd].status).toBe("won");
     expect(s.days[kEasy].status).toBe("won");
     expect(s.streak.count).toBe(1); // one calendar-day streak advance, not one per tier
+  });
+});
+
+// Active-time timer: only the time the puzzle is on screen counts. The Board pauses the Game
+// clock on visibilitychange (tab hidden) and resumes on return; time away never accrues, and
+// solveMs is the active total. Fake timers drive Date.now() deterministically.
+describe("active-time clock (away time never counts)", () => {
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+
+  it("freezes while paused (away) and resumes on return", () => {
+    vi.setSystemTime(0);
+    const g = new Game(m, STD, undefined); // starts counting at t=0
+    vi.setSystemTime(3000);
+    expect(g.elapsedMs).toBe(3000); // 3s active
+    g.pause(); // tab hidden at t=3000
+    vi.setSystemTime(60000); // 57s away
+    expect(g.elapsedMs).toBe(3000); // away time NOT counted
+    g.resume(); // back at t=60000
+    vi.setSystemTime(62000);
+    expect(g.elapsedMs).toBe(5000); // +2s active -> 5s total
+  });
+
+  it("scores solveMs as the active time, excluding the paused gap", () => {
+    vi.setSystemTime(0);
+    const g = new Game(m, REALTIME, undefined); // realtime auto-wins on fill
+    vi.setSystemTime(2000);
+    g.pause();
+    vi.setSystemTime(100_000); // a long time away
+    g.resume();
+    vi.setSystemTime(104_000); // +4s active (total 6s)
+    fill(g); // realtime -> win now
+    expect(g.locked).toBe(true);
+    expect(g.solveMs).toBe(6000); // 2s + 4s active, not the 98s away
+  });
+
+  it("freezes elapsedMs at solveMs once locked (resume is a no-op)", () => {
+    vi.setSystemTime(0);
+    const g = new Game(m, REALTIME, undefined);
+    vi.setSystemTime(1000);
+    fill(g); // win at 1s
+    expect(g.solveMs).toBe(1000);
+    g.resume();
+    vi.setSystemTime(50_000);
+    expect(g.elapsedMs).toBe(1000); // still frozen
   });
 });
