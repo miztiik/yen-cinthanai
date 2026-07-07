@@ -119,6 +119,7 @@
       difficulty = difficultyUi(ui);
       chrome = chromeUi(ui);
       game = new Game(m, dial, prior);
+      if (document.hidden || !document.hasFocus()) game.pause(); // loaded into a hidden/unfocused tab
       tick();
     } catch (e) {
       error = e instanceof Error ? e.message : String(e);
@@ -131,10 +132,20 @@
     // attemptsLeft is -1 when unlimited, so realtime/easy keeps ticking; only an exhausted
     // cap (=== 0) freezes the time the fail card reports.
     if (!game.locked && game.attemptsLeft !== 0) {
-      elapsed = Date.now() - game.startedMs;
+      elapsed = game.elapsedMs;
       idleMs = Date.now() - game.lastMoveMs;
     }
     requestAnimationFrame(tick);
+  }
+
+  // Active-time timer: only time the puzzle is on screen AND the window has focus counts. The
+  // solve clock pauses when the tab is hidden (switched away / minimised / phone asleep) OR the
+  // window loses focus (clicked into another app), and resumes on return. Wired to
+  // visibilitychange + window blur/focus; ActiveClock's guards make overlapping events safe.
+  function syncActive() {
+    if (!game) return;
+    if (document.hidden || !document.hasFocus()) game.pause();
+    else game.resume();
   }
 
   $effect(() => {
@@ -199,7 +210,8 @@
   start();
 </script>
 
-<svelte:window bind:innerWidth={vw} />
+<svelte:window bind:innerWidth={vw} onblur={syncActive} onfocus={syncActive} />
+<svelte:document onvisibilitychange={syncActive} />
 
 <main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-7xl" : "max-w-md"} ${display.color ? "" : "display-mono"}`}>
   <!-- The board Command Bar (v2): one slim line that wraps the live-solve cluster to a slim

@@ -16,6 +16,7 @@
   import AttemptRing from "./AttemptRing.svelte";
   import Tooltip from "./Tooltip.svelte";
   import DayPicker from "./DayPicker.svelte";
+  import { formatClock } from "../lib/dates";
   import type { Game } from "../state/play.svelte";
   import type { DifficultyUi, ChromeUi } from "../lib/config";
 
@@ -134,9 +135,9 @@
     <!-- LIVE-SOLVE cluster: timer | attempt ring | hint. One row where it fits; wraps to a slim
          second zone under a hairline when the header is narrow (the container query below). -->
     <div class="hdr-live">
-      <span class="flex items-center gap-1">
-        <span class="opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
-        <span class="tabular-nums opacity-80">{elapsedS}s</span>
+      <span class="flex items-center gap-1.5">
+        <span class="inline-flex opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
+        <span class="tabular-nums leading-none opacity-80">{formatClock(elapsedS)}</span>
       </span>
       {#if game && attemptsTotal >= 0}
         <span class="h-3.5 w-px shrink-0 bg-ink/15" aria-hidden="true"></span>

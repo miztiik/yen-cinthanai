@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { parsePlay, playPath, dayNeighbors } from "../../src/lib/play-route";
-import { addDays, formatDay, isIsoDate, todayUtc } from "../../src/lib/dates";
+import { addDays, formatDay, formatClock, isIsoDate, todayUtc } from "../../src/lib/dates";
 
 describe("play-route grammar (date-first canonical)", () => {
   it("parses the dated canonical form /play/<date>/<tier>", () => {
@@ -62,6 +62,31 @@ describe("date helpers (UTC)", () => {
   it("formatDay is a short weekday + day + month label", () => {
     expect(formatDay("2026-06-29")).toMatch(/^[A-Z][a-z]{2} 29 Jun$/);
     expect(formatDay("2026-12-01")).toMatch(/^[A-Z][a-z]{2} 1 Dec$/);
+  });
+});
+
+describe("formatClock (fixed-width active timer label)", () => {
+  it("formats seconds as m:ss with no unit", () => {
+    expect(formatClock(0)).toBe("0:00");
+    expect(formatClock(5)).toBe("0:05");
+    expect(formatClock(21)).toBe("0:21");
+    expect(formatClock(120)).toBe("2:00");
+    expect(formatClock(750)).toBe("12:30");
+  });
+
+  it("adds an hours field only past an hour (h:mm:ss)", () => {
+    expect(formatClock(3600)).toBe("1:00:00");
+    expect(formatClock(3661)).toBe("1:01:01");
+    expect(formatClock(7325)).toBe("2:02:05");
+  });
+
+  it("stays 4 chars through the first ten minutes (no reflow across digit counts)", () => {
+    for (const s of [0, 9, 10, 59, 60, 599]) expect(formatClock(s)).toHaveLength(4);
+  });
+
+  it("clamps negatives and floors fractional seconds", () => {
+    expect(formatClock(-3)).toBe("0:00");
+    expect(formatClock(5.9)).toBe("0:05");
   });
 });
 
