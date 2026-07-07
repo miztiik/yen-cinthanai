@@ -90,10 +90,9 @@ def _rep(status: str, missing: list[str] | None = None, text_vals: list[str] | N
 def test_render_md_counts_and_no_broken_note() -> None:
     reports = [_rep("complete"), _rep("text"), _rep("partial", text_vals=["Lavender"])]
     md = render_md(reports)
-    assert "- Scenarios: 1; categories: 3." in md
-    assert "- complete (renders as glyph images): 1" in md
-    assert "- partial (would mix -> whole axis falls back to text): 1" in md
-    assert "| Scenario | Category | Missing image files | Values with no art |" in md
+    assert "- Scenario templates: 1 scenarios, 3 categories -> complete 1, text 1, partial 1." in md
+    assert "- Dimension source (categories.json): 0 dimensions -> complete 0, text 0, partial 0." in md
+    assert "| Source | Category | Missing image files | Values with no art |" in md
     assert "No broken references" in md  # no missing files -> the explanatory note, not a shopping list
 
 
@@ -108,8 +107,11 @@ def test_render_md_groups_broken_refs_by_pack() -> None:
 
 def test_audit_over_real_corpus_is_well_formed() -> None:
     reports = audit()
-    assert reports, "expected the real templates to yield reports"
-    assert len(reports) % 5 == 0  # 5 categories per scenario
+    assert reports, "expected the real corpus to yield reports"
+    tpl = [r for r in reports if r.source == "template"]
+    cat = [r for r in reports if r.source == "categories"]
+    assert len(tpl) % 5 == 0  # 5 categories per scenario template
+    assert cat, "expected categories.json dimensions to be audited too"
     assert {r.status for r in reports} <= {"text", "complete", "partial"}
     # both renderers run clean on the live corpus
     text, n_partial = render_text(reports)
@@ -127,4 +129,20 @@ def test_main_exit_codes(capsys) -> None:
     # --md is a generator, never a gate
     assert main(["--md"]) == 0
     out = capsys.readouterr().out
-    assert "Scenarios:" in out
+    assert "Scenario templates:" in out
+
+
+def test_categories_source_is_audited_and_resolves() -> None:
+    # the dimension source is scanned too; the fruit dimension (fixed to vegetables) resolves
+    reports = audit()
+    cat = [r for r in reports if r.source == "categories"]
+    assert cat, "categories.json dimensions should be audited"
+    fruit = next((r for r in cat if r.cat_id == "fruit"), None)
+    assert fruit is not None
+    assert fruit.status in {"complete", "text"} and fruit.missing_refs == []
+
+
+def test_audit_category_carries_source() -> None:
+    cat = _cat(glyphPack="food", valuePool=[{"id": "a"}])
+    rep = audit_category("categories.json", cat, have={"food.a"}, source="categories")
+    assert rep.source == "categories" and rep.status == "complete"

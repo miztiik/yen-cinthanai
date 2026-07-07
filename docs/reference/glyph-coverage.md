@@ -11,10 +11,12 @@ category without one reads perfectly well as text.
 ## Updating this document (for agents)
 
 This page is a snapshot; the LIVE source of truth is the auditor
-[../../tools/audit_glyphs.py](../../tools/audit_glyphs.py). It reads every template in
-[../../datasets/templates/](../../datasets/templates/), resolves each value exactly as the
-generator does, and checks it against the baked registry
-[../../frontend/public/assets/glyphs/index.json](../../frontend/public/assets/glyphs/index.json):
+[../../tools/audit_glyphs.py](../../tools/audit_glyphs.py). It scans BOTH glyph-backed sources -
+every scenario template in [../../datasets/templates/](../../datasets/templates/) AND the shared
+dimension source [../../datasets/categories.json](../../datasets/categories.json) (a reusable
+dimension library not yet wired into the generator, audited so a glyph ref there cannot silently
+break) - resolves each value exactly as the generator does, and checks it against the baked
+registry [../../frontend/public/assets/glyphs/index.json](../../frontend/public/assets/glyphs/index.json):
 
 ```
 python -m tools.audit_glyphs        # human report; exits 1 while any category is partial (can gate CI)
@@ -47,18 +49,16 @@ Enforced at runtime by `glyphComplete()` / `axisGlyphs()`
 
 <!-- audit:begin - regenerate with: python -m tools.audit_glyphs --md -->
 
-- Scenarios: 100; categories: 500.
-- complete (renders as glyph images): 118
-- text (all green checks, by design): 380
-- partial (would mix -> whole axis falls back to text): 2
+- Scenario templates: 100 scenarios, 500 categories -> complete 118, text 380, partial 2.
+- Dimension source (categories.json): 12 dimensions -> complete 2, text 10, partial 0.
 
-| Scenario | Category | Missing image files | Values with no art |
+| Source | Category | Missing image files | Values with no art |
 | --- | --- | --- | --- |
 | apiary-bloom | Bloom (bloom) | - | Lavender |
 | community-garden | Bloom (bloom) | - | Cosmos |
 
-No broken references: every glyph a template names has a shipped file. Each gap above is a value
-carrying no glyph while its siblings do, which trips the whole axis to text.
+No broken references: every glyph a template or dimension names has a shipped file. Each gap above
+is a value carrying no glyph while its siblings do, which trips the axis to text.
 
 <!-- audit:end -->
 
