@@ -22,6 +22,12 @@
       "date": "2026-07-07",
       "change": "Additive chrome{tooltipDelayMs} block: the hover dwell (ms) before a desktop Tooltip bubble appears in the board Command Bar (focus shows it instantly).",
       "why": "The tooltip hover delay is a chrome micro-interaction feel knob that must be human-edited, not hardcoded (CLAUDE.md #6); it is read by the Tooltip component from baked config."
+    },
+    {
+      "version": 4,
+      "date": "2026-07-07",
+      "change": "Additive chrome.attemptFadeMs (optional): the duration (ms) a just-spent AttemptRing arc fades its opacity as a life is burned in the board header v2. tooltipDelayMs stays the only required chrome key.",
+      "why": "The attempt-ring depletion fade is a chrome micro-interaction feel knob that must be human-edited, not hardcoded (CLAUDE.md #6); it is read by the AttemptRing component from baked config, and the urgency recolour of the survivors snaps (never tweened)."
     }
   ],
   "$defs": {
@@ -66,9 +72,10 @@
     },
     "chromeSpec": {
       "type": "object",
-      "description": "Chrome (HUD/menu) micro-interaction tunables. tooltipDelayMs = the hover dwell in milliseconds before a desktop Tooltip bubble appears in the board Command Bar (a focus always shows it instantly). A pointer feel knob, human-edited (CLAUDE.md #6).",
+      "description": "Chrome (HUD/menu) micro-interaction tunables. tooltipDelayMs = the hover dwell in milliseconds before a desktop Tooltip bubble appears in the board Command Bar (a focus always shows it instantly). attemptFadeMs = the duration in milliseconds a just-spent AttemptRing arc fades its opacity as a life is burned (the urgency recolour of the survivors snaps, never tweens). Feel knobs, human-edited (CLAUDE.md #6).",
       "properties": {
-        "tooltipDelayMs": { "type": "number", "exclusiveMinimum": 0 }
+        "tooltipDelayMs": { "type": "number", "exclusiveMinimum": 0 },
+        "attemptFadeMs": { "type": "number", "exclusiveMinimum": 0 }
       },
       "required": ["tooltipDelayMs"],
       "additionalProperties": false

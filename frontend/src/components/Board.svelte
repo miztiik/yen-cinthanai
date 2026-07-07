@@ -202,16 +202,16 @@
 <svelte:window bind:innerWidth={vw} />
 
 <main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-7xl" : "max-w-md"} ${display.color ? "" : "display-mono"}`}>
-  <!-- The board Command Bar: a two-tier panel (nav / context over a hairline above the
-       live-solve cluster). Extracted into BoardHeader, which wires the DayNav (its label
-       opens the DayPicker calendar), the attempts AttemptPips, desktop Tooltips + the inline
-       DifficultySegmented, and the timer/hint. See components/BoardHeader.svelte, ui-shell.md. -->
+  <!-- The board Command Bar (v2): one slim line that wraps the live-solve cluster to a slim
+       second zone when the header is narrow. Extracted into BoardHeader, which wires the DayNav
+       (its label opens the DayPicker calendar), the attempts as an urgency AttemptRing, desktop
+       Tooltips, a single current-tier chip -> DifficultyPicker, and the timer/hint. See
+       components/BoardHeader.svelte, ui-shell.md. -->
   <BoardHeader
     {game}
     {difficulty}
     {chrome}
     elapsedS={Math.floor(elapsed / 1000)}
-    {desktop}
     homeHref={homeHref()}
     {dayLabel}
     {currentDate}
@@ -224,9 +224,6 @@
     onhint={() => game?.hint()}
     ondisplay={() => (displayOpen = true)}
     ondifficulty={() => (pickerOpen = true)}
-    onpickTier={(t) => {
-      if (game && t !== game.m.tier) navigate(playPath(currentDate, t as Tier));
-    }}
     onprev={() => goToDay(neighbors.prev)}
     onnext={() => goToDay(neighbors.next)}
     onopenDay={() => (dayPickerOpen = true)}
