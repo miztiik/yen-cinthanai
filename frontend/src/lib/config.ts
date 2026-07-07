@@ -180,10 +180,13 @@ export interface DifficultyUi {
  *  the hover dwell (ms) before a desktop Tooltip bubble appears in the board Command Bar; a
  *  focus always shows it instantly, so this is the pointer-feel knob only. attemptFadeMs = how
  *  long (ms) a just-spent AttemptRing arc fades its opacity as a life is burned (transform/
- *  opacity only; the urgency recolour of the survivors SNAPS, never tweens). */
+ *  opacity only; the urgency recolour of the survivors SNAPS, never tweens). attemptColors =
+ *  the AttemptRing urgency ramp (full green -> mid amber -> last-life red), a fixed traffic-light
+ *  ramp like difficulty.colors (hex or a var(--token)); the spent arcs stay ink-dim. */
 export interface ChromeUi {
   tooltipDelayMs: number;
   attemptFadeMs?: number;
+  attemptColors?: { full: string; mid: string; low: string };
 }
 export interface UiConfig {
   puck: { default: PuckSize; small: PuckPreset; medium: PuckPreset; large: PuckPreset };
@@ -218,10 +221,12 @@ const DIFFICULTY_UI_FALLBACK: DifficultyUi = {
   colors: { easy: "#22c55e", standard: "#eab308", sharp: "#f97316", expert: "#ef4444" },
 };
 
-/** Fail-soft chrome micro-interaction tunables (mirrors config/ui.json [chrome]). */
+/** Fail-soft chrome micro-interaction tunables (mirrors config/ui.json [chrome]). The
+ *  attemptColors ramp is the standardized traffic-light urgency (vivid green -> amber -> red). */
 const CHROME_UI_FALLBACK: ChromeUi = {
   tooltipDelayMs: 350,
   attemptFadeMs: 150,
+  attemptColors: { full: "#22c55e", mid: "#f59e0b", low: "#ef4444" },
 };
 
 const UI_FALLBACK: UiConfig = {

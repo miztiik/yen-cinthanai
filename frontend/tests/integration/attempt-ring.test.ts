@@ -50,14 +50,22 @@ describe("AttemptRing", () => {
     expect(a.every((p) => cls(p).includes("opacity-20"))).toBe(true);
   });
 
-  it("ramps the lit colour by urgency: green full, amber middle, red last life", () => {
-    expect(style(arcs(render(AttemptRing, { left: 3, total: 3 }))[0])).toContain("stroke:var(--satisfy)");
-    expect(style(arcs(render(AttemptRing, { left: 2, total: 3 }))[0])).toContain("stroke:var(--near)");
-    expect(style(arcs(render(AttemptRing, { left: 1, total: 2 }))[0])).toContain("stroke:var(--violate)");
+  it("ramps the lit colour by urgency: green full, amber middle, red last life (default ramp)", () => {
+    // jsdom reserialises the inline hex via CSSOM to rgb(); assert that normalized form.
+    expect(style(arcs(render(AttemptRing, { left: 3, total: 3 }))[0])).toContain("stroke:rgb(34,197,94)");
+    expect(style(arcs(render(AttemptRing, { left: 2, total: 3 }))[0])).toContain("stroke:rgb(245,158,11)");
+    expect(style(arcs(render(AttemptRing, { left: 1, total: 2 }))[0])).toContain("stroke:rgb(239,68,68)");
   });
 
   it("reads a single-arc Expert ring as last-life red (left===1 beats full)", () => {
-    expect(style(arcs(render(AttemptRing, { left: 1, total: 1 }))[0])).toContain("stroke:var(--violate)");
+    expect(style(arcs(render(AttemptRing, { left: 1, total: 1 }))[0])).toContain("stroke:rgb(239,68,68)");
+  });
+
+  it("uses the config-provided urgency ramp (chrome.attemptColors) when given", () => {
+    const colors = { full: "var(--full)", mid: "var(--mid)", low: "var(--low)" };
+    expect(style(arcs(render(AttemptRing, { left: 3, total: 3, colors }))[0])).toContain("stroke:var(--full)");
+    expect(style(arcs(render(AttemptRing, { left: 2, total: 3, colors }))[0])).toContain("stroke:var(--mid)");
+    expect(style(arcs(render(AttemptRing, { left: 1, total: 2, colors }))[0])).toContain("stroke:var(--low)");
   });
 
   it("carries the config fade duration on each arc (transform/opacity only)", () => {

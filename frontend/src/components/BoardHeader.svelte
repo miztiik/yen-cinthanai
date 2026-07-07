@@ -139,8 +139,10 @@
         <span class="tabular-nums opacity-80">{elapsedS}s</span>
       </span>
       {#if game && attemptsTotal >= 0}
-        <AttemptRing left={attemptsLeft} total={attemptsTotal} fadeMs={chrome.attemptFadeMs} />
+        <span class="h-3.5 w-px shrink-0 bg-ink/15" aria-hidden="true"></span>
+        <AttemptRing left={attemptsLeft} total={attemptsTotal} fadeMs={chrome.attemptFadeMs} colors={chrome.attemptColors} />
       {/if}
+      <span class="h-3.5 w-px shrink-0 bg-ink/15" aria-hidden="true"></span>
       <Tooltip text="Reveal a step" delayMs={chrome.tooltipDelayMs}>
         {#snippet children(tip)}
           <button
@@ -180,6 +182,12 @@
     align-items: center;
     column-gap: 0.25rem;
     row-gap: 0;
+    /* Menu typeface: a thinner, geometric Jost (distinct from the Inter body) so the chrome
+       reads lighter + smaller than the board content. font-family inherits, so it cascades to
+       every header control including the DayNav label. */
+    font-family: "Jost Variable", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.01em;
   }
   .hdr-home {
     order: 1;
