@@ -28,6 +28,12 @@
       "date": "2026-07-07",
       "change": "Additive chrome.attemptFadeMs (optional): the duration (ms) a just-spent AttemptRing arc fades its opacity as a life is burned in the board header v2. tooltipDelayMs stays the only required chrome key.",
       "why": "The attempt-ring depletion fade is a chrome micro-interaction feel knob that must be human-edited, not hardcoded (CLAUDE.md #6); it is read by the AttemptRing component from baked config, and the urgency recolour of the survivors snaps (never tweened)."
+    },
+    {
+      "version": 5,
+      "date": "2026-07-07",
+      "change": "Additive chrome.attemptColors{full,mid,low} (optional): the AttemptRing urgency ramp - vivid green (full) -> amber (mid) -> red (last life) - a fixed traffic-light ramp like difficulty.colors; spent arcs stay ink-dim.",
+      "why": "The attempt-ring urgency colours must be human-edited knobs, not hardcoded hex in the component (CLAUDE.md #6); read by AttemptRing from baked config."
     }
   ],
   "$defs": {
@@ -72,10 +78,20 @@
     },
     "chromeSpec": {
       "type": "object",
-      "description": "Chrome (HUD/menu) micro-interaction tunables. tooltipDelayMs = the hover dwell in milliseconds before a desktop Tooltip bubble appears in the board Command Bar (a focus always shows it instantly). attemptFadeMs = the duration in milliseconds a just-spent AttemptRing arc fades its opacity as a life is burned (the urgency recolour of the survivors snaps, never tweens). Feel knobs, human-edited (CLAUDE.md #6).",
+      "description": "Chrome (HUD/menu) micro-interaction tunables. tooltipDelayMs = the hover dwell in milliseconds before a desktop Tooltip bubble appears in the board Command Bar (a focus always shows it instantly). attemptFadeMs = the duration in milliseconds a just-spent AttemptRing arc fades its opacity as a life is burned (the urgency recolour of the survivors snaps, never tweens). attemptColors = the AttemptRing urgency ramp full/mid/low (vivid green -> amber -> red), a fixed traffic-light ramp like difficulty.colors. Feel knobs, human-edited (CLAUDE.md #6).",
       "properties": {
         "tooltipDelayMs": { "type": "number", "exclusiveMinimum": 0 },
-        "attemptFadeMs": { "type": "number", "exclusiveMinimum": 0 }
+        "attemptFadeMs": { "type": "number", "exclusiveMinimum": 0 },
+        "attemptColors": {
+          "type": "object",
+          "properties": {
+            "full": { "type": "string" },
+            "mid": { "type": "string" },
+            "low": { "type": "string" }
+          },
+          "required": ["full", "mid", "low"],
+          "additionalProperties": false
+        }
       },
       "required": ["tooltipDelayMs"],
       "additionalProperties": false

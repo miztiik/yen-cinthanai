@@ -29,7 +29,7 @@
   </button>
   {#if onlabel}
     <button
-      class="min-w-[3.25rem] rounded-full px-1.5 py-1 text-center text-[15px] font-semibold text-ink/80 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      class="min-w-[3.25rem] rounded-full px-1.5 py-1 text-center text-[13px] font-medium text-ink/80 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       aria-haspopup="dialog"
       aria-label={`choose a day, showing ${label}`}
       onclick={onlabel}
@@ -37,7 +37,7 @@
       <span aria-live="polite">{label}</span>
     </button>
   {:else}
-    <span class="min-w-[3.25rem] text-center text-[15px] font-semibold text-ink/80" aria-live="polite">{label}</span>
+    <span class="min-w-[3.25rem] text-center text-[13px] font-medium text-ink/80" aria-live="polite">{label}</span>
   {/if}
   <button
     class="grid h-10 w-8 place-items-center rounded-full text-ink/45 transition-transform active:scale-95 disabled:pointer-events-none disabled:opacity-25"

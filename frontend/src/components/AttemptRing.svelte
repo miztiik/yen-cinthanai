@@ -8,15 +8,26 @@
   // the urgency RECOLOUR of the survivors SNAPS (a discrete one-paint event - never a per-frame
   // colour / filter / stroke-dashoffset tween, Carmack veto). Reduced-motion zeroes the fade
   // (app.css [data-motion=reduce] !important, no per-component query). role=img carries the
-  // count for a screen reader (colour never alone). Pure tokenized SVG + palette tokens (the
-  // TierMeter / AttemptPips precedent), no hardcoded hex (Holy Laws #6/#10). The caller hides
-  // this for an unlimited tier (total < 0). Distinct from the plain-digit timer beside it
-  // (discrete arcs vs digits - Palm's flag). See BoardHeader.svelte, docs/concepts/ui-shell.md.
-  let { left, total, fadeMs = 150 }: { left: number; total: number; fadeMs?: number } = $props();
+  // count for a screen reader (colour never alone). Pure tokenized SVG; the urgency ramp is
+  // config-driven (chrome.attemptColors, the difficulty.colors precedent), no hardcoded hex in
+  // markup (Holy Laws #6/#10). The caller hides this for an unlimited tier (total < 0). Distinct
+  // from the plain-digit timer beside it (discrete arcs vs digits - Palm's flag). See
+  // BoardHeader.svelte, docs/concepts/ui-shell.md.
+  let {
+    left,
+    total,
+    fadeMs = 150,
+    colors = { full: "#22c55e", mid: "#f59e0b", low: "#ef4444" },
+  }: {
+    left: number;
+    total: number;
+    fadeMs?: number;
+    colors?: { full: string; mid: string; low: string };
+  } = $props();
 
   const R = 15; // arc radius in the 36x36 viewBox
   const C = 18; // centre
-  const GAP = 16; // degrees of gap between adjacent arcs (reads as discrete wedges)
+  const GAP = 32; // degrees of gap between adjacent arcs (reads as clearly discrete wedges)
 
   function pt(angle: number): string {
     const a = ((angle - 90) * Math.PI) / 180; // 0deg = 12 o'clock, sweeping clockwise
@@ -33,7 +44,7 @@
   const arcs = $derived(Array.from({ length: Math.max(0, total) }, (_, i) => arc(i, total)));
   // Urgency colour of a LIT arc (snaps; never tweened). last-life (left===1) beats full so an
   // Expert single arc reads red; full (left===total) is green; anything between is amber.
-  const litColor = $derived(left === 1 ? "var(--violate)" : left >= total ? "var(--satisfy)" : "var(--near)");
+  const litColor = $derived(left === 1 ? colors.low : left >= total ? colors.full : colors.mid);
 </script>
 
 <span

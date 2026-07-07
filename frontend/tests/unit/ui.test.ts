@@ -60,4 +60,9 @@ describe("chrome config", () => {
   it("falls back to the built-in chrome delay when config omits it", () => {
     expect(chromeUi(ui).tooltipDelayMs).toBe(350);
   });
+  it("carries the attempt-ring urgency ramp (full/mid/low), fail-soft to the standardized ramp", () => {
+    const withRamp: UiConfig = { ...ui, chrome: { tooltipDelayMs: 350, attemptColors: { full: "#0f0", mid: "#fa0", low: "#f00" } } };
+    expect(chromeUi(withRamp).attemptColors).toEqual({ full: "#0f0", mid: "#fa0", low: "#f00" });
+    expect(chromeUi(ui).attemptColors).toEqual({ full: "#22c55e", mid: "#f59e0b", low: "#ef4444" });
+  });
 });
