@@ -16,6 +16,12 @@
       "date": "2026-07-05",
       "change": "Additive ambient{driftSeconds,shiftSeconds,shiftDepth} block (imperceptible warm background shell timing) + difficulty{order,colors} block (the ascending-bars TierMeter rank order + per-tier fill colour token) for the on-board / landing difficulty switcher.",
       "why": "Shell animation timing and the difficulty colour-coding must be human-edited knobs, not hardcoded (CLAUDE.md #6); both are applied as CSS/chrome from config so they tune without a code change."
+    },
+    {
+      "version": 3,
+      "date": "2026-07-07",
+      "change": "Additive chrome{tooltipDelayMs} block: the hover dwell (ms) before a desktop Tooltip bubble appears in the board Command Bar (focus shows it instantly).",
+      "why": "The tooltip hover delay is a chrome micro-interaction feel knob that must be human-edited, not hardcoded (CLAUDE.md #6); it is read by the Tooltip component from baked config."
     }
   ],
   "$defs": {
@@ -57,6 +63,15 @@
       },
       "required": ["order", "colors"],
       "additionalProperties": false
+    },
+    "chromeSpec": {
+      "type": "object",
+      "description": "Chrome (HUD/menu) micro-interaction tunables. tooltipDelayMs = the hover dwell in milliseconds before a desktop Tooltip bubble appears in the board Command Bar (a focus always shows it instantly). A pointer feel knob, human-edited (CLAUDE.md #6).",
+      "properties": {
+        "tooltipDelayMs": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "required": ["tooltipDelayMs"],
+      "additionalProperties": false
     }
   },
   "properties": {
@@ -91,7 +106,8 @@
       "additionalProperties": true
     },
     "ambient": { "$ref": "#/$defs/ambientSpec" },
-    "difficulty": { "$ref": "#/$defs/difficultySpec" }
+    "difficulty": { "$ref": "#/$defs/difficultySpec" },
+    "chrome": { "$ref": "#/$defs/chromeSpec" }
   },
   "required": ["puck", "snap"],
   "additionalProperties": true

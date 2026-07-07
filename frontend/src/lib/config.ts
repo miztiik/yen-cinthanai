@@ -176,6 +176,12 @@ export interface DifficultyUi {
   order: string[];
   colors: Record<string, string>;
 }
+/** Chrome (HUD/menu) micro-interaction tunables (config/ui.json [chrome]). tooltipDelayMs =
+ *  the hover dwell (ms) before a desktop Tooltip bubble appears in the board Command Bar; a
+ *  focus always shows it instantly, so this is the pointer-feel knob only. */
+export interface ChromeUi {
+  tooltipDelayMs: number;
+}
 export interface UiConfig {
   puck: { default: PuckSize; small: PuckPreset; medium: PuckPreset; large: PuckPreset };
   snap: { radius_factor: number; ease: number };
@@ -183,6 +189,7 @@ export interface UiConfig {
   grid?: GridUi;
   ambient?: AmbientUi;
   difficulty?: DifficultyUi;
+  chrome?: ChromeUi;
 }
 
 /** Soft-feedback fallback: easy (realtime-names) + standard (count-wrong) auto-dim. */
@@ -208,6 +215,11 @@ const DIFFICULTY_UI_FALLBACK: DifficultyUi = {
   colors: { easy: "#22c55e", standard: "#eab308", sharp: "#f97316", expert: "#ef4444" },
 };
 
+/** Fail-soft chrome micro-interaction tunables (mirrors config/ui.json [chrome]). */
+const CHROME_UI_FALLBACK: ChromeUi = {
+  tooltipDelayMs: 350,
+};
+
 const UI_FALLBACK: UiConfig = {
   puck: {
     default: "medium",
@@ -220,6 +232,7 @@ const UI_FALLBACK: UiConfig = {
   grid: GRID_UI_FALLBACK,
   ambient: AMBIENT_UI_FALLBACK,
   difficulty: DIFFICULTY_UI_FALLBACK,
+  chrome: CHROME_UI_FALLBACK,
 };
 
 /** Puck sizing + drag-magnet tunables (config/ui.toml). Fail-soft to bootstrap sizes. */
@@ -251,6 +264,11 @@ export function ambientUi(ui: UiConfig): AmbientUi {
 /** Difficulty chrome (config-driven, fail-soft). */
 export function difficultyUi(ui: UiConfig): DifficultyUi {
   return ui.difficulty ?? DIFFICULTY_UI_FALLBACK;
+}
+
+/** Chrome micro-interaction tunables (config-driven, fail-soft). */
+export function chromeUi(ui: UiConfig): ChromeUi {
+  return ui.chrome ?? CHROME_UI_FALLBACK;
 }
 
 /** 1-based rank of a tier (its ascending-bar count); 0 when the tier is unknown. */
