@@ -1,20 +1,20 @@
 <script lang="ts">
-  // BoardHeader: the board's Command Bar - one panel with TWO tiers over a hairline. Tier 1
-  // (nav / context) carries LEAVE (back), the DAY (a DayNav whose label opens the DayPicker
-  // calendar), and ADJUST (difficulty + display): on desktop the difficulty is an inline
-  // DifficultySegmented switch, on phone a chip that opens the DifficultyPicker sheet. Tier 2
-  // (the live-solve cluster) carries the timer, the attempts as depleting AttemptPips (the
-  // ui.target crosshair is gone), and the hint action. Icon controls carry a desktop Tooltip
-  // (focus-instant, hover-delayed by chrome.tooltipDelayMs) and a visible focus ring; every
-  // labelled meaning survives on touch via aria-label. Blur-free, transform/opacity only, so
-  // it holds 60fps on the mid-tier Android (Holy Law #2). Tokenized chrome + Glyph icons only
-  // (Holy Laws #6/#10). All wiring is props/callbacks from Board. See docs/concepts/ui-shell.md.
+  // BoardHeader (v2): the board's Command Bar as ONE slim line - LEAVE (a house glyph, never
+  // twinning the day carets) | the DAY (a DayNav whose label opens the DayPicker calendar) |
+  // the live-solve cluster (timer, the attempts as an urgency AttemptRing, hint) | ADJUST (a
+  // single current-tier chip that opens the DifficultyPicker sheet + the display gear). The
+  // line stays one row where it fits and wraps ONLY the live-solve cluster to a slim second
+  // zone below a hairline when the header is narrow (a container query, NOT a fixed two-tier);
+  // the vertical padding is cut so the bar stops eating the board. Icon controls carry a
+  // desktop Tooltip (focus-instant, hover-delayed by chrome.tooltipDelayMs) and a visible focus
+  // ring; every labelled meaning survives on touch via aria-label. Blur-free, transform/opacity
+  // only, so it holds 60fps on the mid-tier Android (Holy Law #2). Tokenized chrome + Glyph
+  // icons only (Holy Laws #6/#10). All wiring is props/callbacks from Board. See ui-shell.md.
   import Glyph from "../lib/Glyph.svelte";
   import TierMeter from "./TierMeter.svelte";
   import DayNav from "./DayNav.svelte";
-  import AttemptPips from "./AttemptPips.svelte";
+  import AttemptRing from "./AttemptRing.svelte";
   import Tooltip from "./Tooltip.svelte";
-  import DifficultySegmented from "./DifficultySegmented.svelte";
   import DayPicker from "./DayPicker.svelte";
   import type { Game } from "../state/play.svelte";
   import type { DifficultyUi, ChromeUi } from "../lib/config";
@@ -24,7 +24,6 @@
     difficulty: DifficultyUi;
     chrome: ChromeUi;
     elapsedS: number;
-    desktop: boolean;
     homeHref: string;
     dayLabel: string;
     currentDate: string;
@@ -37,7 +36,6 @@
     onhint: () => void;
     ondisplay: () => void;
     ondifficulty: () => void;
-    onpickTier: (tier: string) => void;
     onprev: () => void;
     onnext: () => void;
     onopenDay: () => void;
@@ -49,7 +47,6 @@
     difficulty,
     chrome,
     elapsedS,
-    desktop,
     homeHref,
     dayLabel,
     currentDate,
@@ -62,7 +59,6 @@
     onhint,
     ondisplay,
     ondifficulty,
-    onpickTier,
     onprev,
     onnext,
     onopenDay,
@@ -77,94 +73,165 @@
   const canHint = $derived(!!game && !game.locked && hintsLeft !== 0);
 </script>
 
-<header class="mx-auto flex w-fit max-w-full flex-col gap-1.5 rounded-3xl border border-ink/10 bg-surface px-1.5 py-1.5 text-sm shadow-e1">
-  <!-- Tier 1: nav / context - LEAVE | DAY | ADJUST -->
-  <div class="flex items-center gap-1 whitespace-nowrap">
-    <Tooltip text="Back to puzzles" delayMs={chrome.tooltipDelayMs}>
-      {#snippet children(tip)}
-        <a
-          class="grid h-11 w-11 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          href={homeHref}
-          aria-label="back"
-          aria-describedby={tip}
-          onclick={(e) => {
-            e.preventDefault();
-            onhome();
-          }}
-        >
-          <Glyph ref="ui.back" size={18} tint />
-        </a>
-      {/snippet}
-    </Tooltip>
+<div class="board-hdr-wrap mx-auto w-full max-w-lg">
+  <header class="board-hdr rounded-2xl border border-ink/10 bg-surface px-1.5 py-1 text-sm shadow-e1">
+    <!-- LEAVE: a house glyph so leave never twins the day-nav carets (Decision 2) -->
+    <div class="hdr-home">
+      <Tooltip text="Back to puzzles" delayMs={chrome.tooltipDelayMs}>
+        {#snippet children(tip)}
+          <a
+            class="grid h-9 w-9 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            href={homeHref}
+            aria-label="back"
+            aria-describedby={tip}
+            onclick={(e) => {
+              e.preventDefault();
+              onhome();
+            }}
+          >
+            <Glyph ref="ui.home" size={17} tint />
+          </a>
+        {/snippet}
+      </Tooltip>
+    </div>
 
-    <div class="flex min-w-0 flex-1 justify-center">
+    <!-- DAY: prev/next carets flanking the label; the label opens the DayPicker calendar -->
+    <div class="hdr-day">
       {#if game}
         <DayNav label={dayLabel} {hasPrev} {hasNext} {onprev} {onnext} onlabel={onopenDay} />
       {/if}
     </div>
 
-    <div class="flex items-center gap-1">
+    <!-- ADJUST: a single current-tier chip -> DifficultyPicker (no desktop segmented), + gear -->
+    <div class="hdr-adjust">
       {#if game}
-        {#if desktop}
-          <DifficultySegmented current={tier} {difficulty} onpick={onpickTier} />
-        {:else}
-          <button
-            class="flex min-h-11 items-center gap-2 rounded-full bg-ink/5 px-3 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-            aria-label={`difficulty ${tier}, tap to change`}
-            aria-haspopup="dialog"
-            title={`difficulty: ${tier}`}
-            onclick={ondifficulty}
-          >
-            <TierMeter {tier} {difficulty} height={14} label={false} />
-            <span class="hidden capitalize sm:inline" style={`color:${difficulty.colors[tier] ?? "var(--accent)"}`}>{tier}</span>
-            <span class="inline-flex rotate-90 opacity-50"><Glyph ref="ui.chevron" size={11} tint /></span>
-          </button>
-        {/if}
+        <button
+          class="flex min-h-10 items-center gap-1 rounded-full bg-ink/5 px-2 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          aria-label={`difficulty ${tier}, tap to change`}
+          aria-haspopup="dialog"
+          title={`difficulty: ${tier}`}
+          onclick={ondifficulty}
+        >
+          <TierMeter {tier} {difficulty} height={14} label={false} />
+          <span class="hdr-tier-name capitalize" style={`color:${difficulty.colors[tier] ?? "var(--accent)"}`}>{tier}</span>
+          <span class="inline-flex rotate-90 opacity-50"><Glyph ref="ui.chevron" size={10} tint /></span>
+        </button>
       {/if}
       <Tooltip text="Display options" delayMs={chrome.tooltipDelayMs}>
         {#snippet children(tip)}
           <button
-            class="grid h-11 w-11 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            class="grid h-9 w-9 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             aria-label="display options"
             aria-describedby={tip}
             onclick={ondisplay}
           >
-            <Glyph ref="ui.gear" size={18} tint />
+            <Glyph ref="ui.gear" size={17} tint />
           </button>
         {/snippet}
       </Tooltip>
     </div>
-  </div>
 
-  <span class="mx-1 h-px bg-ink/10" aria-hidden="true"></span>
-
-  <!-- Tier 2: live-solve cluster - timer | attempts pips | hint -->
-  <div class="flex items-center justify-center gap-2 whitespace-nowrap px-1">
-    <span class="flex items-center gap-1">
-      <span class="opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
-      <span class="tabular-nums opacity-80">{elapsedS}s</span>
-    </span>
-    {#if game && attemptsTotal >= 0}
-      <span class="h-3.5 w-px bg-ink/15" aria-hidden="true"></span>
-      <AttemptPips left={attemptsLeft} total={attemptsTotal} />
-    {/if}
-    <span class="h-3.5 w-px bg-ink/15" aria-hidden="true"></span>
-    <Tooltip text="Reveal a step" delayMs={chrome.tooltipDelayMs}>
-      {#snippet children(tip)}
-        <button
-          class="flex min-h-11 items-center gap-1 rounded-full px-2 font-medium tabular-nums transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-30"
-          aria-label={hintsLeft >= 0 ? `use hint, ${hintsLeft} left` : "use hint"}
-          aria-describedby={tip}
-          disabled={!canHint}
-          onclick={onhint}
-        >
-          <span class="opacity-70"><Glyph ref="ui.hint" size={16} tint /></span>{#if hintsLeft >= 0}{hintsLeft}{/if}
-        </button>
-      {/snippet}
-    </Tooltip>
-  </div>
-</header>
+    <!-- LIVE-SOLVE cluster: timer | attempt ring | hint. One row where it fits; wraps to a slim
+         second zone under a hairline when the header is narrow (the container query below). -->
+    <div class="hdr-live">
+      <span class="flex items-center gap-1">
+        <span class="opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
+        <span class="tabular-nums opacity-80">{elapsedS}s</span>
+      </span>
+      {#if game && attemptsTotal >= 0}
+        <AttemptRing left={attemptsLeft} total={attemptsTotal} fadeMs={chrome.attemptFadeMs} />
+      {/if}
+      <Tooltip text="Reveal a step" delayMs={chrome.tooltipDelayMs}>
+        {#snippet children(tip)}
+          <button
+            class="flex min-h-10 items-center gap-1 rounded-full px-2 font-medium tabular-nums transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-30"
+            aria-label={hintsLeft >= 0 ? `use hint, ${hintsLeft} left` : "use hint"}
+            aria-describedby={tip}
+            disabled={!canHint}
+            onclick={onhint}
+          >
+            <span class="opacity-70"><Glyph ref="ui.hint" size={16} tint /></span>{#if hintsLeft >= 0}{hintsLeft}{/if}
+          </button>
+        {/snippet}
+      </Tooltip>
+    </div>
+  </header>
+</div>
 
 {#if dayPickerOpen && game}
   <DayPicker current={currentDate} dates={tierDates} {today} onpick={onpickDay} onclose={oncloseDay} />
 {/if}
+
+<style>
+  /* v2 header layout: one slim flex line that WRAPS ONLY the live-solve cluster to a slim
+     second zone (under a hairline) when the header is too narrow to hold everything on one
+     row - a container query, not a fixed two-tier. The wrapper is the query container (an
+     inline-size container collapses a w-fit child, so the panel is w-full inside it). The
+     four zones swap order at the breakpoint: narrow keeps home | day | adjust on row 1 with
+     the live cluster on its own full-width row 2; wide slots the live cluster back between
+     day and adjust on a single row. Transform/opacity + reflow only (blur-free, Holy Law #2). */
+  .board-hdr-wrap {
+    container-type: inline-size;
+    container-name: boardhdr;
+  }
+  .board-hdr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 0.25rem;
+    row-gap: 0;
+  }
+  .hdr-home {
+    order: 1;
+  }
+  .hdr-day {
+    order: 2;
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+  }
+  .hdr-adjust {
+    order: 3;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  /* The tier NAME rides in the chip only when the header genuinely has room (a wide desktop
+     container), gated on the container - not a viewport breakpoint - because the board caps
+     the header at ~max-w-md until lg, so a viewport sm: gate would show the word with no space
+     and overflow the single line. The bars + colour + aria-label carry the tier otherwise. */
+  .hdr-tier-name {
+    display: none;
+  }
+  .hdr-live {
+    order: 4;
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+    padding-top: 0.25rem;
+    border-top: 1px solid color-mix(in oklab, var(--ink) 12%, transparent);
+  }
+  /* Wide enough for one row: pull the live cluster back into the middle, drop the hairline. */
+  @container boardhdr (min-width: 400px) {
+    .hdr-adjust {
+      order: 4;
+    }
+    .hdr-live {
+      order: 3;
+      flex-basis: auto;
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+  }
+  /* Only a genuinely wide header (desktop lg container) has room for the tier NAME text. */
+  @container boardhdr (min-width: 460px) {
+    .hdr-tier-name {
+      display: inline;
+    }
+  }
+</style>

@@ -178,9 +178,12 @@ export interface DifficultyUi {
 }
 /** Chrome (HUD/menu) micro-interaction tunables (config/ui.json [chrome]). tooltipDelayMs =
  *  the hover dwell (ms) before a desktop Tooltip bubble appears in the board Command Bar; a
- *  focus always shows it instantly, so this is the pointer-feel knob only. */
+ *  focus always shows it instantly, so this is the pointer-feel knob only. attemptFadeMs = how
+ *  long (ms) a just-spent AttemptRing arc fades its opacity as a life is burned (transform/
+ *  opacity only; the urgency recolour of the survivors SNAPS, never tweens). */
 export interface ChromeUi {
   tooltipDelayMs: number;
+  attemptFadeMs?: number;
 }
 export interface UiConfig {
   puck: { default: PuckSize; small: PuckPreset; medium: PuckPreset; large: PuckPreset };
@@ -218,6 +221,7 @@ const DIFFICULTY_UI_FALLBACK: DifficultyUi = {
 /** Fail-soft chrome micro-interaction tunables (mirrors config/ui.json [chrome]). */
 const CHROME_UI_FALLBACK: ChromeUi = {
   tooltipDelayMs: 350,
+  attemptFadeMs: 150,
 };
 
 const UI_FALLBACK: UiConfig = {

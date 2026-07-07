@@ -5,6 +5,7 @@
     "shiftDepth": 0.55
   },
   "chrome": {
+    "attemptFadeMs": 150,
     "tooltipDelayMs": 350
   },
   "clue": {
