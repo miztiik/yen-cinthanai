@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { puckPreset, tierRank, tierColor, difficultyUi, type UiConfig } from "../../src/lib/config";
+import { puckPreset, tierRank, tierColor, difficultyUi, chromeUi, type UiConfig } from "../../src/lib/config";
 
 // Puck sizing is config-driven (config/ui.toml). The resolver maps the player's size
 // setting to a preset and falls back to the config default for anything unknown.
@@ -47,5 +47,17 @@ describe("difficulty tier meter config", () => {
   it("falls back to the built-in difficulty when config omits it", () => {
     expect(difficultyUi(ui).order).toContain("expert");
     expect(tierRank(ui, "standard")).toBe(2);
+  });
+});
+
+// Chrome micro-interaction tunables (config/ui.json [chrome]) are config-driven and fail soft
+// to the built-in default (350ms) when config omits the block.
+describe("chrome config", () => {
+  it("reads the tooltip hover delay from config", () => {
+    const withChrome: UiConfig = { ...ui, chrome: { tooltipDelayMs: 500 } };
+    expect(chromeUi(withChrome).tooltipDelayMs).toBe(500);
+  });
+  it("falls back to the built-in chrome delay when config omits it", () => {
+    expect(chromeUi(ui).tooltipDelayMs).toBe(350);
   });
 });

@@ -13,16 +13,14 @@
   import GridMap from "./GridMap.svelte";
   import GridMatrix from "./GridMatrix.svelte";
   import ResultCard from "./ResultCard.svelte";
-  import TierMeter from "./TierMeter.svelte";
   import DifficultyPicker from "./DifficultyPicker.svelte";
-  import DayNav from "./DayNav.svelte";
+  import BoardHeader from "./BoardHeader.svelte";
   import DisplaySheet from "./DisplaySheet.svelte";
-  import Glyph from "../lib/Glyph.svelte";
   import { route, homeHref, navigate, syncLocation } from "../lib/router.svelte";
   import { loadBank, loadManifest, pickEntry, hasEntry } from "../lib/loader";
   import { parsePlay, playPath, dayNeighbors } from "../lib/play-route";
   import { formatDay } from "../lib/dates";
-  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, difficultyUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type DifficultyUi } from "../lib/config";
+  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, difficultyUi, chromeUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type DifficultyUi, type ChromeUi } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { gridBlocks, gridCategories } from "../lib/grid";
   import { isHero, nextPlayableTier } from "../lib/scoring";
@@ -59,6 +57,10 @@
   // Difficulty switcher (config-driven colour-coded bars). Populated in start() from ui.json.
   let difficulty = $state<DifficultyUi>(difficultyUi({} as never));
   let pickerOpen = $state(false);
+  // Chrome micro-interaction tunables (tooltip dwell). Resolved in start() from ui.json.
+  let chrome = $state<ChromeUi>(chromeUi({} as never));
+  // DayPicker calendar popover (jump between shipped days). Opened from the DayNav label.
+  let dayPickerOpen = $state(false);
   // Display mode (color/glyphs/labels): provided to the grid via context, toggled in-puzzle by
   // the DisplaySheet, persisted to save.settings.display. Defaults reproduce today's behaviour.
   let display = $state<DisplaySettings>({ color: true, glyphs: true, labels: true });
@@ -115,6 +117,7 @@
       snap = ui.snap;
       soft = softFeedback(ui);
       difficulty = difficultyUi(ui);
+      chrome = chromeUi(ui);
       game = new Game(m, dial, prior);
       tick();
     } catch (e) {
@@ -163,7 +166,6 @@
       ? shareText(buildShareCard(toDayState(game), loadSave().streak, shape?.glyph ?? "abstract.grid"), game.stars, copy.share ?? SHARE_FALLBACK)
       : "",
   );
-  const hintsLeft = $derived(game?.hintsLeft ?? -1);
   const pulse = $derived(!!game && !game.locked && idleMs > pace.idle_pulse_s * 1000);
   const glow = $derived(!!game && !game.locked && idleMs > pace.idle_glow_s * 1000);
   const submitLabel = $derived(game?.dial.feedback === "submit-binary" ? "submit" : "check");
@@ -200,67 +202,40 @@
 <svelte:window bind:innerWidth={vw} />
 
 <main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-7xl" : "max-w-md"} ${display.color ? "" : "display-mono"}`}>
-  <!-- One island PANEL: a controls row (leave | live-solve | adjust) folded together with the
-       day-nav underneath a hairline, so the chrome reads as a single object, not two stacked
-       strips. Live-solve is one metered cluster - timer | attempts | hint - each a glyph + count
-       divided by hairlines (no word labels; the aria-label + title name them). Caret grammar
-       (ui-shell.md): back is the ONLY bold arrowhead; the difficulty chip opens a sheet via a
-       DOWN-caret; the day row's thin light horizontal chevrons live in their OWN row so they
-       never twin the back arrow. -->
-  <header class="mx-auto flex w-fit max-w-full flex-col gap-1 rounded-3xl border border-ink/10 bg-surface px-1 py-1 text-sm shadow-e1">
-    <div class="flex items-center gap-1 whitespace-nowrap">
-      <!-- LEAVE -->
-      <a class="grid h-11 w-11 place-items-center rounded-full text-ink/70 transition-transform active:scale-95" href={homeHref()} aria-label="back" onclick={(e) => { e.preventDefault(); navigate(""); }}>
-        <Glyph ref="ui.back" size={18} tint />
-      </a>
-      <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
-      <!-- LIVE SOLVE: one metered cluster - timer | attempts | hint (glyph + count, hairline-divided) -->
-      <div class="flex min-h-11 items-center gap-1.5 px-1">
-        <span class="flex items-center gap-1">
-          <span class="opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
-          <span class="tabular-nums opacity-80">{Math.floor(elapsed / 1000)}s</span>
-        </span>
-        {#if game && game.attemptsLeft >= 0}
-          <span class="h-3.5 w-px bg-ink/15" aria-hidden="true"></span>
-          <span class="flex items-center gap-1 tabular-nums opacity-80" aria-label={`${game.attemptsLeft} attempts left`} title="attempts left">
-            <span class="opacity-50"><Glyph ref="ui.target" size={14} tint /></span>{game.attemptsLeft}
-          </span>
-        {/if}
-        <span class="h-3.5 w-px bg-ink/15" aria-hidden="true"></span>
-        <button
-          class="flex min-h-11 items-center gap-1 rounded-full px-2 font-medium tabular-nums transition-transform active:scale-95 disabled:opacity-30"
-          aria-label={hintsLeft >= 0 ? `use hint, ${hintsLeft} left` : "use hint"}
-          title="hint"
-          disabled={!game || game.locked || hintsLeft === 0}
-          onclick={() => game?.hint()}
-        >
-          <span class="opacity-70"><Glyph ref="ui.hint" size={16} tint /></span>{#if hintsLeft >= 0}{hintsLeft}{/if}
-        </button>
-      </div>
-      <span class="h-5 w-px bg-ink/10" aria-hidden="true"></span>
-      <!-- ADJUST: difficulty chip (down-caret = opens a sheet) + display options -->
-      <button
-        class="flex min-h-11 items-center gap-2 rounded-full bg-ink/5 px-3 transition-transform active:scale-95"
-        aria-label={`difficulty ${game?.m.tier ?? ""}, tap to change`}
-        title={game ? `difficulty: ${game.m.tier}` : undefined}
-        onclick={() => (pickerOpen = true)}
-      >
-        {#if game}
-          <TierMeter tier={game.m.tier} {difficulty} height={14} label={false} />
-          <span class="hidden capitalize sm:inline" style={`color:${difficulty.colors[game.m.tier] ?? "var(--accent)"}`}>{game.m.tier}</span>
-          <span class="inline-flex rotate-90 opacity-50"><Glyph ref="ui.chevron" size={11} tint /></span>
-        {/if}
-      </button>
-      <button class="grid h-11 w-11 place-items-center rounded-full text-ink/70 transition-transform active:scale-95" aria-label="display options" onclick={() => (displayOpen = true)}>
-        <Glyph ref="ui.gear" size={18} tint />
-      </button>
-    </div>
-    {#if game}
-      <!-- DAY: same island, second row under a hairline (was a separate strip below the bar) -->
-      <span class="mx-2 h-px bg-ink/10" aria-hidden="true"></span>
-      <DayNav label={dayLabel} hasPrev={!!neighbors.prev} hasNext={!!neighbors.next} onprev={() => goToDay(neighbors.prev)} onnext={() => goToDay(neighbors.next)} />
-    {/if}
-  </header>
+  <!-- The board Command Bar: a two-tier panel (nav / context over a hairline above the
+       live-solve cluster). Extracted into BoardHeader, which wires the DayNav (its label
+       opens the DayPicker calendar), the attempts AttemptPips, desktop Tooltips + the inline
+       DifficultySegmented, and the timer/hint. See components/BoardHeader.svelte, ui-shell.md. -->
+  <BoardHeader
+    {game}
+    {difficulty}
+    {chrome}
+    elapsedS={Math.floor(elapsed / 1000)}
+    {desktop}
+    homeHref={homeHref()}
+    {dayLabel}
+    {currentDate}
+    {tierDates}
+    today={TODAY}
+    hasPrev={!!neighbors.prev}
+    hasNext={!!neighbors.next}
+    {dayPickerOpen}
+    onhome={() => navigate("")}
+    onhint={() => game?.hint()}
+    ondisplay={() => (displayOpen = true)}
+    ondifficulty={() => (pickerOpen = true)}
+    onpickTier={(t) => {
+      if (game && t !== game.m.tier) navigate(playPath(currentDate, t as Tier));
+    }}
+    onprev={() => goToDay(neighbors.prev)}
+    onnext={() => goToDay(neighbors.next)}
+    onopenDay={() => (dayPickerOpen = true)}
+    oncloseDay={() => (dayPickerOpen = false)}
+    onpickDay={(d) => {
+      dayPickerOpen = false;
+      goToDay(d);
+    }}
+  />
 
   {#if notice}
     <p class="mx-auto w-fit rounded-full bg-surface px-3 py-1 text-xs opacity-70 shadow-e1" role="status">{notice}</p>

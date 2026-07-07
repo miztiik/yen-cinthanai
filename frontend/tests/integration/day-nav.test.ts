@@ -57,4 +57,19 @@ describe("DayNav", () => {
     btn(el, "next day").click();
     expect(onnext).not.toHaveBeenCalled();
   });
+
+  it("renders the day label as a picker-opening button when onlabel is set", () => {
+    const onlabel = vi.fn();
+    const el = render(DayNav, { label: "Today", hasPrev: true, hasNext: true, onprev: () => {}, onnext: () => {}, onlabel });
+    const labelBtn = el.querySelector<HTMLButtonElement>('button[aria-haspopup="dialog"]')!;
+    expect(labelBtn).toBeTruthy();
+    expect(labelBtn.textContent).toContain("Today");
+    labelBtn.click();
+    expect(onlabel).toHaveBeenCalledOnce();
+  });
+
+  it("leaves the label as static text when onlabel is omitted", () => {
+    const el = render(DayNav, { label: "Today", hasPrev: true, hasNext: true, onprev: () => {}, onnext: () => {} });
+    expect(el.querySelector('button[aria-haspopup="dialog"]')).toBeNull();
+  });
 });

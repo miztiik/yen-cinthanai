@@ -4,6 +4,9 @@
     "shiftSeconds": 150,
     "shiftDepth": 0.55
   },
+  "chrome": {
+    "tooltipDelayMs": 350
+  },
   "clue": {
     "autoDimFeedback": ["realtime-names", "count-wrong"]
   },
