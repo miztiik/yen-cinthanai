@@ -22,10 +22,10 @@
   import { loadBank, loadManifest, pickEntry, hasEntry } from "../lib/loader";
   import { parsePlay, playPath, dayNeighbors } from "../lib/play-route";
   import { formatDay } from "../lib/dates";
-  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, difficultyUi, chromeUi, gridDesktop, layoutUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, ANSWER_COPY_FALLBACK, SCRATCH_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type DifficultyUi, type ChromeUi, type UiConfig } from "../lib/config";
+  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, difficultyUi, chromeUi, gridDesktop, gridLabel, gridGap, layoutUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, ANSWER_COPY_FALLBACK, SCRATCH_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type DifficultyUi, type ChromeUi, type UiConfig } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { gridBlocks, gridCategories } from "../lib/grid";
-  import { fitCellSize } from "../lib/fit";
+  import { fitCellSize, scaleClamp } from "../lib/fit";
   import { playerGrid } from "../lib/answer";
   import { isHero, nextPlayableTier } from "../lib/scoring";
   import { buildShareCard, shareText, type ShareCopy } from "../contracts/share";
@@ -65,6 +65,10 @@
   let chrome = $state<ChromeUi>(chromeUi({} as never));
   // Desktop fused-grid growth params + board width cap (config/ui.json). Resolved in start().
   let desktopCfg = $state(gridDesktop({} as UiConfig));
+  // Axis-label font + inter-cell gap that TRACK the cell edge so a grown cell stays
+  // proportional (config/ui.json [grid.label], [grid.gap]). Resolved in start().
+  let labelCfg = $state(gridLabel({} as UiConfig));
+  let gapCfg = $state(gridGap({} as UiConfig));
   let maxWidthPx = $state(0);
   // DayPicker calendar popover (jump between shipped days). Opened from the DayNav label.
   let dayPickerOpen = $state(false);
@@ -126,6 +130,8 @@
       difficulty = difficultyUi(ui);
       chrome = chromeUi(ui);
       desktopCfg = gridDesktop(ui);
+      labelCfg = gridLabel(ui);
+      gapCfg = gridGap(ui);
       maxWidthPx = layoutUi(ui).maxWidthPx;
       game = new Game(m, dial, prior);
       if (document.hidden || !document.hasFocus()) game.pause(); // loaded into a hidden/unfocused tab
@@ -310,10 +316,10 @@
       <div bind:this={gridWrap} class="flex min-w-0 flex-col gap-4 lg:flex-1">
         {#if storyMode && blocks.length > 0}
           {#if desktop}
-            <GridMatrix {game} cats={gridCategories(game.board)} copy={gridCopy} size={gridSize} />
+            <GridMatrix {game} cats={gridCategories(game.board)} copy={gridCopy} size={gridSize} labelPx={scaleClamp(gridSize, labelCfg)} gapPx={scaleClamp(gridSize, gapCfg)} />
           {:else}
             <section class="flex justify-center">
-              <NotesGrid {game} block={blocks[activeBlock]} {blocks} index={activeBlock} copy={gridCopy} size={cellSize} onnav={navBlock} />
+              <NotesGrid {game} block={blocks[activeBlock]} {blocks} index={activeBlock} copy={gridCopy} size={cellSize} labelPx={scaleClamp(cellSize, labelCfg)} gapPx={scaleClamp(cellSize, gapCfg)} onnav={navBlock} />
             </section>
             {#if blocks.length > 1}
               <GridMap {game} {blocks} active={activeBlock} copy={gridCopy} onselect={(i) => (activeBlock = i)} />

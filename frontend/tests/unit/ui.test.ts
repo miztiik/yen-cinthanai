@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { puckPreset, tierRank, tierColor, difficultyUi, chromeUi, gridCrosshair, gridDesktop, layoutUi, type UiConfig } from "../../src/lib/config";
+import { puckPreset, tierRank, tierColor, difficultyUi, chromeUi, gridCrosshair, gridDesktop, gridLabel, gridGap, layoutUi, type UiConfig } from "../../src/lib/config";
 
 // Puck sizing is config-driven (config/ui.toml). The resolver maps the player's size
 // setting to a preset and falls back to the config default for anything unknown.
@@ -80,15 +80,29 @@ describe("grid crosshair config", () => {
 });
 
 // Desktop grid growth + board width (config/ui.json [grid.desktop], [layout]) are config-driven
-// and fail soft to the built-in UNCAPPED defaults (maxCell 0, maxWidthPx 0).
+// and fail soft to the built-in defaults (maxCell 104 = a proportional cap, maxWidthPx 0 = uncapped).
 describe("grid desktop + layout config", () => {
-  it("reads the desktop growth params, fail-soft to the built-in (uncapped) defaults", () => {
+  it("reads the desktop growth params, fail-soft to the built-in (capped) defaults", () => {
     const withDesktop: UiConfig = { ...ui, grid: { cell: { small: 34, medium: 40, large: 48 }, snap: { ease: 0.6, radius_factor: 0.9 }, desktop: { minCell: 50, maxCell: 120, leadRem: 9, slackPx: 20 } } };
     expect(gridDesktop(withDesktop)).toEqual({ minCell: 50, maxCell: 120, leadRem: 9, slackPx: 20 });
-    expect(gridDesktop(ui)).toEqual({ minCell: 44, maxCell: 0, leadRem: 8.75, slackPx: 16 });
+    expect(gridDesktop(ui)).toEqual({ minCell: 44, maxCell: 104, leadRem: 8.75, slackPx: 16 });
   });
   it("reads the board max width, fail-soft to uncapped (0)", () => {
     expect(layoutUi({ ...ui, layout: { maxWidthPx: 1600 } }).maxWidthPx).toBe(1600);
     expect(layoutUi(ui).maxWidthPx).toBe(0);
+  });
+});
+
+// Axis-label font + inter-cell gap (config/ui.json [grid.label], [grid.gap]) TRACK the cell edge
+// and fail soft to the built-in proportional defaults when the grid block omits them.
+describe("grid label + gap config", () => {
+  it("reads the label + gap scaling from config", () => {
+    const withScale: UiConfig = { ...ui, grid: { cell: { small: 34, medium: 40, large: 48 }, snap: { ease: 0.6, radius_factor: 0.9 }, label: { scale: 0.2, min: 13, max: 24 }, gap: { scale: 0.1, min: 3, max: 9 } } };
+    expect(gridLabel(withScale)).toEqual({ scale: 0.2, min: 13, max: 24 });
+    expect(gridGap(withScale)).toEqual({ scale: 0.1, min: 3, max: 9 });
+  });
+  it("falls back to the built-in proportional defaults when config omits them", () => {
+    expect(gridLabel(ui)).toEqual({ scale: 0.15, min: 12, max: 18 });
+    expect(gridGap(ui)).toEqual({ scale: 0.06, min: 2, max: 7 });
   });
 });

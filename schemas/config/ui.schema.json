@@ -46,6 +46,12 @@
       "date": "2026-07-07",
       "change": "Additive grid.desktop{minCell,maxCell,leadRem,slackPx} (optional) + top-level layout{maxWidthPx}: the desktop fused-grid GROWS to fill the freed left/right gutters. A ResizeObserver measures the grid column and lib/fit.ts sizes each cell = clamp(minCell, floor((width-lead-slack)/leafCount), maxCell). maxCell 0 = uncapped, layout.maxWidthPx 0 = uncapped board width (fill any monitor).",
       "why": "Desktop wasted large empty margins while GridMatrix was stuck at its 40px default; the growth params + board width cap must be human-edited knobs, not hardcoded px (CLAUDE.md #6). Read by Board.svelte via config.ts accessors."
+    },
+    {
+      "version": 8,
+      "date": "2026-07-08",
+      "change": "grid.desktop.maxCell default 0 -> 104 (cap the grown cell so labels/glyphs stay proportional; freed width goes to the board layout, not to a ballooning cell) + additive grid.label{scale,min,max} + grid.gap{scale,min,max}: the axis-label font size and the inter-cell gap (border-spacing) now TRACK the cell edge via lib/fit.ts scaleClamp instead of a fixed text-xs / border-spacing-0|1. clue.autoDimFeedback shipped default emptied to [] (a satisfied clue no longer auto-strikes; the manual check-dot stays).",
+      "why": "An uncapped cell grew to ~180px while axis labels stayed 12px and cells sat edge-to-edge, so the chrome read as broken (CLAUDE.md #6 - the proportion knobs must be human-edited). Auto-strike removed the player's own bookkeeping verb, so it is off by default (the gate stays as config optionality)."
     }
   ],
   "$defs": {
@@ -130,6 +136,17 @@
       "required": ["minCell", "maxCell", "leadRem", "slackPx"],
       "additionalProperties": false
     },
+    "gridScaleSpec": {
+      "type": "object",
+      "description": "A grid chrome dimension (px) that TRACKS the cell edge so it stays proportional to a grown cell: px = round(cell * scale) clamped to [min, max]. Used for the axis-label font (grid.label) and the inter-cell gap (grid.gap). Read by Board.svelte via lib/fit.ts scaleClamp.",
+      "properties": {
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "min": { "type": "number", "minimum": 0 },
+        "max": { "type": "number", "minimum": 0 }
+      },
+      "required": ["scale", "min", "max"],
+      "additionalProperties": false
+    },
     "layoutSpec": {
       "type": "object",
       "description": "Board layout tunables. maxWidthPx caps the whole board width on desktop; 0 = uncapped (fill the viewport so the grown grid + rails use every pixel).",
@@ -169,6 +186,8 @@
         },
         "crosshair": { "$ref": "#/$defs/gridCrosshairSpec" },
         "desktop": { "$ref": "#/$defs/gridDesktopSpec" },
+        "label": { "$ref": "#/$defs/gridScaleSpec" },
+        "gap": { "$ref": "#/$defs/gridScaleSpec" },
         "snap": { "$ref": "#/$defs/snapSpec" }
       },
       "additionalProperties": true
