@@ -20,6 +20,9 @@
     tabindex = -1,
     size = 40,
     locked = false,
+    crosshair = false,
+    row,
+    col,
     ontap,
     ontick,
     onmove,
@@ -32,6 +35,9 @@
     tabindex?: number;
     size?: number;
     locked?: boolean;
+    crosshair?: boolean;
+    row?: number;
+    col?: number;
     ontap: () => void;
     ontick: () => void;
     onmove?: (key: string) => void;
@@ -66,12 +72,15 @@
   type="button"
   data-cell-key={cellKey}
   data-cell-block={block}
+  data-r={row}
+  data-c={col}
+  data-crosshair={crosshair ? "" : undefined}
   {tabindex}
   aria-label={ariaLabel}
   disabled={locked}
   onclick={ontap}
   onkeydown={keydown}
-  class={`grid touch-none place-items-center rounded-md border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${frame}`}
+  class={`relative isolate grid touch-none place-items-center rounded-md border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${frame}`}
   style={`width:${size}px;height:${size}px`}
 >
   {#if state === "tick"}

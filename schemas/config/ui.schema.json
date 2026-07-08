@@ -34,6 +34,18 @@
       "date": "2026-07-07",
       "change": "Additive chrome.attemptColors{full,mid,low} (optional): the AttemptRing urgency ramp - vivid green (full) -> amber (mid) -> red (last life) - a fixed traffic-light ramp like difficulty.colors; spent arcs stay ink-dim.",
       "why": "The attempt-ring urgency colours must be human-edited knobs, not hardcoded hex in the component (CLAUDE.md #6); read by AttemptRing from baked config."
+    },
+    {
+      "version": 6,
+      "date": "2026-07-07",
+      "change": "Additive grid.crosshair{cell,header} (optional): the hover/focus crosshair wash intensity - percent of the --ink token mixed into the hovered cell's row+column wash (cell) and its two axis-header wash (header).",
+      "why": "The crosshair wash strength is a chrome feel knob that must be human-edited, not hardcoded (CLAUDE.md #6); read by lib/crosshair.ts and written as CSS custom properties the app.css wash composes."
+    },
+    {
+      "version": 7,
+      "date": "2026-07-07",
+      "change": "Additive grid.desktop{minCell,maxCell,leadRem,slackPx} (optional) + top-level layout{maxWidthPx}: the desktop fused-grid GROWS to fill the freed left/right gutters. A ResizeObserver measures the grid column and lib/fit.ts sizes each cell = clamp(minCell, floor((width-lead-slack)/leafCount), maxCell). maxCell 0 = uncapped, layout.maxWidthPx 0 = uncapped board width (fill any monitor).",
+      "why": "Desktop wasted large empty margins while GridMatrix was stuck at its 40px default; the growth params + board width cap must be human-edited knobs, not hardcoded px (CLAUDE.md #6). Read by Board.svelte via config.ts accessors."
     }
   ],
   "$defs": {
@@ -95,6 +107,37 @@
       },
       "required": ["tooltipDelayMs"],
       "additionalProperties": false
+    },
+    "gridCrosshairSpec": {
+      "type": "object",
+      "description": "Hover/focus crosshair wash intensity. cell = percent (0..100) of the --ink token mixed into the hovered cell's row+column wash; header = percent mixed into the two axis-header wash (a touch stronger, since the header highlight is the primary 'which pairing' cue on glyph axes). Read by lib/crosshair.ts, written as CSS custom properties.",
+      "properties": {
+        "cell": { "type": "number", "minimum": 0, "maximum": 100 },
+        "header": { "type": "number", "minimum": 0, "maximum": 100 }
+      },
+      "required": ["cell", "header"],
+      "additionalProperties": false
+    },
+    "gridDesktopSpec": {
+      "type": "object",
+      "description": "Desktop fused-grid growth. minCell = the floor cell edge (px) below which the grid scrolls instead of shrinking; maxCell = the ceiling cell edge (px), or 0 for UNCAPPED (fill any monitor); leadRem = the two fixed lead label columns reserved from the width (rem); slackPx = a small margin so a group border never trips a 1px overflow. Read by Board.svelte + lib/fit.ts.",
+      "properties": {
+        "minCell": { "type": "integer", "exclusiveMinimum": 0 },
+        "maxCell": { "type": "integer", "minimum": 0 },
+        "leadRem": { "type": "number", "exclusiveMinimum": 0 },
+        "slackPx": { "type": "number", "minimum": 0 }
+      },
+      "required": ["minCell", "maxCell", "leadRem", "slackPx"],
+      "additionalProperties": false
+    },
+    "layoutSpec": {
+      "type": "object",
+      "description": "Board layout tunables. maxWidthPx caps the whole board width on desktop; 0 = uncapped (fill the viewport so the grown grid + rails use every pixel).",
+      "properties": {
+        "maxWidthPx": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["maxWidthPx"],
+      "additionalProperties": false
     }
   },
   "properties": {
@@ -124,10 +167,13 @@
           "type": "object",
           "additionalProperties": { "type": "integer" }
         },
+        "crosshair": { "$ref": "#/$defs/gridCrosshairSpec" },
+        "desktop": { "$ref": "#/$defs/gridDesktopSpec" },
         "snap": { "$ref": "#/$defs/snapSpec" }
       },
       "additionalProperties": true
     },
+    "layout": { "$ref": "#/$defs/layoutSpec" },
     "ambient": { "$ref": "#/$defs/ambientSpec" },
     "difficulty": { "$ref": "#/$defs/difficultySpec" },
     "chrome": { "$ref": "#/$defs/chromeSpec" }

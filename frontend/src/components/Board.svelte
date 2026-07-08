@@ -12,6 +12,8 @@
   import NotesGrid from "./NotesGrid.svelte";
   import GridMap from "./GridMap.svelte";
   import GridMatrix from "./GridMatrix.svelte";
+  import AnswerSummary from "./AnswerSummary.svelte";
+  import ScratchPad from "./ScratchPad.svelte";
   import ResultCard from "./ResultCard.svelte";
   import DifficultyPicker from "./DifficultyPicker.svelte";
   import BoardHeader from "./BoardHeader.svelte";
@@ -20,9 +22,11 @@
   import { loadBank, loadManifest, pickEntry, hasEntry } from "../lib/loader";
   import { parsePlay, playPath, dayNeighbors } from "../lib/play-route";
   import { formatDay } from "../lib/dates";
-  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, difficultyUi, chromeUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type DifficultyUi, type ChromeUi } from "../lib/config";
+  import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, difficultyUi, chromeUi, gridDesktop, layoutUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, ANSWER_COPY_FALLBACK, SCRATCH_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type DifficultyUi, type ChromeUi, type UiConfig } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { gridBlocks, gridCategories } from "../lib/grid";
+  import { fitCellSize } from "../lib/fit";
+  import { playerGrid } from "../lib/answer";
   import { isHero, nextPlayableTier } from "../lib/scoring";
   import { buildShareCard, shareText, type ShareCopy } from "../contracts/share";
   import { configureAudio, play } from "../lib/audio";
@@ -59,6 +63,9 @@
   let pickerOpen = $state(false);
   // Chrome micro-interaction tunables (tooltip dwell). Resolved in start() from ui.json.
   let chrome = $state<ChromeUi>(chromeUi({} as never));
+  // Desktop fused-grid growth params + board width cap (config/ui.json). Resolved in start().
+  let desktopCfg = $state(gridDesktop({} as UiConfig));
+  let maxWidthPx = $state(0);
   // DayPicker calendar popover (jump between shipped days). Opened from the DayNav label.
   let dayPickerOpen = $state(false);
   // Display mode (color/glyphs/labels): provided to the grid via context, toggled in-puzzle by
@@ -118,6 +125,8 @@
       soft = softFeedback(ui);
       difficulty = difficultyUi(ui);
       chrome = chromeUi(ui);
+      desktopCfg = gridDesktop(ui);
+      maxWidthPx = layoutUi(ui).maxWidthPx;
       game = new Game(m, dial, prior);
       if (document.hidden || !document.hasFocus()) game.pause(); // loaded into a hidden/unfocused tab
       tick();
@@ -186,11 +195,37 @@
   // when a shared-cardinality column exists (Decision 7). See core-loop.md, lib/grid.ts.
   let activeBlock = $state(0);
   let vw = $state(typeof window !== "undefined" ? window.innerWidth : 1024); // real width at init (no mount reflow)
-  const cellSize = $derived(vw >= 1024 ? 68 : vw >= 640 ? 54 : 44);
+  const cellSize = $derived(vw >= 640 ? 54 : 44); // mobile/tablet NotesGrid; desktop GridMatrix uses gridSize
   const desktop = $derived(vw >= 1024);
   const blocks = $derived(game ? gridBlocks(gridCategories(game.board)) : []);
   const gridCopy = $derived(copy.grid ?? GRID_COPY_FALLBACK);
   const hasShared = $derived(!!game && game.board.columns.some((c) => c.cardinality === "shared"));
+  // Live results roster (Row #3): the player's CURRENT deductions, fed by their own placements +
+  // grid ticks (playerGrid -> NEVER the solution, so it cannot spoil). Recomputes once per commit;
+  // the rAF timer never re-derives it (it does not read `elapsed`). Standard+ only (not the Easy
+  // cold-open); desktop always-open, mobile a collapsed disclosure.
+  const results = $derived(game ? playerGrid(game.board, game.placements, new Set(Object.keys(game.gridTicks))) : null);
+  const showResults = $derived(!!game && game.m.tier !== "easy");
+  const answerCopy = $derived(copy.answer ?? ANSWER_COPY_FALLBACK);
+  const scratchCopy = $derived(copy.scratch ?? SCRATCH_COPY_FALLBACK);
+  // Desktop grid GROWTH: measure the grid column (ResizeObserver on the layout-sized wrapper -
+  // read contentRect ONLY, never getBoundingClientRect, so no forced reflow) and size each fused
+  // cell to fill it via lib/fit.ts. leafCount = the staircase value columns (every non-anchor
+  // category's values). Cell size is UNCAPPED by config default. See config/ui.json [grid.desktop].
+  let gridWrap = $state<HTMLElement | null>(null);
+  let gridSize = $state(64);
+  const leafCount = $derived(game ? gridCategories(game.board).slice(1).reduce((n, c) => n + c.values.length, 0) : 0);
+  $effect(() => {
+    const el = gridWrap;
+    if (!el || !desktop || leafCount <= 0) return;
+    const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    const fit = { minCell: desktopCfg.minCell, maxCell: desktopCfg.maxCell, leadPx: desktopCfg.leadRem * rootPx, slackPx: desktopCfg.slackPx };
+    const ro = new ResizeObserver((entries) => {
+      gridSize = fitCellSize(entries[0]?.contentRect.width ?? el.clientWidth, leafCount, fit);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  });
   function navBlock(dir: 1 | -1) {
     if (blocks.length) activeBlock = (activeBlock + dir + blocks.length) % blocks.length;
   }
@@ -213,7 +248,10 @@
 <svelte:window bind:innerWidth={vw} onblur={syncActive} onfocus={syncActive} />
 <svelte:document onvisibilitychange={syncActive} />
 
-<main class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-7xl" : "max-w-md"} ${display.color ? "" : "display-mono"}`}>
+<main
+  class={`mx-auto flex min-h-dvh flex-col gap-4 p-4 ${storyMode ? "max-w-md lg:max-w-none" : "max-w-md"} ${display.color ? "" : "display-mono"}`}
+  style={storyMode && maxWidthPx > 0 ? `max-width:${maxWidthPx}px` : undefined}
+>
   <!-- The board Command Bar (v2): one slim line that wraps the live-solve cluster to a slim
        second zone when the header is narrow. Extracted into BoardHeader, which wires the DayNav
        (its label opens the DayPicker calendar), the attempts as an urgency AttemptRing, desktop
@@ -268,11 +306,11 @@
       </div>
     {/if}
 
-    <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-center">
-      <div class="flex min-w-0 flex-col gap-4">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-start">
+      <div bind:this={gridWrap} class="flex min-w-0 flex-col gap-4 lg:flex-1">
         {#if storyMode && blocks.length > 0}
           {#if desktop}
-            <GridMatrix {game} cats={gridCategories(game.board)} copy={gridCopy} />
+            <GridMatrix {game} cats={gridCategories(game.board)} copy={gridCopy} size={gridSize} />
           {:else}
             <section class="flex justify-center">
               <NotesGrid {game} block={blocks[activeBlock]} {blocks} index={activeBlock} copy={gridCopy} size={cellSize} onnav={navBlock} />
@@ -291,7 +329,25 @@
         {/if}
       </div>
       {#if storyMode}
-        <ClueList {game} copy={copy.clues ?? CLUES_COPY_FALLBACK} {soft} />
+        <aside class="flex flex-col gap-4 lg:w-80 lg:shrink-0">
+          <ClueList {game} copy={copy.clues ?? CLUES_COPY_FALLBACK} {soft} />
+          {#if showResults && results}
+            <!-- Live results roster. Desktop: always-open rail panel. Mobile (Standard+): a
+                 collapsed <details> disclosure - never on the Easy cold-open (showResults gates it). -->
+            <div class="hidden lg:block">
+              <AnswerSummary grid={results} heading={answerCopy.resultsHeading} caption={answerCopy.resultsCaption} partial />
+            </div>
+            <details class="rounded-xl bg-surface p-2 shadow-e1 lg:hidden">
+              <summary class="cursor-pointer select-none text-xs font-bold uppercase tracking-widest opacity-70">{answerCopy.resultsHeading}</summary>
+              <div class="pt-2">
+                <AnswerSummary grid={results} heading={answerCopy.resultsHeading} caption={answerCopy.resultsCaption} partial />
+              </div>
+            </details>
+          {/if}
+          {#if showResults}
+            <ScratchPad value={game.scratch} label={scratchCopy.label} placeholder={scratchCopy.placeholder} onchange={(t) => { game?.setScratch(t); if (game) saveProgress(game); }} />
+          {/if}
+        </aside>
       {/if}
     </div>
 

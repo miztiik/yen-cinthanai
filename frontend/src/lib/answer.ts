@@ -6,6 +6,7 @@
 
 import type { BoardModel } from "./board";
 import type { Placements } from "../contracts/save";
+import { mergeGridPlacements } from "./grid";
 
 export interface AnswerCell {
   label: string;
@@ -36,4 +37,12 @@ export function answerGrid(b: BoardModel, solution: Placements): AnswerGrid {
     return { head, cells };
   });
   return { columns, rows };
+}
+
+/** The player's CURRENT deductions in the SAME grid shape, fed ONLY by their committed
+ *  placements + grid ticks (via mergeGridPlacements) - NEVER the solution, so the live results
+ *  roster can never spoil the puzzle. Undeduced cells come back empty ({label:""}); the partial
+ *  AnswerSummary paints those as a muted "-". It reuses answerGrid (one shape, two feeds). */
+export function playerGrid(b: BoardModel, placements: Placements, ticks: ReadonlySet<string>): AnswerGrid {
+  return answerGrid(b, mergeGridPlacements(b, placements, ticks));
 }

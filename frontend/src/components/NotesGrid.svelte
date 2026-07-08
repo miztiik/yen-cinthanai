@@ -11,7 +11,7 @@
   import GridCell from "./GridCell.svelte";
   import Glyph from "../lib/Glyph.svelte";
   import GlyphSeat from "./GlyphSeat.svelte";
-  import { blockCells, cellState, axisGlyphs, type GridBlock } from "../lib/grid";
+  import { blockCells, cellState, axisGlyphs, onCrosshair, type GridBlock } from "../lib/grid";
   import { glyphExists } from "../lib/glyphs";
   import type { GridCopy } from "../lib/config";
   import type { AttributeValue } from "../contracts/manifest";
@@ -38,11 +38,28 @@
 
   let container = $state<HTMLElement | null>(null);
   let activeCell = $state(0);
+  // The hover/focus crosshair: ONE source of truth, STAMPED with the block id so a block switch
+  // auto-clears it. `hov` is the {r,c} view valid for the CURRENT block only - so there is NO
+  // reset effect (an effect that WROTE hovered would re-run on every hover and clobber it, a
+  // Svelte 5 write-back). Cleared outright on pointer-leave / focus leaving the grid.
+  let hovered = $state<{ block: string; r: number; c: number } | null>(null);
+  const hov = $derived(hovered && hovered.block === block.id ? hovered : null);
   // Reset the roving focus to the first cell whenever the active block changes.
   $effect(() => {
     void block.id;
     activeCell = 0;
   });
+  // Delegated crosshair: resolve the cell under the pointer/focus (dataset ONLY - never
+  // getBoundingClientRect, so no forced reflow) and stamp the single hovered {block,r,c}.
+  // pointer-leave clears; focusout clears only when focus left the whole grid (roving BETWEEN
+  // cells keeps it).
+  function markFrom(target: EventTarget | null) {
+    const el = (target as HTMLElement | null)?.closest<HTMLElement>("[data-cell-key]");
+    if (el && el.dataset.r != null && el.dataset.c != null) hovered = { block: block.id, r: +el.dataset.r, c: +el.dataset.c };
+  }
+  function onFocusOut(e: FocusEvent) {
+    if (!container?.contains(e.relatedTarget as Node)) hovered = null;
+  }
 
   const cols = $derived(block.colCat.values);
   const rows = $derived(block.rowCat.values);
@@ -109,14 +126,26 @@
     ><Glyph ref="ui.chevron" size={16} tint /></button>
   </header>
 
-  <div class="overflow-x-auto" bind:this={container}>
+  <!-- The scroll container also DELEGATES the crosshair pointer/focus events for its cells. It
+       is a passive wrapper, not an interactive control (the real controls are the cell <button>s,
+       each labelled + keyboard-reachable), and the handlers only paint a decorative row/column
+       highlight - so a static-interaction role does not apply here. -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <div
+    class="overflow-x-auto"
+    bind:this={container}
+    onpointerover={(e) => markFrom(e.target)}
+    onpointerleave={() => (hovered = null)}
+    onfocusin={(e) => markFrom(e.target)}
+    onfocusout={onFocusOut}
+  >
     <table class="border-separate border-spacing-1">
       <caption class="sr-only">{block.rowCat.label} versus {block.colCat.label}</caption>
       <thead>
         <tr>
           <th scope="col"><span class="sr-only">{block.rowCat.label}</span></th>
-          {#each cols as cv (cv.id)}
-            <th scope="col" class="px-1 text-center text-xs font-medium opacity-70" style={`width:${size}px`}>
+          {#each cols as cv, ci (cv.id)}
+            <th scope="col" data-crosshair-hdr={hov?.c === ci ? "" : undefined} class="px-1 text-center text-xs font-medium opacity-70" style={`width:${size}px`}>
               <span class="flex flex-col items-center gap-1">
                 {#if colGlyphs && cv.glyph}<GlyphSeat ref={cv.glyph} label={cv.label} d={Math.round(size * 0.62)} />{/if}
                 <span>{cv.label}</span>
@@ -126,16 +155,16 @@
         </tr>
       </thead>
       <tbody>
-        {#each rows as rv (rv.id)}
+        {#each rows as rv, ri (rv.id)}
           <tr>
-            <th scope="row" class="pr-1 text-right text-xs font-medium">
+            <th scope="row" data-crosshair-hdr={hov?.r === ri ? "" : undefined} class="pr-1 text-right text-xs font-medium">
               <span class="inline-flex select-none items-center gap-1.5">
                 {#if rowGlyphs && rv.glyph}<GlyphSeat ref={rv.glyph} label={rv.label} d={Math.round(size * 0.62)} />{/if}
                 <span>{rv.label}</span>
               </span>
             </th>
-            {#each cols as cv (cv.id)}
-              {@const idx = rows.indexOf(rv) * cols.length + cols.indexOf(cv)}
+            {#each cols as cv, ci (cv.id)}
+              {@const idx = ri * cols.length + ci}
               <td class="p-0">
                 <GridCell
                   cellKey={keyAt(rv, cv)}
@@ -144,6 +173,9 @@
                   glyph={colGlyphs && cv.glyph ? cv.glyph : null}
                   ariaLabel={ariaAt(rv, cv)}
                   tabindex={idx === activeCell ? 0 : -1}
+                  crosshair={onCrosshair(hov, ri, ci)}
+                  row={ri}
+                  col={ci}
                   {size}
                   locked={game.locked}
                   ontap={() => {

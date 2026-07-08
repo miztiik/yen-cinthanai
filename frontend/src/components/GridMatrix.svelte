@@ -9,7 +9,7 @@
   import { getContext } from "svelte";
   import GridCell from "./GridCell.svelte";
   import GlyphSeat from "./GlyphSeat.svelte";
-  import { staircase, cellKey, cellState, axisGlyphs } from "../lib/grid";
+  import { staircase, cellKey, cellState, axisGlyphs, onCrosshair } from "../lib/grid";
   import { glyphExists } from "../lib/glyphs";
   import type { GridCopy } from "../lib/config";
   import type { AttributeCategory, AttributeValue } from "../contracts/manifest";
@@ -49,6 +49,19 @@
     void cats;
     active = { gr: 0, gc: 0 };
   });
+  // Hover/focus crosshair over the fused grid: ONE {r,c} = the hovered cell's global leaf
+  // (gr,gc). Delegated on the container (dataset only, no reflow); cleared on pointer-leave /
+  // focus exiting the grid. No reset effect (a Svelte 5 write-back would re-run it on every
+  // hover and clobber it) - a new puzzle remounts GridMatrix, so a stale crosshair cannot
+  // persist. Mirrors NotesGrid. See docs/concepts/ui-shell.md.
+  let hovered = $state<{ r: number; c: number } | null>(null);
+  function markFrom(target: EventTarget | null) {
+    const el = (target as HTMLElement | null)?.closest<HTMLElement>("[data-cell-key]");
+    if (el && el.dataset.r != null && el.dataset.c != null) hovered = { r: +el.dataset.r, c: +el.dataset.c };
+  }
+  function onFocusOut(e: FocusEvent) {
+    if (!container?.contains(e.relatedTarget as Node)) hovered = null;
+  }
 
   function keyOf(rc: AttributeCategory, rv: AttributeValue, cc: AttributeCategory, cv: AttributeValue): string {
     return cellKey({ cat: rc.id, val: rv.id }, { cat: cc.id, val: cv.id });
@@ -100,7 +113,16 @@
   }
 </script>
 
-<div bind:this={container} class="overflow-x-auto" aria-label={copy.heading}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+  bind:this={container}
+  class="overflow-x-auto"
+  aria-label={copy.heading}
+  onpointerover={(e) => markFrom(e.target)}
+  onpointerleave={() => (hovered = null)}
+  onfocusin={(e) => markFrom(e.target)}
+  onfocusout={onFocusOut}
+>
   <table class="table-fixed border-separate border-spacing-0 text-ink">
     <caption class="sr-only">{copy.mapHeading}</caption>
     <colgroup>
@@ -116,8 +138,8 @@
         {/each}
       </tr>
       <tr>
-        {#each colLeaves as cl (cl.cat.id + cl.v.id)}
-          <th scope="col" class={`h-28 align-bottom pb-1 text-xs font-medium opacity-80 ${cl.lastInGroup ? "border-r-2 border-ink/15" : ""}`}>
+        {#each colLeaves as cl, ci (cl.cat.id + cl.v.id)}
+          <th scope="col" data-crosshair-hdr={hovered?.c === ci ? "" : undefined} class={`h-28 align-bottom pb-1 text-xs font-medium opacity-80 ${cl.lastInGroup ? "border-r-2 border-ink/15" : ""}`}>
             <span class="flex h-full flex-col items-center justify-end gap-1.5">
               <span class="[writing-mode:vertical-rl]">{cl.v.label}</span>
               {#if glyphCats.has(cl.cat.id) && cl.v.glyph}<GlyphSeat ref={cl.v.glyph} label={cl.v.label} d={Math.round(size * 0.62)} />{/if}
@@ -135,7 +157,7 @@
                 <span class="mx-auto block rotate-180 [writing-mode:vertical-rl]">{rc.label}</span>
               </th>
             {/if}
-            <th scope="row" class="whitespace-nowrap py-px pr-2 text-right text-xs font-medium">
+            <th scope="row" data-crosshair-hdr={hovered?.r === (grOf.get(rv) ?? -1) ? "" : undefined} class="whitespace-nowrap py-px pr-2 text-right text-xs font-medium">
               <span class="inline-flex items-center justify-end gap-1.5">
                 {#if glyphCats.has(rc.id) && rv.glyph}<GlyphSeat ref={rv.glyph} label={rv.label} d={Math.round(size * 0.62)} />{/if}
                 <span>{rv.label}</span>
@@ -155,6 +177,9 @@
                       glyph={cellGlyph(rc, rv, cc, cv)}
                       ariaLabel={ariaAt(rv, cv, key)}
                       tabindex={gr === active.gr && gc === active.gc ? 0 : -1}
+                      crosshair={onCrosshair(hovered, gr, gc)}
+                      row={gr}
+                      col={gc}
                       {size}
                       locked={game.locked}
                       ontap={() => {

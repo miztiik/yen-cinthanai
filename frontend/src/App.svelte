@@ -11,6 +11,7 @@
   import { applyMotion } from "./lib/motion";
   import { applyTheme } from "./lib/theme";
   import { applyAmbient } from "./lib/ambient";
+  import { applyCrosshair } from "./lib/crosshair";
   import { nextPlayableTier } from "./lib/scoring";
   import type { Tier } from "./contracts/save";
 
@@ -28,6 +29,7 @@
   let pickerOpen = $state(false);
   loadUi().then((ui) => {
     applyAmbient(ui);
+    applyCrosshair(ui);
     difficulty = difficultyUi(ui);
   });
 

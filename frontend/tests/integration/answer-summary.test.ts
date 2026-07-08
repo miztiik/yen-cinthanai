@@ -11,7 +11,8 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import AnswerSummary from "../../src/components/AnswerSummary.svelte";
 import { buildBoard } from "../../src/lib/board";
-import { answerGrid } from "../../src/lib/answer";
+import { answerGrid, playerGrid } from "../../src/lib/answer";
+import type { Placements } from "../../src/contracts/save";
 import type { PuzzleManifest } from "../../src/contracts/manifest";
 
 // jsdom sets import.meta.url to a non-file URL, so resolve from the vitest cwd (frontend root).
@@ -54,5 +55,17 @@ describe("AnswerSummary", () => {
     expect(el.querySelector("button")).toBeNull();
     expect(el.querySelector("a")).toBeNull();
     expect((el.textContent ?? "").toLowerCase()).not.toContain("share");
+  });
+
+  it("partial mode fills deduced cells, dashes the rest, and shows a live count", () => {
+    const board = buildBoard(m);
+    const craft = board.columns[0].id;
+    const place: Placements = { [board.entities[0]]: { [craft]: m.solution[board.entities[0]][craft] } };
+    const partialGrid = playerGrid(board, place, new Set());
+    const el = render(AnswerSummary, { grid: partialGrid, heading: "Results", partial: true });
+    expect(el.textContent).toContain("(1/8)"); // 1 of 4 entities x 2 columns deduced
+    expect(el.textContent).toContain("Alpha"); // the deduced craft label
+    const srTexts = Array.from(el.querySelectorAll(".sr-only")).map((s) => s.textContent);
+    expect(srTexts.filter((t) => t === "unknown")).toHaveLength(7); // the 7 undeduced cells
   });
 });

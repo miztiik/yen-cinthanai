@@ -205,6 +205,13 @@ export function cellState(
   return "blank";
 }
 
+/** Crosshair predicate: does the cell at (r, c) lie in the hovered/focused cell's row OR
+ *  column? Pure + DOM-free so NotesGrid stays a thin view (mirrors the grid.ts helper style).
+ *  `hovered` is the single {r,c} source of truth; null clears the whole crosshair. */
+export function onCrosshair(hovered: { r: number; c: number } | null, r: number, c: number): boolean {
+  return !!hovered && (hovered.r === r || hovered.c === c);
+}
+
 /** Project the grid TICKS that involve the anchor category onto a placements copy, so
  *  the grid contributes to the win exactly like the token board (Decision 7). A tick
  *  between two NON-anchor categories has no single entity, so it stays scratch-only.

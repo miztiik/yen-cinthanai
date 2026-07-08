@@ -1,7 +1,13 @@
 {
   "answer": {
     "heading": "Solution",
-    "caption": "The solved grid: each row and its attributes."
+    "caption": "The solved grid: each row and its attributes.",
+    "resultsHeading": "Results",
+    "resultsCaption": "Answers you have deduced so far, filled from your own marks."
+  },
+  "scratch": {
+    "label": "Scratch pad",
+    "placeholder": "Jot your deductions here"
   },
   "clues": {
     "heading": "Clues",

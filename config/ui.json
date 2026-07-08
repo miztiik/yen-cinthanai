@@ -31,10 +31,23 @@
       "medium": 40,
       "small": 34
     },
+    "crosshair": {
+      "cell": 12,
+      "header": 18
+    },
+    "desktop": {
+      "minCell": 44,
+      "maxCell": 0,
+      "leadRem": 8.75,
+      "slackPx": 16
+    },
     "snap": {
       "ease": 0.6,
       "radius_factor": 0.9
     }
+  },
+  "layout": {
+    "maxWidthPx": 0
   },
   "puck": {
     "default": "medium",

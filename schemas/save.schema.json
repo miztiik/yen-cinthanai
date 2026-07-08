@@ -28,6 +28,12 @@
       "date": "2026-07-05",
       "change": "Additive settings.display{color,glyphs,labels} (in-puzzle display mode; schemaVersion unchanged). Absent in older saves; deep-merged to the default {true,true,true} on read and clamped so at least one of glyphs/labels stays on.",
       "why": "An in-puzzle display/clarity toggle (color/glyphs/text) reachable from the board + Settings; additive-optional so old saves keep loading with no version bump."
+    },
+    {
+      "version": 1,
+      "date": "2026-07-07",
+      "change": "Additive DayState.notes.scratch (free-text scratch pad; schemaVersion unchanged). Omitted when empty; a save without it defaults to an empty string on read.",
+      "why": "A per-day free-text scratch pad on the board; additive-optional so older saves keep loading with no version bump (CLAUDE.md #11 read-side default)."
     }
   ],
   "$defs": {
@@ -51,7 +57,8 @@
       "properties": {
         "manualX": { "$ref": "#/$defs/stringList" },
         "scratchTicks": { "$ref": "#/$defs/stringList" },
-        "struckClues": { "$ref": "#/$defs/stringList" }
+        "struckClues": { "$ref": "#/$defs/stringList" },
+        "scratch": { "type": "string" }
       },
       "additionalProperties": false
     },

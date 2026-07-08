@@ -12,6 +12,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import GridCell from "../../src/components/GridCell.svelte";
 import NotesGrid from "../../src/components/NotesGrid.svelte";
+import GridMatrix from "../../src/components/GridMatrix.svelte";
 import { Game } from "../../src/state/play.svelte";
 import { gridBlocks, gridCategories } from "../../src/lib/grid";
 import { GRID_COPY_FALLBACK, type TierDial } from "../../src/lib/config";
@@ -120,5 +121,85 @@ describe("NotesGrid (one-block editor)", () => {
     cell.click();
     flushSync();
     expect(Object.keys(g.gridManualX)).toEqual([cell.dataset.cellKey]);
+  });
+
+  it("hover + keyboard-focus wash the cell's whole row + column and both axis headers, then clear", () => {
+    const g = new Game(m, STD);
+    const el = render(NotesGrid, {
+      game: g, block, blocks, index: 0, copy: GRID_COPY_FALLBACK,
+      size: 40, onnav: () => {},
+    });
+    const container = el.querySelector(".overflow-x-auto") as HTMLElement;
+    const nCols = block.colCat.values.length;
+    const nRows = block.rowCat.values.length;
+    const cells = Array.from(el.querySelectorAll<HTMLButtonElement>("[data-cell-key]"));
+    const r = Math.min(1, nRows - 1);
+    const c = Math.min(1, nCols - 1);
+    const target = cells.find((b) => +b.dataset.r! === r && +b.dataset.c! === c)!;
+
+    // Pointer hover lights exactly the row + column (row cells + col cells - the shared cell).
+    target.dispatchEvent(new MouseEvent("pointerover", { bubbles: true }));
+    flushSync();
+    const lit = cells.filter((b) => b.hasAttribute("data-crosshair"));
+    expect(lit).toHaveLength(nCols + nRows - 1);
+    expect(lit.every((b) => +b.dataset.r! === r || +b.dataset.c! === c)).toBe(true);
+    expect(el.querySelectorAll("th[data-crosshair-hdr]")).toHaveLength(2); // one row + one col header
+    expect(el.querySelector("th[scope='row'][data-crosshair-hdr]")).not.toBeNull();
+    expect(el.querySelector("th[scope='col'][data-crosshair-hdr]")).not.toBeNull();
+
+    // Leaving the grid clears every marker.
+    container.dispatchEvent(new MouseEvent("pointerleave"));
+    flushSync();
+    expect(el.querySelectorAll("[data-crosshair]")).toHaveLength(0);
+    expect(el.querySelectorAll("th[data-crosshair-hdr]")).toHaveLength(0);
+
+    // Keyboard focus produces the IDENTICAL crosshair on a different cell (a11y parity).
+    const r2 = 0;
+    const c2 = Math.min(2, nCols - 1);
+    const target2 = cells.find((b) => +b.dataset.r! === r2 && +b.dataset.c! === c2)!;
+    target2.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+    flushSync();
+    expect(el.querySelectorAll("[data-crosshair]")).toHaveLength(nCols + nRows - 1);
+
+    // Focus leaving the whole grid (relatedTarget outside the container) clears it.
+    const outside = document.createElement("button");
+    document.body.appendChild(outside);
+    target2.dispatchEvent(new FocusEvent("focusout", { bubbles: true, relatedTarget: outside }));
+    flushSync();
+    expect(el.querySelectorAll("[data-crosshair]")).toHaveLength(0);
+  });
+});
+
+describe("GridMatrix (desktop fused grid)", () => {
+  it("threads the config-driven size onto its cells (the desktop grid-growth mechanism)", () => {
+    const g = new Game(m, STD);
+    const el = render(GridMatrix, { game: g, cats: gridCategories(g.board), copy: GRID_COPY_FALLBACK, size: 80 });
+    const cell = el.querySelector("[data-cell-key]") as HTMLElement;
+    expect(cell.style.width).toBe("80px");
+    expect(cell.style.height).toBe("80px");
+  });
+
+  it("hover washes the fused cell's row + column and both axis headers, then clears", () => {
+    const g = new Game(m, STD);
+    const el = render(GridMatrix, { game: g, cats: gridCategories(g.board), copy: GRID_COPY_FALLBACK, size: 60 });
+    const container = el.querySelector(".overflow-x-auto") as HTMLElement;
+    const cells = Array.from(el.querySelectorAll<HTMLElement>("[data-cell-key]"));
+    // pick a cell that is not on the r=0/c=0 lines so the row/column sets are disjoint from the edges
+    const target = cells.find((b) => +b.dataset.r! >= 1 && +b.dataset.c! >= 1) ?? cells[0];
+    const r = +target.dataset.r!;
+    const c = +target.dataset.c!;
+
+    target.dispatchEvent(new MouseEvent("pointerover", { bubbles: true }));
+    flushSync();
+    const lit = cells.filter((b) => b.hasAttribute("data-crosshair"));
+    expect(lit.length).toBeGreaterThan(0);
+    expect(lit.every((b) => +b.dataset.r! === r || +b.dataset.c! === c)).toBe(true);
+    expect(el.querySelector("th[scope='row'][data-crosshair-hdr]")).not.toBeNull();
+    expect(el.querySelector("th[scope='col'][data-crosshair-hdr]")).not.toBeNull();
+
+    container.dispatchEvent(new MouseEvent("pointerleave"));
+    flushSync();
+    expect(el.querySelectorAll("[data-crosshair]")).toHaveLength(0);
+    expect(el.querySelectorAll("th[data-crosshair-hdr]")).toHaveLength(0);
   });
 });

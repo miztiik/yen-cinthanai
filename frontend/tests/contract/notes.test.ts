@@ -51,6 +51,19 @@ describe("toDayState notes emission", () => {
     expect(notes.manualX).toContain(MX);
     expect(notes.struckClues).toEqual(["c1"]);
   });
+
+  it("carries the free-text scratch pad when the player has jotted a note", () => {
+    const g = new Game(m, STD);
+    g.setScratch("Ana is not the potter");
+    expect(toDayState(g).notes!.scratch).toBe("Ana is not the potter");
+  });
+
+  it("still omits notes when the scratch is cleared and nothing else is marked", () => {
+    const g = new Game(m, STD);
+    g.setScratch("something");
+    g.setScratch("");
+    expect(toDayState(g).notes).toBeUndefined();
+  });
 });
 
 describe("validateSave backward compatibility", () => {
@@ -64,6 +77,13 @@ describe("validateSave backward compatibility", () => {
     const day = { ...legacyDay(), notes: { manualX: [MX], scratchTicks: [TICK], struckClues: ["c1"] } };
     const s = validateSave({ schemaVersion: 1, days: { x: day } });
     expect(s.days[dayKey("2026-06-27", "easy", "grid")].notes?.struckClues).toEqual(["c1"]);
+  });
+
+  it("loads a day WITH a scratch note, and a legacy day (no scratch) defaults to empty on the Game", () => {
+    const withScratch = { ...legacyDay(), notes: { scratch: "my running note" } };
+    const s = validateSave({ schemaVersion: 1, days: { x: withScratch } });
+    expect(s.days[dayKey("2026-06-27", "easy", "grid")].notes?.scratch).toBe("my running note");
+    expect(new Game(m, STD, legacyDay()).scratch).toBe("");
   });
 
   it("drops a day whose notes is malformed (not arrays of strings)", () => {
@@ -83,6 +103,7 @@ describe("Game round-trip restores every mark", () => {
     g.gridDrop(TICK);
     g.gridTap(MX);
     g.toggleStruck("c2");
+    g.setScratch("reload me");
     const day = toDayState(g);
 
     const s = validateSave({ schemaVersion: 1, days: { x: day } });
@@ -92,6 +113,7 @@ describe("Game round-trip restores every mark", () => {
     expect(g2.gridTicks[TICK]).toBe(true);
     expect(g2.gridManualX[MX]).toBe(true);
     expect(g2.struck.c2).toBe(true);
+    expect(g2.scratch).toBe("reload me");
     // and the tick reconstructs into the merged eval (drives the win, Decision 7)
     expect(g2.evalState.filled).toBeGreaterThan(0);
   });

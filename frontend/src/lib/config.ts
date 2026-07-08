@@ -22,6 +22,7 @@ export interface CopyBags {
   clues?: CluesCopy;
   grid?: GridCopy;
   answer?: AnswerCopy;
+  scratch?: ScratchCopy;
 }
 
 /** Chrome copy for the story-first clue list (config/copy.json [clues]). `{n}` = number. */
@@ -76,12 +77,28 @@ export const GRID_COPY_FALLBACK: GridCopy = {
 export interface AnswerCopy {
   heading: string;
   caption: string;
+  /** Live in-progress results roster (Board right rail / mobile disclosure). */
+  resultsHeading: string;
+  resultsCaption: string;
 }
 
 /** Fail-soft answer-reveal copy so a missing copy.json still labels the win summary. */
 export const ANSWER_COPY_FALLBACK: AnswerCopy = {
   heading: "Solution",
   caption: "The solved grid: each row and its attributes.",
+  resultsHeading: "Results",
+  resultsCaption: "Answers you have deduced so far, filled from your own marks.",
+};
+
+/** Chrome copy for the free-text scratch pad (config/copy.json [scratch]). */
+export interface ScratchCopy {
+  label: string;
+  placeholder: string;
+}
+/** Fail-soft scratch-pad copy so a missing copy.json still labels the pad. */
+export const SCRATCH_COPY_FALLBACK: ScratchCopy = {
+  label: "Scratch pad",
+  placeholder: "Jot your deductions here",
 };
 export interface Pace {
   idle_pulse_s: number;
@@ -158,6 +175,13 @@ export interface ClueUi {
 export interface GridUi {
   cell: { small: number; medium: number; large: number };
   snap: { radius_factor: number; ease: number };
+  /** Hover/focus crosshair wash intensity: `cell`/`header` = percent of --ink mixed into the
+   *  row+column cell wash / the two axis-header wash (config/ui.json [grid.crosshair]). */
+  crosshair?: { cell: number; header: number };
+  /** Desktop fused-grid growth (config/ui.json [grid.desktop]): the ResizeObserver-driven cell
+   *  fills the column between `minCell` and `maxCell` (0 = uncapped), reserving `leadRem` for the
+   *  two lead label columns and `slackPx` so a group border never trips a 1px overflow. */
+  desktop?: { minCell: number; maxCell: number; leadRem: number; slackPx: number };
 }
 /** Whole-app background shell timing (config/ui.json [ambient]). driftSeconds = the slow
  *  transform drift of aurora layer A; shiftSeconds = the warm opacity cross-fade cycle of
@@ -188,6 +212,12 @@ export interface ChromeUi {
   attemptFadeMs?: number;
   attemptColors?: { full: string; mid: string; low: string };
 }
+/** Board layout tunables (config/ui.json [layout]). maxWidthPx caps the whole board width on
+ *  desktop; 0 = uncapped (the board fills the viewport, so the grown grid + rails use every
+ *  pixel - "this is a gaming app, not a text website"). */
+export interface LayoutUi {
+  maxWidthPx: number;
+}
 export interface UiConfig {
   puck: { default: PuckSize; small: PuckPreset; medium: PuckPreset; large: PuckPreset };
   snap: { radius_factor: number; ease: number };
@@ -196,6 +226,7 @@ export interface UiConfig {
   ambient?: AmbientUi;
   difficulty?: DifficultyUi;
   chrome?: ChromeUi;
+  layout?: LayoutUi;
 }
 
 /** Soft-feedback fallback: easy (realtime-names) + standard (count-wrong) auto-dim. */
@@ -205,7 +236,12 @@ const SOFT_FEEDBACK_FALLBACK: Feedback[] = ["realtime-names", "count-wrong"];
 const GRID_UI_FALLBACK: GridUi = {
   cell: { small: 34, medium: 40, large: 48 },
   snap: { radius_factor: 0.9, ease: 0.6 },
+  crosshair: { cell: 12, header: 18 },
+  desktop: { minCell: 44, maxCell: 0, leadRem: 8.75, slackPx: 16 },
 };
+
+/** Fail-soft board layout (mirrors config/ui.json [layout]); 0 = uncapped width. */
+const LAYOUT_UI_FALLBACK: LayoutUi = { maxWidthPx: 0 };
 
 /** Fail-soft ambient shell timing (mirrors config/ui.json [ambient]). */
 const AMBIENT_UI_FALLBACK: AmbientUi = {
@@ -242,6 +278,7 @@ const UI_FALLBACK: UiConfig = {
   ambient: AMBIENT_UI_FALLBACK,
   difficulty: DIFFICULTY_UI_FALLBACK,
   chrome: CHROME_UI_FALLBACK,
+  layout: LAYOUT_UI_FALLBACK,
 };
 
 /** Puck sizing + drag-magnet tunables (config/ui.toml). Fail-soft to bootstrap sizes. */
@@ -263,6 +300,21 @@ export function softFeedback(ui: UiConfig): Feedback[] {
 /** Cross-out grid tunables (config-driven, fail-soft). */
 export function gridUi(ui: UiConfig): GridUi {
   return ui.grid ?? GRID_UI_FALLBACK;
+}
+
+/** Hover/focus crosshair wash intensities (percent of --ink), config-driven, fail-soft. */
+export function gridCrosshair(ui: UiConfig): { cell: number; header: number } {
+  return gridUi(ui).crosshair ?? { cell: 12, header: 18 };
+}
+
+/** Desktop fused-grid growth params (config-driven, fail-soft). maxCell 0 = uncapped. */
+export function gridDesktop(ui: UiConfig): { minCell: number; maxCell: number; leadRem: number; slackPx: number } {
+  return gridUi(ui).desktop ?? { minCell: 44, maxCell: 0, leadRem: 8.75, slackPx: 16 };
+}
+
+/** Board layout tunables (config-driven, fail-soft). maxWidthPx 0 = uncapped. */
+export function layoutUi(ui: UiConfig): LayoutUi {
+  return ui.layout ?? LAYOUT_UI_FALLBACK;
 }
 
 /** Ambient shell timing (config-driven, fail-soft). */

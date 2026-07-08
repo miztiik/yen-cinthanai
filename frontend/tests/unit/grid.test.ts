@@ -16,6 +16,7 @@ import {
   gridCategories,
   impliedX,
   mergeGridPlacements,
+  onCrosshair,
   orderedValues,
   parseCellKey,
   staircase,
@@ -291,5 +292,22 @@ describe("glyphComplete (no-mix render gate)", () => {
 
   it("is incomplete for an empty category", () => {
     expect(glyphComplete(cat([]), exists)).toBe(false);
+  });
+});
+
+describe("onCrosshair (row/column crosshair predicate)", () => {
+  it("is false for every cell when nothing is hovered", () => {
+    expect(onCrosshair(null, 0, 0)).toBe(false);
+    expect(onCrosshair(null, 3, 5)).toBe(false);
+  });
+  it("is true along the hovered row and the hovered column, including the cell itself", () => {
+    const h = { r: 1, c: 2 };
+    expect(onCrosshair(h, 1, 2)).toBe(true); // the focused cell
+    expect(onCrosshair(h, 1, 5)).toBe(true); // same row
+    expect(onCrosshair(h, 4, 2)).toBe(true); // same column
+  });
+  it("is false for a cell in neither the hovered row nor column", () => {
+    expect(onCrosshair({ r: 1, c: 2 }, 0, 0)).toBe(false);
+    expect(onCrosshair({ r: 1, c: 2 }, 3, 4)).toBe(false);
   });
 });

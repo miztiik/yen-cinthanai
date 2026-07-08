@@ -182,6 +182,29 @@ body::after {
   box-shadow: 0 0 0 3px var(--accent);
 }
 
+/* Grid hover/focus crosshair: a neutral ink wash on the hovered/focused cell's whole row +
+   column and its two axis <th> headers, so the player sees which pairing a cell asserts.
+   lib/crosshair.ts writes --grid-crosshair-pct / --grid-crosshair-hdr-pct from config/ui.json
+   [grid.crosshair]; the wash is composed here from --ink so it follows a live theme swap. The
+   cell wash is a ::before overlay (z-index -1 inside the cell's own `isolate` stacking context)
+   so it paints ABOVE the cell background but BELOW the glyph/X, and leaves box-shadow free for
+   the focus ring (which the focused cell always carries). Colour-only paint, no transition (a
+   pointer sweep must not spawn N tweens), reduced-motion-safe (colour, not motion). NotesGrid
+   owns the single hovered {r,c}. See docs/concepts/ui-shell.md, config/ui.json. */
+[data-cell-key][data-crosshair]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: color-mix(in oklab, var(--ink) var(--grid-crosshair-pct, 12%), transparent);
+  pointer-events: none;
+}
+th[data-crosshair-hdr] {
+  background-color: color-mix(in oklab, var(--ink) var(--grid-crosshair-hdr-pct, 18%), transparent);
+  border-radius: 6px;
+}
+
 /* Glyphs are the only <img> in the app (registry-sourced) and they live inside draggable
    pucks. Browsers make <img> natively draggable, so a mouse press-and-move on a token
    would start an OS image-drag (ghost image) that HIJACKS the pointer-drag in lib/drag.ts

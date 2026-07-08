@@ -26,6 +26,9 @@ export interface DayNotes {
   manualX?: string[];
   scratchTicks?: string[];
   struckClues?: string[];
+  /** Free-text scratch pad (Board right rail / mobile disclosure). Additive-optional and
+   *  omitted when empty, so a save without it still loads (schemaVersion stays 1). */
+  scratch?: string;
 }
 
 export interface DayState {

@@ -49,6 +49,10 @@ export class Game {
   // Both persist via DayState.notes; a present key = marked (removed, never set false).
   gridTicks = $state<Record<string, boolean>>({});
   gridManualX = $state<Record<string, boolean>>({});
+  // Free-text scratch pad (Row #4): the player's private jottings for the day. Persisted via
+  // DayState.notes.scratch (buildNotes) + restored in the constructor. Debounced-saved by the
+  // ScratchPad component (localStorage.setItem serializes the whole save, so not per-keystroke).
+  scratch = $state("");
 
   constructor(m: PuzzleManifest, dial: TierDial, prior?: DayState) {
     this.m = m;
@@ -63,8 +67,14 @@ export class Game {
     this.gridTicks = recFrom(prior?.notes?.scratchTicks);
     this.gridManualX = recFrom(prior?.notes?.manualX);
     this.struck = recFrom(prior?.notes?.struckClues);
+    this.scratch = prior?.notes?.scratch ?? "";
     if (!this.locked) this.clock.start(Date.now());
     this.lastMoveMs = Date.now();
+  }
+
+  /** Set the free-text scratch pad (persistence is debounced by the ScratchPad component). */
+  setScratch(text: string): void {
+    this.scratch = text;
   }
 
   /** Realtime tiers colour as you play; harder tiers stay neutral until CHECK. */
@@ -310,11 +320,12 @@ function buildNotes(g: Game): DayNotes | undefined {
   const scratchTicks = keysOf(g.gridTicks);
   const manualX = keysOf(g.gridManualX);
   const struckClues = keysOf(g.struck);
-  if (!scratchTicks.length && !manualX.length && !struckClues.length) return undefined;
+  if (!scratchTicks.length && !manualX.length && !struckClues.length && !g.scratch) return undefined;
   const notes: DayNotes = {};
   if (scratchTicks.length) notes.scratchTicks = scratchTicks;
   if (manualX.length) notes.manualX = manualX;
   if (struckClues.length) notes.struckClues = struckClues;
+  if (g.scratch) notes.scratch = g.scratch;
   return notes;
 }
 
