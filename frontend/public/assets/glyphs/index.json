@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T20:42:58Z",
+  "generatedAt": "2026-07-08T21:56:52Z",
   "packs": {
     "abstract": {
       "awardblank": {
@@ -1788,6 +1788,10 @@
         "file": "occupation/captain.svg",
         "label": "Captain"
       },
+      "caregivers": {
+        "file": "occupation/caregivers.svg",
+        "label": "Caregivers"
+      },
       "carpenter": {
         "file": "occupation/carpenter.svg",
         "label": "Carpenter"
@@ -1799,6 +1803,10 @@
       "chemist": {
         "file": "occupation/chemist.svg",
         "label": "Chemist"
+      },
+      "cook": {
+        "file": "occupation/cook.svg",
+        "label": "Cook"
       },
       "detective": {
         "file": "occupation/detective.svg",
@@ -1836,9 +1844,17 @@
         "file": "occupation/hairdresser.svg",
         "label": "Hairdresser"
       },
+      "juggler": {
+        "file": "occupation/juggler.svg",
+        "label": "Juggler"
+      },
       "lawyer": {
         "file": "occupation/lawyer.svg",
         "label": "Lawyer"
+      },
+      "magician": {
+        "file": "occupation/magician.svg",
+        "label": "Magician"
       },
       "mathematician": {
         "file": "occupation/mathematician.svg",
@@ -1933,6 +1949,60 @@
       "hospital": {
         "file": "offices/hospital.svg",
         "label": "Hospital"
+      }
+    },
+    "people": {
+      "female1": {
+        "file": "people/female-1.svg",
+        "label": "Female 1"
+      },
+      "female2": {
+        "file": "people/female-2.svg",
+        "label": "Female 2"
+      },
+      "female3": {
+        "file": "people/female-3.svg",
+        "label": "Female 3"
+      },
+      "female4": {
+        "file": "people/female-4.svg",
+        "label": "Female 4"
+      },
+      "female5": {
+        "file": "people/female-5.svg",
+        "label": "Female 5"
+      },
+      "female6": {
+        "file": "people/female-6.svg",
+        "label": "Female 6"
+      },
+      "female7": {
+        "file": "people/female-7.svg",
+        "label": "Female 7"
+      },
+      "male1": {
+        "file": "people/male-1.svg",
+        "label": "Male 1"
+      },
+      "male2": {
+        "file": "people/male-2.svg",
+        "label": "Male 2"
+      },
+      "male3": {
+        "file": "people/male-3.svg",
+        "label": "Male 3"
+      },
+      "male4": {
+        "file": "people/male-4.svg",
+        "label": "Male 4"
+      },
+      "male5": {
+        "file": "people/male-5.svg",
+        "label": "Male 5"
+      },
+      "male6": {
+        "file": "people/male-6.svg",
+        "label": "Male 6"
       }
     },
     "shapes": {
