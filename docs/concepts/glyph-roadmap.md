@@ -12,7 +12,7 @@ Which glyph pack backs each scenario CATEGORY, what is reused today, and what ar
 
 ## Current state (2026-07-08)
 
-23 packs, ~586 glyphs, audit CLEAN (0 partials). The per-scenario tables further down are a
+23 packs, ~588 glyphs, audit CLEAN (0 partials). The per-scenario tables further down are a
 historical 2026-07-03 snapshot (trust [../reference/glyph-coverage.md](../reference/glyph-coverage.md)
 for the live census); since then three packs were completed and wired into new scenarios:
 
@@ -20,9 +20,9 @@ for the live census); since then three packs were completed and wired into new s
   existing `poppies`). All bloom axes now render complete.
 - `events` -> 8 cheerful milestones (anniversary, baby, birthday, farewell, graduation, new-home,
   retirement, wedding); backs the new `town-chronicle` scenario at full easy->expert.
-- `time` (10 clocks) backs `departures-board`. The `hour` dimension in `categories.json` also
-  draws on `time`. `offices` (5) is NOT yet used - a `glyphPack` column needs 6 values (frontend
-  contract), so offices needs a 6th glyph before it can back a scenario.
+- `time` (10 clocks) backs `departures-board`; `offices` (7, after adding bank + bakery) backs
+  `city-inspection` at full easy->expert. The `hour` dimension in `categories.json` also draws on
+  `time`.
 
 For the PROCESS (add a pack, wire a category, author a scenario) and the traps, see the how-to
 [../how-to/enrich-glyphs-and-scenarios.md](../how-to/enrich-glyphs-and-scenarios.md).
@@ -126,12 +126,12 @@ Legend: GLYPH = renders from a shipped pack; TEXT = text-only (anchor, or a non-
 RESOLVED 2026-07-08: the `flowers` gap is closed (8-bloom pack; the stragglers were repointed to the
 existing `poppies`) and `events` is now a full 8-glyph pack backing `town-chronicle`. Remaining, by ROI:
 
-1. Grow the sub-6 packs so they can back a glyph column at all: `medals` (3 -> add 3) and
-   `offices` (5 -> add 1, e.g. a school or a library). A `glyphPack` column needs 6 values
-   (frontend contract `scenario-glyphs.test.ts`), so a pack under 6 glyphs cannot back one - see
-   [../how-to/enrich-glyphs-and-scenarios.md](../how-to/enrich-glyphs-and-scenarios.md). Mind the
-   pack-COLLISION rule when drawing: one visual idea per pack (a trophy belongs to awards/medals, a
-   clock to time).
+1. Grow the last sub-6 pack so it can back a glyph column at all: `medals` (3 -> add 3). A
+   `glyphPack` column needs 6 values (frontend contract `scenario-glyphs.test.ts`), so a pack under
+   6 glyphs cannot back one - see
+   [../how-to/enrich-glyphs-and-scenarios.md](../how-to/enrich-glyphs-and-scenarios.md). (`offices`
+   reached 7 with bank + bakery and now backs `city-inspection`.) Mind the pack-COLLISION rule when
+   drawing: one visual idea per pack (a trophy belongs to awards/medals, a clock to time).
 2. `cargo` (or a generic sci-fi pack) - starliner-crew.cargo (ore/ice/grain/alloy/relics/spores) is
    a text-only ATTRIBUTE. A space pack could also enrich role beyond the occupation-pack stand-ins.
 3. Row-9g text-only ATTRIBUTE categories (candidates for a future pack, roughly by ROI): musical `instrument` (orchestra-tuning), `mask` (costume-parade), `boat` rig (harbor-regatta), film `genre` (film-festival) and `tool` (county-fair); plus the abstract text columns project/subject, target/instrument, venue, beat/section and piece. Each reads cleanly as text today; a pack just lights its column up.

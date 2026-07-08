@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T04:03:48Z",
+  "generatedAt": "2026-07-08T20:42:58Z",
   "packs": {
     "abstract": {
       "awardblank": {
@@ -1909,6 +1909,14 @@
       "airport": {
         "file": "offices/airport.svg",
         "label": "Airport"
+      },
+      "bakery": {
+        "file": "offices/bakery.svg",
+        "label": "Bakery"
+      },
+      "bank": {
+        "file": "offices/bank.svg",
+        "label": "Bank"
       },
       "factory": {
         "file": "offices/factory.svg",
