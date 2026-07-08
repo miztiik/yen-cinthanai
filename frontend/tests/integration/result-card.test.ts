@@ -63,4 +63,19 @@ describe("ResultCard", () => {
     retry!.click();
     expect(onretry).toHaveBeenCalledOnce();
   });
+
+  it("offers PLAY AGAIN on the win card when onagain is given", () => {
+    const onagain = vi.fn();
+    const el = render(ResultCard, { ...base, variant: "win" as const, onagain, ondismiss: () => {} });
+    const again = [...el.querySelectorAll("button")].find((b) => b.textContent?.trim() === "play again");
+    expect(again).toBeTruthy();
+    again!.click();
+    expect(onagain).toHaveBeenCalledOnce();
+  });
+
+  it("shows no PLAY AGAIN on the fail card", () => {
+    const el = render(ResultCard, { ...base, variant: "fail" as const, onretry: () => {}, ondismiss: () => {} });
+    const again = [...el.querySelectorAll("button")].find((b) => b.textContent?.trim() === "play again");
+    expect(again).toBeFalsy();
+  });
 });

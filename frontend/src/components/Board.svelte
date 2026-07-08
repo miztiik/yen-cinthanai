@@ -168,7 +168,7 @@
       void game.placements; // track commits
       void game.locked;
       const won = game.locked;
-      hero = won && isHero(heroBaseline, game.solveMs, game.hintsUsed);
+      hero = won && !game.replaying && isHero(heroBaseline, game.solveMs, game.hintsUsed);
       saveProgress(game);
     }
   });
@@ -400,6 +400,7 @@
         {share}
         onhome={() => navigate("")}
         onstats={() => navigate("stats")}
+        onagain={() => game?.playAgain()}
         ondismiss={() => (resultDismissed = true)}
       />
     {:else if failed && !resultDismissed}

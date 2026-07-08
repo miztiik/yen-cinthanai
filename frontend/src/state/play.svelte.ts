@@ -38,6 +38,10 @@ export class Game {
   private clock = new ActiveClock();
   solveMs = $state(0);
   locked = $state(false);
+  // A "play again" run of an already-solved puzzle. Practice only: the recorded result is
+  // frozen (saveProgress never downgrades a won slot) and a re-solve celebrates as a normal
+  // win, never a false "personal best", so replays are satisfying but not farmable.
+  replaying = $state(false);
   stars = $state(0);
   checked = $state(false); // last CHECK revealed feedback (non-realtime tiers)
   lastMoveMs = $state(0); // for stuck-moment pacing
@@ -219,6 +223,26 @@ export class Game {
     this.clock.reset(Date.now());
   }
 
+  /** "Play again" a solved puzzle: unlock and clear the board + grid marks, restore the full
+   *  attempt budget, and restart the clock so the puzzle is fully playable again. The recorded
+   *  result stays frozen (saveProgress freezes a won slot) and streak/best never move again for
+   *  the day; `replaying` marks the run so a re-solve reads as a plain win. Practice, not farmable. */
+  playAgain(): void {
+    this.replaying = true;
+    this.locked = false;
+    this.placements = {};
+    this.gridTicks = {};
+    this.gridManualX = {};
+    this.selected = null;
+    this.checked = false;
+    this.attempts = 0;
+    this.hintsUsed = 0;
+    this.solveMs = 0;
+    this.stars = 0;
+    this.clock.reset(Date.now());
+    this.lastMoveMs = Date.now();
+  }
+
   /** Toggle a manual clue strike (reversible, never required). */
   toggleStruck(id: string): void {
     this.struck[id] = !this.struck[id];
@@ -335,7 +359,10 @@ export function saveProgress(g: Game): Save {
   const day = toDayState(g);
   const key = dayKey(day.date, day.tier, day.shapeId);
   const fresh = day.status === "won" && save.days[key]?.status !== "won";
-  save.days[key] = day;
+  // A puzzle once won is immutable: a "play again" run (or any later save) never downgrades or
+  // overwrites the recorded result. streak + best advance only on the FIRST win of the day
+  // (fresh), so replaying is practice - it can never re-bump the streak or rewrite the best.
+  if (save.days[key]?.status !== "won") save.days[key] = day;
   if (fresh) recordWin(save, day);
   persistSave(save, g.m.puzzleId);
   return save;

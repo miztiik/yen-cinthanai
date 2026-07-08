@@ -26,6 +26,7 @@
     onhome,
     onstats,
     onretry,
+    onagain,
     ondismiss,
   }: {
     variant?: "win" | "fail";
@@ -44,6 +45,7 @@
     onhome: () => void;
     onstats: () => void;
     onretry?: () => void;
+    onagain?: () => void;
     ondismiss?: () => void;
   } = $props();
 
@@ -108,6 +110,9 @@
 
     {#if variant === "win"}
       <button class="w-full rounded-2xl bg-accent px-6 py-3 font-bold text-black active:scale-95 transition-transform" onclick={copyShare}>{copied ? "copied" : "share"}</button>
+      {#if onagain}
+        <button class="w-full rounded-2xl bg-bg px-6 py-3 font-bold active:scale-95 transition-transform" onclick={onagain}>play again</button>
+      {/if}
     {:else if onretry}
       <button class="w-full rounded-2xl bg-accent px-6 py-3 font-bold active:scale-95 transition-transform" onclick={onretry}>retry</button>
     {/if}
