@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T17:42:02Z",
+  "generatedAt": "2026-07-08T04:03:48Z",
   "packs": {
     "abstract": {
       "awardblank": {
@@ -400,9 +400,37 @@
       }
     },
     "events": {
-      "partypopper": {
-        "file": "events/party-popper.svg",
-        "label": "Party popper"
+      "anniversary": {
+        "file": "events/anniversary.svg",
+        "label": "Anniversary"
+      },
+      "baby": {
+        "file": "events/baby.svg",
+        "label": "Baby"
+      },
+      "birthday": {
+        "file": "events/birthday.svg",
+        "label": "Birthday"
+      },
+      "farewell": {
+        "file": "events/farewell.svg",
+        "label": "Farewell"
+      },
+      "graduation": {
+        "file": "events/graduation.svg",
+        "label": "Graduation"
+      },
+      "newhome": {
+        "file": "events/new-home.svg",
+        "label": "New home"
+      },
+      "retirement": {
+        "file": "events/retirement.svg",
+        "label": "Retirement"
+      },
+      "wedding": {
+        "file": "events/wedding.svg",
+        "label": "Wedding"
       }
     },
     "flags": {
@@ -1500,6 +1528,14 @@
         "file": "flowers/jasmine.svg",
         "label": "Jasmine"
       },
+      "lily": {
+        "file": "flowers/lily.svg",
+        "label": "Lily"
+      },
+      "lotus": {
+        "file": "flowers/lotus.svg",
+        "label": "Lotus"
+      },
       "poppies": {
         "file": "flowers/poppies.svg",
         "label": "Poppies"
@@ -2001,6 +2037,48 @@
         "label": "Waterpolo"
       }
     },
+    "time": {
+      "clockeight": {
+        "file": "time/clock-eight.svg",
+        "label": "Clock eight"
+      },
+      "clockeleven": {
+        "file": "time/clock-eleven.svg",
+        "label": "Clock eleven"
+      },
+      "clockfour": {
+        "file": "time/clock-four.svg",
+        "label": "Clock four"
+      },
+      "clocknine": {
+        "file": "time/clock-nine.svg",
+        "label": "Clock nine"
+      },
+      "clockone": {
+        "file": "time/clock-one.svg",
+        "label": "Clock one"
+      },
+      "clockseven": {
+        "file": "time/clock-seven.svg",
+        "label": "Clock seven"
+      },
+      "clockten": {
+        "file": "time/clock-ten.svg",
+        "label": "Clock ten"
+      },
+      "clockthree": {
+        "file": "time/clock-three.svg",
+        "label": "Clock three"
+      },
+      "clocktwelve": {
+        "file": "time/clock-twelve.svg",
+        "label": "Clock twelve"
+      },
+      "clocktwo": {
+        "file": "time/clock-two.svg",
+        "label": "Clock two"
+      }
+    },
     "transport": {
       "aeroplane": {
         "file": "transport/aeroplane.svg",
@@ -2107,6 +2185,10 @@
       "chevron": {
         "file": "ui/chevron.svg",
         "label": "Chevron"
+      },
+      "cross": {
+        "file": "ui/cross.svg",
+        "label": "Cross"
       },
       "crown": {
         "file": "ui/crown.svg",

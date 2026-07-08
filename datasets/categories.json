@@ -48,6 +48,19 @@
         { "id": "biscoff", "label": "Biscoff" }, { "id": "mochi", "label": "Mochi" }, { "id": "pumpkin", "label": "Pumpkin" }
       ]
     },
+    "hour": {
+      "label": "Hour",
+      "kind": "ordinal",
+      "glyphPack": "time",
+      "note": "GLYPH-BACKED: value ids are time-pack slugs (the kebab clock filename with hyphens dropped, e.g. clock-nine -> clocknine); each renders as value.glyph = 'time.<id>'. Ordinal by clock hour (magnitude). The pack ships ten faces - 5 and 6 o'clock are not drawn yet, so those hours are omitted; the ordinal ranking stays correct across the gap.",
+      "values": [
+        { "id": "clockone", "label": "1 o'clock", "magnitude": 1 }, { "id": "clocktwo", "label": "2 o'clock", "magnitude": 2 },
+        { "id": "clockthree", "label": "3 o'clock", "magnitude": 3 }, { "id": "clockfour", "label": "4 o'clock", "magnitude": 4 },
+        { "id": "clockseven", "label": "7 o'clock", "magnitude": 7 }, { "id": "clockeight", "label": "8 o'clock", "magnitude": 8 },
+        { "id": "clocknine", "label": "9 o'clock", "magnitude": 9 }, { "id": "clockten", "label": "10 o'clock", "magnitude": 10 },
+        { "id": "clockeleven", "label": "11 o'clock", "magnitude": 11 }, { "id": "clocktwelve", "label": "12 o'clock", "magnitude": 12 }
+      ]
+    },
     "weekday": {
       "label": "Day",
       "kind": "ordinal",

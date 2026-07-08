@@ -42,7 +42,7 @@
         { "id": "sunflower", "label": "Sunflowers", "phrase": "worked the sunflowers", "refPhrase": "sunflower hive", "glyph": "flowers.sunflower" },
         { "id": "jasmine", "label": "Jasmine", "phrase": "worked the jasmine", "refPhrase": "jasmine hive", "glyph": "flowers.jasmine" },
         { "id": "hibiscus", "label": "Hibiscus", "phrase": "worked the hibiscus", "refPhrase": "hibiscus hive", "glyph": "flowers.hibiscus" },
-        { "id": "lavender", "label": "Lavender", "phrase": "worked the lavender", "refPhrase": "lavender hive" }
+        { "id": "poppies", "label": "Poppies", "phrase": "worked the poppies", "refPhrase": "poppy hive", "glyph": "flowers.poppies" }
       ]
     },
     {
