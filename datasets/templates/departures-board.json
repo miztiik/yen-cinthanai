@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "departures-board",
+  "title": "The Departures Board",
+  "subjectNoun": "conductor",
+  "subjectCategory": "conductor",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A night shift at the station as the departures board fills in. Anchor = conductor. departure is glyph-backed by the time pack (value ids are clock slugs: clockseven..clocktwelve, the kebab filename with hyphens dropped); cars is the numeric axis (carriages hauled) at index 2 so it survives the standard slice; line and service are text-only. The time pack ships ten faces, so the glyph column backs a full six-entity expert grid. The narrativeTemplate is flavor only - it never names a sliced category (cars/line/service).",
+  "narrativeTemplate": "The last {n} trains of the night wait under the glass roof as {master} works out whose service was whose after a {snag} smudged the chalk on the board.",
+  "flavorPools": {
+    "master": ["Stationmaster Okonkwo", "old Signalman Pryce", "the night duty master"],
+    "snag": ["draught off the platform", "flickering gas lamp", "spilled pot of tea"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Bela'; 'attribute' -> 'the 9 o'clock conductor' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "conductor",
+      "label": "Conductor",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "bela", "label": "Bela" },
+        { "id": "otto", "label": "Otto" },
+        { "id": "sena", "label": "Sena" },
+        { "id": "raj", "label": "Raj" },
+        { "id": "vera", "label": "Vera" },
+        { "id": "milo", "label": "Milo" }
+      ]
+    },
+    {
+      "id": "departure",
+      "label": "Departure",
+      "kind": "nominal",
+      "glyphPack": "time",
+      "valuePool": [
+        { "id": "clockseven", "label": "the 7 o'clock", "phrase": "called the 7 o'clock", "refPhrase": "7 o'clock conductor" },
+        { "id": "clockeight", "label": "the 8 o'clock", "phrase": "called the 8 o'clock", "refPhrase": "8 o'clock conductor" },
+        { "id": "clocknine", "label": "the 9 o'clock", "phrase": "called the 9 o'clock", "refPhrase": "9 o'clock conductor" },
+        { "id": "clockten", "label": "the 10 o'clock", "phrase": "called the 10 o'clock", "refPhrase": "10 o'clock conductor" },
+        { "id": "clockeleven", "label": "the 11 o'clock", "phrase": "called the 11 o'clock", "refPhrase": "11 o'clock conductor" },
+        { "id": "clocktwelve", "label": "the midnight", "phrase": "called the midnight service", "refPhrase": "midnight conductor" }
+      ]
+    },
+    {
+      "id": "cars",
+      "label": "Cars",
+      "kind": "numeric",
+      "unit": "cars",
+      "valuePool": [
+        { "id": "cars6", "label": "6 cars", "magnitude": 6, "phrase": "hauled 6 cars" },
+        { "id": "cars7", "label": "7 cars", "magnitude": 7, "phrase": "hauled 7 cars" },
+        { "id": "cars8", "label": "8 cars", "magnitude": 8, "phrase": "hauled 8 cars" },
+        { "id": "cars9", "label": "9 cars", "magnitude": 9, "phrase": "hauled 9 cars" },
+        { "id": "cars10", "label": "10 cars", "magnitude": 10, "phrase": "hauled 10 cars" },
+        { "id": "cars11", "label": "11 cars", "magnitude": 11, "phrase": "hauled 11 cars" }
+      ]
+    },
+    {
+      "id": "line",
+      "label": "Line",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "coast", "label": "the Coast Line", "phrase": "took the Coast Line", "refPhrase": "Coast Line conductor" },
+        { "id": "vale", "label": "the Vale Line", "phrase": "took the Vale Line", "refPhrase": "Vale Line conductor" },
+        { "id": "moor", "label": "the Moor Line", "phrase": "took the Moor Line", "refPhrase": "Moor Line conductor" },
+        { "id": "harbour", "label": "the Harbour Line", "phrase": "took the Harbour Line", "refPhrase": "Harbour Line conductor" },
+        { "id": "summit", "label": "the Summit Line", "phrase": "took the Summit Line", "refPhrase": "Summit Line conductor" },
+        { "id": "orchard", "label": "the Orchard Line", "phrase": "took the Orchard Line", "refPhrase": "Orchard Line conductor" }
+      ]
+    },
+    {
+      "id": "service",
+      "label": "Service",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "express", "label": "the Express", "phrase": "ran the Express", "refPhrase": "Express conductor" },
+        { "id": "local", "label": "the Local", "phrase": "ran the Local", "refPhrase": "Local conductor" },
+        { "id": "mail", "label": "the Mail", "phrase": "ran the Mail", "refPhrase": "Mail conductor" },
+        { "id": "sleeper", "label": "the Sleeper", "phrase": "ran the Sleeper", "refPhrase": "Sleeper conductor" },
+        { "id": "scenic", "label": "the Scenic", "phrase": "ran the Scenic", "refPhrase": "Scenic conductor" },
+        { "id": "freight", "label": "the Freight", "phrase": "ran the Freight", "refPhrase": "Freight conductor" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "cars",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} hauled {delta} more cars than {b_ref}.",
+        "{a_ref} hauled {delta} more cars than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "cars",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} hauled no fewer than {bound} cars.",
+        "{a_ref} hauled at least {bound} cars."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the board read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}

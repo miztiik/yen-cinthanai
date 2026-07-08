@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "id": "town-chronicle",
+  "title": "The Town Chronicle",
+  "subjectNoun": "historian",
+  "subjectCategory": "historian",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A quiet afternoon in the town archive, each keeper cataloguing one kind of happy milestone the town records. Anchor = historian. record is glyph-backed by the events pack (value ids are pack slugs: birthday/wedding/graduation/anniversary/retirement/newhome - the town's milestones). entries is the numeric axis (records catalogued) at index 2 so it survives the standard slice; era and wing are text-only. The events pack ships eight glyphs, so the glyph column backs a full six-entity expert grid (all five axes are live at expert). Staged as 'build'. The narrativeTemplate is flavor only - it never names a sliced category (entries/era/wing).",
+  "narrativeTemplate": "{n} historians bend over the long archive tables while {curator} untangles which ledger belongs to whom after a {snag} shuffled the loose pages.",
+  "flavorPools": {
+    "curator": ["Curator Voss", "old Miss Prendergast", "the head archivist"],
+    "snag": ["draught from the reading-room window", "slipped index box", "faded catalogue tag"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Edith'; 'attribute' -> 'the weddings archivist' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "historian",
+      "label": "Historian",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "edith", "label": "Edith" },
+        { "id": "amos", "label": "Amos" },
+        { "id": "lena", "label": "Lena" },
+        { "id": "cyrus", "label": "Cyrus" },
+        { "id": "priya", "label": "Priya" },
+        { "id": "walt", "label": "Walt" }
+      ]
+    },
+    {
+      "id": "record",
+      "label": "Record",
+      "kind": "nominal",
+      "glyphPack": "events",
+      "valuePool": [
+        { "id": "birthday", "label": "the Birthdays", "phrase": "catalogued the birthdays", "refPhrase": "birthdays archivist" },
+        { "id": "wedding", "label": "the Weddings", "phrase": "catalogued the weddings", "refPhrase": "weddings archivist" },
+        { "id": "graduation", "label": "the Graduations", "phrase": "catalogued the graduations", "refPhrase": "graduations archivist" },
+        { "id": "anniversary", "label": "the Anniversaries", "phrase": "catalogued the anniversaries", "refPhrase": "anniversaries archivist" },
+        { "id": "retirement", "label": "the Retirements", "phrase": "catalogued the retirements", "refPhrase": "retirements archivist" },
+        { "id": "newhome", "label": "the Housewarmings", "phrase": "catalogued the housewarmings", "refPhrase": "housewarmings archivist" }
+      ]
+    },
+    {
+      "id": "entries",
+      "label": "Entries",
+      "kind": "numeric",
+      "unit": "entries",
+      "valuePool": [
+        { "id": "entries5", "label": "5 entries", "magnitude": 5, "phrase": "catalogued 5 entries" },
+        { "id": "entries8", "label": "8 entries", "magnitude": 8, "phrase": "catalogued 8 entries" },
+        { "id": "entries11", "label": "11 entries", "magnitude": 11, "phrase": "catalogued 11 entries" },
+        { "id": "entries14", "label": "14 entries", "magnitude": 14, "phrase": "catalogued 14 entries" },
+        { "id": "entries17", "label": "17 entries", "magnitude": 17, "phrase": "catalogued 17 entries" },
+        { "id": "entries20", "label": "20 entries", "magnitude": 20, "phrase": "catalogued 20 entries" }
+      ]
+    },
+    {
+      "id": "era",
+      "label": "Era",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "founders", "label": "the Founders' Era", "phrase": "worked the Founders' Era", "refPhrase": "Founders' Era historian" },
+        { "id": "millyears", "label": "the Mill Years", "phrase": "worked the Mill Years", "refPhrase": "Mill Years historian" },
+        { "id": "railboom", "label": "the Rail Boom", "phrase": "worked the Rail Boom", "refPhrase": "Rail Boom historian" },
+        { "id": "harvestdecade", "label": "the Harvest Decade", "phrase": "worked the Harvest Decade", "refPhrase": "Harvest Decade historian" },
+        { "id": "bloomdecade", "label": "the Bloom Decade", "phrase": "worked the Bloom Decade", "refPhrase": "Bloom Decade historian" },
+        { "id": "modernage", "label": "the Modern Age", "phrase": "worked the Modern Age", "refPhrase": "Modern Age historian" }
+      ]
+    },
+    {
+      "id": "wing",
+      "label": "Wing",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "eastwing", "label": "the East Wing", "phrase": "worked the East Wing", "refPhrase": "East Wing historian" },
+        { "id": "westwing", "label": "the West Wing", "phrase": "worked the West Wing", "refPhrase": "West Wing historian" },
+        { "id": "vault", "label": "the Vault", "phrase": "worked the Vault", "refPhrase": "Vault historian" },
+        { "id": "gallery", "label": "the Gallery", "phrase": "worked the Gallery", "refPhrase": "Gallery historian" },
+        { "id": "annexe", "label": "the Annexe", "phrase": "worked the Annexe", "refPhrase": "Annexe historian" },
+        { "id": "readingroom", "label": "the Reading Room", "phrase": "worked the Reading Room", "refPhrase": "Reading Room historian" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "entries",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} catalogued {delta} more entries than {b_ref}.",
+        "{a_ref} catalogued {delta} more entries than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "entries",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} catalogued no fewer than {bound} entries.",
+        "{a_ref} catalogued at least {bound} entries."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the index card read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    }
+  }
+}

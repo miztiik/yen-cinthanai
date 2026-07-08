@@ -27,7 +27,7 @@
       "tone": "cozy",
       "kind": "garden",
       "status": "live",
-      "verifiedSha": "d75b15ca37e31fad28ed8d58008cc92d9f19ff5bfda13874a9c4da7b382244d4"
+      "verifiedSha": "fb3d4beb2d393d3e13e783fa8cf6494409ffe35b370c4a23a65c48dc2d7537ee"
     },
     {
       "id": "starliner-crew",
@@ -333,7 +333,7 @@
       "tone": "cozy",
       "kind": "apiary",
       "status": "live",
-      "verifiedSha": "e79c7acb0f417ab7e01edecda339846ab802e3e7f00133a29d812d789bfa1324"
+      "verifiedSha": "c9a3a3e4f046238a5de86efb95b31b1dcf77ff58dc1a846f3b90a3861130fa30"
     },
     {
       "id": "vineyard-harvest",
@@ -901,6 +901,22 @@
       "kind": "icerink",
       "status": "live",
       "verifiedSha": "8645b8f4eb240dfee1abfbf22b815f8d598f21c72d45ecc503085d94e57451dc"
+    },
+    {
+      "id": "town-chronicle",
+      "file": "town-chronicle.json",
+      "title": "The Town Chronicle",
+      "tone": "cozy",
+      "kind": "archive",
+      "status": "build"
+    },
+    {
+      "id": "departures-board",
+      "file": "departures-board.json",
+      "title": "The Departures Board",
+      "tone": "cozy",
+      "kind": "transit",
+      "status": "build"
     }
   ]
 }

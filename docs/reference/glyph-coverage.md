@@ -1,6 +1,6 @@
 # Glyph Coverage
 
-**Last Updated**: 2026-07-06
+**Last Updated**: 2026-07-08
 
 The single central document for scenario glyphs: which pack backs which category, the exact gap
 between the art we ship and what the templates reference, how to close it, and how to keep this
@@ -49,46 +49,31 @@ Enforced at runtime by `glyphComplete()` / `axisGlyphs()`
 
 <!-- audit:begin - regenerate with: python -m tools.audit_glyphs --md -->
 
-- Scenario templates: 100 scenarios, 500 categories -> complete 118, text 380, partial 2.
-- Dimension source (categories.json): 12 dimensions -> complete 2, text 10, partial 0.
+- Scenario templates: 102 scenarios, 510 categories -> complete 122, text 388, partial 0.
+- Dimension source (categories.json): 13 dimensions -> complete 3, text 10, partial 0.
 
-| Source | Category | Missing image files | Values with no art |
-| --- | --- | --- | --- |
-| apiary-bloom | Bloom (bloom) | - | Lavender |
-| community-garden | Bloom (bloom) | - | Cosmos |
-
-No broken references: every glyph a template or dimension names has a shipped file. Each gap above
-is a value carrying no glyph while its siblings do, which trips the axis to text.
+No broken references: every glyph a template or dimension names has a shipped file. Each gap above is a value carrying no glyph while its siblings do, which trips the axis to text.
 
 <!-- audit:end -->
 
 ## Closing the open gaps now
 
-Two SVGs close the remaining partial categories - the `cosmos` and `lavender` blooms. Drop each
-into `flowers/` and set the matching `"glyph": "<ref>"` on the named value.
+No open gaps: every glyph-backed axis is `complete` and the audit exits 0. The two former partials
+(apiary-bloom + community-garden `bloom`) closed by swapping their one artless straggler
+(Lavender / Cosmos) for `poppies`, which the flowers pack already ships - no new art was drawn. The
+`flowers` pack is now a stable six-bloom set (hibiscus, jasmine, poppies, rose, sunflower, tulips),
+so those two blooms plus weekend-market all render as pictures.
 
-| Add art file | New ref | Wire on value | In template |
-| --- | --- | --- | --- |
-| `flowers/cosmos.svg` | `flowers.cosmos` | `cosmos` | [../../datasets/templates/community-garden.json](../../datasets/templates/community-garden.json) (bloom) |
-| `flowers/lavender.svg` | `flowers.lavender` | `lavender` | [../../datasets/templates/apiary-bloom.json](../../datasets/templates/apiary-bloom.json) (bloom) |
-
-Both are real plants (garden cosmos = Cosmos bipinnatus; lavender the herb) - not placeholders. The
-art must be a real VECTOR SVG in the flowers-pack style (a washed single illustration under the
-byte ceiling); a raster PNG cannot be used - the bake only walks `*.svg` and glyphs render as
-scalable art. `flowers/poppies.svg` is the reference shape.
-
-- The two blooms each already carry five real `flowers.*` overrides and opt out only the one
-  straggler above; adding the two flowers completes both axes. Once `flowers` is a stable 6-value
-  set the blooms can drop the per-value overrides for a single category `glyphPack`.
-- Not every axis needs bespoke art: when the values have no unique real-world emblem (film awards),
-  NUMBER them instead - see the `awards` pack under "Packs in play".
-
-Workflow to close one: wash the SVG (`python -m tools.wash_svg`, keep it under the per-file ceiling
+Workflow to close a gap when one reappears (a new template names a value with no art): first try to
+point the value at an EXISTING pack slug (the cheap fix - no new art, as the blooms did); only if no
+existing glyph fits, wash a new SVG (`python -m tools.wash_svg`, keep it under the per-file ceiling
 in [../../config/budgets.json](../../config/budgets.json), single-path/`currentColor` or a washed
-illustration like the pack) -> set the `glyph` ref on the value -> `python -m tools.bake_glyphs`
-(rebuilds the registry) -> `python -m tools.verify_scenarios --stamp` (re-verify edited scenarios)
--> `python -m tools.audit_glyphs` (the fixed axis drops out of the partial list) -> update the
-snapshot above.
+illustration like the pack; `flowers/poppies.svg` is the reference shape) -> set the `glyph` ref (or
+a category `glyphPack`) on the value -> `python -m tools.bake_glyphs` (rebuilds the registry) ->
+`python -m tools.verify_scenarios --stamp` (re-verify edited live scenarios) ->
+`python -m tools.audit_glyphs` (the fixed axis drops out of the partial list) -> update the snapshot
+above. Not every axis needs bespoke art: when the values have no unique real-world emblem (film
+awards), NUMBER them instead - see the `awards` pack under "Packs in play".
 
 ## How a category becomes glyph-backed
 
