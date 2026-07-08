@@ -49,7 +49,7 @@ Enforced at runtime by `glyphComplete()` / `axisGlyphs()`
 
 <!-- audit:begin - regenerate with: python -m tools.audit_glyphs --md -->
 
-- Scenario templates: 102 scenarios, 510 categories -> complete 122, text 388, partial 0.
+- Scenario templates: 103 scenarios, 515 categories -> complete 123, text 392, partial 0.
 - Dimension source (categories.json): 13 dimensions -> complete 3, text 10, partial 0.
 
 No broken references: every glyph a template or dimension names has a shipped file. Each gap above is a value carrying no glyph while its siblings do, which trips the axis to text.

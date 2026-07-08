@@ -134,7 +134,7 @@ reference shape - and change the content. Recipe:
   requires every `glyphPack` category to carry >= 6 values (the largest tier's entity count), and
   the no-mix rule requires all 6 to resolve to shipped art. So a pack needs >= 6 SHIPPED glyphs to
   back a glyph column AT ALL - capping `maxTier` does NOT help, because the contract checks the
-  GLOBAL max (6), not your template's maxTier. A sub-6 pack (offices = 5, medals = 3) cannot be a
+  GLOBAL max (6), not your template's maxTier. A sub-6 pack (medals = 3) cannot be a
   `glyphPack` until it grows to 6; grow the pack, or leave the category text-only.
 - **Exactly 5 categories**: every template must list 5 (a test asserts it). A tier-capped template
   still needs all 5; its extra axes just stay dormant at the capped tier.

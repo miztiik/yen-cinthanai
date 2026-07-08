@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "id": "city-inspection",
+  "title": "The City Inspection",
+  "subjectNoun": "inspector",
+  "subjectCategory": "inspector",
+  "ordinalAxis": false,
+  "minTier": "easy",
+  "maxTier": "expert",
+  "note": "Original content. A morning round of civic-safety inspections. Anchor = inspector. site is glyph-backed by the offices pack (value ids are pack slugs: airport/bank/factory/firestation/government/hospital); checks is the numeric axis (safety checks logged) at index 2 so it survives the standard slice; district and shift are text-only. The offices pack ships seven glyphs, so the glyph column backs a full six-entity expert grid. Staged as 'build'. The narrativeTemplate is flavor only - it never names a sliced category (checks/district/shift).",
+  "narrativeTemplate": "{n} inspectors fan out across the city at first light while {chief} reconciles which clipboard came from where after a {snag} scrambled the morning's paperwork.",
+  "flavorPools": {
+    "chief": ["Chief Okafor", "old Warden Bell", "the duty chief"],
+    "snag": ["gust through the depot door", "toppled file cart", "coffee-stained roster"]
+  },
+  "indirection": {
+    "note": "How an operand is named. 'name' -> 'Dalia'; 'attribute' -> 'the airport inspector' (the value's refPhrase).",
+    "byTier": { "easy": "name", "standard": "name", "sharp": "attribute", "expert": "attribute" }
+  },
+  "categories": [
+    {
+      "id": "inspector",
+      "label": "Inspector",
+      "kind": "nominal",
+      "anchor": true,
+      "valuePool": [
+        { "id": "dalia", "label": "Dalia" },
+        { "id": "ravi", "label": "Ravi" },
+        { "id": "mona", "label": "Mona" },
+        { "id": "tomas", "label": "Tomas" },
+        { "id": "iris", "label": "Iris" },
+        { "id": "hugo", "label": "Hugo" }
+      ]
+    },
+    {
+      "id": "site",
+      "label": "Site",
+      "kind": "nominal",
+      "glyphPack": "offices",
+      "valuePool": [
+        { "id": "airport", "label": "the Airport", "phrase": "inspected the airport", "refPhrase": "airport inspector" },
+        { "id": "bank", "label": "the Bank", "phrase": "inspected the bank", "refPhrase": "bank inspector" },
+        { "id": "factory", "label": "the Factory", "phrase": "inspected the factory", "refPhrase": "factory inspector" },
+        { "id": "firestation", "label": "the Fire Station", "phrase": "inspected the fire station", "refPhrase": "fire-station inspector" },
+        { "id": "government", "label": "the Town Hall", "phrase": "inspected the town hall", "refPhrase": "town-hall inspector" },
+        { "id": "hospital", "label": "the Hospital", "phrase": "inspected the hospital", "refPhrase": "hospital inspector" }
+      ]
+    },
+    {
+      "id": "checks",
+      "label": "Checks",
+      "kind": "numeric",
+      "unit": "checks",
+      "valuePool": [
+        { "id": "checks4", "label": "4 checks", "magnitude": 4, "phrase": "logged 4 checks" },
+        { "id": "checks6", "label": "6 checks", "magnitude": 6, "phrase": "logged 6 checks" },
+        { "id": "checks8", "label": "8 checks", "magnitude": 8, "phrase": "logged 8 checks" },
+        { "id": "checks10", "label": "10 checks", "magnitude": 10, "phrase": "logged 10 checks" },
+        { "id": "checks12", "label": "12 checks", "magnitude": 12, "phrase": "logged 12 checks" },
+        { "id": "checks14", "label": "14 checks", "magnitude": 14, "phrase": "logged 14 checks" }
+      ]
+    },
+    {
+      "id": "district",
+      "label": "District",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "riverside", "label": "Riverside", "phrase": "worked Riverside", "refPhrase": "Riverside inspector" },
+        { "id": "oldtown", "label": "Old Town", "phrase": "worked Old Town", "refPhrase": "Old Town inspector" },
+        { "id": "uptown", "label": "Uptown", "phrase": "worked Uptown", "refPhrase": "Uptown inspector" },
+        { "id": "harbour", "label": "Harbour", "phrase": "worked the Harbour", "refPhrase": "Harbour inspector" },
+        { "id": "midtown", "label": "Midtown", "phrase": "worked Midtown", "refPhrase": "Midtown inspector" },
+        { "id": "parkside", "label": "Parkside", "phrase": "worked Parkside", "refPhrase": "Parkside inspector" }
+      ]
+    },
+    {
+      "id": "shift",
+      "label": "Shift",
+      "kind": "nominal",
+      "valuePool": [
+        { "id": "dawn", "label": "the Dawn shift", "phrase": "took the Dawn shift", "refPhrase": "Dawn-shift inspector" },
+        { "id": "morning", "label": "the Morning shift", "phrase": "took the Morning shift", "refPhrase": "Morning-shift inspector" },
+        { "id": "midday", "label": "the Midday shift", "phrase": "took the Midday shift", "refPhrase": "Midday-shift inspector" },
+        { "id": "afternoon", "label": "the Afternoon shift", "phrase": "took the Afternoon shift", "refPhrase": "Afternoon-shift inspector" },
+        { "id": "evening", "label": "the Evening shift", "phrase": "took the Evening shift", "refPhrase": "Evening-shift inspector" },
+        { "id": "dusk", "label": "the Dusk shift", "phrase": "took the Dusk shift", "refPhrase": "Dusk-shift inspector" }
+      ]
+    }
+  ],
+  "clueTemplates": {
+    "eq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} {b_phrase}.",
+        "The one who {b_phrase} was {a_ref}.",
+        "It was {a_ref} who {b_phrase}."
+      ]
+    },
+    "neq": {
+      "minTier": "easy",
+      "variants": [
+        "{a_ref} was not the one who {b_phrase}.",
+        "The one who {b_phrase} was not {a_ref}.",
+        "It was not {a_ref} who {b_phrase}."
+      ]
+    },
+    "numDiff": {
+      "appliesTo": "checks",
+      "minTier": "standard",
+      "variants": [
+        "{a_ref} logged {delta} more checks than {b_ref}.",
+        "{a_ref} logged {delta} more checks than {b_ref} did."
+      ]
+    },
+    "threshold": {
+      "appliesTo": "checks",
+      "minTier": "sharp",
+      "variants": [
+        "{a_ref} logged no fewer than {bound} checks.",
+        "{a_ref} logged at least {bound} checks."
+      ]
+    },
+    "oneOf": {
+      "minTier": "sharp",
+      "note": "disjunction: entity a is one of {x, y}",
+      "variants": [
+        "{a_ref} was down to {x_label} or {y_label}, and only one was right.",
+        "For {a_ref} the docket read {x_label} or {y_label} - just one was true."
+      ]
+    },
+    "oneEachOf": {
+      "minTier": "sharp",
+      "note": "of two entities x and y, one satisfies fact A and the other fact B",
+      "variants": [
+        "Of {x_ref} and {y_ref}, one {a_phrase} and the other {b_phrase}."
+      ]
+    },
+    "ifThen": {
+      "minTier": "expert",
+      "note": "conditional / chained indirect reference",
+      "variants": [
+        "If {a_ref} {a_phrase}, then {b_ref} was not the one who {b_phrase}."
+      ]
+    }
+  }
+}
