@@ -903,14 +903,6 @@
       "verifiedSha": "8645b8f4eb240dfee1abfbf22b815f8d598f21c72d45ecc503085d94e57451dc"
     },
     {
-      "id": "city-inspection",
-      "file": "city-inspection.json",
-      "title": "The City Inspection",
-      "tone": "cozy",
-      "kind": "city",
-      "status": "build"
-    },
-    {
       "id": "town-chronicle",
       "file": "town-chronicle.json",
       "title": "The Town Chronicle",

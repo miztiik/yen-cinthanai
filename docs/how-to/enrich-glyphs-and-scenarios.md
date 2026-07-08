@@ -106,7 +106,7 @@ reference shape - and change the content. Recipe:
    glyph-backed axis at index 1 (`glyphPack: "<pack>"`, ids = slugs); a `numeric` axis at index 2
    (integer `magnitude` per value, for `numDiff`/`threshold`); two more text axes at indices 3-4.
 2. **Six values per category** so the template reaches expert (6 rows). The glyph column needs >= 6
-   SHIPPED glyphs (see the cap gotcha below).
+   SHIPPED glyphs (see the 6-value rule below).
 3. **Clue templates**: `eq`/`neq` (minTier easy), `numDiff` (standard, `appliesTo` the numeric id),
    `threshold`/`oneOf`/`oneEachOf` (sharp), `ifThen` (expert). Keep the narrative flavor-only.
 4. **Register it** in `manifest.json` with `status: build`. Author + iterate as build; promote to
@@ -130,9 +130,12 @@ reference shape - and change the content. Recipe:
 
 - **No-mix render**: a column shows pictures ONLY if EVERY value resolves to a shipped glyph; one
   missing straggler drops the WHOLE column back to text. Cover all 6 or none.
-- **The under-6 cap**: a glyph column can hold at most as many rows as the pack has glyphs. So a
-  pack with < 6 glyphs CANNOT back a full easy->expert column - cap `maxTier` (5 glyphs -> `sharp`,
-  4 -> `standard`, 3 -> `easy`), or grow the pack to 6. Prefer growing the pack.
+- **A glyph column needs 6 values**: the frontend contract `tests/contract/scenario-glyphs.test.ts`
+  requires every `glyphPack` category to carry >= 6 values (the largest tier's entity count), and
+  the no-mix rule requires all 6 to resolve to shipped art. So a pack needs >= 6 SHIPPED glyphs to
+  back a glyph column AT ALL - capping `maxTier` does NOT help, because the contract checks the
+  GLOBAL max (6), not your template's maxTier. A sub-6 pack (offices = 5, medals = 3) cannot be a
+  `glyphPack` until it grows to 6; grow the pack, or leave the category text-only.
 - **Exactly 5 categories**: every template must list 5 (a test asserts it). A tier-capped template
   still needs all 5; its extra axes just stay dormant at the capped tier.
 - **Category order is load-bearing**: the glyph axis at index 1 and the numeric axis at index 2, or
