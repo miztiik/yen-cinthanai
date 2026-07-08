@@ -7,7 +7,7 @@ import type { TierDial } from "../../src/lib/config";
 import type { Streak, Hero, DayState } from "../../src/contracts/save";
 import {
   computeStars, parMs, dayGap, updateStreak, updateHero, isHero, recentSolveMs, wonOnDate,
-  wonTierOnDate, nextPlayableTier,
+  wonTierOnDate, nextPlayableTier, tierHistory,
 } from "../../src/lib/scoring";
 
 const STD: TierDial = { par_s: 240, hints: 2, attempts: 3, feedback: "count-wrong" };
@@ -55,6 +55,35 @@ describe("sparkline window", () => {
     for (let i = 0; i < 5; i++)
       days[`2026-06-0${i + 1}`] = { date: `2026-06-0${i + 1}`, tier: "easy", shapeId: "grid", status: "won", placements: {}, attempts: 0, solveMs: (i + 1) * 1000, hintsUsed: 0, stars: 3 };
     expect(recentSolveMs(days, 3)).toEqual([3000, 4000, 5000]);
+  });
+});
+
+describe("tierHistory (per-difficulty breakdown)", () => {
+  const ORDER = ["easy", "standard", "sharp", "expert"];
+  const day = (date: string, tier: string, status: string, solveMs: number): DayState => ({
+    date, tier: tier as DayState["tier"], shapeId: "grid", status: status as DayState["status"],
+    placements: {}, attempts: 0, solveMs, hintsUsed: 0, stars: 3,
+  });
+  it("lists every tier in order; unplayed ones are zeroed", () => {
+    const h = tierHistory({}, ORDER);
+    expect(h.map((t) => t.tier)).toEqual(ORDER);
+    expect(h.every((t) => t.solved === 0 && t.bestMs === 0)).toBe(true);
+  });
+  it("counts won slots and takes the fastest solve per tier across days", () => {
+    const days: Record<string, DayState> = {
+      "2026-07-01|easy|grid": day("2026-07-01", "easy", "won", 12000),
+      "2026-07-02|easy|grid": day("2026-07-02", "easy", "won", 8000), // a faster easy day
+      "2026-07-01|standard|grid": day("2026-07-01", "standard", "won", 40000),
+      "2026-07-03|standard|grid": day("2026-07-03", "standard", "playing", 0), // not a win
+    };
+    const h = tierHistory(days, ORDER);
+    const easy = h.find((t) => t.tier === "easy")!;
+    const std = h.find((t) => t.tier === "standard")!;
+    expect(easy.solved).toBe(2);
+    expect(easy.bestMs).toBe(8000); // the faster of the two easy solves
+    expect(std.solved).toBe(1); // the "playing" slot is not counted
+    expect(std.bestMs).toBe(40000);
+    expect(h.find((t) => t.tier === "sharp")!.solved).toBe(0);
   });
 });
 

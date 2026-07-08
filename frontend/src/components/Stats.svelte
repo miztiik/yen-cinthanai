@@ -7,11 +7,11 @@
   // from the save; window from config pace.
   import { homeHref, navigate } from "../lib/router.svelte";
   import { loadSave } from "../state/save.svelte";
-  import { loadPace } from "../lib/config";
+  import { loadPace, loadUi, difficultyUi } from "../lib/config";
   import { loadBank } from "../lib/loader";
   import { playPath } from "../lib/play-route";
   import { reviewTarget } from "../lib/review";
-  import { recentSolveMs, wonOnDate } from "../lib/scoring";
+  import { recentSolveMs, wonOnDate, tierHistory } from "../lib/scoring";
   import Glyph from "../lib/Glyph.svelte";
   import StatTile from "./StatTile.svelte";
   import type { BankIndex } from "../contracts/bank";
@@ -23,6 +23,11 @@
   // becomes a tap-to-play button. Tolerant - if it fails to load, dots stay non-interactive.
   let bank = $state<BankIndex | null>(null);
   loadBank().then((b) => (bank = b)).catch(() => {});
+  // Per-difficulty solve history: config difficulty order + the standardized colour ramp. Tolerant -
+  // difficultyUi supplies a fallback order/colours if ui fails to load, so the table still renders.
+  let tierOrder = $state<string[]>(["easy", "standard", "sharp", "expert"]);
+  let tierColors = $state<Record<string, string>>({});
+  loadUi().then((u) => { const d = difficultyUi(u); tierOrder = d.order; tierColors = d.colors; });
   function openDay(date: string) {
     const t = bank && reviewTarget(save, bank, date);
     if (t) navigate(playPath(date, t.tier));
@@ -32,6 +37,9 @@
   const peak = $derived(Math.max(1, ...times));
   const stars = $derived(Object.values(save.days).reduce((n, d) => n + d.stars, 0));
   const solved = $derived(Object.values(save.days).filter((d) => d.status === "won").length);
+  // Best time + solve count per difficulty (won slots, across all days). Answers "how am I doing
+  // at each level" - the flat sparkline mixes tiers, this separates them. See lib/scoring.ts.
+  const byTier = $derived(tierHistory(save.days, tierOrder));
 
   // last 7 UTC days: won (filled) | other-day (open) | none (gap). Quiet, never shaming.
   // A day counts as won if ANY tier/shape slot for that date won (days are composite-keyed).
@@ -91,6 +99,20 @@
               <span class="text-[10px] uppercase opacity-40">{d.wd}</span>
             </div>
           {/if}
+        {/each}
+      </div>
+    </section>
+
+    <section class="col-span-2 flex flex-col gap-2 rounded-2xl bg-surface p-4 shadow-e1 sm:col-span-4">
+      <p class="text-xs uppercase tracking-wide opacity-60">by difficulty</p>
+      <div class="flex flex-col gap-2">
+        {#each byTier as t (t.tier)}
+          <div class="flex items-center gap-3 text-sm">
+            <span class="h-2.5 w-2.5 shrink-0 rounded-full" style={`background:${tierColors[t.tier] ?? "var(--accent)"}`} aria-hidden="true"></span>
+            <span class="w-16 shrink-0 capitalize">{t.tier}</span>
+            <span class="flex-1 text-right tabular-nums opacity-60">{t.solved} solved</span>
+            <span class="w-12 shrink-0 text-right font-semibold tabular-nums" aria-label={t.bestMs ? `${t.tier} best ${Math.round(t.bestMs / 1000)} seconds` : `${t.tier} no solves yet`}>{t.bestMs ? `${Math.round(t.bestMs / 1000)}s` : "-"}</span>
+          </div>
         {/each}
       </div>
     </section>

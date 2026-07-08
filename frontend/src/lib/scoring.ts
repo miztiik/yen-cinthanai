@@ -74,6 +74,26 @@ export function recentSolveMs(days: Record<string, DayState>, window: number): n
     .map((d) => d.solveMs);
 }
 
+/** Per-tier solve summary for the Stats difficulty breakdown. bestMs 0 = never solved. */
+export interface TierStat {
+  tier: string;
+  solved: number;
+  bestMs: number;
+}
+
+/** Solve history grouped by difficulty (won slots only), in the given tier `order`. Every tier
+ *  in the order appears (solved 0, bestMs 0 when unplayed) so the Stats table stays stable, and
+ *  bestMs is the fastest won solve for that tier across all days. Pure; days are keyed
+ *  date|tier|shape, so a tier spans many days. */
+export function tierHistory(days: Record<string, DayState>, order: string[]): TierStat[] {
+  return order.map((tier) => {
+    const times = Object.values(days)
+      .filter((d) => d.tier === tier && d.status === "won" && d.solveMs > 0)
+      .map((d) => d.solveMs);
+    return { tier, solved: times.length, bestMs: times.length ? Math.min(...times) : 0 };
+  });
+}
+
 /** Did any saved slot for this calendar date end won? Days are keyed by date|tier|shape,
  *  so a date can hold several slots; a day counts as won if any of them won. */
 export function wonOnDate(days: Record<string, DayState>, date: string): boolean {
