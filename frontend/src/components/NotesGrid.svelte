@@ -25,6 +25,8 @@
     index,
     copy,
     size = 40,
+    labelPx = 12,
+    gapPx = 4,
     onnav,
   }: {
     game: Game;
@@ -33,6 +35,10 @@
     index: number;
     copy: GridCopy;
     size?: number;
+    // labelPx/gapPx TRACK the cell edge (Board -> lib/fit.ts scaleClamp) so the axis labels and
+    // the inter-cell gap stay proportional to the cell instead of a fixed size.
+    labelPx?: number;
+    gapPx?: number;
     onnav: (dir: 1 | -1) => void;
   } = $props();
 
@@ -139,13 +145,13 @@
     onfocusin={(e) => markFrom(e.target)}
     onfocusout={onFocusOut}
   >
-    <table class="border-separate border-spacing-1">
+    <table class="border-separate" style={`border-spacing:${gapPx}px`}>
       <caption class="sr-only">{block.rowCat.label} versus {block.colCat.label}</caption>
       <thead>
         <tr>
           <th scope="col"><span class="sr-only">{block.rowCat.label}</span></th>
           {#each cols as cv, ci (cv.id)}
-            <th scope="col" data-crosshair-hdr={hov?.c === ci ? "" : undefined} class="px-1 text-center text-xs font-medium opacity-70" style={`width:${size}px`}>
+            <th scope="col" data-crosshair-hdr={hov?.c === ci ? "" : undefined} class="px-1 text-center font-medium opacity-70" style={`width:${size}px;font-size:${labelPx}px`}>
               <span class="flex flex-col items-center gap-1">
                 {#if colGlyphs && cv.glyph}<GlyphSeat ref={cv.glyph} label={cv.label} d={Math.round(size * 0.62)} />{/if}
                 <span>{cv.label}</span>
@@ -157,7 +163,7 @@
       <tbody>
         {#each rows as rv, ri (rv.id)}
           <tr>
-            <th scope="row" data-crosshair-hdr={hov?.r === ri ? "" : undefined} class="pr-1 text-right text-xs font-medium">
+            <th scope="row" data-crosshair-hdr={hov?.r === ri ? "" : undefined} style={`font-size:${labelPx}px`} class="pr-1 text-right font-medium">
               <span class="inline-flex select-none items-center gap-1.5">
                 {#if rowGlyphs && rv.glyph}<GlyphSeat ref={rv.glyph} label={rv.label} d={Math.round(size * 0.62)} />{/if}
                 <span>{rv.label}</span>

@@ -14,7 +14,7 @@
     "tooltipDelayMs": 350
   },
   "clue": {
-    "autoDimFeedback": ["realtime-names", "count-wrong"]
+    "autoDimFeedback": []
   },
   "difficulty": {
     "order": ["easy", "standard", "sharp", "expert"],
@@ -37,9 +37,19 @@
     },
     "desktop": {
       "minCell": 44,
-      "maxCell": 0,
+      "maxCell": 104,
       "leadRem": 8.75,
       "slackPx": 16
+    },
+    "label": {
+      "scale": 0.15,
+      "min": 12,
+      "max": 18
+    },
+    "gap": {
+      "scale": 0.06,
+      "min": 2,
+      "max": 7
     },
     "snap": {
       "ease": 0.6,

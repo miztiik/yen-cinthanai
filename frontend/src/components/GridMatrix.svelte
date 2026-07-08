@@ -16,7 +16,9 @@
   import type { DisplaySettings } from "../contracts/save";
   import type { Game } from "../state/play.svelte";
 
-  let { game, cats, copy, size = 40 }: { game: Game; cats: AttributeCategory[]; copy: GridCopy; size?: number } = $props();
+  // labelPx/gapPx TRACK the cell edge (Board -> lib/fit.ts scaleClamp) so the axis labels and
+  // the inter-cell gap stay proportional to a grown cell instead of sitting at a fixed size.
+  let { game, cats, copy, size = 40, labelPx = 12, gapPx = 0 }: { game: Game; cats: AttributeCategory[]; copy: GridCopy; size?: number; labelPx?: number; gapPx?: number } = $props();
 
   const layout = $derived(staircase(cats));
   const ticks = $derived(new Set(Object.keys(game.gridTicks)));
@@ -123,7 +125,7 @@
   onfocusin={(e) => markFrom(e.target)}
   onfocusout={onFocusOut}
 >
-  <table class="table-fixed border-separate border-spacing-0 text-ink">
+  <table class="table-fixed border-separate text-ink" style={`border-spacing:${gapPx}px`}>
     <caption class="sr-only">{copy.mapHeading}</caption>
     <colgroup>
       <col style="width:1.75rem" />
@@ -139,7 +141,7 @@
       </tr>
       <tr>
         {#each colLeaves as cl, ci (cl.cat.id + cl.v.id)}
-          <th scope="col" data-crosshair-hdr={hovered?.c === ci ? "" : undefined} class={`h-28 align-bottom pb-1 text-xs font-medium opacity-80 ${cl.lastInGroup ? "border-r-2 border-ink/15" : ""}`}>
+          <th scope="col" data-crosshair-hdr={hovered?.c === ci ? "" : undefined} style={`font-size:${labelPx}px`} class={`h-28 align-bottom pb-1 font-medium opacity-80 ${cl.lastInGroup ? "border-r-2 border-ink/15" : ""}`}>
             <span class="flex h-full flex-col items-center justify-end gap-1.5">
               <span class="[writing-mode:vertical-rl]">{cl.v.label}</span>
               {#if glyphCats.has(cl.cat.id) && cl.v.glyph}<GlyphSeat ref={cl.v.glyph} label={cl.v.label} d={Math.round(size * 0.62)} />{/if}
@@ -157,7 +159,7 @@
                 <span class="mx-auto block rotate-180 [writing-mode:vertical-rl]">{rc.label}</span>
               </th>
             {/if}
-            <th scope="row" data-crosshair-hdr={hovered?.r === (grOf.get(rv) ?? -1) ? "" : undefined} class="whitespace-nowrap py-px pr-2 text-right text-xs font-medium">
+            <th scope="row" data-crosshair-hdr={hovered?.r === (grOf.get(rv) ?? -1) ? "" : undefined} style={`font-size:${labelPx}px`} class="whitespace-nowrap py-px pr-2 text-right font-medium">
               <span class="inline-flex items-center justify-end gap-1.5">
                 {#if glyphCats.has(rc.id) && rv.glyph}<GlyphSeat ref={rv.glyph} label={rv.label} d={Math.round(size * 0.62)} />{/if}
                 <span>{rv.label}</span>

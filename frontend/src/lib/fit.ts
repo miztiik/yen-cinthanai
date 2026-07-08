@@ -19,3 +19,17 @@ export function fitCellSize(width: number, leafCount: number, cfg: FitCfg): numb
   const floored = Math.max(cfg.minCell, budget);
   return cfg.maxCell > 0 ? Math.min(cfg.maxCell, floored) : floored;
 }
+
+/** A derived grid dimension (px) that TRACKS the cell edge so the chrome stays proportional
+ *  to the box - the axis-label font and the inter-cell gap both scale with `cellPx` rather
+ *  than sitting at a fixed size next to a grown cell. Pure: `round(cellPx * scale)` clamped
+ *  to [min, max]. Used for the label font size and the cell gap (config/ui.json [grid.label],
+ *  [grid.gap]); mirrors the GlyphSeat `d = cellPx * ratio` pattern. */
+export interface ScaleCfg {
+  scale: number; // fraction of the cell edge
+  min: number; // px floor (stays legible / present at the smallest cell)
+  max: number; // px ceiling (never dwarfs the cell on a grown grid)
+}
+export function scaleClamp(cellPx: number, cfg: ScaleCfg): number {
+  return Math.max(cfg.min, Math.min(cfg.max, Math.round(cellPx * cfg.scale)));
+}

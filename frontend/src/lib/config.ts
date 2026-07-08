@@ -182,6 +182,12 @@ export interface GridUi {
    *  fills the column between `minCell` and `maxCell` (0 = uncapped), reserving `leadRem` for the
    *  two lead label columns and `slackPx` so a group border never trips a 1px overflow. */
   desktop?: { minCell: number; maxCell: number; leadRem: number; slackPx: number };
+  /** Axis-label font size that TRACKS the cell edge (config/ui.json [grid.label]) so a grown
+   *  cell keeps its value labels proportional: px = round(cell * scale) clamped to [min, max]. */
+  label?: { scale: number; min: number; max: number };
+  /** Inter-cell gap that TRACKS the cell edge (config/ui.json [grid.gap]): the `border-spacing`
+   *  between cells so a bigger cell breathes more; px = round(cell * scale) clamped to [min, max]. */
+  gap?: { scale: number; min: number; max: number };
 }
 /** Whole-app background shell timing (config/ui.json [ambient]). driftSeconds = the slow
  *  transform drift of aurora layer A; shiftSeconds = the warm opacity cross-fade cycle of
@@ -237,8 +243,15 @@ const GRID_UI_FALLBACK: GridUi = {
   cell: { small: 34, medium: 40, large: 48 },
   snap: { radius_factor: 0.9, ease: 0.6 },
   crosshair: { cell: 12, header: 18 },
-  desktop: { minCell: 44, maxCell: 0, leadRem: 8.75, slackPx: 16 },
+  desktop: { minCell: 44, maxCell: 104, leadRem: 8.75, slackPx: 16 },
+  label: { scale: 0.15, min: 12, max: 18 },
+  gap: { scale: 0.06, min: 2, max: 7 },
 };
+
+/** Fail-soft axis-label font + inter-cell gap defaults (mirror config/ui.json [grid.label],
+ *  [grid.gap]); both TRACK the cell edge so the chrome stays proportional to a grown cell. */
+const GRID_LABEL_FALLBACK = { scale: 0.15, min: 12, max: 18 };
+const GRID_GAP_FALLBACK = { scale: 0.06, min: 2, max: 7 };
 
 /** Fail-soft board layout (mirrors config/ui.json [layout]); 0 = uncapped width. */
 const LAYOUT_UI_FALLBACK: LayoutUi = { maxWidthPx: 0 };
@@ -309,7 +322,17 @@ export function gridCrosshair(ui: UiConfig): { cell: number; header: number } {
 
 /** Desktop fused-grid growth params (config-driven, fail-soft). maxCell 0 = uncapped. */
 export function gridDesktop(ui: UiConfig): { minCell: number; maxCell: number; leadRem: number; slackPx: number } {
-  return gridUi(ui).desktop ?? { minCell: 44, maxCell: 0, leadRem: 8.75, slackPx: 16 };
+  return gridUi(ui).desktop ?? { minCell: 44, maxCell: 104, leadRem: 8.75, slackPx: 16 };
+}
+
+/** Axis-label font-size scaling that tracks the cell edge (config-driven, fail-soft). */
+export function gridLabel(ui: UiConfig): { scale: number; min: number; max: number } {
+  return gridUi(ui).label ?? GRID_LABEL_FALLBACK;
+}
+
+/** Inter-cell gap scaling that tracks the cell edge (config-driven, fail-soft). */
+export function gridGap(ui: UiConfig): { scale: number; min: number; max: number } {
+  return gridUi(ui).gap ?? GRID_GAP_FALLBACK;
 }
 
 /** Board layout tunables (config-driven, fail-soft). maxWidthPx 0 = uncapped. */
