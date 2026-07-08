@@ -12,20 +12,47 @@ Which glyph pack backs each scenario CATEGORY, what is reused today, and what ar
 
 ## Current state (2026-07-08)
 
-23 packs, ~588 glyphs, audit CLEAN (0 partials). The per-scenario tables further down are a
-historical 2026-07-03 snapshot (trust [../reference/glyph-coverage.md](../reference/glyph-coverage.md)
-for the live census); since then three packs were completed and wired into new scenarios:
+24 packs, ~605 glyphs, audit CLEAN (0 partials). Recently added / completed:
 
-- `flowers` -> 8 blooms (added lily, lotus; the Lavender/Cosmos stragglers were repointed to the
-  existing `poppies`). All bloom axes now render complete.
-- `events` -> 8 cheerful milestones (anniversary, baby, birthday, farewell, graduation, new-home,
-  retirement, wedding); backs the new `town-chronicle` scenario at full easy->expert.
-- `time` (10 clocks) backs `departures-board`; `offices` (7, after adding bank + bakery) backs
-  `city-inspection` at full easy->expert. The `hour` dimension in `categories.json` also draws on
-  `time`.
+- `flowers` -> 8 blooms; `events` -> 8 milestones (backs `town-chronicle`); `time` -> 10 clocks
+  (backs `departures-board`); `offices` -> 7 with bank + bakery (backs `city-inspection`). The
+  `hour` dimension in `categories.json` draws on `time`.
+- NEW `people` pack (13: female1-7, male1-6) - generic male/female avatars. Registered, not yet
+  wired (see the text-only analysis below).
+- `occupation` grew to 37 (added caregivers, cook, juggler, magician) - more roles/performers.
 
 For the PROCESS (add a pack, wire a category, author a scenario) and the traps, see the how-to
 [../how-to/enrich-glyphs-and-scenarios.md](../how-to/enrich-glyphs-and-scenarios.md).
+
+## What text-only categories can benefit from a pack
+
+Across the 103 scenarios (515 categories) the audit sees:
+
+- 120 categories already glyph-backed.
+- 103 numeric axes (text unless the magnitudes are the sequential 1..6 the `abstract` numerals back).
+- 103 person ANCHORS - text by design (the identity axis reads as a name).
+- 189 text-only NOMINAL non-anchor categories - the addressable pool.
+
+Those 189 are a long tail of highly specific one-offs (herb, lens, relic, mask, koi, script, ...)
+that each need bespoke art; no existing pack matches them. The two NEW packs help in two focused
+places only:
+
+- `people` avatars can back the 103 person ANCHORS - by far the biggest bucket - IF we choose to
+  glyph-back the identity axis (a deliberate UX change; see below). They match no non-anchor column
+  (there is no generic guest/person attribute).
+- `occupation` (37 roles) can back the few role/performer/crew columns (`role`; a circus `act` via
+  juggler/magician; a kitchen `cook`; care via caregivers).
+
+So beyond anchors, most of the 189 stay text until a matching themed pack is drawn (the gap backlog
+below) - the new packs are not a broad reuse.
+
+### Glyph-backing the person anchor (the `people` question)
+
+Technically yes: give each of the six anchor values a per-value `glyph` (`people.male3`,
+`people.female2`, ...) so the name still reads while an avatar renders beside it. Weigh two things
+first: (1) it touches EVERY scenario's anchor, so it is a design call - prototype on one scenario;
+(2) the anchor is usually a COLUMN header and glyphs currently render in ROW headers only (see the
+Rendering note), so confirm the avatar actually shows before rolling it out.
 
 ## How a category becomes glyph-backed
 
@@ -35,6 +62,9 @@ For the PROCESS (add a pack, wire a category, author a scenario) and the traps, 
 - TEXT-ONLY BY DESIGN: the ANCHOR (a person name) reads as text. A NUMERIC axis reads as text UNLESS its magnitudes are the sequential run 1..6, in which case the `abstract` numerals (`num1`..`num6`) back it (community-garden.plot, starliner-crew.shift); a non-sequential numeric axis like a dollar price stays text.
 
 ## Packs backing scenarios today
+
+_Historical strategy snapshot (2026-07-03); see Current state above for the latest packs and
+[../reference/glyph-coverage.md](../reference/glyph-coverage.md) for the live per-category census._
 
 Backfilled 2026-07-03: `crafts`, `flowers` (partial), `spaceship`, plus the `abstract` numerals now wired to numbered/position categories and sequential numeric axes. Row 9g then SCALED the catalog from 4 to 12 scenarios by REUSING existing packs (no new art): `food`, `drinks`, `vegetables`, `color`, `creatures` and `clothes` each back several scenarios, and `medals` decorates the top three film-festival prizes per-value. Per this batch's rule the ANCHOR and every NUMERIC axis stay text.
 
@@ -56,75 +86,15 @@ Backfilled 2026-07-03: `crafts`, `flowers` (partial), `spaceship`, plus the `abs
 
 ## Per-scenario category map
 
-Legend: GLYPH = renders from a shipped pack; TEXT = text-only (anchor, or a non-sequential numeric axis); PARTIAL = some values glyph-backed, the rest text.
-
-| Scenario | Category | kind | glyphPack | Status |
-| --- | --- | --- | --- | --- |
-| weekend-market | name (anchor) | nominal | - | TEXT (person) |
-| weekend-market | craft | nominal | `crafts` | GLYPH |
-| weekend-market | price | numeric | - | TEXT (dollars, non-sequential) |
-| weekend-market | produce | nominal | `food` | GLYPH |
-| weekend-market | bloom | nominal | per-value | PARTIAL (`flowers`: jasmine + sunflower; 4 blooms text) |
-| food-truck-festival | vendor (anchor) | nominal | - | TEXT (person) |
-| food-truck-festival | dish | nominal | `food` | GLYPH |
-| food-truck-festival | price | numeric | - | TEXT (dollars, non-sequential) |
-| food-truck-festival | drink | nominal | `drinks` | GLYPH |
-| food-truck-festival | pitch | nominal | `abstract` | GLYPH (numerals num1..num6) |
-| community-garden | grower (anchor) | nominal | - | TEXT (person) |
-| community-garden | vegetable | nominal | `vegetables` | GLYPH |
-| community-garden | plot | numeric | `abstract` | GLYPH (numerals 1..6) |
-| community-garden | bloom | nominal | - | TEXT (dahlias/marigolds/... - flowers pack too small) |
-| community-garden | ribbon | nominal | `color` | GLYPH |
-| starliner-crew | crew (anchor) | nominal | - | TEXT (person) |
-| starliner-crew | role | nominal | `occupation` | GLYPH (partial reuse) |
-| starliner-crew | shift | numeric | `abstract` | GLYPH (numerals 1..6) |
-| starliner-crew | vessel | nominal | `spaceship` | GLYPH (repurposed from deck) |
-| starliner-crew | cargo | nominal | - | TEXT (no cargo pack yet) |
-| science-fair | student (anchor) | nominal | - | TEXT (person) |
-| science-fair | project | nominal | - | TEXT (no project pack) |
-| science-fair | score | numeric | - | TEXT (points, non-sequential) |
-| science-fair | subject | nominal | - | TEXT (no subject pack) |
-| science-fair | snack | nominal | `food` | GLYPH |
-| harbor-regatta | sailor (anchor) | nominal | - | TEXT (person) |
-| harbor-regatta | boat | nominal | - | TEXT (boat rigs) |
-| harbor-regatta | finish | numeric | - | TEXT (minutes, non-sequential) |
-| harbor-regatta | sailcolor | nominal | `color` | GLYPH |
-| harbor-regatta | mascot | nominal | `creatures` | GLYPH |
-| film-festival | director (anchor) | nominal | - | TEXT (person) |
-| film-festival | genre | nominal | - | TEXT (no genre pack) |
-| film-festival | slot | numeric | - | TEXT (screening order 1..6, kept text) |
-| film-festival | venue | nominal | - | TEXT (no venue pack) |
-| film-festival | award | nominal | per-value | PARTIAL (`medals`: gold/silver/bronze; 3 prizes text) |
-| observatory-night | astronomer (anchor) | nominal | - | TEXT (person) |
-| observatory-night | target | nominal | - | TEXT (no sky pack) |
-| observatory-night | vigil | numeric | - | TEXT (hours, non-sequential) |
-| observatory-night | instrument | nominal | - | TEXT (no instrument pack) |
-| observatory-night | drink | nominal | `drinks` | GLYPH |
-| orchestra-tuning | musician (anchor) | nominal | - | TEXT (person) |
-| orchestra-tuning | instrument | nominal | - | TEXT (no instrument pack) |
-| orchestra-tuning | seat | numeric | - | TEXT (chair 1..6, kept text) |
-| orchestra-tuning | piece | nominal | - | TEXT (no piece pack) |
-| orchestra-tuning | outfit | nominal | `clothes` | GLYPH |
-| county-fair | farmer (anchor) | nominal | - | TEXT (person) |
-| county-fair | animal | nominal | `creatures` | GLYPH |
-| county-fair | tally | numeric | - | TEXT (ribbons, non-sequential) |
-| county-fair | crop | nominal | `vegetables` | GLYPH |
-| county-fair | tool | nominal | - | TEXT (no tool pack) |
-| newsroom-deadline | reporter (anchor) | nominal | - | TEXT (person) |
-| newsroom-deadline | beat | nominal | - | TEXT (no beat pack) |
-| newsroom-deadline | length | numeric | - | TEXT (words, non-sequential) |
-| newsroom-deadline | section | nominal | - | TEXT (no section pack) |
-| newsroom-deadline | drink | nominal | `drinks` | GLYPH |
-| costume-parade | reveller (anchor) | nominal | - | TEXT (person) |
-| costume-parade | costume | nominal | `clothes` | GLYPH |
-| costume-parade | float | numeric | - | TEXT (parade position 1..6, kept text) |
-| costume-parade | mask | nominal | - | TEXT (no mask pack) |
-| costume-parade | treat | nominal | `food` | GLYPH |
+The full per-scenario census (complete / text / partial for every category across all 103
+scenarios) is machine-tracked in [../reference/glyph-coverage.md](../reference/glyph-coverage.md)
+(regenerate with `python -m tools.audit_glyphs --md`). It is not duplicated here.
 
 ## Gap backlog (remaining art to backfill)
 
-RESOLVED 2026-07-08: the `flowers` gap is closed (8-bloom pack; the stragglers were repointed to the
-existing `poppies`) and `events` is now a full 8-glyph pack backing `town-chronicle`. Remaining, by ROI:
+RESOLVED 2026-07-08: `flowers` (8), `events` (8, backs `town-chronicle`) and `offices` (7, backs
+`city-inspection`) are closed. A `people` avatar pack (13) and 4 new `occupation` roles were added
+(registered; wiring TBD - see the analysis above). Remaining, by ROI:
 
 1. Grow the last sub-6 pack so it can back a glyph column at all: `medals` (3 -> add 3). A
    `glyphPack` column needs 6 values (frontend contract `scenario-glyphs.test.ts`), so a pack under
