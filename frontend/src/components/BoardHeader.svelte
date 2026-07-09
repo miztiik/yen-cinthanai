@@ -147,7 +147,7 @@
         <Tooltip text={`Difficulty: ${tierCap}`} delayMs={chrome.tooltipDelayMs}>
           {#snippet children(tip)}
             <button
-              class="flex min-h-10 items-center gap-1 rounded-full bg-ink/5 px-2 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              class="flex min-h-10 items-center gap-1 rounded-full px-2 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label={`difficulty ${tier}, tap to change`}
               aria-haspopup="dialog"
               aria-describedby={tip}
@@ -184,15 +184,23 @@
          zone under a hairline when the header is narrow (container query below). Hint is an ACTION
          (spends a resource), so it sits PAST the status divider with check/reset, not with status. -->
     <div class="hdr-live">
-      <span class="flex items-center gap-1.5">
-        <span class="inline-flex opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
-        <span class="tabular-nums leading-none opacity-80">{formatClock(elapsedS)}</span>
-      </span>
+      <Tooltip text="Time elapsed" delayMs={chrome.tooltipDelayMs}>
+        {#snippet children(tip)}
+          <span class="hdr-stat flex items-center gap-1.5 rounded-full px-1.5 py-1" aria-describedby={tip}>
+            <span class="inline-flex opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
+            <span class="tabular-nums leading-none opacity-80">{formatClock(elapsedS)}</span>
+          </span>
+        {/snippet}
+      </Tooltip>
       {#if progress}
-        <span class="flex items-center gap-1.5" role="status" aria-label={`${progress.filled} of ${progress.total} solved`}>
-          <span class="inline-flex opacity-50"><Glyph ref="ui.progress" size={14} tint /></span>
-          <span class="tabular-nums leading-none opacity-80">{progress.filled}/{progress.total}</span>
-        </span>
+        <Tooltip text="Cells filled" delayMs={chrome.tooltipDelayMs}>
+          {#snippet children(tip)}
+            <span class="hdr-stat flex items-center gap-1.5 rounded-full px-1.5 py-1" role="status" aria-describedby={tip} aria-label={`${progress.filled} of ${progress.total} filled`}>
+              <span class="inline-flex opacity-50"><Glyph ref="ui.progress" size={14} tint /></span>
+              <span class="tabular-nums leading-none opacity-80">{progress.filled}/{progress.total}</span>
+            </span>
+          {/snippet}
+        </Tooltip>
       {/if}
       {#if game && attemptsTotal >= 0}
         <AttemptRing left={attemptsLeft} total={attemptsTotal} fadeMs={chrome.attemptFadeMs} colors={chrome.attemptColors} />
@@ -227,7 +235,7 @@
               {/snippet}
             </Tooltip>
           {:else}
-            <Tooltip text={submitLabel === "submit" ? "Submit" : "Check"} delayMs={chrome.tooltipDelayMs}>
+            <Tooltip text={submitLabel === "submit" ? "Submit your answer" : "Check for mistakes"} delayMs={chrome.tooltipDelayMs}>
               {#snippet children(tip)}
                 <button
                   class="grid h-9 w-9 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-30"
@@ -298,6 +306,14 @@
   .board-hdr :global(a:hover) {
     background-color: color-mix(in oklab, var(--ink) 9%, transparent);
   }
+  /* The read-only STATUS chips (timer, cells-filled) are not buttons, so give them the same
+     hover wash + a Tooltip that names the reading ("Time elapsed" / "Cells filled"). */
+  .board-hdr :global(.hdr-stat) {
+    transition: background-color 120ms ease;
+  }
+  .board-hdr :global(.hdr-stat:hover) {
+    background-color: color-mix(in oklab, var(--ink) 9%, transparent);
+  }
   .board-hdr {
     display: flex;
     flex-wrap: wrap;
@@ -347,12 +363,17 @@
      bar is a clean two rows (identity + frame on top, the live-solve cluster on its own row).
      Gated at the width the full cluster genuinely fits so it never wraps a control awkwardly. */
   @container boardhdr (min-width: 640px) {
+    /* Identity stops growing so the day sits right next to home (no big left gap); the live
+       cluster absorbs the slack instead, carrying the gear to the far edge. */
+    .hdr-day {
+      flex: 0 1 auto;
+    }
     .hdr-adjust {
       order: 4;
     }
     .hdr-live {
       order: 3;
-      flex-basis: auto;
+      flex: 1 1 auto;
       margin-top: 0;
       padding-top: 0;
       border-top: 0;
