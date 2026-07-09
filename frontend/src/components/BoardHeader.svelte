@@ -82,6 +82,9 @@
   const attemptsLeft = $derived(game?.attemptsLeft ?? -1);
   const hintsLeft = $derived(game?.hintsLeft ?? -1);
   const canHint = $derived(!!game && !game.locked && hintsLeft !== 0);
+  // Fill progress (filled/total slots) folded INTO the bar as a solve stat beside the timer, so
+  // it no longer needs its own row below the header. One evalState read, memoized by $derived.
+  const progress = $derived(game ? { filled: game.evalState.filled, total: game.evalState.total } : null);
   // CHECK/SUBMIT lives in the Command Bar (2c): non-realtime tiers only; a spent attempt cap
   // swaps it for RETRY. Realtime (easy) auto-wins, so it shows no submit button. The feedback
   // pill renders directly under the header (Board), so it stays adjacent to this button.
@@ -155,6 +158,9 @@
         <span class="inline-flex opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
         <span class="tabular-nums leading-none opacity-80">{formatClock(elapsedS)}</span>
       </span>
+      {#if progress}
+        <span class="tabular-nums leading-none opacity-60" role="status" aria-label={`${progress.filled} of ${progress.total} solved`}>{progress.filled}/{progress.total}</span>
+      {/if}
       {#if game && attemptsTotal >= 0}
         <AttemptRing left={attemptsLeft} total={attemptsTotal} fadeMs={chrome.attemptFadeMs} colors={chrome.attemptColors} />
       {/if}
