@@ -1,6 +1,9 @@
 name: deploy
 
-# Build today's bank, bake config, and publish the static bundle to GitHub Pages.
+# Build the rolling 7-day bank window, bake config, and publish the static bundle to
+# GitHub Pages. The window (today + previous 6 days x four tiers) is what the board's
+# DayPicker calendar navigates; building a single day here would ship an index with only
+# today, leaving the date picker with nothing to jump to. Must match daily.yml's backfill.
 # Gated on CI: this runs only AFTER the "ci" workflow concludes success on master,
 # so a red build (failing typecheck / lint / test / pytest) never deploys. The
 # workflow_dispatch trigger is a manual escape hatch that bypasses the gate for a
@@ -43,7 +46,9 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: pip install -r tools/requirements.txt
-      - run: python -m tools.generate --date today
+      # Backfill the rolling 7-day window (add-only; existing days frozen) so the deployed
+      # index carries every day the DayPicker can jump to - matches daily.yml.
+      - run: python -m tools.generate --backfill 7
       - run: python -m tools.bake_config
       - run: npm ci
         working-directory: frontend
