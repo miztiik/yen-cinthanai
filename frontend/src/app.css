@@ -266,9 +266,9 @@ th[data-crosshair-hdr] {
   position: absolute;
   top: calc(-0.5 * var(--grid-gap, 4px));
   bottom: calc(-0.5 * var(--grid-gap, 4px));
-  right: calc(-0.5 * var(--grid-gap, 4px) - 1px);
-  width: 2px;
-  border-radius: 1px;
+  right: calc(-0.5 * var(--grid-gap, 4px) - 0.5px);
+  width: 1px;
+  border-radius: 0.5px;
   background: color-mix(in oklab, var(--ink) 22%, transparent);
   pointer-events: none;
 }
@@ -277,9 +277,9 @@ th[data-crosshair-hdr] {
   position: absolute;
   left: calc(-0.5 * var(--grid-gap, 4px));
   right: calc(-0.5 * var(--grid-gap, 4px));
-  bottom: calc(-0.5 * var(--grid-gap, 4px) - 1px);
-  height: 2px;
-  border-radius: 1px;
+  bottom: calc(-0.5 * var(--grid-gap, 4px) - 0.5px);
+  height: 1px;
+  border-radius: 0.5px;
   background: color-mix(in oklab, var(--ink) 22%, transparent);
   pointer-events: none;
 }
