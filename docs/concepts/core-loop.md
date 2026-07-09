@@ -27,7 +27,7 @@ One headline puzzle per day = the ritual + the shared artifact. PLAY is one tap:
 
 ## First 60 seconds (Easy grid cold-open)
 
-3 entities x 2 nominal categories, bijective, clue types eq+ends only. The first grid block is already open; the player taps a cell to eliminate (X), then a second tap on the forced cell confirms it (tick) and fires the auto-X cascade - the verb is taught by playing, no tutorial screen. Player wins by ~34s. Mixed cardinality and indirect clues graduate at Standard+.
+3 entities x 3 categories (subject + two attributes), bijective, mostly direct eq clues plus a single neq. The board opens on the first pairing; the player taps a cell to eliminate (X) or confirm (tick), and ticking fires the auto-X cascade - the verb is taught by playing, no tutorial screen. Easy is a REAL (small) deduction, not clue-copying: a cross-pairing clue ("the one who landed 7 tricks rode the green deck") plus one negation force genuine transitive reasoning across the three pairings. The single neq teaches the cross-out (X) half of the verb that an all-eq grid never exercises. Unlimited hints and attempts keep it forgiving - a stuck player taps the hint for the next forced cell - so the first solve stays inevitable without being trivial. Numeric REASONING (numDiff) and the attempt/hint caps graduate at Standard+.
 
 ## Hints
 

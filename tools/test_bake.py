@@ -27,7 +27,7 @@ def test_bake_is_deterministic(tmp_path: Path) -> None:
 def test_tiers_par_survives_bake(tmp_path: Path) -> None:
     bake_all(CONFIG_DIR, tmp_path)
     tiers = json.loads((tmp_path / "tiers.json").read_text(encoding="ascii"))
-    assert tiers["easy"]["par_s"] == 90 and tiers["expert"]["par_s"] == 900
+    assert tiers["easy"]["par_s"] == 150 and tiers["expert"]["par_s"] == 900
 
 
 def test_copy_bags_ship_full_and_in_bounds() -> None:

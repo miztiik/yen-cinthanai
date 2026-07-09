@@ -10,7 +10,7 @@
   "note": "Original content. Whimsical hot-air balloon fiesta at dawn. Anchor = pilot. canopy is glyph-backed by the color pack and motif by the shapes pack (value ids are pack slugs); field is text-only; altitude is the numeric axis at index 2 so it survives the standard slice. The narrativeTemplate is flavor only - it never names a sliced category (altitude/motif/field).",
   "narrativeTemplate": "Dawn is calm and the burners roar as {n} pilots inflate their great balloons on the green, and {marshal} keeps the launch order straight after a {mishap} scattered the flight cards.",
   "flavorPools": {
-    "marshal": ["Fieldmaster Bo", "old Auntie Wisp", "the launch marshal"],
+    "marshal": ["Skipper Bo", "old Auntie Wisp", "the launch marshal"],
     "mishap": ["gust of wind", "tangled tether", "runaway clipboard"]
   },
   "indirection": {

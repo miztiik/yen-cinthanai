@@ -89,7 +89,7 @@ def test_strict_rejects_extra_field() -> None:
 
 
 def test_par_and_stars_from_config() -> None:
-    assert par_seconds("easy") == 90 and par_seconds("standard") == 240
+    assert par_seconds("easy") == 150 and par_seconds("standard") == 240
     assert compute_stars("standard", 200_000, 0, 0) == 3  # under par, no hints/wrong
     assert compute_stars("standard", 200_000, 1, 0) == 1  # hint kills 2/3
     assert compute_stars("standard", 999_000, 0, 0) == 2  # no hint, over par
