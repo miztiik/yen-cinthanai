@@ -39,6 +39,7 @@
     onagain: () => void;
     oncheck: () => void;
     onretry: () => void;
+    onreveal: () => void;
     ondisplay: () => void;
     ondifficulty: () => void;
     onprev: () => void;
@@ -66,6 +67,7 @@
     onagain,
     oncheck,
     onretry,
+    onreveal,
     ondisplay,
     ondifficulty,
     onprev,
@@ -88,7 +90,7 @@
   const submitLabel = $derived(game?.dial.feedback === "submit-binary" ? "submit" : "check");
 </script>
 
-<div class="board-hdr-wrap mx-auto w-full max-w-xl">
+<div class="board-hdr-wrap mx-auto w-full max-w-2xl">
   <header class="board-hdr rounded-2xl border border-ink/10 bg-surface px-1.5 py-1 text-sm shadow-e1">
     <!-- LEAVE: a house glyph so leave never twins the day-nav carets (Decision 2) -->
     <div class="hdr-home">
@@ -180,20 +182,28 @@
         {#if !live}
           {#if failed}
             <button
-              class="grid h-9 w-9 place-items-center rounded-full bg-accent text-bg transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              class="grid h-9 w-9 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label="retry"
               title="retry"
               onclick={onretry}
             ><Glyph ref="ui.reset" size={16} tint /></button>
           {:else}
             <button
-              class="grid h-9 w-9 place-items-center rounded-full bg-accent text-bg transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-30"
+              class="grid h-9 w-9 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-30"
               aria-label={submitLabel}
               title={submitLabel}
               disabled={game.locked}
               onclick={oncheck}
             ><Glyph ref="ui.check" size={16} tint /></button>
           {/if}
+        {/if}
+        {#if !game.locked}
+          <button
+            class="grid h-9 w-9 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            aria-label="reveal solution"
+            title="reveal solution"
+            onclick={onreveal}
+          ><Glyph ref="ui.eye" size={17} tint /></button>
         {/if}
       {/if}
     </div>
@@ -215,6 +225,20 @@
   .board-hdr-wrap {
     container-type: inline-size;
     container-name: boardhdr;
+  }
+  /* Hover highlight on the command-bar controls (yen-doku style): a subtle ink wash fills the
+     icon buttons on hover; the accent action buttons dim slightly instead. Scoped :global so it
+     also reaches the DayNav carets. Background/filter/transform only - compositor-cheap, Holy
+     Law #2; reduced-motion (app.css) zeroes the transition. */
+  .board-hdr :global(button),
+  .board-hdr :global(a) {
+    transition:
+      background-color 120ms ease,
+      transform 120ms ease;
+  }
+  .board-hdr :global(button:not(:disabled):hover),
+  .board-hdr :global(a:hover) {
+    background-color: color-mix(in oklab, var(--ink) 9%, transparent);
   }
   .board-hdr {
     display: flex;

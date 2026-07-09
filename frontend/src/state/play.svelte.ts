@@ -61,6 +61,9 @@ export class Game {
   // board placement), and a monotonic nonce the grid views watch to fire a one-shot pulse (PR-4).
   lastHintKey = $state<string | null>(null);
   hintFlash = $state(0);
+  // Reveal-solution ("give up"): reveal() fills the board from the manifest solution and locks the
+  // day as a LOSS (not a win - no stars, no streak). See reveal() + toDayState + win() guard.
+  gaveUp = $state(false);
 
   constructor(m: PuzzleManifest, dial: TierDial, prior?: DayState) {
     this.m = m;
@@ -281,6 +284,36 @@ export class Game {
     this.struck[id] = !this.struck[id];
   }
 
+  /** Reveal the full solution ("give up"): fill every cell from the manifest solution and lock the
+   *  board as a LOSS - gaveUp blocks the win() so it never scores, records no stars/streak, and
+   *  persists as "lost". Fills the visible surface (grid ticks for bijective cats, token placements
+   *  for shared) so the answer is on screen. playAgain() still offers a clean practice run. */
+  reveal(): void {
+    if (this.locked) return;
+    this.gaveUp = true;
+    for (const e of this.board.entities) {
+      const anchorVal = this.board.anchor.values[this.board.entities.indexOf(e)]?.id;
+      for (const col of this.board.columns) {
+        const v = this.m.solution[e]?.[col.id];
+        if (!v) continue;
+        if (col.cardinality === "bijective" && anchorVal) {
+          this.gridTicks[cellKey({ cat: this.board.anchor.id, val: anchorVal }, { cat: col.id, val: v })] = true;
+        } else {
+          this.placements[e] = { ...this.placements[e], [col.id]: v };
+        }
+      }
+    }
+    this.gridManualX = {};
+    this.selected = null;
+    this.checked = true;
+    this.locked = true;
+    this.stars = 0;
+    const now = Date.now();
+    this.solveMs = this.clock.elapsed(now);
+    this.clock.pause(now);
+    this.lastMoveMs = now;
+  }
+
   /** B-prime verb: drop a glyph into a cell = TICK the positive. Displaces any tick in the
    *  same block sharing a row or column (one positive per line), clears a prior manual-X on
    *  the cell, and lets the derived auto-X do the elimination. Realtime tiers may win now. */
@@ -324,9 +357,10 @@ export class Game {
     }
   }
 
-  /** Lock + score on a complete correct board. Stars: brag-cost via hintsUsed. */
+  /** Lock + score on a complete correct board. Stars: brag-cost via hintsUsed. A revealed board
+   *  (gaveUp) is correct but must NOT win - it is a loss. */
   private win(): boolean {
-    if (this.locked || !this.evalState.won) return false;
+    if (this.locked || this.gaveUp || !this.evalState.won) return false;
     this.locked = true;
     const now = Date.now();
     this.solveMs = this.clock.elapsed(now);
@@ -347,7 +381,7 @@ export function toDayState(g: Game): DayState {
     date: g.m.puzzleId,
     tier: g.m.tier,
     shapeId: g.m.shapeId,
-    status: g.locked ? "won" : ev.filled > 0 ? "playing" : "unplayed",
+    status: g.gaveUp ? "lost" : g.locked ? "won" : ev.filled > 0 ? "playing" : "unplayed",
     placements: g.placements,
     attempts: g.attempts,
     solveMs: g.solveMs,

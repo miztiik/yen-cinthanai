@@ -180,6 +180,29 @@ describe("play again (practice replay of a solved puzzle)", () => {
   });
 });
 
+describe("reveal solution (give up)", () => {
+  it("fills the board from the solution but locks as a LOSS - correct yet never scored", () => {
+    const g = new Game(m, STD);
+    g.reveal();
+    expect(g.gaveUp).toBe(true);
+    expect(g.locked).toBe(true);
+    expect(g.evalState.won).toBe(true); // the board is the correct solution...
+    expect(g.evalState.filled).toBe(g.evalState.total); // ...every cell filled...
+    expect(g.stars).toBe(0); // ...but a reveal never scores
+  });
+
+  it("persists a revealed day as lost and never advances streak/best", () => {
+    const g = new Game(m, REALTIME);
+    g.reveal();
+    saveProgress(g);
+    const s = loadSave();
+    const k = dayKey(m.puzzleId, m.tier, m.shapeId);
+    expect(s.days[k].status).toBe("lost");
+    expect(s.days[k].stars).toBe(0);
+    expect(s.streak.count).toBe(0);
+  });
+});
+
 describe("brag-cost", () => {
   it("a hint forces the next step and caps to 1 star, no best-time", () => {
     const g = new Game(m, STD);

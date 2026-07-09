@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-09T02:38:14Z",
+  "generatedAt": "2026-07-09T03:26:55Z",
   "packs": {
     "abstract": {
       "awardblank": {
@@ -2271,6 +2271,10 @@
       "crown": {
         "file": "ui/crown.svg",
         "label": "Crown"
+      },
+      "eye": {
+        "file": "ui/eye.svg",
+        "label": "Eye"
       },
       "flame": {
         "file": "ui/flame.svg",
