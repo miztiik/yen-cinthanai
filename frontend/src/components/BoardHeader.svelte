@@ -161,7 +161,7 @@
       <Tooltip text="Reveal a step" delayMs={chrome.tooltipDelayMs}>
         {#snippet children(tip)}
           <button
-            class="flex min-h-10 items-center gap-1 rounded-full px-2 font-medium tabular-nums transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-30"
+            class={`inline-flex h-9 items-center justify-center rounded-full font-medium tabular-nums transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-30 ${hintsLeft >= 0 ? "w-auto gap-1 px-2.5" : "w-9"}`}
             aria-label={hintsLeft >= 0 ? `use hint, ${hintsLeft} left` : "use hint"}
             aria-describedby={tip}
             disabled={!canHint}
