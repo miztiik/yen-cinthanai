@@ -309,7 +309,7 @@
        fill progress. Sits next to the header CHECK button (2c) so a first "not yet" is never
        below the fold - the reason CHECK + its feedback travel together. See ui-shell.md. -->
   {#if game}
-    <div class="mx-auto flex w-full max-w-lg items-center justify-center gap-2">
+    <div class="mx-auto flex w-full max-w-xl items-center justify-center gap-2">
       {#if game.checked && !game.locked && !failed}
         {@const off = game.m.constraints.filter((c) => game?.evalState.clues[c.id] === "violate").length}
         <p class="flex w-fit items-center gap-2 rounded-full border border-violate/30 bg-violate/10 px-4 py-1 text-sm font-medium text-violate" role="status">

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T21:56:52Z",
+  "generatedAt": "2026-07-09T02:38:14Z",
   "packs": {
     "abstract": {
       "awardblank": {
@@ -2287,6 +2287,10 @@
       "home": {
         "file": "ui/home.svg",
         "label": "Home"
+      },
+      "reset": {
+        "file": "ui/reset.svg",
+        "label": "Reset"
       },
       "sliders": {
         "file": "ui/sliders.svg",
