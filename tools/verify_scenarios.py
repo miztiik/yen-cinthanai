@@ -62,7 +62,7 @@ VERIFY_VARIANT = 1
 # the fixture date at every tier on EVERY run, so the stamp is a catalog-sweep cache, not the only
 # gate. (Explicit-version over raw-byte hashing: an AI-agent-authored casual game does not need the
 # byte-hash's coarse "re-stamp on any edit" tax.)
-GENERATOR_VERSION = 1
+GENERATOR_VERSION = 2  # 2: identity/anchor axis auto-decorated with distinct people avatars (Option B)
 
 # Config inputs that feed generation, content-hashed (canonicalized JSON) so a reformat is free but a
 # value change - a tier band, a clue weight, an ENV weight - moves the fingerprint.
