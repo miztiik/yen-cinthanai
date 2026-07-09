@@ -342,4 +342,20 @@
     padding-top: 0.25rem;
     border-top: 1px solid color-mix(in oklab, var(--ink) 12%, transparent);
   }
+  /* Wide enough to hold everything on ONE row (desktop / a wide window): pull the live cluster
+     back inline between the identity zone and the gear, and drop the hairline. Below this the
+     bar is a clean two rows (identity + frame on top, the live-solve cluster on its own row).
+     Gated at the width the full cluster genuinely fits so it never wraps a control awkwardly. */
+  @container boardhdr (min-width: 640px) {
+    .hdr-adjust {
+      order: 4;
+    }
+    .hdr-live {
+      order: 3;
+      flex-basis: auto;
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+  }
 </style>
