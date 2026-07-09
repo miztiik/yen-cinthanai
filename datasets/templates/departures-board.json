@@ -8,7 +8,7 @@
   "minTier": "easy",
   "maxTier": "expert",
   "note": "Original content. A night shift at the station as the departures board fills in. Anchor = conductor. departure is glyph-backed by the time pack (value ids are clock slugs: clockseven..clocktwelve, the kebab filename with hyphens dropped); cars is the numeric axis (carriages hauled) at index 2 so it survives the standard slice; line and service are text-only. The time pack ships ten faces, so the glyph column backs a full six-entity expert grid. The narrativeTemplate is flavor only - it never names a sliced category (cars/line/service).",
-  "narrativeTemplate": "The last {n} trains of the night wait under the glass roof as {master} works out whose service was whose after a {snag} smudged the chalk on the board.",
+  "narrativeTemplate": "The last {n} trains of the night wait under the glass roof as {master} works out whose run was whose after a {snag} smudged the chalk on the board.",
   "flavorPools": {
     "master": ["Stationmaster Okonkwo", "old Signalman Pryce", "the night duty master"],
     "snag": ["draught off the platform", "flickering gas lamp", "spilled pot of tea"]

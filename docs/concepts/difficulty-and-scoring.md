@@ -29,7 +29,7 @@ Difficulty is a returning-player dial, placed where "too easy / too hard" is act
 
 | Tier | band | E x C | N | indir | attempts | hints | feedback | PAR |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Easy | 0-13 | 3x2 | 3-4 | 0.0 | unlimited | unlimited | realtime-names | 90s |
+| Easy | 0-22 | 3x3 | 3-5 | 0-.25 | unlimited | unlimited | realtime-names | 150s |
 | Standard | 14-39 | 4x3 | 5-7 | .25-.40 | 3 | 2 | count-wrong | 240s |
 | Sharp | 48-66 | 5x4 | 9-11 | ~0.0 | 2 | 1 | binary-check | 480s |
 | Expert | 96-120 | 6x5 | 14-16 | ~1.0 | 1 | 0 | submit-binary | 900s |
@@ -62,6 +62,18 @@ NOTE (2026-07-05): the runtime does not yet implement these idle / wrong-count r
 ## Copy bags (config/copy.toml)
 
 50 SUCCESS, 50 ENCOURAGE, 10 HERO, <=22 chars, ASCII, spoiler-free. Examples: SUCCESS "Case closed." / "Airtight." / "Checkmate."; ENCOURAGE "So close." / "One swap from glory."; HERO "NEW RECORD - the board bows." The full bags ship in config, not code.
+
+## Design rationale: Easy is a real 3x3, not a click exercise
+
+Easy was a 3x2 (3 entities, 2 categories) all-`eq` grid: two "X is Y" clues, tick two cells, the third auto-fills. It required zero deduction - a click exercise identical in shape every day across all ~100 templates. Easy is now a 3x3 (3 entities, 3 categories) that forces real (small) deduction: ~4 clues (3 `eq` + 1 `neq`), ~42% of them cross-pairing, D=20, with unlimited hints/attempts as the safety net. Making Easy 3-category also shrinks the Easy->Standard cliff - both tiers are now 3 categories, so Standard adds an entity + numeric REASONING + attempt caps rather than a whole new pairing dimension.
+
+The lever was the band, not just the `indir` flag. `INDIR = round(20 * indirect/N)` is a ratio that spikes at small N: one `neq` on a short set adds >=5, so the old `[0,13]` Easy band was mathematically incompatible with any indirection - the band ceiling had to move to `[0,22]` before variety was possible.
+
+## Rejected alternatives
+
+- **Keep 3x2, force a `neq`.** Infeasible: on a single pairing the eq-greedy pruner always finds an all-`eq` minimal set, so the share cap rejects every reseed and generation exhausts the 64-reseed budget (deterministic CI failure). Verified: 14/14 dates raised `RuntimeError`.
+- **3x3, all-direct (eq only, no `neq`).** Genuinely deductive via cross-pairing transitivity and beginner-friendlier (no negation), but reseed-risky (max 44/64 observed) because a random all-eq 3x3 is often not zero-guess, and it never teaches the cross-out (X) half of the verb. Rejected for the reseed tail risk; a future biased-selection generator change could revisit it.
+- **Add a 5th tier between Easy and Standard.** A tier-taxonomy change (Level-5): +25% daily CI, save-schema enum, DifficultyPicker, badge ramp, every template's `minTier`. Not a tuning tweak; deferred.
 
 ## See also
 

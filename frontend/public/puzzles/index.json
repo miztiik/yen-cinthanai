@@ -5,7 +5,7 @@
     {
       "date": "2026-06-24",
       "file": "2026-06-24-easy.json",
-      "sha": "e6623d6ec879062b61a1bd974b723471f84733161deea384c00f103f512c608b",
+      "sha": "77664c5e1e20b75513efb9140d78772f66e5367968b06d7431d9fa83373f610b",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -33,7 +33,7 @@
     {
       "date": "2026-06-25",
       "file": "2026-06-25-easy.json",
-      "sha": "8db592de897e4008274edb199a87675e75043ae9945ad7515a8cb92b457bf4a5",
+      "sha": "84eda9f3e0f6fe7619daef47fbd19d349832ff30f4b680bff0920d88df931eef",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -61,7 +61,7 @@
     {
       "date": "2026-06-26",
       "file": "2026-06-26-easy.json",
-      "sha": "3a164a9f7199b78c70c11e981d94db35c35ac99cb095172385bef81e8cfeb3c8",
+      "sha": "a378f65fc0956bf912f50c18363bcfd82a949dcd57315823b46b57604b7b81e8",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -89,7 +89,7 @@
     {
       "date": "2026-06-27",
       "file": "2026-06-27-easy.json",
-      "sha": "5b2e7add96d7399bc4da1362e082a09d3b7ab08872e279e2284f4f7278e5f63c",
+      "sha": "36370c85a3a5c68a23242413f3885a1112f5666ebc3ffc9523499ea000d7bcf1",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -117,7 +117,7 @@
     {
       "date": "2026-06-28",
       "file": "2026-06-28-easy.json",
-      "sha": "81294b312785f6f8a53a9519e6e4825d9086938ff5457ae34a7320bf87f90227",
+      "sha": "daa636552dd1036b68bb41b77f3151afe1a6fbd92d5b3087c87062809b30a337",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -145,7 +145,7 @@
     {
       "date": "2026-06-29",
       "file": "2026-06-29-easy.json",
-      "sha": "ff52e806d2528221760608d60a71d3dc8836957a9d207ada169b94aade4efbcc",
+      "sha": "e47b4ac50847830e3ebac86866a2ab9cd43f027ed2b1d013dd4b74f71c7a11e9",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -173,7 +173,7 @@
     {
       "date": "2026-06-30",
       "file": "2026-06-30-easy.json",
-      "sha": "31c593af68475cd26c3ca16f56fcb49d808d708a3470f5526ba816d34d28c4a6",
+      "sha": "f135095d1341fceb46f39461a6ffb5b9b0595d8f4e31f6e98ade85dceef888af",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -201,7 +201,7 @@
     {
       "date": "2026-07-01",
       "file": "2026-07-01-easy.json",
-      "sha": "a7043f79f9e94ffb775c4c892658146663e238fee2a06bac5c9d7c082410718a",
+      "sha": "d96401f7b7eb3c9bb9a3b74c8bed4118d309b683ac3da842e11abccea06ba89f",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -229,7 +229,7 @@
     {
       "date": "2026-07-02",
       "file": "2026-07-02-easy.json",
-      "sha": "76d8108eb7a68060fb56f6fa8e67edc8a43adbe54133287955bbacd0555d0cce",
+      "sha": "4030995aaf22bbe61bc7704c95413caa17b8b77dec172e13396e2353c39435cc",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -257,7 +257,7 @@
     {
       "date": "2026-07-03",
       "file": "2026-07-03-easy.json",
-      "sha": "39adb70dcf4a7941d81cddd164264dcdb467b68f944c08588663cc190f666547",
+      "sha": "70f5e5dd490560626754f4aeb34b8dea5b058229ab334a564602c542dd3421ec",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -285,7 +285,7 @@
     {
       "date": "2026-07-04",
       "file": "2026-07-04-easy.json",
-      "sha": "268fa281557839d342a498b099d141d48ccd10241c92e13db5137947a5207f3a",
+      "sha": "82de70321c08de88b3715ef86826536071a3c256d8552eed7f2184f78a6d2a31",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -313,7 +313,7 @@
     {
       "date": "2026-07-05",
       "file": "2026-07-05-easy.json",
-      "sha": "10487a082f11f9ce0c9370ebd3826adc66e735559df995183ecb7c48bedd12e2",
+      "sha": "57c8da6239b1b38b7581ccd49030ccd6f72529fa72a3d1395cd03a69f35f8e91",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -341,7 +341,7 @@
     {
       "date": "2026-07-06",
       "file": "2026-07-06-easy.json",
-      "sha": "d6ef6bb74a60903c6060f595fc5e4eecfafe65de86a7cab34207dc2bf1d9f327",
+      "sha": "c4d37b5afa4f8191e6bc14232f565303a3312805609bb412325feac04a0f551b",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -369,7 +369,7 @@
     {
       "date": "2026-07-07",
       "file": "2026-07-07-easy.json",
-      "sha": "a222e7de6fabce1ba54f2224c2da2ca3c6305dc8e361f2993b2771713c0178f6",
+      "sha": "a5a1575170389c1ef6f21ae55bb34f6b0334b8f07f105e20031f6c35b3b690a1",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -397,7 +397,7 @@
     {
       "date": "2026-07-08",
       "file": "2026-07-08-easy.json",
-      "sha": "38ed9cc2d62eaadd7122dacadc5ec19f2dcae54b076de6ec74312840c8ea9169",
+      "sha": "af88851832143f2089bf1242efcc605663377edaed891f3186ce9dd2ddf5251b",
       "shapeId": "grid",
       "tier": "easy"
     },
@@ -425,7 +425,7 @@
     {
       "date": "2026-07-09",
       "file": "2026-07-09-easy.json",
-      "sha": "79528c83f65097e7e9af582a225e97a06212e6d5ce8a0a75435a5e0e51a00b3a",
+      "sha": "502301521ae80687bab09fcc942b6b001f4083c393ce0da0d9742c50c5152e12",
       "shapeId": "grid",
       "tier": "easy"
     },

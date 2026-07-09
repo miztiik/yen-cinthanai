@@ -3,22 +3,22 @@
     "attempts": -1,
     "band": [
       0,
-      13
+      22
     ],
     "cardinality": "bijective",
-    "categories": 2,
+    "categories": 3,
     "clue_count": [
       3,
-      4
+      5
     ],
     "entities": 3,
     "feedback": "realtime-names",
     "hints": -1,
     "indir": [
       0.0,
-      0.0
+      0.25
     ],
-    "par_s": 90
+    "par_s": 150
   },
   "expert": {
     "attempts": 1,

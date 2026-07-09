@@ -297,19 +297,22 @@ EASY_DATE = "2026-07-02"
 
 @pytest.fixture(scope="module")
 def easy_build() -> g.StoryBuild:
-    # Easy is the all-direct tutorial: tiers.json indir == [0, 0], so the variety/share cap is
-    # exempt and an all-eq grid is exactly the intended shape (the fix that unblocked easy).
+    # Easy is a real 3x3 mini-grid (tiers.json categories == 3, indir == [0, 0.25]): the share cap
+    # rejects an all-eq grid, so every easy carries at least one neq and the three pairings force
+    # cross-pairing deduction. Numeric/compound clues stay gated above easy.
     return g.build_story(EASY_DATE, "easy", 1, CONFIG_DIR, scenario_path=WEEKEND_MARKET)
 
 
-def test_easy_is_all_direct_story_first(easy_build: g.StoryBuild) -> None:
-    # Easy emits a story-first schemaVersion-2 grid with NO indirect clue (all-direct tutorial):
-    # eq present, and no neq/compound - matching the tier's declared indirection budget [0, 0].
+def test_easy_is_light_deduction_story_first(easy_build: g.StoryBuild) -> None:
+    # Easy emits a story-first schemaVersion-2 grid that is NOT a click exercise: eq present (the
+    # toehold) AND at least one neq (real deduction), with no numeric/compound clue (those graduate
+    # at standard+). Matches the tier's indirection budget (0, 0.25].
     m = easy_build.manifest
     assert m.schemaVersion == 2 and m.shapeId == "grid" and m.story and m.scenarioId
     types = [c.type for c in m.constraints]
     assert types and "eq" in types
-    assert all(t not in g.INDIRECT_TYPES for t in types), [t for t in types if t in g.INDIRECT_TYPES]
+    assert "neq" in types, "easy must carry real deduction (>=1 neq), not be a click exercise"
+    assert all(t in ("eq", "neq") for t in types), [t for t in types if t not in ("eq", "neq")]
 
 
 def test_p1_easy_zero_guess(easy_build: g.StoryBuild) -> None:
