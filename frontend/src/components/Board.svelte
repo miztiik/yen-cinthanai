@@ -306,18 +306,15 @@
     }}
   />
 
-  <!-- Status row directly under the Command Bar: the CHECK feedback pill (when checked) + the
-       fill progress. Sits next to the header CHECK button (2c) so a first "not yet" is never
-       below the fold - the reason CHECK + its feedback travel together. See ui-shell.md. -->
-  {#if game}
+  <!-- CHECK feedback row: the fill progress now rides in the Command Bar (folded in), so this
+       row appears ONLY when CHECK has been pressed and the board is not yet solved - it carries
+       just the conflict/"not yet" pill, directly under its CHECK button (2c). See ui-shell.md. -->
+  {#if game && game.checked && !game.locked && !failed}
+    {@const off = game.m.constraints.filter((c) => game?.evalState.clues[c.id] === "violate").length}
     <div class="mx-auto flex w-full max-w-xl items-center justify-center gap-2">
-      {#if game.checked && !game.locked && !failed}
-        {@const off = game.m.constraints.filter((c) => game?.evalState.clues[c.id] === "violate").length}
-        <p class="flex w-fit items-center gap-2 rounded-full border border-violate/30 bg-violate/10 px-4 py-1 text-sm font-medium text-violate" role="status">
-          {#if off > 0}{#if game.dial.feedback === "count-wrong"}{off} {off === 1 ? "clue" : "clues"} off - shown in red{:else}not solved yet - conflicts shown in red{/if}{:else}not solved yet - keep deducing{/if}
-        </p>
-      {/if}
-      <span class="tabular-nums text-sm opacity-60">{game.evalState.filled}/{game.evalState.total}</span>
+      <p class="flex w-fit items-center gap-2 rounded-full border border-violate/30 bg-violate/10 px-4 py-1 text-sm font-medium text-violate" role="status">
+        {#if off > 0}{#if game.dial.feedback === "count-wrong"}{off} {off === 1 ? "clue" : "clues"} off - shown in red{:else}not solved yet - conflicts shown in red{/if}{:else}not solved yet - keep deducing{/if}
+      </p>
     </div>
   {/if}
 
