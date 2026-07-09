@@ -57,6 +57,16 @@ def test_difficulty_in_band(built: g.StoryBuild) -> None:
     assert lo <= built.d <= hi
 
 
+def test_anchor_carries_distinct_people_avatars(built: g.StoryBuild) -> None:
+    # Option B: the identity/anchor axis is auto-decorated with distinct people avatars, so faces
+    # render on the person axis. Decorative only - the dedicated PRNG never perturbs the solution.
+    m = built.manifest
+    anchor = next(c for c in m.categories.items if c.anchor)
+    glyphs = [v.glyph for v in anchor.values]
+    assert all(gr.startswith("people.") for gr in glyphs), glyphs
+    assert len(set(glyphs)) == len(glyphs)  # one distinct avatar per entity (no repeats)
+
+
 def test_determinism_same_sha(tmp_path: Path) -> None:
     a = g.write_puzzle(DATE, "standard", tmp_path / "a", CONFIG_DIR)
     b = g.write_puzzle(DATE, "standard", tmp_path / "b", CONFIG_DIR)

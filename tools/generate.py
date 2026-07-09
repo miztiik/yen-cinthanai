@@ -55,6 +55,7 @@ CONFIG_DIR = _ROOT / "config"
 PUZZLES_DIR = _ROOT / "frontend" / "public" / "puzzles"
 DATASETS_DIR = _ROOT / "datasets"
 LOGS_DIR = _ROOT / ".logs"
+GLYPH_INDEX = _ROOT / "frontend" / "public" / "assets" / "glyphs" / "index.json"  # avatar pool (people pack)
 
 # Matrix-only clue vocabulary (the seating-row/round-table positional engine is retired, Row 9d).
 # Compound reified clues are INDIRECT reasoning: they weaken any single cell, so they lift the
@@ -141,22 +142,49 @@ def _value_glyph(glyph_pack: str | None, value) -> str:
     return f"{glyph_pack}.{value.id}" if glyph_pack else ""
 
 
+_ANCHOR_AVATAR_PACK = "people"
+_ANCHOR_AVATAR_SALT = 0xC2B2AE35  # decorrelate the avatar pick from the solution sampling
+
+
+def _avatar_pool() -> list[str]:
+    """Sorted 'people.<slug>' refs from the baked glyph registry - the generic person avatars the
+    identity axis is decorated with. Read from the manifest so new avatars auto-enroll on rebake."""
+    data = json.loads(GLYPH_INDEX.read_text(encoding="ascii"))
+    return [f"{_ANCHOR_AVATAR_PACK}.{s}" for s in sorted(data.get("packs", {}).get(_ANCHOR_AVATAR_PACK, {}))]
+
+
+def _anchor_avatars(k: int, seed: int) -> list[str]:
+    """k DISTINCT person avatars for the identity axis, deterministic per (date, tier, variant) via a
+    dedicated PRNG so decorating the anchor never perturbs the solution/clue sampling. No gender
+    match (any distinct avatar). Empty when the people pack cannot cover k - then the anchor stays text."""
+    pool = _avatar_pool()
+    if len(pool) < k:
+        return []
+    return random.Random(seed ^ _ANCHOR_AVATAR_SALT).sample(pool, k)
+
+
 def build_story_categories(scenario, entities: int, seed: int) -> list[Cat]:
     """Build one bijective Cat per scenario category (subject first == the anchor). Every Cat
     keeps ordinal=False so identity_cat() anchors on the subject; the emitted manifest derives
     its display ordinal from kind. Date-seeded pick of N values per category (N = entities);
-    glyphPack decorates value.glyph as '<pack>.<id>' or '' when the category has no pack."""
+    glyphPack decorates value.glyph as '<pack>.<id>' or '' when the category has no pack. The
+    text-only ANCHOR is auto-decorated with distinct people avatars (Option B) via a dedicated PRNG,
+    so the identity axis renders faces without perturbing the solution/clue sampling."""
     rng = random.Random(seed ^ _STORY_SALT)
+    avatars = _anchor_avatars(entities, seed)  # distinct people avatars for the identity axis
     cats: list[Cat] = []
     for tc in scenario.categories:
         pool = list(tc.valuePool)
         picked = rng.sample(pool, min(entities, len(pool)))
         gp = getattr(tc, "glyphPack", None)
+        glyphs = [_value_glyph(gp, v) for v in picked]
+        if tc.anchor and len(avatars) >= len(picked) and not any(glyphs):
+            glyphs = avatars[: len(picked)]  # Option B: auto-assign avatars to the identity axis (no gender match)
         cats.append(
             Cat(
                 id=tc.id, label=tc.label, ordinal=False,
                 value_ids=[v.id for v in picked],
-                glyphs=[_value_glyph(gp, v) for v in picked],
+                glyphs=glyphs,
                 labels=[v.label for v in picked],
                 cardinality="bijective",
                 phrases=[v.phrase for v in picked],
