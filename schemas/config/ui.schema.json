@@ -58,6 +58,12 @@
       "date": "2026-07-09",
       "change": "Additive chrome.hintFlashMs (optional): the duration (ms) a hint-revealed grid cell pulses (scale + accent ring) so the just-placed cell is noticed even among already-filled cells. tooltipDelayMs stays the only required chrome key.",
       "why": "The hint reveal was a silent hint-count drop with no on-board feedback; the pulse duration is a chrome feel knob that must be human-edited, not hardcoded (CLAUDE.md #6). Read by GridMatrix/NotesGrid via config.ts chromeUi and written as the --hint-flash-ms custom property."
+    },
+    {
+      "version": 10,
+      "date": "2026-07-09",
+      "change": "Additive chrome.revealArmMs (optional): the window (ms) the reveal-solution (eye) control stays ARMED after a first tap before it disarms - reveal is a terminal give-up, so it is a two-tap action (first tap arms + warns, a second tap within the window reveals) to stop a fat-thumb from silently ending the puzzle. tooltipDelayMs stays the only required chrome key.",
+      "why": "Reveal-solution was a single tap that instantly spoiled the board with no confirm; the arm window is a chrome safety feel knob that must be human-edited, not hardcoded (CLAUDE.md #6). Read by BoardHeader via config.ts chromeUi."
     }
   ],
   "$defs": {
@@ -102,11 +108,12 @@
     },
     "chromeSpec": {
       "type": "object",
-      "description": "Chrome (HUD/menu) micro-interaction tunables. tooltipDelayMs = the hover dwell in milliseconds before a desktop Tooltip bubble appears in the board Command Bar (a focus always shows it instantly). attemptFadeMs = the duration in milliseconds a just-spent AttemptRing arc fades its opacity as a life is burned (the urgency recolour of the survivors snaps, never tweens). hintFlashMs = the duration in milliseconds a hint-revealed grid cell pulses (scale + accent ring) so it is noticed among filled cells. attemptColors = the AttemptRing urgency ramp full/mid/low (vivid green -> amber -> red), a fixed traffic-light ramp like difficulty.colors. Feel knobs, human-edited (CLAUDE.md #6).",
+      "description": "Chrome (HUD/menu) micro-interaction tunables. tooltipDelayMs = the hover dwell in milliseconds before a desktop Tooltip bubble appears in the board Command Bar (a focus always shows it instantly). attemptFadeMs = the duration in milliseconds a just-spent AttemptRing arc fades its opacity as a life is burned (the urgency recolour of the survivors snaps, never tweens). hintFlashMs = the duration in milliseconds a hint-revealed grid cell pulses (scale + accent ring) so it is noticed among filled cells. revealArmMs = the window in milliseconds the reveal-solution (eye) control stays armed after a first tap before disarming (reveal is a two-tap terminal action so a mis-tap cannot silently end the puzzle). attemptColors = the AttemptRing urgency ramp full/mid/low (vivid green -> amber -> red), a fixed traffic-light ramp like difficulty.colors. Feel knobs, human-edited (CLAUDE.md #6).",
       "properties": {
         "tooltipDelayMs": { "type": "number", "exclusiveMinimum": 0 },
         "attemptFadeMs": { "type": "number", "exclusiveMinimum": 0 },
         "hintFlashMs": { "type": "number", "exclusiveMinimum": 0 },
+        "revealArmMs": { "type": "number", "exclusiveMinimum": 0 },
         "attemptColors": {
           "type": "object",
           "properties": {
