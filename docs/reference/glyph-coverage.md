@@ -1,6 +1,6 @@
 # Glyph Coverage
 
-**Last Updated**: 2026-07-08
+**Last Updated**: 2026-07-09
 
 The single central document for scenario glyphs: which pack backs which category, the exact gap
 between the art we ship and what the templates reference, how to close it, and how to keep this
@@ -34,8 +34,10 @@ to a shipped image; otherwise the WHOLE axis falls back to green checks - never 
 and checks in one column. So each category is in exactly one state, and only one is a gap:
 
 - **complete** - every value has art; renders as images. Nothing to do.
-- **text** - no value carries a glyph; all green checks BY DESIGN (a person anchor, or a
-  non-sequential numeric axis). Not a gap - it reads perfectly as text.
+- **text** - no value in the TEMPLATE carries a glyph; all green checks (a non-sequential numeric
+  axis, or a person anchor). Not a gap. NOTE: the generator overlays a distinct `people` avatar on
+  every anchor value at build time (Option B), so an anchor renders as a portrait in play even
+  though its template is counted text here.
 - **partial** - some values have art and at least one does not; the mix trips the whole axis back
   to text. THIS is the closeable gap: give the straggler(s) art and the axis auto-upgrades to
   images with no code or data change.
@@ -83,9 +85,10 @@ awards), NUMBER them instead - see the `awards` pack under "Packs in play".
 - Per-value override: a single value may carry its own `glyph` (a `"<pack>.<id>"` ref, or `""` to
   force text) independent of the category `glyphPack`. This lights the values a partly-backfilled
   pack covers while the rest read as text - the three bloom axes do exactly this.
-- Text by design: the ANCHOR (a person name) stays text. A NUMERIC axis stays text UNLESS its
-  magnitudes are the sequential run 1..6, in which case the `abstract` numerals (`num1`..`num6`)
-  back it. A non-sequential numeric axis (a price, a duration) stays text.
+- ANCHOR: the TEMPLATE carries no glyph, but the generator overlays a distinct `people` avatar on
+  every anchor value at build time (Option B), so an anchor renders as a portrait in play. A NUMERIC
+  axis stays text UNLESS its magnitudes are the sequential run 1..6, in which case the `abstract`
+  numerals (`num1`..`num6`) back it. A non-sequential numeric axis (a price, a duration) stays text.
 - Build guard: `glyphPath` throws on an unknown ref, and
   [../../frontend/tests/contract/scenario-glyphs.test.ts](../../frontend/tests/contract/scenario-glyphs.test.ts)
   fails the build if any glyph-backed value does not resolve to a shipped file.

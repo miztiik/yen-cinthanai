@@ -1,6 +1,6 @@
 # Generator Pipeline
 
-**Last Updated**: 2026-07-03
+**Last Updated**: 2026-07-09
 
 Build-time only (tools/, Python, CI). Pipes and filters, one Pydantic model per arrow, JSONL log to `.logs/build-<date>.jsonl`. No runtime backend; no in-browser solver in v1 (WASM allowed later if it enriches play).
 
@@ -20,6 +20,12 @@ The narrative comes from a CATALOG of authored scenario templates under `dataset
 - **Per-date selection** (`corpus.scenario_path_for_date`): a stable hash of the date over the sorted LIVE ids picks ONE scenario per date - `sorted(live)[sha256(date)[:8] % len(live)]`. Only `status=="live"` scenarios rotate. Consecutive dates vary while the same date always resolves to the same scenario, so all four tiers of a date share one scenario (sliced per tier) and a rebuild stays byte-identical.
 - **Build / live staging** (`corpus.scenario_path_by_id`): a `"build"` scenario is authorable + testable via `generate.py --scenario <id>` (which resolves ANY catalogued id, live or build) but is kept OUT of the live daily rotation. So a new template can be iterated - generated, played, tuned - without touching the served bank; flip its `status` to `"live"` to promote it. The reference golden masters under `datasets/**` are pinned to weekend-market via `generate.py --story --scenario weekend-market`.
 - **Per-tier narrative coherence** (`translator.render_story`): the template `narrativeTemplate` is SETTING FLAVOR ONLY - it never names a category. The renderer fills the flavor (`{n}` + one date-seeded pick per flavor pool) and then APPENDS a premise + match-line generated from the non-anchor categories actually PRESENT at that tier ("Each cook has a different dish and price. Using the clues, match every cook to their dish and price."). So easy (2 cats) never reads a clue to match a dimension it does not have, and expert (5 cats) lists them all.
+
+### Identity-anchor avatars (Option B)
+
+`build_story_categories` decorates every scenario's identity anchor with distinct `people` avatars at build time: each anchor value gets a `people.*` glyph from `random.Random(seed ^ _ANCHOR_AVATAR_SALT).sample(pool, k)` - a deterministic shuffle over the sorted `people` pool, applied only when the anchor has no per-value glyph and the pool holds >= k distinct avatars. The avatar rng is SEPARATE from the solver rng, so the solution, clues, hint trace and difficulty are byte-identical with or without avatars - the portrait is purely cosmetic. The anchor axis then renders as art because it is glyph-complete.
+
+**Design rationale**: the identity axis is the single biggest text bucket (one per scenario, ~100) and used to render as a blank seat. Decorating it in the generator glyph-backs all of them at once with no per-template edit and covers every future scenario for free. Assignment is a plain shuffle, deliberately NOT gender-matched to the value name - matching would couple cosmetic art to name semantics and risk implying a clue on an axis whose picture must stay neutral. **Rejected alternative**: per-value `glyph` refs on every anchor in ~100 templates - correct but a standing per-template maintenance cost the one-line generator overlay avoids. **Cost**: the overlay is output-affecting, so it bumped `GENERATOR_VERSION` (1 -> 2), invalidating every scenario's `verifiedSha` (re-stamped) and requiring a `--force` re-migration of the served bank so already-shipped dates show avatars too.
 
 ## Incremental verification (verifiedSha dirty-tracking)
 

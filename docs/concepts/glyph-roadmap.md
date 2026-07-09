@@ -1,6 +1,6 @@
 # Glyph Roadmap
 
-**Last Updated**: 2026-07-08
+**Last Updated**: 2026-07-09
 
 Which glyph pack backs each scenario CATEGORY, what is reused today, and what art is still a GAP to backfill. The generator is glyph-agnostic (the solver never reads a glyph), so this is a CONTENT map, not an engine dependency: a scenario category with a `glyphPack` renders its values as art; a category without one is text-only and reads perfectly well. See [../architecture/generator/pipeline.md](../architecture/generator/pipeline.md) (scenario catalog) and [ui-shell.md](ui-shell.md).
 
@@ -10,15 +10,15 @@ Which glyph pack backs each scenario CATEGORY, what is reused today, and what ar
 > STRATEGY - which packs exist and what to build next - not a per-scenario census across the full
 > catalog; trust the reference for the current gap list.
 
-## Current state (2026-07-08)
+## Current state (2026-07-09)
 
 24 packs, ~605 glyphs, audit CLEAN (0 partials). Recently added / completed:
 
 - `flowers` -> 8 blooms; `events` -> 8 milestones (backs `town-chronicle`); `time` -> 10 clocks
   (backs `departures-board`); `offices` -> 7 with bank + bakery (backs `city-inspection`). The
   `hour` dimension in `categories.json` draws on `time`.
-- NEW `people` pack (13: female1-7, male1-6) - generic male/female avatars. Registered, not yet
-  wired (see the text-only analysis below).
+- `people` pack (13: female1-7, male1-6) - generic male/female avatars. WIRED to every scenario's
+  identity anchor by the generator overlay (Option B, PR #63); see the anchor-avatar note below.
 - `occupation` grew to 37 (added caregivers, cook, juggler, magician) - more roles/performers.
 
 For the PROCESS (add a pack, wire a category, author a scenario) and the traps, see the how-to
@@ -30,36 +30,38 @@ Across the 103 scenarios (515 categories) the audit sees:
 
 - 120 categories already glyph-backed.
 - 103 numeric axes (text unless the magnitudes are the sequential 1..6 the `abstract` numerals back).
-- 103 person ANCHORS - text by design (the identity axis reads as a name).
+- 103 person ANCHORS - the identity axis. The TEMPLATE carries no glyph (the audit counts it text), but the GENERATOR overlays a distinct `people` avatar on every anchor value at build time (Option B), so anchors render as portraits in play.
 - 189 text-only NOMINAL non-anchor categories - the addressable pool.
 
 Those 189 are a long tail of highly specific one-offs (herb, lens, relic, mask, koi, script, ...)
 that each need bespoke art; no existing pack matches them. The two NEW packs help in two focused
 places only:
 
-- `people` avatars can back the 103 person ANCHORS - by far the biggest bucket - IF we choose to
-  glyph-back the identity axis (a deliberate UX change; see below). They match no non-anchor column
-  (there is no generic guest/person attribute).
+- `people` avatars back the 103 person ANCHORS - by far the biggest bucket - via the generator
+  overlay (Option B), NOT a template `glyphPack`. They match no non-anchor column (there is no
+  generic guest/person attribute).
 - `occupation` (37 roles) can back the few role/performer/crew columns (`role`; a circus `act` via
   juggler/magician; a kitchen `cook`; care via caregivers).
 
 So beyond anchors, most of the 189 stay text until a matching themed pack is drawn (the gap backlog
 below) - the new packs are not a broad reuse.
 
-### Glyph-backing the person anchor (the `people` question)
+### The person anchor is avatar-backed (Option B, shipped PR #63)
 
-Technically yes: give each of the six anchor values a per-value `glyph` (`people.male3`,
-`people.female2`, ...) so the name still reads while an avatar renders beside it. Weigh two things
-first: (1) it touches EVERY scenario's anchor, so it is a design call - prototype on one scenario;
-(2) the anchor is usually a COLUMN header and glyphs currently render in ROW headers only (see the
-Rendering note), so confirm the avatar actually shows before rolling it out.
+The generator auto-decorates every scenario's identity anchor with distinct `people` avatars:
+`build_story_categories` assigns each anchor value a `people.*` glyph via a dedicated salted RNG (a
+deterministic shuffle, NOT gender-matched to the name), applied only when the anchor has no
+per-value glyph of its own. The avatar rng is SEPARATE from the solver, so the solution, clues and
+difficulty stay byte-identical - the portrait is purely cosmetic. The name still reads beside the
+avatar, and the axis renders as art because it is now glyph-complete. See the engine behaviour +
+rationale in [../architecture/generator/pipeline.md](../architecture/generator/pipeline.md).
 
 ## How a category becomes glyph-backed
 
 - Set `glyphPack: "<pack>"` on the template category. Each `value.id` MUST be a real slug in that pack; the generator emits `value.glyph = "<pack>.<id>"`.
 - The slug is the SVG filename stem with kebab hyphens dropped (`bell-pepper.svg` -> `bellpepper`, `candle-making.svg` -> `candlemaking`), so a value id is the hyphen-free stem. `glyphPath` throws on an unknown ref, and `tests/contract/scenario-glyphs.test.ts` fails the build if any glyph-backed value does not resolve to a shipped file - the guard for this whole map.
 - PARTIAL packs: a single value may carry its own optional `glyph` override (a `"<pack>.<id>"` ref, or `""` to stay text) independent of the category `glyphPack`. This wires the values a partly-backfilled pack DOES cover while the rest of the column reads as text - `weekend-market.bloom` does exactly this with the 2-of-6 `flowers` pack. The contract test resolves these overrides too.
-- TEXT-ONLY BY DESIGN: the ANCHOR (a person name) reads as text. A NUMERIC axis reads as text UNLESS its magnitudes are the sequential run 1..6, in which case the `abstract` numerals (`num1`..`num6`) back it (community-garden.plot, starliner-crew.shift); a non-sequential numeric axis like a dollar price stays text.
+- ANCHOR: the template carries no glyph, but the generator overlays a distinct `people` avatar on every anchor value at build time (Option B), so the anchor renders as a portrait in play (the name still reads). A NUMERIC axis reads as text UNLESS its magnitudes are the sequential run 1..6, in which case the `abstract` numerals (`num1`..`num6`) back it (community-garden.plot, starliner-crew.shift); a non-sequential numeric axis like a dollar price stays text.
 
 ## Packs backing scenarios today
 
