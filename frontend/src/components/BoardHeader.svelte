@@ -93,6 +93,25 @@
   const live = $derived(!!game && game.live);
   const failed = $derived(!!game && !game.locked && attemptsLeft === 0);
   const submitLabel = $derived(game?.dial.feedback === "submit-binary" ? "submit" : "check");
+  const tierCap = $derived(tier ? tier.charAt(0).toUpperCase() + tier.slice(1) : "");
+
+  // Reveal-solution is a TERMINAL give-up (fills the board, locks a loss), so it is a two-tap
+  // ARMED action: the first tap arms + warns (the eye turns violate-red), a second tap within
+  // chrome.revealArmMs actually reveals; it auto-disarms after the window so a stray later tap
+  // is safe. Placement (own divider, far end) + the arm is the fat-thumb fix (Player, Jony).
+  let revealArmed = $state(false);
+  let revealTimer: ReturnType<typeof setTimeout> | undefined;
+  function tapReveal(): void {
+    if (revealArmed) {
+      clearTimeout(revealTimer);
+      revealArmed = false;
+      onreveal();
+    } else {
+      revealArmed = true;
+      clearTimeout(revealTimer);
+      revealTimer = setTimeout(() => (revealArmed = false), chrome.revealArmMs ?? 2500);
+    }
+  }
 </script>
 
 <div class="board-hdr-wrap mx-auto w-full max-w-2xl">
@@ -117,28 +136,35 @@
       </Tooltip>
     </div>
 
-    <!-- DAY: prev/next carets flanking the label; the label opens the DayPicker calendar -->
+    <!-- IDENTITY: day nav + the tier chip. Date + tier together ARE the puzzle's identity
+         (/play/<date>/<tier>), so the difficulty rides here (not with the gear). The chip is
+         glyph-only - the TierMeter bars + colour carry the level; the name is taught on the
+         landing pill + the DifficultyPicker, and the styled Tooltip names it on desktop. -->
     <div class="hdr-day">
       {#if game}
+        <div class="flex w-fit items-center gap-1.5">
         <DayNav label={dayLabel} {hasPrev} {hasNext} {onprev} {onnext} onlabel={onopenDay} />
+        <Tooltip text={`Difficulty: ${tierCap}`} delayMs={chrome.tooltipDelayMs}>
+          {#snippet children(tip)}
+            <button
+              class="flex min-h-10 items-center gap-1 rounded-full bg-ink/5 px-2 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              aria-label={`difficulty ${tier}, tap to change`}
+              aria-haspopup="dialog"
+              aria-describedby={tip}
+              onclick={ondifficulty}
+            >
+              <TierMeter {tier} {difficulty} height={14} label={false} />
+              <span class="inline-flex rotate-90 opacity-50"><Glyph ref="ui.chevron" size={10} tint /></span>
+            </button>
+          {/snippet}
+        </Tooltip>
+        </div>
       {/if}
     </div>
 
-    <!-- ADJUST: a single current-tier chip -> DifficultyPicker (no desktop segmented), + gear -->
+    <!-- FRAME: the display gear - a presentation-only control (colour / glyph / label toggles),
+         so it bookends home at the far edge rather than sitting with the content-changing tier. -->
     <div class="hdr-adjust">
-      {#if game}
-        <button
-          class="flex min-h-10 items-center gap-1 rounded-full bg-ink/5 px-2 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          aria-label={`difficulty ${tier}, tap to change`}
-          aria-haspopup="dialog"
-          title={`difficulty: ${tier}`}
-          onclick={ondifficulty}
-        >
-          <TierMeter {tier} {difficulty} height={14} label={false} />
-          <span class="hdr-tier-name capitalize" style={`color:${difficulty.colors[tier] ?? "var(--accent)"}`}>{tier}</span>
-          <span class="inline-flex rotate-90 opacity-50"><Glyph ref="ui.chevron" size={10} tint /></span>
-        </button>
-      {/if}
       <Tooltip text="Display options" delayMs={chrome.tooltipDelayMs}>
         {#snippet children(tip)}
           <button
@@ -153,15 +179,16 @@
       </Tooltip>
     </div>
 
-    <!-- LIVE-SOLVE cluster: timer | progress | attempt ring | hint. One row where it fits; wraps
-         to a slim second zone under a hairline when the header is narrow (the container query below). -->
+    <!-- LIVE-SOLVE cluster: STATUS (timer | progress | attempt ring) | divider | ACTIONS (hint |
+         check | reset) | divider | terminal REVEAL. One row where it fits; wraps to a slim second
+         zone under a hairline when the header is narrow (container query below). Hint is an ACTION
+         (spends a resource), so it sits PAST the status divider with check/reset, not with status. -->
     <div class="hdr-live">
       <span class="flex items-center gap-1.5">
         <span class="inline-flex opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
         <span class="tabular-nums leading-none opacity-80">{formatClock(elapsedS)}</span>
       </span>
       {#if progress}
-        <span class="h-3.5 w-px shrink-0 bg-ink/15" aria-hidden="true"></span>
         <span class="flex items-center gap-1.5" role="status" aria-label={`${progress.filled} of ${progress.total} solved`}>
           <span class="inline-flex opacity-50"><Glyph ref="ui.progress" size={14} tint /></span>
           <span class="tabular-nums leading-none opacity-80">{progress.filled}/{progress.total}</span>
@@ -169,6 +196,9 @@
       {/if}
       {#if game && attemptsTotal >= 0}
         <AttemptRing left={attemptsLeft} total={attemptsTotal} fadeMs={chrome.attemptFadeMs} colors={chrome.attemptColors} />
+      {/if}
+      {#if game}
+        <span class="h-3.5 w-px shrink-0 bg-ink/15" aria-hidden="true"></span>
       {/if}
       <Tooltip text="Reveal a step" delayMs={chrome.tooltipDelayMs}>
         {#snippet children(tip)}
@@ -184,38 +214,54 @@
         {/snippet}
       </Tooltip>
       {#if game}
-        <span class="h-3.5 w-px shrink-0 bg-ink/15" aria-hidden="true"></span>
-        <button
-          class="grid h-9 w-9 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          aria-label={game.locked ? "play again" : "reset the board"}
-          title={game.locked ? "play again" : "reset the board"}
-          onclick={game.locked ? onagain : onreset}
-        ><Glyph ref="ui.reset" size={17} tint /></button>
         {#if !live}
           {#if failed}
-            <button
-              class="grid h-9 w-9 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              aria-label="retry"
-              title="retry"
-              onclick={onretry}
-            ><Glyph ref="ui.reset" size={16} tint /></button>
+            <Tooltip text="Retry" delayMs={chrome.tooltipDelayMs}>
+              {#snippet children(tip)}
+                <button
+                  class="grid h-9 w-9 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  aria-label="retry"
+                  aria-describedby={tip}
+                  onclick={onretry}
+                ><Glyph ref="ui.reset" size={16} tint /></button>
+              {/snippet}
+            </Tooltip>
           {:else}
-            <button
-              class="grid h-9 w-9 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-30"
-              aria-label={submitLabel}
-              title={submitLabel}
-              disabled={game.locked}
-              onclick={oncheck}
-            ><Glyph ref="ui.check" size={16} tint /></button>
+            <Tooltip text={submitLabel === "submit" ? "Submit" : "Check"} delayMs={chrome.tooltipDelayMs}>
+              {#snippet children(tip)}
+                <button
+                  class="grid h-9 w-9 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-30"
+                  aria-label={submitLabel}
+                  aria-describedby={tip}
+                  disabled={game.locked}
+                  onclick={oncheck}
+                ><Glyph ref="ui.check" size={16} tint /></button>
+              {/snippet}
+            </Tooltip>
           {/if}
         {/if}
+        <Tooltip text={game.locked ? "Play again" : "Reset the board"} delayMs={chrome.tooltipDelayMs}>
+          {#snippet children(tip)}
+            <button
+              class="grid h-9 w-9 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              aria-label={game.locked ? "play again" : "reset the board"}
+              aria-describedby={tip}
+              onclick={game.locked ? onagain : onreset}
+            ><Glyph ref="ui.reset" size={17} tint /></button>
+          {/snippet}
+        </Tooltip>
         {#if !game.locked}
-          <button
-            class="grid h-9 w-9 place-items-center rounded-full text-ink/70 transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-            aria-label="reveal solution"
-            title="reveal solution"
-            onclick={onreveal}
-          ><Glyph ref="ui.eye" size={17} tint /></button>
+          <span class="h-3.5 w-px shrink-0 bg-ink/15" aria-hidden="true"></span>
+          <Tooltip text={revealArmed ? "Tap again to reveal" : "Reveal the solution"} delayMs={chrome.tooltipDelayMs}>
+            {#snippet children(tip)}
+              <button
+                class={`grid h-9 w-9 place-items-center rounded-full transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${revealArmed ? "text-violate bg-violate/15" : "text-ink/70"}`}
+                aria-label={revealArmed ? "tap again to reveal the solution" : "reveal the solution"}
+                aria-describedby={tip}
+                onclick={tapReveal}
+              ><Glyph ref="ui.eye" size={17} tint /></button>
+            {/snippet}
+          </Tooltip>
         {/if}
       {/if}
     </div>
@@ -273,7 +319,9 @@
     flex: 1 1 auto;
     min-width: 0;
     display: flex;
+    align-items: center;
     justify-content: center;
+    gap: 0.375rem;
   }
   .hdr-adjust {
     order: 3;
@@ -281,13 +329,8 @@
     align-items: center;
     gap: 0.25rem;
   }
-  /* The tier NAME rides in the chip only when the header genuinely has room (a wide desktop
-     container), gated on the container - not a viewport breakpoint - because the board caps
-     the header at ~max-w-md until lg, so a viewport sm: gate would show the word with no space
-     and overflow the single line. The bars + colour + aria-label carry the tier otherwise. */
-  .hdr-tier-name {
-    display: none;
-  }
+  /* The tier NAME word is gone from the board chip (glyph-only: TierMeter bars + chevron + a
+     styled Tooltip name it; the word is taught on the landing pill + DifficultyPicker). */
   .hdr-live {
     order: 4;
     flex-basis: 100%;
@@ -298,24 +341,5 @@
     margin-top: 0.25rem;
     padding-top: 0.25rem;
     border-top: 1px solid color-mix(in oklab, var(--ink) 12%, transparent);
-  }
-  /* Wide enough for one row: pull the live cluster back into the middle, drop the hairline. */
-  @container boardhdr (min-width: 400px) {
-    .hdr-adjust {
-      order: 4;
-    }
-    .hdr-live {
-      order: 3;
-      flex-basis: auto;
-      margin-top: 0;
-      padding-top: 0;
-      border-top: 0;
-    }
-  }
-  /* Only a genuinely wide header (desktop lg container) has room for the tier NAME text. */
-  @container boardhdr (min-width: 460px) {
-    .hdr-tier-name {
-      display: inline;
-    }
   }
 </style>

@@ -221,6 +221,11 @@ export interface ChromeUi {
    *  cell is noticed even among already-filled cells. transform/box-shadow only; reduced-motion
    *  zeroes it. Consumed by GridMatrix/NotesGrid (--hint-flash-ms). */
   hintFlashMs?: number;
+  /** How long (ms) the reveal-solution (eye) control stays ARMED after a first tap before it
+   *  disarms. Reveal is a terminal give-up, so it is a two-tap action (first tap arms + warns,
+   *  a second tap within this window reveals) - stops a fat-thumb from silently ending the
+   *  puzzle. Consumed by BoardHeader. */
+  revealArmMs?: number;
 }
 /** Board layout tunables (config/ui.json [layout]). maxWidthPx caps the whole board width on
  *  desktop; 0 = uncapped (the board fills the viewport, so the grown grid + rails use every
@@ -281,6 +286,7 @@ const CHROME_UI_FALLBACK: ChromeUi = {
   attemptFadeMs: 150,
   attemptColors: { full: "#22c55e", mid: "#f59e0b", low: "#ef4444" },
   hintFlashMs: 550,
+  revealArmMs: 2500,
 };
 
 const UI_FALLBACK: UiConfig = {

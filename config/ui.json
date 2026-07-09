@@ -12,7 +12,8 @@
       "low": "#ef4444"
     },
     "tooltipDelayMs": 350,
-    "hintFlashMs": 550
+    "hintFlashMs": 550,
+    "revealArmMs": 2500
   },
   "clue": {
     "autoDimFeedback": []
