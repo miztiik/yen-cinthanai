@@ -18,11 +18,14 @@
 
   // labelPx/gapPx TRACK the cell edge (Board -> lib/fit.ts scaleClamp) so the axis labels and
   // the inter-cell gap stay proportional to a grown cell instead of sitting at a fixed size.
-  let { game, cats, copy, size = 40, labelPx = 12, gapPx = 0 }: { game: Game; cats: AttributeCategory[]; copy: GridCopy; size?: number; labelPx?: number; gapPx?: number } = $props();
+  let { game, cats, copy, size = 40, labelPx = 12, gapPx = 0, flashMs = 550 }: { game: Game; cats: AttributeCategory[]; copy: GridCopy; size?: number; labelPx?: number; gapPx?: number; flashMs?: number } = $props();
 
   const layout = $derived(staircase(cats));
   const ticks = $derived(new Set(Object.keys(game.gridTicks)));
   const manualX = $derived(new Set(Object.keys(game.gridManualX)));
+  // Conflict cells (PR-6): only when the tier has revealed feedback (CHECK/realtime/won). A
+  // TICKED cell that participates in a violated clue is ringed red; never a blank (no spoiler).
+  const conflicts = $derived(game.revealed ? game.evalState.conflicts : null);
   // Per-axis glyph completeness: an axis shows images only if ALL its values have art, else the
   // whole axis falls back to green checks (no mix). Auto-upgrades when the missing art is added.
   // Display mode: the player's `glyphs` toggle gates this - glyphs off forces the axis to text.
@@ -57,6 +60,20 @@
   // hover and clobber it) - a new puzzle remounts GridMatrix, so a stale crosshair cannot
   // persist. Mirrors NotesGrid. See docs/concepts/ui-shell.md.
   let hovered = $state<{ r: number; c: number } | null>(null);
+  // Hint reveal pulse (PR-4): when the store bumps hintFlash, stamp the just-ticked cell so it
+  // pulses (app.css [data-flash]) and scroll it into view - so a hint landing among filled cells
+  // is unmissable. Cleared after flashMs; the returned cleanup cancels a pending clear on a
+  // re-hint or unmount. lastHintKey is the grid cell the hint ticked (null for a token placement).
+  let flashKey = $state<string | null>(null);
+  $effect(() => {
+    const nonce = game.hintFlash;
+    const key = game.lastHintKey;
+    if (!nonce || !key) return;
+    flashKey = key;
+    queueMicrotask(() => container?.querySelector<HTMLElement>(`[data-cell-key="${key}"]`)?.scrollIntoView({ block: "nearest", inline: "nearest" }));
+    const t = setTimeout(() => (flashKey = null), flashMs);
+    return () => clearTimeout(t);
+  });
   function markFrom(target: EventTarget | null) {
     const el = (target as HTMLElement | null)?.closest<HTMLElement>("[data-cell-key]");
     if (el && el.dataset.r != null && el.dataset.c != null) hovered = { r: +el.dataset.r, c: +el.dataset.c };
@@ -119,6 +136,7 @@
 <div
   bind:this={container}
   class="overflow-x-auto"
+  style={`--hint-flash-ms:${flashMs}ms`}
   aria-label={copy.heading}
   onpointerover={(e) => markFrom(e.target)}
   onpointerleave={() => (hovered = null)}
@@ -141,7 +159,7 @@
       </tr>
       <tr>
         {#each colLeaves as cl, ci (cl.cat.id + cl.v.id)}
-          <th scope="col" data-crosshair-hdr={hovered?.c === ci ? "" : undefined} style={`font-size:${labelPx}px`} class={`h-28 align-bottom pb-1 font-medium opacity-80 ${cl.lastInGroup ? "border-r-2 border-ink/15" : ""}`}>
+          <th scope="col" data-crosshair-hdr={hovered?.c === ci ? "" : undefined} style={`font-size:${labelPx}px`} class={`h-28 align-bottom pb-1 font-medium opacity-80 ${cl.lastInGroup ? "border-r-2 border-ink/20" : ""}`}>
             <span class="flex h-full flex-col items-center justify-end gap-1.5">
               <span class="[writing-mode:vertical-rl]">{cl.v.label}</span>
               {#if glyphCats.has(cl.cat.id) && cl.v.glyph}<GlyphSeat ref={cl.v.glyph} label={cl.v.label} d={Math.round(size * 0.62)} />{/if}
@@ -167,11 +185,15 @@
             </th>
             {#each layout.cols as cc, c (cc.id)}
               {#if layout.present[r][c]}
-                {#each cc.values as cv (cv.id)}
+                {#each cc.values as cv, cvi (cv.id)}
                   {@const key = keyOf(rc, rv, cc, cv)}
                   {@const gr = grOf.get(rv) ?? 0}
                   {@const gc = gcOf.get(cv) ?? 0}
-                  <td class="p-0 text-center">
+                  <td
+                    data-col-edge={cvi === cc.values.length - 1 && c < layout.cols.length - 1 ? "" : undefined}
+                    data-row-edge={vi === rc.values.length - 1 && r < layout.rows.length - 1 ? "" : undefined}
+                    class={`p-0 text-center${cvi === cc.values.length - 1 && c < layout.cols.length - 1 ? " border-r-2 border-ink/20" : ""}${vi === rc.values.length - 1 && r < layout.rows.length - 1 ? " border-b-2 border-ink/20" : ""}`}
+                  >
                     <GridCell
                       cellKey={key}
                       block={`${rc.id}|${cc.id}`}
@@ -182,6 +204,8 @@
                       crosshair={onCrosshair(hovered, gr, gc)}
                       row={gr}
                       col={gc}
+                      flash={key === flashKey}
+                      conflict={!!conflicts && ticks.has(key) && conflicts.has(key)}
                       {size}
                       locked={game.locked}
                       ontap={() => {

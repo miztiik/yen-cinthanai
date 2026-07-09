@@ -8,7 +8,7 @@ import type { PuzzleManifest } from "../contracts/manifest";
 import type { DayState, DayNotes, Placements, Save } from "../contracts/save";
 import { buildBoard, type BoardModel } from "../lib/board";
 import { evaluate, type PuzzleEval } from "../lib/validate";
-import { mergeGridPlacements, collides } from "../lib/grid";
+import { mergeGridPlacements, collides, cellKey } from "../lib/grid";
 import { ActiveClock } from "../lib/clock";
 import { type Feedback, type TierDial } from "../lib/config";
 import { computeStars } from "../lib/scoring";
@@ -57,6 +57,10 @@ export class Game {
   // DayState.notes.scratch (buildNotes) + restored in the constructor. Debounced-saved by the
   // ScratchPad component (localStorage.setItem serializes the whole save, so not per-keystroke).
   scratch = $state("");
+  // Reveal-flash bookkeeping for the last hint: the grid cell key it ticked (null for a token-
+  // board placement), and a monotonic nonce the grid views watch to fire a one-shot pulse (PR-4).
+  lastHintKey = $state<string | null>(null);
+  hintFlash = $state(0);
 
   constructor(m: PuzzleManifest, dial: TierDial, prior?: DayState) {
     this.m = m;
@@ -89,12 +93,14 @@ export class Game {
   get revealed(): boolean {
     return this.live || this.checked || this.locked;
   }
-  get evalState(): PuzzleEval {
+  /** Placements as the win-checker sees them: grid ticks projected onto the token placements
+   *  (mergeGridPlacements), so the grid contributes to the eval exactly like the token board. */
+  private mergedPlacements(): Placements {
     const ticks = Object.keys(this.gridTicks);
-    const placements = ticks.length
-      ? mergeGridPlacements(this.board, this.placements, new Set(ticks))
-      : this.placements;
-    return evaluate(this.m, this.board, placements);
+    return ticks.length ? mergeGridPlacements(this.board, this.placements, new Set(ticks)) : this.placements;
+  }
+  get evalState(): PuzzleEval {
+    return evaluate(this.m, this.board, this.mergedPlacements());
   }
   /** Hints left (-1 unlimited); attempts left (-1 unlimited) per tier dial. */
   get hintsLeft(): number {
@@ -175,17 +181,42 @@ export class Game {
     this.place(entity, cat, this.selected.value);
   }
 
-  /** Apply the next forced step (hintTrace); costs the brag, capped by tier. */
+  /** Apply the next forced step (hintTrace); costs the brag, capped by tier. The step lands on
+   *  the surface the player actually uses: a grid TICK when an anchor-vs-attribute cell exists
+   *  (the story/grid common case), else a token placement (shared column). "Already deduced" is
+   *  tested against the MERGED view so a grid tick counts and a hint never re-reveals a cell the
+   *  player already solved. Records lastHintKey + bumps hintFlash for the reveal pulse (PR-4). */
   hint(): void {
     if (this.locked || this.hintsLeft === 0) return;
+    const merged = this.mergedPlacements();
     for (const step of this.m.hintTrace) {
       const f = step.forces;
-      if (this.placements[f.entity]?.[f.cat] !== f.value) {
-        this.hintsUsed += 1;
-        this.place(f.entity, f.cat, f.value);
+      if (merged[f.entity]?.[f.cat] === f.value) continue; // already deduced on either surface
+      this.hintsUsed += 1;
+      this.applyHint(f.entity, f.cat, f.value);
+      return;
+    }
+  }
+
+  /** Apply a forced (entity, cat, value) on the visible surface: a grid tick on the anchor-vs-
+   *  attribute cell when that cell exists (a bijective column), else a token placement. Flags the
+   *  landing cell so the grid view can pulse it (lastHintKey); a token placement is already
+   *  visible on the SlotBoard, so it carries no grid key. */
+  private applyHint(entity: string, cat: string, value: string): void {
+    const col = this.board.columns.find((c) => c.id === cat);
+    if (col?.cardinality === "bijective") {
+      const anchorVal = this.board.anchor.values[this.board.entities.indexOf(entity)]?.id;
+      if (anchorVal) {
+        const key = cellKey({ cat: this.board.anchor.id, val: anchorVal }, { cat, val: value });
+        this.gridDrop(key);
+        this.lastHintKey = key;
+        this.hintFlash += 1;
         return;
       }
     }
+    this.place(entity, cat, value);
+    this.lastHintKey = null;
+    this.hintFlash += 1;
   }
 
   /** CHECK/SUBMIT for non-realtime tiers: reveal, win or burn an attempt. */
@@ -197,16 +228,16 @@ export class Game {
     if (this.attemptsLeft !== 0) this.attempts += 1;
   }
 
-  /** Clear the board back to a blank slate mid-solve: token placements AND the cross-out
-   *  grid marks (ticks + manual-X), so RESET works in story/grid mode too (the grid keeps
-   *  its state in gridTicks/gridManualX, not placements). Attempts + timer are untouched -
-   *  this is "I made a mess", not "give me a fresh run". Clue strikes are a reading aid, left
-   *  as-is. */
+  /** Clear the board back to a blank slate mid-solve: token placements, the cross-out grid
+   *  marks (ticks + manual-X), AND the clue strikes, so a reset is a genuinely clean slate in
+   *  story/grid mode (the grid keeps its state in gridTicks/gridManualX, not placements).
+   *  Attempts + timer are untouched - this is "I made a mess", not "give me a fresh run". */
   reset(): void {
     if (this.locked) return;
     this.placements = {};
     this.gridTicks = {};
     this.gridManualX = {};
+    this.struck = {};
     this.selected = null;
     this.checked = false;
     this.lastMoveMs = Date.now();
@@ -223,16 +254,18 @@ export class Game {
     this.clock.reset(Date.now());
   }
 
-  /** "Play again" a solved puzzle: unlock and clear the board + grid marks, restore the full
-   *  attempt budget, and restart the clock so the puzzle is fully playable again. The recorded
-   *  result stays frozen (saveProgress freezes a won slot) and streak/best never move again for
-   *  the day; `replaying` marks the run so a re-solve reads as a plain win. Practice, not farmable. */
+  /** "Play again" a solved puzzle: unlock and clear the board + grid marks + clue strikes,
+   *  restore the full attempt budget, and restart the clock so the puzzle is fully playable
+   *  again. The recorded result stays frozen (saveProgress never downgrades a won slot) and
+   *  streak/best never move again for the day; `replaying` marks the run so a re-solve reads as
+   *  a plain win. Practice, not farmable. */
   playAgain(): void {
     this.replaying = true;
     this.locked = false;
     this.placements = {};
     this.gridTicks = {};
     this.gridManualX = {};
+    this.struck = {};
     this.selected = null;
     this.checked = false;
     this.attempts = 0;

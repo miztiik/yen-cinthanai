@@ -12,6 +12,7 @@ import type { PuzzleManifest } from "../../src/contracts/manifest";
 import type { Placements } from "../../src/contracts/save";
 import { buildBoard } from "../../src/lib/board";
 import { evaluate } from "../../src/lib/validate";
+import { cellKey } from "../../src/lib/grid";
 
 const here = fileURLToPath(new URL(".", import.meta.url));
 const m = JSON.parse(
@@ -28,6 +29,18 @@ describe("buildBoard honours the anchor:true identity", () => {
   it("anchors on name (not the ordinal price axis) and leaves craft + price fillable", () => {
     expect(board.anchor.id).toBe("name");
     expect(board.columns.map((c) => c.id)).toEqual(["craft", "price"]);
+  });
+});
+
+describe("conflicts (PR-6, constraint-derived, no spoiler)", () => {
+  it("is empty when nothing is violated", () => {
+    expect(evaluate(m, board, {}).conflicts.size).toBe(0);
+  });
+  it("collects the operand-pair cell of a violated clue, never the solution", () => {
+    const place: Placements = { e0: { price: "p5" }, e1: { price: "p20" } }; // violates nd_u (gap != 5)
+    const ev = evaluate(m, board, place);
+    expect(ev.clues["nd_u"]).toBe("violate");
+    expect(ev.conflicts.has(cellKey({ cat: "name", val: "n0" }, { cat: "name", val: "n1" }))).toBe(true);
   });
 });
 

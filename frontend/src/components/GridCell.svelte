@@ -23,6 +23,8 @@
     crosshair = false,
     row,
     col,
+    flash = false,
+    conflict = false,
     ontap,
     ontick,
     onmove,
@@ -38,6 +40,8 @@
     crosshair?: boolean;
     row?: number;
     col?: number;
+    flash?: boolean;
+    conflict?: boolean;
     ontap: () => void;
     ontick: () => void;
     onmove?: (key: string) => void;
@@ -75,6 +79,8 @@
   data-r={row}
   data-c={col}
   data-crosshair={crosshair ? "" : undefined}
+  data-flash={flash ? "" : undefined}
+  data-conflict={conflict ? "" : undefined}
   {tabindex}
   aria-label={ariaLabel}
   disabled={locked}

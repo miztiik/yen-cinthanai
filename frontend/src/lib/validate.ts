@@ -11,6 +11,7 @@
 import type { PuzzleManifest, Constraint, AttributeCategory, Operand } from "../contracts/manifest";
 import type { BoardModel } from "./board";
 import type { Placements } from "../contracts/save";
+import { cellKey } from "./grid";
 
 export type ClueState = "satisfy" | "violate" | "unknown";
 export type RowState = "empty" | "near" | "satisfy" | "violate";
@@ -21,6 +22,10 @@ export interface PuzzleEval {
   filled: number;
   total: number;
   won: boolean;
+  /** Grid cell keys implicated by a VIOLATED constraint (each unordered operand pair). Derived
+   *  from the constraint eval, NEVER the solution (no spoiler): a TICKED cell in this set reads
+   *  as "this positive is part of a broken clue". The board paints it only when revealed (PR-6). */
+  conflicts: Set<string>;
 }
 
 /** Ordinal position of an entity = its anchor value index (value i -> entity i). */
@@ -191,10 +196,23 @@ export function evaluate(m: PuzzleManifest, b: BoardModel, place: Placements): P
   const clues: Record<string, ClueState> = {};
   const violate = new Set<string>();
   const ok = new Set<string>();
+  const conflicts = new Set<string>();
   for (const k of m.constraints) {
     const s = evalConstraint(b, anchor, place, k);
     clues[k.id] = s;
     for (const e of touched(b, anchor, place, k)) (s === "violate" ? violate : ok).add(e);
+    // Conflict cells (PR-6): the grid relationships a broken clue constrains (each operand
+    // pair). A ticked cell here contradicts the clue; the view paints only ticks, never blanks.
+    if (s === "violate") {
+      for (let i = 0; i < k.operands.length; i++)
+        for (let j = i + 1; j < k.operands.length; j++)
+          conflicts.add(
+            cellKey(
+              { cat: k.operands[i].cat, val: k.operands[i].value },
+              { cat: k.operands[j].cat, val: k.operands[j].value },
+            ),
+          );
+    }
   }
 
   let filled = 0;
@@ -212,5 +230,5 @@ export function evaluate(m: PuzzleManifest, b: BoardModel, place: Placements): P
 
   const allSat = m.constraints.every((k) => clues[k.id] === "satisfy");
   const won = filled === total && total > 0 && allSat;
-  return { clues, rows, filled, total, won };
+  return { clues, rows, filled, total, won, conflicts };
 }

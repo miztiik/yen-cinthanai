@@ -35,6 +35,10 @@
     dayPickerOpen: boolean;
     onhome: () => void;
     onhint: () => void;
+    onreset: () => void;
+    onagain: () => void;
+    oncheck: () => void;
+    onretry: () => void;
     ondisplay: () => void;
     ondifficulty: () => void;
     onprev: () => void;
@@ -58,6 +62,10 @@
     dayPickerOpen,
     onhome,
     onhint,
+    onreset,
+    onagain,
+    oncheck,
+    onretry,
     ondisplay,
     ondifficulty,
     onprev,
@@ -72,6 +80,12 @@
   const attemptsLeft = $derived(game?.attemptsLeft ?? -1);
   const hintsLeft = $derived(game?.hintsLeft ?? -1);
   const canHint = $derived(!!game && !game.locked && hintsLeft !== 0);
+  // CHECK/SUBMIT lives in the Command Bar (2c): non-realtime tiers only; a spent attempt cap
+  // swaps it for RETRY. Realtime (easy) auto-wins, so it shows no submit button. The feedback
+  // pill renders directly under the header (Board), so it stays adjacent to this button.
+  const live = $derived(!!game && game.live);
+  const failed = $derived(!!game && !game.locked && attemptsLeft === 0);
+  const submitLabel = $derived(game?.dial.feedback === "submit-binary" ? "submit" : "check");
 </script>
 
 <div class="board-hdr-wrap mx-auto w-full max-w-lg">
@@ -157,6 +171,30 @@
           </button>
         {/snippet}
       </Tooltip>
+      {#if game}
+        <span class="h-3.5 w-px shrink-0 bg-ink/15" aria-hidden="true"></span>
+        <button
+          class="flex min-h-10 items-center rounded-full px-2.5 font-medium transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          aria-label={game.locked ? "play again" : "reset the board"}
+          title={game.locked ? "play again" : "reset the board"}
+          onclick={game.locked ? onagain : onreset}
+        >{game.locked ? "again" : "reset"}</button>
+        {#if !live}
+          {#if failed}
+            <button
+              class="flex min-h-10 items-center rounded-full bg-accent px-3 font-semibold transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              onclick={onretry}
+            >retry</button>
+          {:else}
+            <button
+              class="flex min-h-10 items-center rounded-full bg-accent px-3 font-semibold transition-transform active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-30"
+              aria-label={submitLabel}
+              disabled={game.locked}
+              onclick={oncheck}
+            >{submitLabel}</button>
+          {/if}
+        {/if}
+      {/if}
     </div>
   </header>
 </div>
@@ -219,7 +257,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.25rem;
+    gap: 0.5rem;
     margin-top: 0.25rem;
     padding-top: 0.25rem;
     border-top: 1px solid color-mix(in oklab, var(--ink) 12%, transparent);

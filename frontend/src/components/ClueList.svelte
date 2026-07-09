@@ -15,6 +15,14 @@
 
   let open = $state(true); // phone disclosure; desktop shows the list regardless (lg:block)
   let announce = $state("");
+  let listEl = $state<HTMLElement | null>(null);
+  // On CHECK, bring the first currently-violated clue into view so "what's wrong" is not just a
+  // count - the player lands on the broken clue and can re-read it (PR-6; no spoiler: the clue was
+  // always visible, the reveal only FLAGS which one their board breaks). Runs when checked flips.
+  $effect(() => {
+    if (!game.checked || !game.revealed) return;
+    queueMicrotask(() => listEl?.querySelector<HTMLElement>("[data-violated]")?.scrollIntoView({ block: "nearest" }));
+  });
 
   const autoDim = $derived(autoDimAllowed(game.dial.feedback, soft));
   const view = $derived.by(() => {
@@ -22,10 +30,12 @@
     return clueRows(game.m.constraints).map((r) => {
       const state = clues ? clues[r.id] : "unknown";
       const struck = !!game.struck[r.id];
+      const violated = state === "violate";
       return {
         ...r,
         struck,
-        dimmed: isClueStruck(struck, autoDim, state),
+        violated,
+        dimmed: !violated && isClueStruck(struck, autoDim, state), // a violated clue reads red, never dimmed
         strikeLabel: (struck ? copy.unstrike : copy.strike).replace("{n}", String(r.n)),
       };
     });
@@ -48,13 +58,14 @@
     <span class="text-xs font-normal opacity-60 lg:hidden">{open ? copy.hide : copy.show}</span>
   </button>
 
-  <ol class="mt-1 divide-y divide-ink/10 {open ? 'block' : 'hidden'} lg:block">
+  <ol class="mt-1 divide-y divide-ink/10 {open ? 'block' : 'hidden'} lg:block" bind:this={listEl}>
     {#each view as row (row.id)}
       <ClueRow
         n={row.n}
         text={row.text}
         struck={row.struck}
         dimmed={row.dimmed}
+        violated={row.violated}
         strikeLabel={row.strikeLabel}
         onToggle={() => toggle(row.id, row.n)}
       />

@@ -52,6 +52,12 @@
       "date": "2026-07-08",
       "change": "grid.desktop.maxCell default 0 -> 104 (cap the grown cell so labels/glyphs stay proportional; freed width goes to the board layout, not to a ballooning cell) + additive grid.label{scale,min,max} + grid.gap{scale,min,max}: the axis-label font size and the inter-cell gap (border-spacing) now TRACK the cell edge via lib/fit.ts scaleClamp instead of a fixed text-xs / border-spacing-0|1. clue.autoDimFeedback shipped default emptied to [] (a satisfied clue no longer auto-strikes; the manual check-dot stays).",
       "why": "An uncapped cell grew to ~180px while axis labels stayed 12px and cells sat edge-to-edge, so the chrome read as broken (CLAUDE.md #6 - the proportion knobs must be human-edited). Auto-strike removed the player's own bookkeeping verb, so it is off by default (the gate stays as config optionality)."
+    },
+    {
+      "version": 9,
+      "date": "2026-07-09",
+      "change": "Additive chrome.hintFlashMs (optional): the duration (ms) a hint-revealed grid cell pulses (scale + accent ring) so the just-placed cell is noticed even among already-filled cells. tooltipDelayMs stays the only required chrome key.",
+      "why": "The hint reveal was a silent hint-count drop with no on-board feedback; the pulse duration is a chrome feel knob that must be human-edited, not hardcoded (CLAUDE.md #6). Read by GridMatrix/NotesGrid via config.ts chromeUi and written as the --hint-flash-ms custom property."
     }
   ],
   "$defs": {
@@ -96,10 +102,11 @@
     },
     "chromeSpec": {
       "type": "object",
-      "description": "Chrome (HUD/menu) micro-interaction tunables. tooltipDelayMs = the hover dwell in milliseconds before a desktop Tooltip bubble appears in the board Command Bar (a focus always shows it instantly). attemptFadeMs = the duration in milliseconds a just-spent AttemptRing arc fades its opacity as a life is burned (the urgency recolour of the survivors snaps, never tweens). attemptColors = the AttemptRing urgency ramp full/mid/low (vivid green -> amber -> red), a fixed traffic-light ramp like difficulty.colors. Feel knobs, human-edited (CLAUDE.md #6).",
+      "description": "Chrome (HUD/menu) micro-interaction tunables. tooltipDelayMs = the hover dwell in milliseconds before a desktop Tooltip bubble appears in the board Command Bar (a focus always shows it instantly). attemptFadeMs = the duration in milliseconds a just-spent AttemptRing arc fades its opacity as a life is burned (the urgency recolour of the survivors snaps, never tweens). hintFlashMs = the duration in milliseconds a hint-revealed grid cell pulses (scale + accent ring) so it is noticed among filled cells. attemptColors = the AttemptRing urgency ramp full/mid/low (vivid green -> amber -> red), a fixed traffic-light ramp like difficulty.colors. Feel knobs, human-edited (CLAUDE.md #6).",
       "properties": {
         "tooltipDelayMs": { "type": "number", "exclusiveMinimum": 0 },
         "attemptFadeMs": { "type": "number", "exclusiveMinimum": 0 },
+        "hintFlashMs": { "type": "number", "exclusiveMinimum": 0 },
         "attemptColors": {
           "type": "object",
           "properties": {
