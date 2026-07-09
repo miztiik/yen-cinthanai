@@ -420,17 +420,19 @@ function buildNotes(g: Game): DayNotes | undefined {
   return notes;
 }
 
-/** Persist the day; on a fresh win advance streak + best-time once (today never pruned). */
-export function saveProgress(g: Game): Save {
+/** Persist the day; on a fresh win of TODAY advance streak + best-time once (today never pruned).
+ *  `today` (real UTC calendar day) defaults to now; production Board play passes nothing, so an
+ *  archived day the player opens from the calendar records its stars but never the streak/best. */
+export function saveProgress(g: Game, today: string = new Date().toISOString().slice(0, 10)): Save {
   const save = loadSave();
   const day = toDayState(g);
   const key = dayKey(day.date, day.tier, day.shapeId);
   const fresh = day.status === "won" && save.days[key]?.status !== "won";
   // A puzzle once won is immutable: a "play again" run (or any later save) never downgrades or
   // overwrites the recorded result. streak + best advance only on the FIRST win of the day
-  // (fresh), so replaying is practice - it can never re-bump the streak or rewrite the best.
+  // (fresh) AND only when that day is today, so replaying - or playing the archive - is practice.
   if (save.days[key]?.status !== "won") save.days[key] = day;
-  if (fresh) recordWin(save, day);
-  persistSave(save, g.m.puzzleId);
+  if (fresh) recordWin(save, day, today);
+  persistSave(save, today);
   return save;
 }

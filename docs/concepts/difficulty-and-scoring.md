@@ -51,6 +51,8 @@ team). INDIR is capped at 20 by construction.
 
 skipsLeft = 1, refills each Monday 00:00 UTC. Miss a day with a skip -> burn it, streak holds, no shame UI. Miss with none -> reset to 0. Hero/streak survive day-prune.
 
+The streak and the global best advance ONLY for a solve whose date is real UTC today (`recordWin` guards `day.date === today`). Playing an archived day from the calendar is PRACTICE: it records that day's stars + completion in its save slot but never touches the streak or the best. This blocks a backfill exploit (grinding the past to build a streak) AND prevents save corruption - `dayGap` is signed, so an archived win would otherwise fall through the burn-skips branch, mint a free streak increment, rewind `lastDate` into the past, and balloon `skipsLeft`. The forgiving Monday skip-refill stays the only sanctioned streak-recovery valve.
+
 ## Stuck-moment
 
 The intended anti-frustration behaviour: idle 12s pulse next token (free, uncounted); idle 25s glow the clue chip; wrong x2 same slot highlight conflicting clue; wrong x4 offer replay-confidence. Never sell, never timer-wall.

@@ -608,6 +608,24 @@ def write_index(date: str, entries: list[dict], out_dir: Path = PUZZLES_DIR) -> 
     return out
 
 
+def index_entries_from_disk(out_dir: Path = PUZZLES_DIR) -> list[dict]:
+    """Every frozen on-disk puzzle file as a BankEntry dict, oldest-first then tier order. The
+    served index advertises the FULL archive (add-only) - an aged-out day stays reachable in the
+    DayPicker - not just the run's backfill window. Deterministic: the canonical sha is recomputed
+    per file (a drifted file surfaces as a sha mismatch, the failure we want), stable (date, tier)
+    sort. See docs/architecture/generator/pipeline.md."""
+    entries: list[dict] = []
+    for fpath in sorted(out_dir.glob("*.json")):
+        if fpath.name == "index.json":
+            continue
+        date, tier = fpath.stem.rsplit("-", 1)
+        manifest = PuzzleManifest.model_validate_json(fpath.read_text(encoding="ascii"))
+        _, sha = canonical_sha(manifest)
+        entries.append({"date": date, "tier": tier, "shapeId": manifest.shapeId, "file": fpath.name, "sha": sha})
+    entries.sort(key=lambda e: (e["date"], TIER_ORDER.index(e["tier"])))
+    return entries
+
+
 # --- story-first (corpus-driven matrix) -----------------------------------------
 
 
@@ -852,18 +870,20 @@ def main(argv: list[str] | None = None) -> int:
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
     # Backfill ends at `anchor` but never past today (no spoiling an unreleased date).
     dates = backfill_dates(min(anchor, today), args.backfill) if args.backfill > 0 else [anchor]
-    all_entries: list[dict] = []
     for date in dates:
-        entries, lines = [], []
+        lines = []
         for tier in tiers:
             e = _entry_for(date, tier, PUZZLES_DIR, CONFIG_DIR, args.force)
-            entries.append(e)
             lines.append(json.dumps({"date": date, **e}, sort_keys=True))
             print(f"{e['file']} " + ("frozen" if e["frozen"] else f"sha={e['sha'][:12]} D={e['D']}"))
         (LOGS_DIR / f"build-{date}.jsonl").write_text("\n".join(lines) + "\n", encoding="ascii")
-        all_entries.extend(entries)
-    write_index(dates[-1], all_entries)  # dates[-1] == newest (today) -> generatedSeed served for play
-    print(f"index.json ({len(all_entries)} puzzles across {len(dates)} day(s))")
+    # The served index advertises the FULL on-disk archive (add-only), not just this run's
+    # backfill window - an aged-out day stays reachable in the DayPicker. generatedSeed stays the
+    # newest generated day (dates[-1] == today) so "today's puzzle" still resolves unchanged.
+    entries = index_entries_from_disk(PUZZLES_DIR)
+    write_index(dates[-1], entries)
+    archived_days = len({e["date"] for e in entries})
+    print(f"index.json ({len(entries)} puzzles across {archived_days} archived day(s); {len(dates)} generated this run)")
     return 0
 
 

@@ -156,7 +156,7 @@ describe("play again (practice replay of a solved puzzle)", () => {
       vi.setSystemTime(5000);
       fill(g); // clean win at 5s
       expect(g.solveMs).toBe(5000);
-      saveProgress(g);
+      saveProgress(g, m.puzzleId); // today == the puzzle's date, so the streak advances
       const k = dayKey(m.puzzleId, m.tier, m.shapeId);
       const s1 = loadSave();
       expect(s1.days[k].solveMs).toBe(5000);
@@ -167,7 +167,7 @@ describe("play again (practice replay of a solved puzzle)", () => {
       vi.setSystemTime(9000);
       fill(g); // a faster replay: 4s
       expect(g.solveMs).toBe(4000);
-      saveProgress(g);
+      saveProgress(g, m.puzzleId);
 
       const s2 = loadSave();
       expect(s2.days[k].solveMs).toBe(5000); // frozen: the 4s replay did NOT overwrite
@@ -214,7 +214,7 @@ describe("brag-cost", () => {
     g.check();
     expect(g.locked).toBe(true);
     expect(g.stars).toBe(1);
-    saveProgress(g);
+    saveProgress(g, m.puzzleId);
     expect(loadSave().hero.bestMs).toBe(0); // hinted solve never sets best
   });
 });
@@ -244,7 +244,7 @@ describe("persist + resume", () => {
   it("a clean win persists, advances streak, sets best, resumes locked", () => {
     const g = new Game(m, REALTIME);
     fill(g);
-    saveProgress(g);
+    saveProgress(g, m.puzzleId);
     const s = loadSave();
     const k = dayKey(m.puzzleId, m.tier, m.shapeId);
     expect(s.days[k].status).toBe("won");
@@ -255,16 +255,41 @@ describe("persist + resume", () => {
   });
 });
 
+describe("archive play is practice (never the streak or best)", () => {
+  // m is dated 2026-06-29. Playing it on a LATER day is an archived solve: it must record its
+  // stars but must not move (or corrupt) the forward streak. Guards the signed-dayGap bug where
+  // an archived win minted a free streak, rewound lastDate, and ballooned skip credits.
+  it("solving a PAST day today records stars but never advances streak or best", () => {
+    const before = loadSave().streak; // the fresh, untouched streak
+    const g = new Game(m, REALTIME);
+    fill(g); // clean 3-star win
+    saveProgress(g, "2026-07-09"); // today is later than the puzzle's 2026-06-29 -> archived
+    const s = loadSave();
+    const k = dayKey(m.puzzleId, m.tier, m.shapeId);
+    expect(s.days[k].status).toBe("won"); // the day slot IS recorded (stars + completion) ...
+    expect(s.days[k].stars).toBe(3);
+    expect(s.streak).toEqual(before); // ... but the streak is byte-identical: no increment/rewind/balloon
+    expect(s.hero.bestMs).toBe(0); // ... and the global best is untouched
+  });
+
+  it("the SAME solve on its own day DOES advance the streak (control)", () => {
+    const g = new Game(m, REALTIME);
+    fill(g);
+    saveProgress(g, m.puzzleId); // today == the puzzle's date
+    expect(loadSave().streak.count).toBe(1);
+  });
+});
+
 describe("composite day slots (multi-tier same day)", () => {
   it("a second tier the same day persists as its own slot, no overwrite", () => {
     const g1 = new Game(m, STD); // standard / seating-row
     fill(g1);
     g1.check();
-    saveProgress(g1);
+    saveProgress(g1, m.puzzleId);
 
     const g2 = new Game(mEasy, REALTIME); // easy / grid, SAME date
     for (const e of g2.board.entities) for (const c of g2.board.columns) g2.place(e, c.id, mEasy.solution[e][c.id]);
-    saveProgress(g2);
+    saveProgress(g2, mEasy.puzzleId);
 
     const s = loadSave();
     const kStd = dayKey(m.puzzleId, m.tier, m.shapeId);

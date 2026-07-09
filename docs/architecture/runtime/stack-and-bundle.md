@@ -14,7 +14,11 @@ pointerdown -> setPointerCapture -> transform translate3d follow (compositor-onl
 
 ## Offline (vite-plugin-pwa 1.3)
 
-autoUpdate; base /yen-cinthanai/; precache shell + today; runtimeCaching NetworkFirst for /puzzles/*.json; navigateFallback 404.html; manifest start_url/scope relative. New day = NetworkFirst then Cache API. Yesterday's save always loads.
+autoUpdate; base /yen-cinthanai/; navigateFallback 404.html; manifest start_url/scope relative. Precache is BOUNDED and stays flat as the puzzle archive grows: shell (js/css/html/webmanifest) + `config/*.json` + the glyph SVGs + `assets/glyphs/index.json` only - the unbounded add-only `puzzles/` dir is deliberately NOT swept in. Two runtime rules serve it: the bank `index.json` is NetworkFirst (`bank-index` cache, `networkTimeoutSeconds` 3) so the newest day + the full archive listing always appear; the frozen dated day files are CacheFirst (`puzzles` cache, a bounded ring buffer `maxEntries` 120 ~= 30 days x 4 tiers, 180-day age, `purgeOnQuotaError`) - fetched on first play, then served offline. Country flags stay CacheFirst. Yesterday's save always loads.
+
+### Design rationale
+
+The bank `index.json` is deliberately NOT precached: a precached index is served CacheFirst, which would short-circuit the loader's fresh `fetch` and delay a newly-shipped day by a service-worker cycle - so it moves to a NetworkFirst runtime route (fresh online, last-seen offline; install is always online, so there is no never-seen gap). Precaching the whole `puzzles/` dir (the old `**/*.json` glob) was O(n) in archive size and would balloon the install as the add-only archive grows 4 files/day; excluding it keeps the install O(1). Dated day files are immutable once written, so CacheFirst (no revalidation) is correct, and the bounded ring buffer caps offline storage independent of archive size. **Rejected alternative**: keep precaching every puzzle - simple today (16 days) but an unbounded install that fails the mid-tier-Android budget within a year. Boot cost must stay O(1) in archive size; revisit splitting the archive listing out of the boot path (a tiny `latest.json` + a lazily-fetched full index) when gzipped `index.json` crosses ~50KB (~2-3 years out).
 
 ## Repo tree (P0-P3)
 

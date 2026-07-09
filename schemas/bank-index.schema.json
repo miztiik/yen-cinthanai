@@ -16,6 +16,12 @@
       "date": "2026-07-02",
       "change": "BankEntry.shapeId enum tightened to grid-only (seating-row/round-table retired, Row 9d matrix-only contract close). schemaVersion stays 1 - the index shape is unchanged, only the value set narrows.",
       "why": "The served bank is matrix-only after the legacy engine retirement, so a non-grid entry can no longer be produced and the schema forbids it."
+    },
+    {
+      "version": 1,
+      "date": "2026-07-09",
+      "change": "The served index now advertises the FULL on-disk archive - every frozen <date>-<tier>.json, oldest-first then tier order - instead of only the daily backfill window (tools/generate.py::index_entries_from_disk). Shape unchanged (more BankEntry items of the identical shape), so schemaVersion stays 1.",
+      "why": "A day file is add-only and frozen but used to age out of the index after 7 days, leaving it shipped-but-unreachable in the DayPicker calendar. Indexing every on-disk day keeps the whole past playable; generatedSeed still marks today's default puzzle."
     }
   ],
   "$defs": {

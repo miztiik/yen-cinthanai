@@ -154,8 +154,13 @@ export function persistSave(save: Save, today: string): void {
   }
 }
 
-/** On a fresh win, advance the streak once and set best-time only on a clean solve. */
-export function recordWin(save: Save, day: DayState): Save {
+/** On a fresh win of TODAY's puzzle, advance the streak once and set best-time on a clean solve.
+ *  An ARCHIVED solve (day.date != today) is practice: its stars + completion are recorded in the
+ *  day slot by the caller, but it never touches the streak or the global best. A past day can
+ *  neither build the forward streak nor corrupt it - dayGap is signed, so a negative gap would
+ *  otherwise mint a free streak and balloon skip credits. See docs/concepts/difficulty-and-scoring.md. */
+export function recordWin(save: Save, day: DayState, today: string): Save {
+  if (day.date !== today) return save; // archived day: practice only, never the streak/best
   if (save.streak.lastDate === day.date) return save; // already counted today
   save.streak = updateStreak(save.streak, day.date);
   save.hero = updateHero(save.hero, day.solveMs, day.hintsUsed, day.date);

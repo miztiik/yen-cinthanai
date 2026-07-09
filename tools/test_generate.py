@@ -127,6 +127,27 @@ def test_backfill_index_lists_all_days_seed_is_newest(tmp_path: Path) -> None:
     assert all(e["frozen"] for e in again)  # second pass reads the frozen files
 
 
+def test_index_from_disk_lists_the_full_archive_not_just_the_window(tmp_path: Path) -> None:
+    # The served index advertises EVERY on-disk day (add-only), so a day OUTSIDE the current
+    # backfill window still appears - the aging-out regression a window-scoped index caused
+    # (an old day's file ships but the DayPicker could not reach it).
+    g.write_puzzle("2026-06-24", "easy", tmp_path, CONFIG_DIR)      # an aged-out day
+    g.write_puzzle("2026-07-09", "standard", tmp_path, CONFIG_DIR)  # a newer day, different window
+    g.write_puzzle("2026-07-09", "easy", tmp_path, CONFIG_DIR)      # written out of tier order on purpose
+    g.write_index("2026-07-09", [], tmp_path)                       # an index.json in the dir must be skipped
+    entries = g.index_entries_from_disk(tmp_path)
+    assert [(e["date"], e["tier"]) for e in entries] == [
+        ("2026-06-24", "easy"),   # the aged-out day is still indexed (the point of this test)
+        ("2026-07-09", "easy"),   # oldest-first by date, then TIER_ORDER within a day
+        ("2026-07-09", "standard"),
+    ]
+    # every entry's sha is the canonical sha of its file (index.json itself was skipped)
+    for e in entries:
+        text = (tmp_path / e["file"]).read_text("ascii").rstrip("\n")
+        assert hashlib.sha256(text.encode("ascii")).hexdigest() == e["sha"], e["file"]
+
+
+
 # --- story-first served bank (row 9b: the served bank IS the story-first master) -----------------
 
 PUZZLES_DIR = ROOT / "frontend" / "public" / "puzzles"

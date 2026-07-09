@@ -25,8 +25,13 @@ describe.skipIf(!has)("PWA build artifacts", () => {
     expect(existsSync(resolve(dist, "404.html"))).toBe(true);
   });
 
-  it("precaches today's bank index", () => {
+  it("does not precache the growing puzzle archive; days + index are runtime-cached", () => {
     const sw = readFileSync(resolve(dist, "sw.js"), "utf8");
+    // No dated day file is baked into the precache manifest - the archive grows unbounded and
+    // must not bloat the install; a day is fetched + CacheFirst-cached on first play instead.
+    expect(sw).not.toMatch(/puzzles\/\d{4}-\d{2}-\d{2}-[a-z]+\.json/);
+    // The bank index is still referenced - by its NetworkFirst runtime route (kept fresh), not
+    // the precache manifest - so the newest day + the full archive listing always appear.
     expect(sw).toMatch(/puzzles\/index\.json/);
   });
 

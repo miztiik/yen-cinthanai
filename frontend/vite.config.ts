@@ -35,18 +35,45 @@ function pwa() {
     injectRegister: null,
     manifest: false,
     workbox: {
-      globPatterns: ["**/*.{js,css,html,svg,json,webmanifest}"],
+      // Precache only the BOUNDED, boot-critical tree: shell + config + the glyph manifest and
+      // the (non-flag) glyph SVGs. The unbounded add-only puzzles/ dir (dated day files AND the
+      // growing index.json) is deliberately NOT swept in - it is served at runtime below, so the
+      // install stays flat as the archive grows to hundreds of days. Only `json` is dropped from
+      // the blanket glob (puzzles are json); `svg` stays so glyph art is precached (flags ignored).
+      globPatterns: ["**/*.{js,css,html,svg,webmanifest}", "config/**/*.json", "assets/glyphs/index.json"],
       // The 271 country flags are kept OUT of the shell precache (it would balloon); they are
       // fetched per file on demand via the CacheFirst "flags" rule below, then served offline.
       globIgnores: [FLAGS_GLOB_IGNORE],
       navigateFallback: `${base}404.html`,
       runtimeCaching: [
         {
-          urlPattern: ({ url }) => url.pathname.endsWith(".json") && url.pathname.includes("/puzzles/"),
+          // Bank index: MUST stay fresh so the newest day + the full archive listing appear. It
+          // is deliberately NOT precached - a precached index is served CacheFirst, which would
+          // short-circuit the loader's fresh fetch and delay a new day by a service-worker cycle.
+          // NetworkFirst -> newest online, last-seen index offline; networkTimeoutSeconds bounds
+          // boot cost on flaky 4G. Registered FIRST so it wins over the dated-day rule below.
+          urlPattern: ({ url }) => url.pathname.endsWith("/puzzles/index.json"),
           handler: "NetworkFirst",
           options: {
+            cacheName: "bank-index",
+            networkTimeoutSeconds: 3,
+            expiration: { maxEntries: 1, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            cacheableResponse: { statuses: [0, 200] },
+          },
+        },
+        {
+          // Dated day files are FROZEN once written -> CacheFirst (never revalidated, works
+          // offline immediately once played). A bounded ring buffer keeps a returning player's
+          // recently-played days offline without growing with the archive: oldest-out by count,
+          // self-purging on a storage-starved device. This is now the ONLY offline home for a
+          // day file (they left the precache), which is correct: a day you played is cached, a
+          // day you never opened is not - honest and bounded. maxEntries 120 ~= 30 days x 4 tiers.
+          urlPattern: ({ url }) =>
+            url.pathname.includes("/puzzles/") && url.pathname.endsWith(".json") && !url.pathname.endsWith("/index.json"),
+          handler: "CacheFirst",
+          options: {
             cacheName: "puzzles",
-            expiration: { maxEntries: 64, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            expiration: { maxEntries: 120, maxAgeSeconds: 60 * 60 * 24 * 180, purgeOnQuotaError: true },
             cacheableResponse: { statuses: [0, 200] },
           },
         },

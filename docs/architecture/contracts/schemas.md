@@ -27,7 +27,7 @@ DayState = { date, tier, shapeId, status, placements, attempts, solveMs, hintsUs
 
 ## BankIndex v1
 
-`{ schemaVersion, generatedSeed, builtAt, puzzles:[{date,tier,shapeId,file,sha}] }` at public/puzzles/index.json. sha = canonical-JSON sha256; rebuild must match (determinism gate).
+`{ schemaVersion, generatedSeed, builtAt, puzzles:[{date,tier,shapeId,file,sha}] }` at public/puzzles/index.json. sha = canonical-JSON sha256; rebuild must match (determinism gate). `puzzles` lists the FULL on-disk archive (every frozen dated file, oldest-first then tier order via `index_entries_from_disk`), not just the latest day, so the DayPicker can reach every past puzzle; `generatedSeed` still marks today's default.
 
 ## ShareCard v1
 

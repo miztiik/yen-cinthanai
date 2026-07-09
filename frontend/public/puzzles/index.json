@@ -3,6 +3,258 @@
   "generatedSeed": "2026-07-09",
   "puzzles": [
     {
+      "date": "2026-06-24",
+      "file": "2026-06-24-easy.json",
+      "sha": "e6623d6ec879062b61a1bd974b723471f84733161deea384c00f103f512c608b",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-24",
+      "file": "2026-06-24-standard.json",
+      "sha": "539012dedc2f9176e8f24234d291e7f67d767133621addf212d4edc656b86e9e",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-24",
+      "file": "2026-06-24-sharp.json",
+      "sha": "c5d673cd683f96bf5235314204caa881c2e21952f15108392e415f2a0d24fa35",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-24",
+      "file": "2026-06-24-expert.json",
+      "sha": "39bbdbe1b66c870ebceda82bfc9692358b595524edf50664ec3161b14a8f8ae2",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-06-25",
+      "file": "2026-06-25-easy.json",
+      "sha": "8db592de897e4008274edb199a87675e75043ae9945ad7515a8cb92b457bf4a5",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-25",
+      "file": "2026-06-25-standard.json",
+      "sha": "f146501d317c2066fc877458f71a4a9452e8eed4a5f8b9dfa66b73c37b078db0",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-25",
+      "file": "2026-06-25-sharp.json",
+      "sha": "aa60117cb80c840e8fbd521b31cc4124666a80e95cbb2ae0a5fd7fa686390c55",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-25",
+      "file": "2026-06-25-expert.json",
+      "sha": "f025bb45874fd2794e607c205d8980d511305f9a7cc50be09849bf5c82b500b1",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-06-26",
+      "file": "2026-06-26-easy.json",
+      "sha": "3a164a9f7199b78c70c11e981d94db35c35ac99cb095172385bef81e8cfeb3c8",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-26",
+      "file": "2026-06-26-standard.json",
+      "sha": "f61aad3ef57e36d1fbe448355541b4ba6d7eb7037a817d51dbea0c79b2efe5f4",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-26",
+      "file": "2026-06-26-sharp.json",
+      "sha": "2479cfca2a369356b8c64030b62a2d4d8da33ce8384bd5ab1c909dc96925cd3f",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-26",
+      "file": "2026-06-26-expert.json",
+      "sha": "0c6370d7e7dfe9332a9cfc05e8d28cb4b5bd307da5faffbd3de7867645f0f5ba",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-06-27",
+      "file": "2026-06-27-easy.json",
+      "sha": "5b2e7add96d7399bc4da1362e082a09d3b7ab08872e279e2284f4f7278e5f63c",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-27",
+      "file": "2026-06-27-standard.json",
+      "sha": "a3864f76bcdc043ecbcb6d50426dcb508e386383b6eb4559db637f171719483c",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-27",
+      "file": "2026-06-27-sharp.json",
+      "sha": "fcae7de748ecff88e0fede2b922cf629e84e3e66352c2f78c5ab493c75fce4fe",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-27",
+      "file": "2026-06-27-expert.json",
+      "sha": "ed278b4c05c5bca9ab7763fc66325b2a1cfa596b24d16be0f915e3c084b6b196",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-06-28",
+      "file": "2026-06-28-easy.json",
+      "sha": "81294b312785f6f8a53a9519e6e4825d9086938ff5457ae34a7320bf87f90227",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-28",
+      "file": "2026-06-28-standard.json",
+      "sha": "9912e910d8fdb1f7c3472c3cfb1623dc5b69ca5f1522b144f5ccc8b28b316458",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-28",
+      "file": "2026-06-28-sharp.json",
+      "sha": "222a8d20dd1a6d099fb54eef420880d28e748e7454e2b06f6b63cf876193ddec",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-28",
+      "file": "2026-06-28-expert.json",
+      "sha": "81abb276d6405ae13acd186ebb6e910d6a38fd31b9ca147834752f6c8d0d605c",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-06-29",
+      "file": "2026-06-29-easy.json",
+      "sha": "ff52e806d2528221760608d60a71d3dc8836957a9d207ada169b94aade4efbcc",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-29",
+      "file": "2026-06-29-standard.json",
+      "sha": "d77d83111b262040e11715a9f32ee2386b3c119c4c5c01832a16006b40ee7848",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-29",
+      "file": "2026-06-29-sharp.json",
+      "sha": "8cbeb67887ecb3b8e1613398897da7c42f3f4bca591ec0d01f9a8084d25c9a70",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-29",
+      "file": "2026-06-29-expert.json",
+      "sha": "fc892bf60389893571d53ecf18ed83754d61c9bafaefee717bb2d56297fdf44c",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-06-30",
+      "file": "2026-06-30-easy.json",
+      "sha": "31c593af68475cd26c3ca16f56fcb49d808d708a3470f5526ba816d34d28c4a6",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-06-30",
+      "file": "2026-06-30-standard.json",
+      "sha": "f6145e646e7a40430b2d44bf7e726e3aa3b30259c686500af70be46d7b6c315c",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-06-30",
+      "file": "2026-06-30-sharp.json",
+      "sha": "0afcb779561394d747001f60077d011f4c7977db0ad28593f907862d20c8bbcb",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-06-30",
+      "file": "2026-06-30-expert.json",
+      "sha": "25bc952135a21aa3d6bd3faf867f0df50e56385b917cb2bd376a7c0f5bbabe84",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-07-01",
+      "file": "2026-07-01-easy.json",
+      "sha": "a7043f79f9e94ffb775c4c892658146663e238fee2a06bac5c9d7c082410718a",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-07-01",
+      "file": "2026-07-01-standard.json",
+      "sha": "b9921e30d1701545322195cb79fdaaed8d37f4703faf3d6143f0e9a060e2935b",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-07-01",
+      "file": "2026-07-01-sharp.json",
+      "sha": "5545c867b45781017f7f20c5aaa5fcb678c3fa8c8aa66bcd2c504752864887f4",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-07-01",
+      "file": "2026-07-01-expert.json",
+      "sha": "56558523b452d14a55b951a953795ef61d8064384aa7d63dd76a989614c6e5cc",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-07-02",
+      "file": "2026-07-02-easy.json",
+      "sha": "76d8108eb7a68060fb56f6fa8e67edc8a43adbe54133287955bbacd0555d0cce",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-07-02",
+      "file": "2026-07-02-standard.json",
+      "sha": "5e9d25fd625bb731481434a920e9038d52c66f4388094f8311d57b8dccced15d",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-07-02",
+      "file": "2026-07-02-sharp.json",
+      "sha": "bd5bc5eed3e587fe320c7928d326ca2c08a1faf311b49639147c44058cc14cce",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-07-02",
+      "file": "2026-07-02-expert.json",
+      "sha": "5ff5e795f867018d2b21bc1719973e6168df5af0f2bb10a3065eb6d3165fa7cc",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
       "date": "2026-07-03",
       "file": "2026-07-03-easy.json",
       "sha": "39adb70dcf4a7941d81cddd164264dcdb467b68f944c08588663cc190f666547",
