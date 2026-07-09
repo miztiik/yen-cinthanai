@@ -363,8 +363,10 @@
      bar is a clean two rows (identity + frame on top, the live-solve cluster on its own row).
      Gated at the width the full cluster genuinely fits so it never wraps a control awkwardly. */
   @container boardhdr (min-width: 640px) {
-    /* Identity stops growing so the day sits right next to home (no big left gap); the live
-       cluster absorbs the slack instead, carrying the gear to the far edge. */
+    /* Identity packs LEFT (day right next to home); the live cluster + gear pack RIGHT -
+       margin-left:auto pushes them over so the gear PINS to the far edge with no stray gap
+       beside it. The single slack sits in the middle, splitting "which puzzle" from the solve
+       status/actions (no growing-and-centring, which left equal gaps on both sides). */
     .hdr-day {
       flex: 0 1 auto;
     }
@@ -373,7 +375,8 @@
     }
     .hdr-live {
       order: 3;
-      flex: 1 1 auto;
+      flex: 0 1 auto;
+      margin-left: auto;
       margin-top: 0;
       padding-top: 0;
       border-top: 0;
