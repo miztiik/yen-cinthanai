@@ -81,27 +81,31 @@ describe("submit tier (Expert)", () => {
 });
 
 describe("reset + retry (story/grid mode)", () => {
-  it("reset clears BOTH token placements and the cross-out grid marks", () => {
+  it("reset clears token placements, the cross-out grid marks, AND the clue strikes", () => {
     const g = new Game(m, STD);
     g.place("e0", COL, E0_VAL);
     g.gridTicks["farmer:e0|animal:a"] = true; // a positive tick
     g.gridManualX["farmer:e1|animal:b"] = true; // a hand elimination
+    g.toggleStruck(m.constraints[0].id); // a struck clue (a reading aid)
     g.checked = true;
     g.reset();
     expect(g.placements).toEqual({});
     expect(Object.keys(g.gridTicks)).toHaveLength(0);
     expect(Object.keys(g.gridManualX)).toHaveLength(0);
+    expect(Object.keys(g.struck).filter((k) => g.struck[k])).toHaveLength(0); // strikes cleared too
     expect(g.checked).toBe(false);
   });
 
   it("retry after a spent attempt cap restores the budget and clears the board", () => {
     const g = new Game(m, SUBMIT); // attempts: 1
     g.place("e0", COL, E1_VAL); // wrong seat
+    g.toggleStruck(m.constraints[0].id); // a struck clue
     g.check();
     expect(g.attemptsLeft).toBe(0); // cap spent -> the fail card would show
     g.retry();
     expect(g.attemptsLeft).toBe(1); // fresh run, not stuck re-failing
     expect(g.placements).toEqual({});
+    expect(Object.keys(g.struck).filter((k) => g.struck[k])).toHaveLength(0); // retry clears strikes too
     expect(g.checked).toBe(false);
     expect(g.locked).toBe(false);
   });
@@ -121,6 +125,14 @@ describe("play again (practice replay of a solved puzzle)", () => {
     expect(g.hintsUsed).toBe(0);
     expect(g.solveMs).toBe(0);
     expect(g.stars).toBe(0);
+  });
+
+  it("play again also clears the clue strikes", () => {
+    const g = new Game(m, REALTIME);
+    g.toggleStruck(m.constraints[0].id);
+    fill(g); // realtime -> win + lock
+    g.playAgain();
+    expect(Object.keys(g.struck).filter((k) => g.struck[k])).toHaveLength(0);
   });
 
   it("a mid-replay snapshot never downgrades the recorded win", () => {
@@ -171,10 +183,9 @@ describe("play again (practice replay of a solved puzzle)", () => {
 describe("brag-cost", () => {
   it("a hint forces the next step and caps to 1 star, no best-time", () => {
     const g = new Game(m, STD);
-    const cat = m.hintTrace[0].forces.cat; // the column the hint will fill
-    const before = g.remaining(cat).length;
+    const before = g.evalState.filled;
     g.hint();
-    expect(g.remaining(cat).length).toBe(before - 1);
+    expect(g.evalState.filled).toBe(before + 1); // the hint commits one deduction (a grid tick in story mode)
     expect(g.hintsUsed).toBe(1);
     fill(g);
     g.check();
@@ -182,6 +193,27 @@ describe("brag-cost", () => {
     expect(g.stars).toBe(1);
     saveProgress(g);
     expect(loadSave().hero.bestMs).toBe(0); // hinted solve never sets best
+  });
+});
+
+describe("hint lands on the player's grid surface (story mode)", () => {
+  it("a hint commits one deduction and records the ticked grid cell, not a hidden placement", () => {
+    const g = new Game(m, STD);
+    const before = g.evalState.filled;
+    g.hint();
+    expect(g.evalState.filled).toBe(before + 1); // a hint fills exactly one cell
+    expect(g.hintsUsed).toBe(1);
+    expect(g.lastHintKey).not.toBeNull(); // grid puzzle: the hint ticks a cell (visible)
+    expect(g.gridTicks[g.lastHintKey!]).toBe(true);
+  });
+
+  it("consecutive hints advance through the trace, never re-revealing a ticked cell (adaptive)", () => {
+    const g = new Game(m, STD);
+    g.hint();
+    const key1 = g.lastHintKey;
+    g.hint();
+    expect(g.hintsUsed).toBe(2);
+    expect(g.lastHintKey).not.toBe(key1); // read the MERGED view, so it skips the ticked step
   });
 });
 

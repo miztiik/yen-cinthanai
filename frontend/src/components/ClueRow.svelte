@@ -12,6 +12,7 @@
     text,
     struck = false,
     dimmed = false,
+    violated = false,
     strikeLabel,
     onToggle,
   }: {
@@ -19,12 +20,13 @@
     text: string;
     struck?: boolean;
     dimmed?: boolean;
+    violated?: boolean;
     strikeLabel: string;
     onToggle: () => void;
   } = $props();
 </script>
 
-<li>
+<li data-violated={violated ? "" : undefined} class={violated ? "border-l-2 border-violate" : ""}>
   <button
     type="button"
     class="flex w-full items-start gap-3 rounded-lg px-2 py-2.5 text-left transition-colors hover:bg-ink/[0.04] active:bg-ink/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
@@ -33,13 +35,15 @@
     onclick={onToggle}
   >
     <span class="mt-px w-5 shrink-0" aria-hidden="true">
-      {#if dimmed}
+      {#if violated}
+        <span class="grid h-[22px] w-[22px] place-items-center rounded-full border border-violate bg-violate/10 text-xs font-bold tabular-nums text-violate">{n}</span>
+      {:else if dimmed}
         <span class="grid h-[22px] w-[22px] place-items-center rounded-full border border-accent bg-accent/15 text-accent"><Glyph ref="ui.check" size={12} tint /></span>
       {:else}
         <span class="grid h-[22px] w-[22px] place-items-center rounded-full border border-ink/25 text-xs tabular-nums text-ink/70">{n}</span>
       {/if}
     </span>
-    <span class="flex-1 text-sm leading-relaxed transition-opacity duration-150 {dimmed ? 'line-through decoration-ink/40 opacity-50' : 'opacity-100'}">
+    <span class="flex-1 text-sm leading-relaxed transition-opacity duration-150 {violated ? 'text-violate' : dimmed ? 'line-through decoration-ink/40 opacity-50' : 'opacity-100'}">
       {text}
     </span>
   </button>

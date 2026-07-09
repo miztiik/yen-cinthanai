@@ -67,6 +67,28 @@ describe("GridCell states", () => {
     const ax = render(GridCell, { ...base, state: "autoX" });
     expect(ax.querySelector(".opacity-40")).not.toBeNull(); // the derived auto-X reads dimmer
   });
+
+  it("flash stamps data-flash for the hint reveal pulse (PR-4)", () => {
+    const on = render(GridCell, { ...base, state: "tick", glyph: null, flash: true }).querySelector("button")!;
+    expect(on.hasAttribute("data-flash")).toBe(true);
+    const off = render(GridCell, { ...base, state: "tick", glyph: null }).querySelector("button")!;
+    expect(off.hasAttribute("data-flash")).toBe(false);
+  });
+
+  it("conflict stamps data-conflict for the CHECK reveal - red = wrong (PR-6)", () => {
+    const on = render(GridCell, { ...base, state: "tick", glyph: null, conflict: true }).querySelector("button")!;
+    expect(on.hasAttribute("data-conflict")).toBe(true);
+  });
+});
+
+describe("GridMatrix section dividers (PR-1)", () => {
+  it("draws divider edges at category-group boundaries in the fused staircase", () => {
+    const g = new Game(m, STD);
+    const cats = gridCategories(g.board);
+    const el = render(GridMatrix, { game: g, cats, copy: GRID_COPY_FALLBACK, size: 40 });
+    expect(el.querySelectorAll("[data-col-edge]").length).toBeGreaterThan(0);
+    expect(el.querySelectorAll("[data-row-edge]").length).toBeGreaterThan(0);
+  });
 });
 
 describe("GridCell interaction + a11y", () => {

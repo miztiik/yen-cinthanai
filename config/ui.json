@@ -11,7 +11,8 @@
       "mid": "#f59e0b",
       "low": "#ef4444"
     },
-    "tooltipDelayMs": 350
+    "tooltipDelayMs": 350,
+    "hintFlashMs": 550
   },
   "clue": {
     "autoDimFeedback": []

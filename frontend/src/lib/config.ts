@@ -217,6 +217,10 @@ export interface ChromeUi {
   tooltipDelayMs: number;
   attemptFadeMs?: number;
   attemptColors?: { full: string; mid: string; low: string };
+  /** How long (ms) a hint-revealed grid cell pulses (scale + accent ring) so the just-placed
+   *  cell is noticed even among already-filled cells. transform/box-shadow only; reduced-motion
+   *  zeroes it. Consumed by GridMatrix/NotesGrid (--hint-flash-ms). */
+  hintFlashMs?: number;
 }
 /** Board layout tunables (config/ui.json [layout]). maxWidthPx caps the whole board width on
  *  desktop; 0 = uncapped (the board fills the viewport, so the grown grid + rails use every
@@ -276,6 +280,7 @@ const CHROME_UI_FALLBACK: ChromeUi = {
   tooltipDelayMs: 350,
   attemptFadeMs: 150,
   attemptColors: { full: "#22c55e", mid: "#f59e0b", low: "#ef4444" },
+  hintFlashMs: 550,
 };
 
 const UI_FALLBACK: UiConfig = {

@@ -205,6 +205,51 @@ th[data-crosshair-hdr] {
   border-radius: 6px;
 }
 
+/* Hint reveal pulse: when a hint places a cell, the grid view stamps data-flash on it for
+   chrome.hintFlashMs. A brief scale-up + accent ring pulls the eye to the just-revealed cell,
+   even when it sits among already-filled cells (the "silent hint" fix, PR-4). Transform +
+   box-shadow only (compositor-cheap, Holy Law #2); reduced-motion zeroes the duration so the
+   tick still places but does not pulse. --hint-flash-ms is set inline by the grid view from
+   config/ui.json [chrome.hintFlashMs]. */
+[data-cell-key][data-flash] {
+  animation: hint-flash var(--hint-flash-ms, 550ms) ease-out 1;
+  z-index: 1;
+}
+@keyframes hint-flash {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 70%, transparent);
+  }
+  30% {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 55%, transparent);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--accent) 0%, transparent);
+  }
+}
+
+/* Check conflict mark (PR-6, Option A - no spoiler): on CHECK, cells/rows that participate in a
+   VIOLATED clue are stamped data-conflict, painting the reserved --violate colour (red = wrong)
+   as a ring PLUS a corner dot marker so the cue is never colour-alone (Jony worldview #8). It is
+   derived from the constraint eval, never the solution, so it says "your logic breaks here", not
+   "the answer is X". Colour paint only; reduced-motion-safe. */
+[data-cell-key][data-conflict] {
+  box-shadow: inset 0 0 0 2px var(--violate);
+}
+[data-cell-key][data-conflict]::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--violate);
+  pointer-events: none;
+}
+
 /* Glyphs are the only <img> in the app (registry-sourced) and they live inside draggable
    pucks. Browsers make <img> natively draggable, so a mouse press-and-move on a token
    would start an OS image-drag (ghost image) that HIJACKS the pointer-drag in lib/drag.ts

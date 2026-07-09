@@ -24,7 +24,7 @@
   import { formatDay } from "../lib/dates";
   import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, difficultyUi, chromeUi, gridDesktop, gridLabel, gridGap, layoutUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, ANSWER_COPY_FALLBACK, SCRATCH_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type DifficultyUi, type ChromeUi, type UiConfig } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
-  import { gridBlocks, gridCategories } from "../lib/grid";
+  import { gridBlocks, gridCategories, parseCellKey, blockId } from "../lib/grid";
   import { fitCellSize, scaleClamp } from "../lib/fit";
   import { playerGrid } from "../lib/answer";
   import { isHero, nextPlayableTier } from "../lib/scoring";
@@ -236,6 +236,18 @@
     if (blocks.length) activeBlock = (activeBlock + dir + blocks.length) % blocks.length;
   }
 
+  // Hint reveal (PR-4): when a hint ticks a grid cell, jump the mobile NotesGrid to that cell's
+  // block so the pulse is on screen (desktop GridMatrix shows every block, so activeBlock is
+  // unused there and this is a harmless no-op). Depends on the store's hintFlash nonce.
+  $effect(() => {
+    const nonce = game?.hintFlash ?? 0;
+    const key = game?.lastHintKey;
+    if (!nonce || !key || !blocks.length) return;
+    const [p, q] = parseCellKey(key);
+    const idx = blocks.findIndex((b) => b.id === blockId(p.cat, q.cat));
+    if (idx >= 0) activeBlock = idx;
+  });
+
   // Day navigation: carets move within the loaded tier's shipped days; next is absent at today
   // (the newest shipped day), prev at the oldest. See docs/concepts/ui-shell.md.
   const neighbors = $derived(dayNeighbors(tierDates, currentDate));
@@ -278,6 +290,8 @@
     {dayPickerOpen}
     onhome={() => navigate("")}
     onhint={() => game?.hint()}
+    onreset={() => game?.reset()}
+    onagain={() => { game?.playAgain(); resultDismissed = false; }}
     ondisplay={() => (displayOpen = true)}
     ondifficulty={() => (pickerOpen = true)}
     onprev={() => goToDay(neighbors.prev)}
@@ -316,10 +330,10 @@
       <div bind:this={gridWrap} class="flex min-w-0 flex-col gap-4 lg:flex-1">
         {#if storyMode && blocks.length > 0}
           {#if desktop}
-            <GridMatrix {game} cats={gridCategories(game.board)} copy={gridCopy} size={gridSize} labelPx={scaleClamp(gridSize, labelCfg)} gapPx={scaleClamp(gridSize, gapCfg)} />
+            <GridMatrix {game} cats={gridCategories(game.board)} copy={gridCopy} size={gridSize} labelPx={scaleClamp(gridSize, labelCfg)} gapPx={scaleClamp(gridSize, gapCfg)} flashMs={chrome.hintFlashMs ?? 550} />
           {:else}
             <section class="flex justify-center">
-              <NotesGrid {game} block={blocks[activeBlock]} {blocks} index={activeBlock} copy={gridCopy} size={cellSize} labelPx={scaleClamp(cellSize, labelCfg)} gapPx={scaleClamp(cellSize, gapCfg)} onnav={navBlock} />
+              <NotesGrid {game} block={blocks[activeBlock]} {blocks} index={activeBlock} copy={gridCopy} size={cellSize} labelPx={scaleClamp(cellSize, labelCfg)} gapPx={scaleClamp(cellSize, gapCfg)} flashMs={chrome.hintFlashMs ?? 550} onnav={navBlock} />
             </section>
             {#if blocks.length > 1}
               <GridMap {game} {blocks} active={activeBlock} copy={gridCopy} onselect={(i) => (activeBlock = i)} />
@@ -364,14 +378,12 @@
          leaves a fresh run one tap away. See ui-shell.md. -->
     <div class="mt-auto flex flex-col items-center gap-2 pt-2">
       {#if game.checked && !game.locked && !failed}
+        {@const off = game.m.constraints.filter((c) => game.evalState.clues[c.id] === "violate").length}
         <p class="flex w-fit items-center gap-2 rounded-full border border-violate/30 bg-violate/10 px-4 py-1.5 text-center text-sm font-medium text-violate" role="status">
-          {game.dial.feedback === "count-wrong"
-            ? `${game.m.constraints.filter((c) => game?.evalState.clues[c.id] === "violate").length} clues off`
-            : "not yet - keep deducing"}
+          {#if off > 0}{#if game.dial.feedback === "count-wrong"}{off} {off === 1 ? "clue" : "clues"} off - shown in red{:else}not solved yet - conflicts shown in red{/if}{:else}not solved yet - keep deducing{/if}
         </p>
       {/if}
       <div class="flex items-center justify-center gap-3">
-        <button class="rounded-xl bg-surface px-4 py-2 disabled:opacity-30" disabled={game.locked} onclick={() => game?.reset()}>reset</button>
         {#if !game.live}
           {#if failed}
             <button class="rounded-xl bg-accent px-5 py-2 font-semibold" onclick={() => { game?.retry(); resultDismissed = false; }}>retry</button>

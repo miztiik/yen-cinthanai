@@ -27,6 +27,7 @@
     size = 40,
     labelPx = 12,
     gapPx = 4,
+    flashMs = 550,
     onnav,
   }: {
     game: Game;
@@ -39,11 +40,25 @@
     // the inter-cell gap stay proportional to the cell instead of a fixed size.
     labelPx?: number;
     gapPx?: number;
+    flashMs?: number;
     onnav: (dir: 1 | -1) => void;
   } = $props();
 
   let container = $state<HTMLElement | null>(null);
   let activeCell = $state(0);
+  // Hint reveal pulse (PR-4): when the store bumps hintFlash, stamp the just-ticked cell of the
+  // CURRENT block so it pulses (app.css [data-flash]) and scroll it into view. Board switches
+  // activeBlock to the hinted cell's block first, so by the time this runs the cell is on screen.
+  let flashKey = $state<string | null>(null);
+  $effect(() => {
+    const nonce = game.hintFlash;
+    const key = game.lastHintKey;
+    if (!nonce || !key) return;
+    flashKey = key;
+    queueMicrotask(() => container?.querySelector<HTMLElement>(`[data-cell-key="${key}"]`)?.scrollIntoView({ block: "nearest", inline: "nearest" }));
+    const t = setTimeout(() => (flashKey = null), flashMs);
+    return () => clearTimeout(t);
+  });
   // The hover/focus crosshair: ONE source of truth, STAMPED with the block id so a block switch
   // auto-clears it. `hov` is the {r,c} view valid for the CURRENT block only - so there is NO
   // reset effect (an effect that WROTE hovered would re-run on every hover and clobber it, a
@@ -72,6 +87,9 @@
   const cells = $derived(blockCells(block)); // row-major, matches DOM order of the buttons
   const ticks = $derived(new Set(Object.keys(game.gridTicks)));
   const manualX = $derived(new Set(Object.keys(game.gridManualX)));
+  // Conflict cells (PR-6): only when the tier has revealed feedback. A TICKED cell in a violated
+  // clue is ringed red (never a blank, no spoiler). See lib/validate.ts conflicts, app.css.
+  const conflicts = $derived(game.revealed ? game.evalState.conflicts : null);
   // No-mix glyph rule: each axis shows images only when ALL its values have art, else text.
   // Display mode: the player's `glyphs` toggle gates this - glyphs off forces the axis to text.
   const display = getContext<(() => DisplaySettings) | undefined>("display");
@@ -140,6 +158,7 @@
   <div
     class="overflow-x-auto"
     bind:this={container}
+    style={`--hint-flash-ms:${flashMs}ms`}
     onpointerover={(e) => markFrom(e.target)}
     onpointerleave={() => (hovered = null)}
     onfocusin={(e) => markFrom(e.target)}
@@ -182,6 +201,8 @@
                   crosshair={onCrosshair(hov, ri, ci)}
                   row={ri}
                   col={ci}
+                  flash={keyAt(rv, cv) === flashKey}
+                  conflict={!!conflicts && ticks.has(keyAt(rv, cv)) && conflicts.has(keyAt(rv, cv))}
                   {size}
                   locked={game.locked}
                   ontap={() => {
