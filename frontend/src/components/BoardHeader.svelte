@@ -82,9 +82,11 @@
   const attemptsLeft = $derived(game?.attemptsLeft ?? -1);
   const hintsLeft = $derived(game?.hintsLeft ?? -1);
   const canHint = $derived(!!game && !game.locked && hintsLeft !== 0);
-  // Fill progress (filled/total slots) folded INTO the bar as a solve stat beside the timer, so
-  // it no longer needs its own row below the header. One evalState read, memoized by $derived.
-  const progress = $derived(game ? { filled: game.evalState.filled, total: game.evalState.total } : null);
+  // Fill progress (filled/total slots) as a solve stat beside the timer, shown as a glyph CHIP
+  // (ui.progress) so a bare fraction never reads as hints/lives (Jony + Player review). HIDDEN on
+  // easy - a 3-cell grid shows progress on its face - mirroring the AttemptRing "hide when it
+  // carries no info on this tier" rule; it earns its pixels on the bigger standard/sharp/expert.
+  const progress = $derived(game && game.m.tier !== "easy" ? { filled: game.evalState.filled, total: game.evalState.total } : null);
   // CHECK/SUBMIT lives in the Command Bar (2c): non-realtime tiers only; a spent attempt cap
   // swaps it for RETRY. Realtime (easy) auto-wins, so it shows no submit button. The feedback
   // pill renders directly under the header (Board), so it stays adjacent to this button.
@@ -151,15 +153,19 @@
       </Tooltip>
     </div>
 
-    <!-- LIVE-SOLVE cluster: timer | attempt ring | hint. One row where it fits; wraps to a slim
-         second zone under a hairline when the header is narrow (the container query below). -->
+    <!-- LIVE-SOLVE cluster: timer | progress | attempt ring | hint. One row where it fits; wraps
+         to a slim second zone under a hairline when the header is narrow (the container query below). -->
     <div class="hdr-live">
       <span class="flex items-center gap-1.5">
         <span class="inline-flex opacity-50"><Glyph ref="ui.timer" size={14} tint /></span>
         <span class="tabular-nums leading-none opacity-80">{formatClock(elapsedS)}</span>
       </span>
       {#if progress}
-        <span class="tabular-nums leading-none opacity-60" role="status" aria-label={`${progress.filled} of ${progress.total} solved`}>{progress.filled}/{progress.total}</span>
+        <span class="h-3.5 w-px shrink-0 bg-ink/15" aria-hidden="true"></span>
+        <span class="flex items-center gap-1.5" role="status" aria-label={`${progress.filled} of ${progress.total} solved`}>
+          <span class="inline-flex opacity-50"><Glyph ref="ui.progress" size={14} tint /></span>
+          <span class="tabular-nums leading-none opacity-80">{progress.filled}/{progress.total}</span>
+        </span>
       {/if}
       {#if game && attemptsTotal >= 0}
         <AttemptRing left={attemptsLeft} total={attemptsTotal} fadeMs={chrome.attemptFadeMs} colors={chrome.attemptColors} />
