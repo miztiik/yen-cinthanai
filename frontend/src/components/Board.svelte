@@ -168,7 +168,7 @@
       void game.placements; // track commits
       void game.locked;
       const won = game.locked;
-      hero = won && !game.replaying && isHero(heroBaseline, game.solveMs, game.hintsUsed);
+      hero = won && !game.replaying && !game.gaveUp && isHero(heroBaseline, game.solveMs, game.hintsUsed);
       saveProgress(game);
     }
   });
@@ -293,6 +293,7 @@
     onagain={() => { game?.playAgain(); resultDismissed = false; }}
     oncheck={() => { game?.check(); if (game && !game.locked) play("violate"); else play("satisfy"); }}
     onretry={() => { game?.retry(); resultDismissed = false; }}
+    onreveal={() => game?.reveal()}
     ondisplay={() => (displayOpen = true)}
     ondifficulty={() => (pickerOpen = true)}
     onprev={() => goToDay(neighbors.prev)}
@@ -309,7 +310,7 @@
        fill progress. Sits next to the header CHECK button (2c) so a first "not yet" is never
        below the fold - the reason CHECK + its feedback travel together. See ui-shell.md. -->
   {#if game}
-    <div class="mx-auto flex w-full max-w-lg items-center justify-center gap-2">
+    <div class="mx-auto flex w-full max-w-xl items-center justify-center gap-2">
       {#if game.checked && !game.locked && !failed}
         {@const off = game.m.constraints.filter((c) => game?.evalState.clues[c.id] === "violate").length}
         <p class="flex w-fit items-center gap-2 rounded-full border border-violate/30 bg-violate/10 px-4 py-1 text-sm font-medium text-violate" role="status">
@@ -387,7 +388,7 @@
       {/if}
     </div>
 
-    {#if game.locked && !resultDismissed}
+    {#if game.locked && !game.gaveUp && !resultDismissed}
       <ResultCard
         variant="win"
         {hero}
@@ -404,12 +405,12 @@
         onagain={() => game?.playAgain()}
         ondismiss={() => (resultDismissed = true)}
       />
-    {:else if failed && !resultDismissed}
+    {:else if (failed || game.gaveUp) && !resultDismissed}
       <ResultCard
         variant="fail"
-        phrase={wonText}
+        phrase={game.gaveUp ? "solution revealed" : wonText}
         stars={0}
-        solveMs={elapsed}
+        solveMs={game.solveMs || elapsed}
         hintsUsed={game.hintsUsed}
         wrong={game.attempts}
         streak={loadSave().streak.count}
@@ -417,7 +418,7 @@
         share=""
         onhome={() => navigate("")}
         onstats={() => navigate("stats")}
-        onretry={() => { game?.retry(); resultDismissed = false; }}
+        onretry={() => { if (game?.gaveUp) game.playAgain(); else game?.retry(); resultDismissed = false; }}
         ondismiss={() => (resultDismissed = true)}
       />
     {/if}

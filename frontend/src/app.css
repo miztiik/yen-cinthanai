@@ -250,6 +250,40 @@ th[data-crosshair-hdr] {
   pointer-events: none;
 }
 
+/* Section dividers (PR-1): a hairline CENTRED in the inter-cell gap at each category-group
+   boundary of the fused grid, running continuously header -> body. Drawn as a pseudo-element
+   offset into the border-spacing gap (NOT a cell-edge border, which hugs one side and reads
+   off-centre - the user's report); the extension by half the gap on the cross axis connects
+   the per-cell segments into one line. --grid-gap is the live border-spacing (GridMatrix).
+   Colour paint only, no motion. A corner cell (both edges) gets the vertical ::after AND the
+   horizontal ::before, so they cross. */
+[data-col-edge],
+[data-row-edge] {
+  position: relative;
+}
+[data-col-edge]::after {
+  content: "";
+  position: absolute;
+  top: calc(-0.5 * var(--grid-gap, 4px));
+  bottom: calc(-0.5 * var(--grid-gap, 4px));
+  right: calc(-0.5 * var(--grid-gap, 4px) - 1px);
+  width: 2px;
+  border-radius: 1px;
+  background: color-mix(in oklab, var(--ink) 22%, transparent);
+  pointer-events: none;
+}
+[data-row-edge]::before {
+  content: "";
+  position: absolute;
+  left: calc(-0.5 * var(--grid-gap, 4px));
+  right: calc(-0.5 * var(--grid-gap, 4px));
+  bottom: calc(-0.5 * var(--grid-gap, 4px) - 1px);
+  height: 2px;
+  border-radius: 1px;
+  background: color-mix(in oklab, var(--ink) 22%, transparent);
+  pointer-events: none;
+}
+
 /* Glyphs are the only <img> in the app (registry-sourced) and they live inside draggable
    pucks. Browsers make <img> natively draggable, so a mouse press-and-move on a token
    would start an OS image-drag (ghost image) that HIJACKS the pointer-drag in lib/drag.ts

@@ -143,7 +143,7 @@
   onfocusin={(e) => markFrom(e.target)}
   onfocusout={onFocusOut}
 >
-  <table class="table-fixed border-separate text-ink" style={`border-spacing:${gapPx}px`}>
+  <table class="table-fixed border-separate text-ink" style={`border-spacing:${gapPx}px;--grid-gap:${gapPx}px`}>
     <caption class="sr-only">{copy.mapHeading}</caption>
     <colgroup>
       <col style="width:1.75rem" />
@@ -159,7 +159,7 @@
       </tr>
       <tr>
         {#each colLeaves as cl, ci (cl.cat.id + cl.v.id)}
-          <th scope="col" data-crosshair-hdr={hovered?.c === ci ? "" : undefined} style={`font-size:${labelPx}px`} class={`h-28 align-bottom pb-1 font-medium opacity-80 ${cl.lastInGroup ? "border-r-2 border-ink/20" : ""}`}>
+          <th scope="col" data-crosshair-hdr={hovered?.c === ci ? "" : undefined} data-col-edge={cl.lastInGroup && cl.axisIdx < layout.cols.length - 1 ? "" : undefined} style={`font-size:${labelPx}px`} class="h-28 align-bottom pb-1 font-medium opacity-80">
             <span class="flex h-full flex-col items-center justify-end gap-1.5">
               <span class="[writing-mode:vertical-rl]">{cl.v.label}</span>
               {#if glyphCats.has(cl.cat.id) && cl.v.glyph}<GlyphSeat ref={cl.v.glyph} label={cl.v.label} d={Math.round(size * 0.62)} />{/if}
@@ -192,7 +192,7 @@
                   <td
                     data-col-edge={cvi === cc.values.length - 1 && c < layout.cols.length - 1 ? "" : undefined}
                     data-row-edge={vi === rc.values.length - 1 && r < layout.rows.length - 1 ? "" : undefined}
-                    class={`p-0 text-center${cvi === cc.values.length - 1 && c < layout.cols.length - 1 ? " border-r-2 border-ink/20" : ""}${vi === rc.values.length - 1 && r < layout.rows.length - 1 ? " border-b-2 border-ink/20" : ""}`}
+                    class="p-0 text-center"
                   >
                     <GridCell
                       cellKey={key}

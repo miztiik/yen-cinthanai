@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T21:56:52Z",
+  "generatedAt": "2026-07-09T03:26:55Z",
   "packs": {
     "abstract": {
       "awardblank": {
@@ -2272,6 +2272,10 @@
         "file": "ui/crown.svg",
         "label": "Crown"
       },
+      "eye": {
+        "file": "ui/eye.svg",
+        "label": "Eye"
+      },
       "flame": {
         "file": "ui/flame.svg",
         "label": "Flame"
@@ -2287,6 +2291,10 @@
       "home": {
         "file": "ui/home.svg",
         "label": "Home"
+      },
+      "reset": {
+        "file": "ui/reset.svg",
+        "label": "Reset"
       },
       "sliders": {
         "file": "ui/sliders.svg",
