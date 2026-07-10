@@ -93,7 +93,7 @@
   },
   "grid": {
     "heading": "Grid",
-    "mapHeading": "All blocks",
+    "mapHeading": "Pairings",
     "state": {
       "blank": "unmarked",
       "manualX": "crossed out",
@@ -102,9 +102,10 @@
     },
     "cell": "{row} and {col}: {state}",
     "cross": "Cross out {row} and {col}",
-    "prevBlock": "Previous block",
-    "nextBlock": "Next block",
-    "openBlock": "Open {row} vs {col}"
+    "prevBlock": "Previous pairing",
+    "nextBlock": "Next pairing",
+    "openBlock": "Open {row} vs {col}",
+    "pairingClues": "{n} clues"
   },
   "success": [
     "Case closed.",

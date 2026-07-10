@@ -139,7 +139,7 @@
       onclick={() => onnav(-1)}
     ><span class="inline-block -scale-x-100"><Glyph ref="ui.chevron" size={16} tint /></span></button>
     <span class="font-semibold">
-      {block.rowCat.label} <span class="opacity-50">/</span> {block.colCat.label}
+      {block.rowCat.label} <span class="opacity-50">vs</span> {block.colCat.label}
       <span class="ml-1 opacity-50 tabular-nums">({index + 1}/{blocks.length})</span>
     </span>
     <button
@@ -190,7 +190,10 @@
             </th>
             {#each cols as cv, ci (cv.id)}
               {@const idx = ri * cols.length + ci}
-              <td class="p-0">
+              <!-- The value column stretches to fit its (one-line) axis label, which is often
+                   wider than the fixed-`size` cell; centering the tile keeps every cell under
+                   its header instead of left-drifting in a widened column. See ui-shell.md. -->
+              <td class="p-0"><div class="flex justify-center">
                 <GridCell
                   cellKey={keyAt(rv, cv)}
                   block={block.id}
@@ -215,7 +218,7 @@
                   }}
                   onmove={moveFrom}
                 />
-              </td>
+              </div></td>
             {/each}
           </tr>
         {/each}

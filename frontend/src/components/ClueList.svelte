@@ -11,7 +11,7 @@
   import type { CluesCopy, Feedback } from "../lib/config";
   import type { Game } from "../state/play.svelte";
 
-  let { game, copy, soft }: { game: Game; copy: CluesCopy; soft: Feedback[] } = $props();
+  let { game, copy, soft, onPick }: { game: Game; copy: CluesCopy; soft: Feedback[]; onPick?: (id: string) => void } = $props();
 
   let open = $state(true); // phone disclosure; desktop shows the list regardless (lg:block)
   let announce = $state("");
@@ -44,6 +44,7 @@
   function toggle(id: string, n: number): void {
     game.toggleStruck(id);
     announce = (game.struck[id] ? copy.struck : copy.restored).replace("{n}", String(n));
+    onPick?.(id); // jump the mobile pager to the pairing this clue constrains (no-op on desktop)
   }
 </script>
 

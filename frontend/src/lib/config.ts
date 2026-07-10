@@ -58,18 +58,20 @@ export interface GridCopy {
   prevBlock: string;
   nextBlock: string;
   openBlock: string;
+  pairingClues: string;
 }
 
 /** Fail-soft grid chrome so a missing copy.json never blanks the cell labels. */
 export const GRID_COPY_FALLBACK: GridCopy = {
   heading: "Grid",
-  mapHeading: "All blocks",
+  mapHeading: "Pairings",
   state: { blank: "unmarked", manualX: "crossed out", autoX: "eliminated", tick: "matched" },
   cell: "{row} and {col}: {state}",
   cross: "Cross out {row} and {col}",
-  prevBlock: "Previous block",
-  nextBlock: "Next block",
+  prevBlock: "Previous pairing",
+  nextBlock: "Next pairing",
   openBlock: "Open {row} vs {col}",
+  pairingClues: "{n} clues",
 };
 
 /** Chrome copy for the private post-win answer reveal (config/copy.json [answer]). A private

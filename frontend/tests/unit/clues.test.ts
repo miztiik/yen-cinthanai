@@ -9,7 +9,8 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { PuzzleManifest } from "../../src/contracts/manifest";
 import type { Feedback } from "../../src/lib/config";
-import { clueRows, autoDimAllowed, isClueStruck } from "../../src/lib/clues";
+import { clueRows, autoDimAllowed, isClueStruck, cluePairing, pairingClueCounts } from "../../src/lib/clues";
+import { blockId } from "../../src/lib/grid";
 
 const here = fileURLToPath(new URL(".", import.meta.url));
 const m = JSON.parse(
@@ -72,5 +73,29 @@ describe("isClueStruck (manual OR gated auto-dim)", () => {
   it("never dims an unsatisfied clue on its own", () => {
     expect(isClueStruck(false, true, "violate")).toBe(false);
     expect(isClueStruck(false, true, "unknown")).toBe(false);
+  });
+});
+
+describe("cluePairing + pairingClueCounts (where the clues are)", () => {
+  it("maps a two-category clue to its pairing block id, else null", () => {
+    for (const c of m.constraints) {
+      const cats = [...new Set(c.operands.map((o) => o.cat))];
+      if (cats.length === 2) expect(cluePairing(c)).toBe(blockId(cats[0], cats[1]));
+      else expect(cluePairing(c)).toBeNull(); // same-axis numeric / 3+ cat compound -> no single pairing
+    }
+  });
+
+  it("counts clues per pairing; the total equals the clues that map to a pairing", () => {
+    const counts = pairingClueCounts(m.constraints);
+    const mapped = m.constraints.filter((c) => cluePairing(c) !== null);
+    const total = Object.values(counts).reduce((a, b) => a + b, 0);
+    expect(total).toBe(mapped.length);
+    for (const key of Object.keys(counts)) {
+      expect(mapped.some((c) => cluePairing(c) === key)).toBe(true);
+    }
+  });
+
+  it("is empty for no constraints", () => {
+    expect(pairingClueCounts([])).toEqual({});
   });
 });
