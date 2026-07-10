@@ -14,12 +14,14 @@
     blocks,
     active,
     copy,
+    clueCounts,
     onselect,
   }: {
     game: Game;
     blocks: GridBlock[];
     active: number;
     copy: GridCopy;
+    clueCounts: Record<string, number>;
     onselect: (index: number) => void;
   } = $props();
 
@@ -32,8 +34,14 @@
     if (mark === "autoX") return "bg-ink/40";
     return "bg-ink/10";
   }
+  /** How many clues constrain this pairing - the "where the clues are" signal (clues.ts). */
+  function count(b: GridBlock): number {
+    return clueCounts[b.id] ?? 0;
+  }
   function label(b: GridBlock): string {
-    return copy.openBlock.replace("{row}", b.rowCat.label).replace("{col}", b.colCat.label);
+    const base = copy.openBlock.replace("{row}", b.rowCat.label).replace("{col}", b.colCat.label);
+    const n = count(b);
+    return n ? `${base}, ${copy.pairingClues.replace("{n}", String(n))}` : base;
   }
 </script>
 
@@ -46,14 +54,17 @@
         aria-label={label(b)}
         aria-current={i === active ? "true" : undefined}
         onclick={() => onselect(i)}
-        class={`flex flex-col items-center gap-1 rounded-lg border-2 p-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${i === active ? "border-accent bg-accent/10" : "border-ink/15 bg-surface"}`}
+        class={`relative flex flex-col items-center gap-1 rounded-lg border-2 p-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${i === active ? "border-accent bg-accent/10" : "border-ink/15 bg-surface"}`}
       >
+        {#if count(b) > 0}
+          <span aria-hidden="true" class="absolute -right-1.5 -top-1.5 grid h-4 min-w-[1rem] place-items-center rounded-full bg-accent px-1 text-[0.6rem] font-bold leading-none tabular-nums text-bg">{count(b)}</span>
+        {/if}
         <span class="grid gap-px" style={`grid-template-columns: repeat(${b.colCat.values.length}, 0.5rem)`} aria-hidden="true">
           {#each blockCells(b) as cell (cell.key)}
             <span class={`h-2 w-2 rounded-[2px] ${chip(cellState(cell.key, ticks, manualX))}`}></span>
           {/each}
         </span>
-        <span class="max-w-[6rem] truncate text-[0.65rem] leading-tight opacity-70">{b.rowCat.label}/{b.colCat.label}</span>
+        <span class="max-w-[6rem] truncate text-[0.65rem] leading-tight opacity-70">{b.rowCat.label} vs {b.colCat.label}</span>
       </button>
     {/each}
   </div>

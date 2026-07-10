@@ -25,6 +25,7 @@
   import { loadTiers, loadCopy, loadPace, loadUi, puckPreset, pick, softFeedback, difficultyUi, chromeUi, gridDesktop, gridLabel, gridGap, layoutUi, CLUES_COPY_FALLBACK, GRID_COPY_FALLBACK, ANSWER_COPY_FALLBACK, SCRATCH_COPY_FALLBACK, type TierDial, type CopyBags, type Pace, type PuckPreset, type Feedback, type DifficultyUi, type ChromeUi, type UiConfig } from "../lib/config";
   import { loadShapes, shapeOf, type ShapeDef } from "../lib/shapes";
   import { gridBlocks, gridCategories, parseCellKey, blockId } from "../lib/grid";
+  import { pairingClueCounts, cluePairing } from "../lib/clues";
   import { fitCellSize, scaleClamp } from "../lib/fit";
   import { playerGrid } from "../lib/answer";
   import { isHero, nextPlayableTier } from "../lib/scoring";
@@ -134,6 +135,16 @@
       gapCfg = gridGap(ui);
       maxWidthPx = layoutUi(ui).maxWidthPx;
       game = new Game(m, dial, prior);
+      // Open the pager on the MOST-CLUED pairing (not always the first), so the player never
+      // lands on an under-clued grid that reads as "the clues are mis-aimed"; the same counts
+      // drive the GridMap badges. Desktop shows every pairing, so this only matters on phone.
+      {
+        const bl = gridBlocks(gridCategories(game.board));
+        const cc = pairingClueCounts(m.constraints);
+        let best = 0;
+        for (let i = 1; i < bl.length; i++) if ((cc[bl[i].id] ?? 0) > (cc[bl[best].id] ?? 0)) best = i;
+        activeBlock = best;
+      }
       if (document.hidden || !document.hasFocus()) game.pause(); // loaded into a hidden/unfocused tab
       tick();
     } catch (e) {
@@ -203,6 +214,9 @@
   const cellSize = $derived(vw >= 640 ? 54 : 44); // mobile/tablet NotesGrid; desktop GridMatrix uses gridSize
   const desktop = $derived(vw >= 1024);
   const blocks = $derived(game ? gridBlocks(gridCategories(game.board)) : []);
+  // Clues per pairing (block id): drives the GridMap "where the clues are" badges and the
+  // open-on-most-clued default, so an under-clued pairing reads as "start elsewhere", not broken.
+  const clueCounts = $derived(game ? pairingClueCounts(game.m.constraints) : {});
   const gridCopy = $derived(copy.grid ?? GRID_COPY_FALLBACK);
   const hasShared = $derived(!!game && game.board.columns.some((c) => c.cardinality === "shared"));
   // Live results roster (Row #3): the player's CURRENT deductions, fed by their own placements +
@@ -233,6 +247,16 @@
   });
   function navBlock(dir: 1 | -1) {
     if (blocks.length) activeBlock = (activeBlock + dir + blocks.length) % blocks.length;
+  }
+  // Tapping a clue jumps the mobile pager to the pairing it constrains (desktop shows every
+  // pairing at once, so this is a harmless no-op there). Mirrors the hint-jump path below.
+  function jumpToCluePairing(id: string) {
+    if (!game) return;
+    const c = game.m.constraints.find((x) => x.id === id);
+    const p = c ? cluePairing(c) : null;
+    if (p == null) return;
+    const idx = blocks.findIndex((b) => b.id === p);
+    if (idx >= 0) activeBlock = idx;
   }
 
   // Hint reveal (PR-4): when a hint ticks a grid cell, jump the mobile NotesGrid to that cell's
@@ -350,7 +374,7 @@
               <NotesGrid {game} block={blocks[activeBlock]} {blocks} index={activeBlock} copy={gridCopy} size={cellSize} labelPx={scaleClamp(cellSize, labelCfg)} gapPx={scaleClamp(cellSize, gapCfg)} flashMs={chrome.hintFlashMs ?? 550} onnav={navBlock} />
             </section>
             {#if blocks.length > 1}
-              <GridMap {game} {blocks} active={activeBlock} copy={gridCopy} onselect={(i) => (activeBlock = i)} />
+              <GridMap {game} {blocks} active={activeBlock} copy={gridCopy} {clueCounts} onselect={(i) => (activeBlock = i)} />
             {/if}
           {/if}
           {#if hasShared}
@@ -364,7 +388,7 @@
       </div>
       {#if storyMode}
         <aside class="flex flex-col gap-4 lg:w-80 lg:shrink-0">
-          <ClueList {game} copy={copy.clues ?? CLUES_COPY_FALLBACK} {soft} />
+          <ClueList {game} copy={copy.clues ?? CLUES_COPY_FALLBACK} {soft} onPick={jumpToCluePairing} />
           {#if showResults && results}
             <!-- Live results roster. Desktop: always-open rail panel. Mobile (Standard+): a
                  collapsed <details> disclosure - never on the Easy cold-open (showResults gates it). -->
