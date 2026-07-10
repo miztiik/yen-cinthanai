@@ -10,7 +10,8 @@
       "oneEachOf": 2,
       "ifThen": 2
     },
-    "share_cap": 0.8
+    "share_cap": 0.8,
+    "spread_blocks": true
   },
   "scorer": {
     "env": {
