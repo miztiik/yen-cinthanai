@@ -260,22 +260,35 @@ def test_t16_indirection_gate(build: g.StoryBuild, sharp_build: g.StoryBuild) ->
     assert ref_rendered(sharp_build.manifest)  # sharp: indirection.byTier == "attribute" -> refPhrase
 
 
-def test_p1_compound_sharp_oneof_full_depth(sharp_build: g.StoryBuild) -> None:
+def _first_variant_with(tier: str, ctype: str, hi: int = 12) -> g.StoryBuild:
+    """The first weekend-market variant (1..hi) whose minimal set carries a `ctype` clue. spread_blocks
+    changes which variant a rare compound clue lands in, so the P1-compound tripwires search instead
+    of pinning one variant."""
+    for v in range(1, hi + 1):
+        b = g.build_story(DATE, tier, v, CONFIG_DIR, scenario_path=WEEKEND_MARKET)
+        if any(c[0] == ctype for c in b.clues):
+            return b
+    raise AssertionError(f"no {tier} variant in 1..{hi} carried a {ctype} clue")
+
+
+def test_p1_compound_sharp_oneof_full_depth() -> None:
     # P1 tripwire with a compound clue present: a Sharp manifest carrying a oneOf is still fully
     # forced (the reified disjunction participates in is_unique + hint_trace; zero guesses remain).
-    m = sharp_build.manifest
+    b = _first_variant_with("sharp", "oneOf")
+    m = b.manifest
     assert any(c.type == "oneOf" for c in m.constraints)
     assert len(m.hintTrace) == _full_depth(m)
-    assert g.is_unique(sharp_build.cats, sharp_build.entities, sharp_build.clues, sharp_build.seed) is True
+    assert g.is_unique(b.cats, b.entities, b.clues, b.seed) is True
 
 
-def test_p1_compound_expert_ifthen_full_depth(expert_build: g.StoryBuild) -> None:
+def test_p1_compound_expert_ifthen_full_depth() -> None:
     # P1 tripwire with the conditional: an Expert manifest carrying an ifThen (AddImplication) stays
     # fully forced and unique - the implication reasons correctly inside the forced deduction trace.
-    m = expert_build.manifest
+    b = _first_variant_with("expert", "ifThen")
+    m = b.manifest
     assert any(c.type == "ifThen" for c in m.constraints)
     assert len(m.hintTrace) == _full_depth(m)
-    assert g.is_unique(expert_build.cats, expert_build.entities, expert_build.clues, expert_build.seed) is True
+    assert g.is_unique(b.cats, b.entities, b.clues, b.seed) is True
 
 
 def test_rebuild_is_byte_identical_sharp(sharp_build: g.StoryBuild) -> None:
@@ -321,6 +334,15 @@ def test_p1_easy_zero_guess(easy_build: g.StoryBuild) -> None:
     m = easy_build.manifest
     assert len(m.hintTrace) == _full_depth(m)
     assert g.is_unique(easy_build.cats, easy_build.entities, easy_build.clues, easy_build.seed) is True
+
+
+def test_standard_spreads_clues_across_pairings() -> None:
+    # spread_blocks (config): the minimal clue set spans the grid's pairings instead of clustering
+    # in one - the "clues predominantly target one grid" report. Standard has 3 pairings; assert
+    # the two-category clues cover at least 2 distinct pairings.
+    b = g.build_story("2026-07-02", "standard", 1, CONFIG_DIR, scenario_path=WEEKEND_MARKET)
+    pairings = {g._clue_block(c) for c in b.clues if len({op[0] for op in c[1]}) == 2}
+    assert len(pairings) >= 2, f"standard clues cluster in one pairing: {pairings}"
 
 
 def test_p4_easy_in_band(easy_build: g.StoryBuild) -> None:

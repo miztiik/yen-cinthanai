@@ -495,16 +495,45 @@ def enumerate_compound_clues(cats: list[Cat], n: int, sol: dict[str, list[str]],
 # --- select + prune -------------------------------------------------------------
 
 
+def _clue_block(clue: Clue) -> tuple[str, ...]:
+    """The category set a clue constrains (its grid pairing) - used to SPREAD the minimal clue
+    set across pairings instead of letting it cluster in one. A 2-operand eq/neq is one pair; a
+    same-axis numeric or a compound clue forms its own (1- or 3-category) group."""
+    return tuple(sorted({op[0] for op in clue[1]}))
+
+
 def select_minimal(
     cats: list[Cat], n: int, candidates: list[Clue], weights: dict, seed: int, rng: random.Random,
+    spread: bool = False,
 ) -> list[Clue]:
-    """Weighted greedy add to uniqueness, then shuffle-and-drop to a minimal set."""
-    pool = sorted(candidates, key=lambda c: -weights.get(c[0], 1) + rng.random() / 1000)
-    chosen: list[Clue] = []
-    for clue in pool:
-        if is_unique(cats, n, chosen, seed):
-            break
-        chosen.append(clue)
+    """Weighted greedy add to uniqueness, then shuffle-and-drop to a minimal set. When `spread`
+    is set (config story.spread_blocks) the greedy add prefers the highest-weight clue in the
+    LEAST-covered pairing, so the minimal set spans the grid's blocks instead of clustering in one
+    (the reported 'clues predominantly target one grid'). Deterministic for a fixed seed: the sort
+    draws one rng value per candidate either way, and the prune shuffle is unchanged."""
+    if spread:
+        pool = sorted(candidates, key=lambda c: (-weights.get(c[0], 1), rng.random()))
+        chosen_idx: list[int] = []
+        taken: set[int] = set()
+        while not is_unique(cats, n, [pool[i] for i in chosen_idx], seed):
+            cov: dict[tuple[str, ...], int] = {}
+            for i in chosen_idx:
+                b = _clue_block(pool[i])
+                cov[b] = cov.get(b, 0) + 1
+            rem = [i for i in range(len(pool)) if i not in taken]
+            if not rem:
+                break
+            pick = min(rem, key=lambda i: (cov.get(_clue_block(pool[i]), 0), i))
+            chosen_idx.append(pick)
+            taken.add(pick)
+        chosen = [pool[i] for i in chosen_idx]
+    else:
+        pool = sorted(candidates, key=lambda c: -weights.get(c[0], 1) + rng.random() / 1000)
+        chosen = []
+        for clue in pool:
+            if is_unique(cats, n, chosen, seed):
+                break
+            chosen.append(clue)
     order = list(chosen)
     rng.shuffle(order)
     for clue in order:
@@ -765,7 +794,7 @@ def build_story(
         cand = enumerate_clues(cats, entities, sol)
         cand += enumerate_numeric_clues(cats, entities, sol, tier, scenario)
         cand += enumerate_compound_clues(cats, entities, sol, tier, scenario)
-        clues = select_minimal(cats, entities, cand, story["weights"], seed, rng)
+        clues = select_minimal(cats, entities, cand, story["weights"], seed, rng, story.get("spread_blocks", False))
         hints = hint_trace(cats, entities, clues, sol, seed)
         indirect = sum(1 for c in clues if c[0] in INDIRECT_TYPES)
         d = difficulty(tiers, entities, len(cats), len(clues), indirect, len(hints), dials["scorer"]["env"])

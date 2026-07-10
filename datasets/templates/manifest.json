@@ -9,7 +9,7 @@
       "tone": "cozy",
       "kind": "village",
       "status": "live",
-      "verifiedSha": "cc80e4030e07f6f0319235d5413bff2e47cef7b095d217603e355240074a3ccb"
+      "verifiedSha": "da92c4f9bff2aa3b4134c6778613e839b8dd147053add5e68d9d3be13642d751"
     },
     {
       "id": "food-truck-festival",
@@ -18,7 +18,7 @@
       "tone": "witty",
       "kind": "city",
       "status": "live",
-      "verifiedSha": "87929543c1b9d53ccea5f84e0f9cabd9c79860b2bb916895ae168bd6c9e8c7ee"
+      "verifiedSha": "fa61a2bc3b45dfff950e43ae42ebcf4a69abde0136120327c1a1ebf637313a7f"
     },
     {
       "id": "community-garden",
@@ -27,7 +27,7 @@
       "tone": "cozy",
       "kind": "garden",
       "status": "live",
-      "verifiedSha": "184819b9c922bdd0f49f3032fff57b848272e73041ca72e316049b1ed9fcb2a7"
+      "verifiedSha": "6833ca751ed719dac9c5d2d8043d054e572fadb7d9d0e54396d2c020060519dc"
     },
     {
       "id": "starliner-crew",
@@ -36,7 +36,7 @@
       "tone": "light-mystery",
       "kind": "sci-fi",
       "status": "live",
-      "verifiedSha": "22cfcd472a7e3ad09f1c22f5ae62a4f2720b9cf31ca2e1c7d6d17ed4b301d473"
+      "verifiedSha": "ae5d96f6cdd296c34ac2897ab84a55659de7ff5c00d806d673d9cc2c9cd9f7f3"
     },
     {
       "id": "science-fair",
@@ -45,7 +45,7 @@
       "tone": "witty",
       "kind": "school",
       "status": "live",
-      "verifiedSha": "58c90cb0f3b703e4fcfca92fc1d29d0bf078a9a53c6a390192c80fe06bc690a1"
+      "verifiedSha": "2f18d0a35947f5957cce263d3b8dd8eb7b4ce76954b505d8fa92195b996f7483"
     },
     {
       "id": "harbor-regatta",
@@ -54,7 +54,7 @@
       "tone": "cozy",
       "kind": "coast",
       "status": "live",
-      "verifiedSha": "3b14bc31ebbeb5f96c952590c7393aa8d5e2f56815c47260fba54056fb25b391"
+      "verifiedSha": "7086f099b9bef0e9b97fac9129a622e01389b675fb55185692f0fd14b580b4cc"
     },
     {
       "id": "film-festival",
@@ -63,7 +63,7 @@
       "tone": "light-mystery",
       "kind": "cinema",
       "status": "live",
-      "verifiedSha": "874b504e72fda175256f7542a56411c4fdd670805148f6b5d1d5bb4e8ae27e12"
+      "verifiedSha": "19de61d4a5b2f56c69453f8565875e8b6f0b53f465b0512f226a51b13401d7dd"
     },
     {
       "id": "observatory-night",
@@ -72,7 +72,7 @@
       "tone": "whimsical",
       "kind": "night-sky",
       "status": "live",
-      "verifiedSha": "c2e8d9dc8c902c67b8ec7ead45519fbbfb658e91411436b4a1d1774c6d049662"
+      "verifiedSha": "d0440c5fe73ee6a2f280cf65d751626f3f2f4cdde8ef81460d2b75ded02b7a0c"
     },
     {
       "id": "orchestra-tuning",
@@ -81,7 +81,7 @@
       "tone": "cozy",
       "kind": "concert",
       "status": "live",
-      "verifiedSha": "f26f67a183cf7c5f3e3328479df32cff96160253577fc1b4b182d3736b98ee4e"
+      "verifiedSha": "d4211dffa370d8c7aa038fb7f56df10ce53e5427563f6f20fed1cd563fd82aea"
     },
     {
       "id": "county-fair",
@@ -90,7 +90,7 @@
       "tone": "cozy",
       "kind": "countryside",
       "status": "live",
-      "verifiedSha": "e10052162de64963afb825b97a7405b87ca91dc6d0c6c284335530c8458fd037"
+      "verifiedSha": "0bb158cc003da396a1b61ac0d67fe12b9d4e018f1e7878326bf400eb29dd7cdd"
     },
     {
       "id": "newsroom-deadline",
@@ -99,7 +99,7 @@
       "tone": "witty",
       "kind": "newsroom",
       "status": "live",
-      "verifiedSha": "09eb90aa60f812b941c6091bcd2244429c5f0ba201819d93c486ae1b9b8e0e7d"
+      "verifiedSha": "18159dedc356ebeb11ad28c3469c9863dbba9df3197db182611ac7a13f26794c"
     },
     {
       "id": "costume-parade",
@@ -108,7 +108,7 @@
       "tone": "whimsical",
       "kind": "carnival",
       "status": "live",
-      "verifiedSha": "6b0eb7d6caafd1feb3de36d162b18439062fcd5a3fd9bd807cc1d3fd108d9989"
+      "verifiedSha": "136045c5384cd5d72ab11fcfdb404ceee15ab6ec81fd6ff927dfbcb9f844ae16"
     },
     {
       "id": "detective-agency",
@@ -117,7 +117,7 @@
       "tone": "light-mystery",
       "kind": "noir",
       "status": "live",
-      "verifiedSha": "4a363aec3e6fc4b244897d6cd0215224b4067928a5cc2682606501d81cef1f68"
+      "verifiedSha": "625b87efc39ba5cebf411b62c86248cf1ab9642c19c4cff5670da4fbe9d548fb"
     },
     {
       "id": "night-train",
@@ -126,7 +126,7 @@
       "tone": "light-mystery",
       "kind": "railway",
       "status": "live",
-      "verifiedSha": "9dcff94cad8649821a2a6a6a6960d4e921dcb6a2acacc19166010600b015b78e"
+      "verifiedSha": "19de540307cbcbe8aff3d20a3802903bc66be91faa03ae67f6bd2999edd3dd16"
     },
     {
       "id": "sports-league",
@@ -135,7 +135,7 @@
       "tone": "witty",
       "kind": "stadium",
       "status": "live",
-      "verifiedSha": "c6f88baee5b004bba530ce0db712c4b60696cd62a5a80bbb3f5d3757a008ecda"
+      "verifiedSha": "efdb19400f0616155c87188d26dd09c65c5b0f1fb93948691b73865021fe6618"
     },
     {
       "id": "museum-gala",
@@ -144,7 +144,7 @@
       "tone": "light-mystery",
       "kind": "museum",
       "status": "live",
-      "verifiedSha": "32b9158242ac02e1d83487c491f2e1b98385fdafc2b26093738fea3f7a962acb"
+      "verifiedSha": "4d99afca586a4746f541b8eddc81f5952d9db8b571b98188072c2da0e67be919"
     },
     {
       "id": "startup-hackathon",
@@ -153,7 +153,7 @@
       "tone": "witty",
       "kind": "tech",
       "status": "live",
-      "verifiedSha": "cd02e7af180e91067c90e85bb2a4c100ce39d1a28d88b3f36678070fc6e4d749"
+      "verifiedSha": "78c58dc498f10c39ca1250aa521d8e94dce8b6e663e11ab58dbbe1e9cdc98c85"
     },
     {
       "id": "wildlife-safari",
@@ -162,7 +162,7 @@
       "tone": "whimsical",
       "kind": "savanna",
       "status": "live",
-      "verifiedSha": "39246b2ef0b1424b0141763a69dcd22657470749d0279d94767ff34947fa0da5"
+      "verifiedSha": "c184e52182af335454fe35f7e71150a6dfdd2a63d48af5000bf624ed26857a50"
     },
     {
       "id": "wizard-academy",
@@ -171,7 +171,7 @@
       "tone": "whimsical",
       "kind": "fantasy",
       "status": "live",
-      "verifiedSha": "279e5f2e55d913c97dca82bc346eb12a263ed8141ff90aa7842acb6e38b65783"
+      "verifiedSha": "bc47359307fe217f9323dbb31eeb31649ba0e619a13f239033887e135b5f3e5a"
     },
     {
       "id": "circus-troupe",
@@ -180,7 +180,7 @@
       "tone": "whimsical",
       "kind": "bigtop",
       "status": "live",
-      "verifiedSha": "0241b2fa15b7a027692ba0c080375dd7220b3b8220eb5f8a9b6f1901e7722782"
+      "verifiedSha": "eee6451688c3b570e9e86aab5552759f4a8647e39555ea507492845acbffd6d3"
     },
     {
       "id": "aquarium-night",
@@ -189,7 +189,7 @@
       "tone": "cozy",
       "kind": "aquarium",
       "status": "live",
-      "verifiedSha": "604db62cf1b6756fa1c147e7bafbb060131e33dfe276f3e320a9da20c879c50a"
+      "verifiedSha": "86a36f0f031b67aabe132faf9d256b346e158fa01bc5a2cfc21811fc55006e7a"
     },
     {
       "id": "library-hush",
@@ -198,7 +198,7 @@
       "tone": "light-mystery",
       "kind": "library",
       "status": "live",
-      "verifiedSha": "66a1cb09fc71ee354e864c8ee1ac68f129d47962ab2b93d018c9fb3a37a4f16c"
+      "verifiedSha": "3c86a6f8e52a6af98ad213d64879fdc5fadec8543ba837a1951cdb981f76a523"
     },
     {
       "id": "reef-dive",
@@ -207,7 +207,7 @@
       "tone": "whimsical",
       "kind": "reef",
       "status": "live",
-      "verifiedSha": "2b215c1dba5f1480496475c1559633080efed7a40813876c31c7b4143160f39e"
+      "verifiedSha": "07f6268dedfa6a0eb70e9f1580e97150cde34d933d1224189faa50a29cefa0ce"
     },
     {
       "id": "desert-caravan",
@@ -216,7 +216,7 @@
       "tone": "cozy",
       "kind": "desert",
       "status": "live",
-      "verifiedSha": "cb4b3f9c4278af4dfd91e1581759f08795d9bf828423578f9de4f6861b680e44"
+      "verifiedSha": "f340e26dd79dbdb3249e680843957cf1fb4a955e5968dd463788717ab1098f64"
     },
     {
       "id": "polar-station",
@@ -225,7 +225,7 @@
       "tone": "light-mystery",
       "kind": "arctic",
       "status": "live",
-      "verifiedSha": "dce0fd13624124b0e0d751fc38e0b2a492c6d10e07b31fa074097ece2f1a9467"
+      "verifiedSha": "583e488b0a0b3b4538d727721e9156653666b517eaaafa1423781db9b64de15d"
     },
     {
       "id": "jousting-tourney",
@@ -234,7 +234,7 @@
       "tone": "witty",
       "kind": "joust",
       "status": "live",
-      "verifiedSha": "8d45014dc33823d616b2cf64f81c26aae41de16f3153260fc4641bf956d12e39"
+      "verifiedSha": "cfcb6d957b9f605480a563d8f875d2dd9603a029228802da53454ee0c5403dce"
     },
     {
       "id": "clockwork-workshop",
@@ -243,7 +243,7 @@
       "tone": "whimsical",
       "kind": "steampunk",
       "status": "live",
-      "verifiedSha": "f4b50a9b0e31b3dbac3388484438b0c9c8a024f56810afffc57ea59319c66ea4"
+      "verifiedSha": "29f68001893a9ba8a2f8b7c99b4efd2cd4e0daca52842c2a2af6f466e8c000ff"
     },
     {
       "id": "farmhouse-table",
@@ -252,7 +252,7 @@
       "tone": "cozy",
       "kind": "farmhouse",
       "status": "live",
-      "verifiedSha": "0c05df630ffb3d205f60bb559e6491af4bea211d974fa44cce53d483c83cfe4c"
+      "verifiedSha": "db899e09f20d6101757244a2f09171b1a12398f326331357b9a1cdeefc48cadf"
     },
     {
       "id": "esports-arena",
@@ -261,7 +261,7 @@
       "tone": "witty",
       "kind": "esports",
       "status": "live",
-      "verifiedSha": "a5ea8a46f8c71af13bfc0bfc108ef17e98ce68ec260e427b099c0a6ba878bfa6"
+      "verifiedSha": "3633d8bbc684904a641819b9c43972c0c60d78d562f7ead842ede1a29d15276c"
     },
     {
       "id": "ski-lodge",
@@ -270,7 +270,7 @@
       "tone": "cozy",
       "kind": "ski-lodge",
       "status": "live",
-      "verifiedSha": "0722cf16d6a599a55a4e2419e176291ecb0bc70314d2e5630c1bb3acc251b55f"
+      "verifiedSha": "75e1d183f8385b7c8ee7c35461fec96f27d68cb7a5935ed1d84bb403356fb9d5"
     },
     {
       "id": "speakeasy-jazz",
@@ -279,7 +279,7 @@
       "tone": "light-mystery",
       "kind": "speakeasy",
       "status": "live",
-      "verifiedSha": "204758b643c6806471a7fb817de517b85419e32ad4cac65c0ea616881f03b703"
+      "verifiedSha": "f21f4d1c43ff11f9d825a7551658c73deae7cddb9bd3ede42d3cb62d31519e1f"
     },
     {
       "id": "pottery-studio",
@@ -288,7 +288,7 @@
       "tone": "witty",
       "kind": "pottery",
       "status": "live",
-      "verifiedSha": "2868bbb21205d5af0b1ff1c97d29db51553b7948b8a6af0747b5741e6b89a065"
+      "verifiedSha": "75c23d46e8c587ef5a2ff74112be11d00ecd405fc2f3f606828b5d79e58c946e"
     },
     {
       "id": "balloon-fiesta",
@@ -297,7 +297,7 @@
       "tone": "whimsical",
       "kind": "ballooning",
       "status": "live",
-      "verifiedSha": "82e8edfb58c06718d81bde0c6e8cf910c9ed74bd4200c70f059ea54b0712e1e0"
+      "verifiedSha": "60d2c436f6abdbc90e03d06b3a1441c5f2b11ae1509322b42dabb0683b83cc1b"
     },
     {
       "id": "archaeology-dig",
@@ -306,7 +306,7 @@
       "tone": "light-mystery",
       "kind": "archaeology",
       "status": "live",
-      "verifiedSha": "43a7e751257640f8bb762753c0c6b277fec6897583464fee4182f8d125529617"
+      "verifiedSha": "a01256bab9040789719267e3bdc8a8633892d9d71169d5ed0787f2bcd7354f7f"
     },
     {
       "id": "chocolate-factory",
@@ -315,7 +315,7 @@
       "tone": "whimsical",
       "kind": "confectionery",
       "status": "live",
-      "verifiedSha": "cb72c11dfa566c7822bf8d11c07bc945937c4d87853e0f1ec472d021b42d1ba0"
+      "verifiedSha": "416d3e8b80de711a63c3fcd1ec2f6a776aa9e0b782f64730fcac96d8f18e3c28"
     },
     {
       "id": "tram-depot",
@@ -324,7 +324,7 @@
       "tone": "witty",
       "kind": "tram",
       "status": "live",
-      "verifiedSha": "0ee254f135c17609862ba5947464d64f6b79b08f9aa6ff30522e9cdee993d552"
+      "verifiedSha": "d2c7b571e003437fef9d8510b32d3fe176d33efde8c0192fef6b09084fa24d83"
     },
     {
       "id": "apiary-bloom",
@@ -333,7 +333,7 @@
       "tone": "cozy",
       "kind": "apiary",
       "status": "live",
-      "verifiedSha": "6452873ddb280092c6475ef2562374b873b3951db6984a76523599be78983557"
+      "verifiedSha": "cdc3834ca5ce43d6f02878ed34854ed6a384fe04c6561aa45cea73fdb317b993"
     },
     {
       "id": "vineyard-harvest",
@@ -342,7 +342,7 @@
       "tone": "cozy",
       "kind": "vineyard",
       "status": "live",
-      "verifiedSha": "4b000eba0b802412bdc63f48df44595e07035bc84c6385193be0e7fb10e66b8a"
+      "verifiedSha": "391c2225589d27b418fee4f8462b02c5314e9d39e41a56059190cea5d0ec4d49"
     },
     {
       "id": "lighthouse-watch",
@@ -351,7 +351,7 @@
       "tone": "light-mystery",
       "kind": "lighthouse",
       "status": "live",
-      "verifiedSha": "8dc362e3c7b8e50a6937de97ef53f18a81314517bbaba5630c815a5c58d340f9"
+      "verifiedSha": "ee82b8b76e27596cae37eb7dc2c2737c96475da5de0b13a4035181c34ba722d6"
     },
     {
       "id": "greenhouse-morning",
@@ -360,7 +360,7 @@
       "tone": "cozy",
       "kind": "greenhouse",
       "status": "live",
-      "verifiedSha": "738a9a1205accd47bc25f571012fef2c0afcf1a4d9a150c7026dab406465d8dc"
+      "verifiedSha": "c6db0e30cf960009ae59e1f1ebea4464586cb83ad1a2a475b6fd3358ff2c084b"
     },
     {
       "id": "submarine-voyage",
@@ -369,7 +369,7 @@
       "tone": "light-mystery",
       "kind": "submarine",
       "status": "live",
-      "verifiedSha": "c14bd795d672a48f2a6eda1cb77c397c9f13fdc8b99eb0e3b6ca1bd6f5b08d77"
+      "verifiedSha": "f7cbe0cc941e68aae1f968eafae35fa2ea8fa1f3e477ebba7d22baa749c62532"
     },
     {
       "id": "blacksmith-forge",
@@ -378,7 +378,7 @@
       "tone": "witty",
       "kind": "forge",
       "status": "live",
-      "verifiedSha": "aee96099470fdc33d89335a06d9c92203359052a8b3f0c6fa7b1ea31ccdf716a"
+      "verifiedSha": "aa87e90259ec711af2afab571626340344a46ef5cdd526984459ef8ee659f50d"
     },
     {
       "id": "windmill-mill",
@@ -387,7 +387,7 @@
       "tone": "light-mystery",
       "kind": "windmill",
       "status": "live",
-      "verifiedSha": "acfcf2bb7d16f87107a16e7eddf3e0194df960853274882218d429ae86ad2d67"
+      "verifiedSha": "2fac9059e6fba99598c66402a57be9fb1ee1511fc0756f0ba86d18a0f983a2e9"
     },
     {
       "id": "teahouse-afternoon",
@@ -396,7 +396,7 @@
       "tone": "cozy",
       "kind": "teahouse",
       "status": "live",
-      "verifiedSha": "d8f417fd7344192f98395ef5d4dac4310eff01d3c63b9ba47f710078506dc17b"
+      "verifiedSha": "12135aa76e740ee5aff134b056da279ec656a999a69d2954de6353d2e37d54d9"
     },
     {
       "id": "spice-bazaar",
@@ -405,7 +405,7 @@
       "tone": "witty",
       "kind": "bazaar",
       "status": "live",
-      "verifiedSha": "fa312ad69b5c119fac597c685e9b2026c168b84a6f5f5467d7e0417f149577e5"
+      "verifiedSha": "85e8f8862f740d9bb45cc17080bf0ad4e3fdb4857eb76170fa6a85c8ea3738c4"
     },
     {
       "id": "glassblowing-studio",
@@ -414,7 +414,7 @@
       "tone": "whimsical",
       "kind": "glassworks",
       "status": "live",
-      "verifiedSha": "1cf54988bca5145c6ff838262839c5352db70d75f549ee72e46f1fe9b20d2efe"
+      "verifiedSha": "37e1349d44acc659da052f5633f732656ca1eb7e6f496ab758c97f6b28500340"
     },
     {
       "id": "falconry-meet",
@@ -423,7 +423,7 @@
       "tone": "whimsical",
       "kind": "falconry",
       "status": "live",
-      "verifiedSha": "beb3121cd0cb78ae1e270e009b1dfb6a8def2ec26939b6d57cb78685e0627115"
+      "verifiedSha": "cd5cb617ad3dc1cd6b73859b2a29a3d04e685e5c8a0c60602fb78ddf521259c5"
     },
     {
       "id": "cave-expedition",
@@ -432,7 +432,7 @@
       "tone": "light-mystery",
       "kind": "caving",
       "status": "live",
-      "verifiedSha": "ad062c24bbe52ca59efa4fdf67d6bc5b5f6c50f3b04fcaa7eaec53c5d86b02c6"
+      "verifiedSha": "b1645a973466e8b2eb4f509b69188f44cf01b334a88306079a0c3dd831242509"
     },
     {
       "id": "bottling-works",
@@ -441,7 +441,7 @@
       "tone": "witty",
       "kind": "brewery",
       "status": "live",
-      "verifiedSha": "e0ca2079159e96d9d8f77e30e6aaaff81368ce81882daf39e0f195e783828736"
+      "verifiedSha": "c23abaec89a06d583072b1cccde5324f15a8419ac01ef1eb359aa3683eae8b72"
     },
     {
       "id": "puppet-theatre",
@@ -450,7 +450,7 @@
       "tone": "whimsical",
       "kind": "puppetry",
       "status": "live",
-      "verifiedSha": "cfb0d85b27245ff5e682348b2c8788a3814093b11bb52020f705cac1cd4cf546"
+      "verifiedSha": "0328e573970a3ee5f819ab7cb467a3cb8188e1ca6f589ab0b7d9b79c6add5100"
     },
     {
       "id": "rock-climbing-crag",
@@ -459,7 +459,7 @@
       "tone": "witty",
       "kind": "climbing",
       "status": "live",
-      "verifiedSha": "ad292910da8c922fe5e456c69c00821ec06466f02ba3aacd9bb11727657035c2"
+      "verifiedSha": "ee2779868210aa8d53f73e7436cb3cd82d8184bf877bcb8f12eed27f6bc27ff1"
     },
     {
       "id": "perfumery-atelier",
@@ -468,7 +468,7 @@
       "tone": "whimsical",
       "kind": "perfumery",
       "status": "live",
-      "verifiedSha": "65083ee243c084cf478107d4bcb1709f576c66b1d9f044cdc4d194a0067a49ac"
+      "verifiedSha": "184dedcb7ba5e3b87e57c7022d6c34fb2abf2f60d487d72f469035516e47e918"
     },
     {
       "id": "orchard-harvest",
@@ -477,7 +477,7 @@
       "tone": "cozy",
       "kind": "orchard",
       "status": "live",
-      "verifiedSha": "fdc21ef8efdda0b5e63281d0699c90b7e02e00214b6e3345d25c10274f053897"
+      "verifiedSha": "69b86e5495c0d1bda944912e48ea1c0fc9b233ea44479f1199e5356afad3f84a"
     },
     {
       "id": "planetarium-show",
@@ -486,7 +486,7 @@
       "tone": "whimsical",
       "kind": "planetarium",
       "status": "live",
-      "verifiedSha": "5a78ece5c40b4ca0e5b358304d6828a65d6dc5448362bd0f518cda29fc63e2ef"
+      "verifiedSha": "62d4a0d72fc16b40f0cc57d15aebff0a0700e1283e93a4deed725bcbd229f8e9"
     },
     {
       "id": "watchmaker-bench",
@@ -495,7 +495,7 @@
       "tone": "light-mystery",
       "kind": "watchmaker",
       "status": "live",
-      "verifiedSha": "149d58d70fd57d228915d645deb07c5bd5222d103d35d135f9014cdb68d44661"
+      "verifiedSha": "51af4a6bb168f1713d77fd437add6a5276dead34e58bbfe57cbcf734ee8c33fa"
     },
     {
       "id": "creamery-cave",
@@ -504,7 +504,7 @@
       "tone": "cozy",
       "kind": "creamery",
       "status": "live",
-      "verifiedSha": "135e34d2d88e6a9b6a54d2917fae7b171fcb4682c209b5111100865e4f74ea6c"
+      "verifiedSha": "503b070c82c8fa02b010f32e63984949d01c525717442f5ff747a4692f3b4911"
     },
     {
       "id": "cobbler-shop",
@@ -513,7 +513,7 @@
       "tone": "witty",
       "kind": "cobbler",
       "status": "live",
-      "verifiedSha": "aa2e00435818771d8bba96f658f977aae007974fc12d023cd63bd646f1f72b65"
+      "verifiedSha": "1ad0cac73cd0521923f0e573980d911db9916c78f5dc5a6b71b2a9af566d3b87"
     },
     {
       "id": "apothecary-counter",
@@ -522,7 +522,7 @@
       "tone": "light-mystery",
       "kind": "apothecary",
       "status": "live",
-      "verifiedSha": "419f9f0a600eeac7f9671372e93462b9a4052665d0545166128f8e0418130b43"
+      "verifiedSha": "045ec55a4db7df5f9b688ebaf363eadec0d35df179d0b8e109bd64839132081f"
     },
     {
       "id": "toy-workshop",
@@ -531,7 +531,7 @@
       "tone": "whimsical",
       "kind": "toyshop",
       "status": "live",
-      "verifiedSha": "4edb1a3e52bfa1a1864170c9d0a4c010b67a30bf2042837193f228a6819a7742"
+      "verifiedSha": "317c283c24bc6973cfbf9d524091476d03ffb1d29d049ea7f1e257d7e8d5610a"
     },
     {
       "id": "opera-house",
@@ -540,7 +540,7 @@
       "tone": "light-mystery",
       "kind": "opera",
       "status": "live",
-      "verifiedSha": "f502d52b3913a6de3e531d2f550e9f264933e249c1c28b1d393b0d68b06db24d"
+      "verifiedSha": "94dce4ab68bccf14771c7c54f6ad765e62c9dbfa15d8abac59f973c4f2f119b9"
     },
     {
       "id": "skate-park",
@@ -549,7 +549,7 @@
       "tone": "witty",
       "kind": "skatepark",
       "status": "live",
-      "verifiedSha": "9f51c3d3c236755d891b01ffcb13f57090f8c80ee50795c3b60d0012b7504b00"
+      "verifiedSha": "ccf2993532f6dbd368d2cc78a3767703025fbf6aa9d19e6b746d5641f5e346aa"
     },
     {
       "id": "kayak-race",
@@ -558,7 +558,7 @@
       "tone": "witty",
       "kind": "kayak",
       "status": "live",
-      "verifiedSha": "e8ba051fd0c00ade4820445414dd7e6ca8519d6512ca93514393f5f80e3116e1"
+      "verifiedSha": "92d31bd02f9450c6774187d28cb71d3204ee665382ba166d5e645f2d02ae88c9"
     },
     {
       "id": "koi-pond",
@@ -567,7 +567,7 @@
       "tone": "cozy",
       "kind": "koipond",
       "status": "live",
-      "verifiedSha": "79d37abdd68fedc6a5113b632da4d6bb0e3d4f146befc1983f8a3086f00c8ad1"
+      "verifiedSha": "acfd3acf4899d6c0f6a67c0780f1c9823237e411e0c2728b7c7f00033a9f52c5"
     },
     {
       "id": "calligraphy-hall",
@@ -576,7 +576,7 @@
       "tone": "cozy",
       "kind": "calligraphy",
       "status": "live",
-      "verifiedSha": "ea1936a4d4c0718fb52880286662ea1f430799412fc3e26125b02f208d1a4c4f"
+      "verifiedSha": "51acf9ea3fcaef09d81d48828f77b15d2cbee8cd946d12f174cf3297bc5dbab7"
     },
     {
       "id": "reptile-house",
@@ -585,7 +585,7 @@
       "tone": "whimsical",
       "kind": "reptile",
       "status": "live",
-      "verifiedSha": "4c9899a36d6762c11ad20fc6148d5e6a2d6950ec2f5de85207ecc5176242bac7"
+      "verifiedSha": "801bf4a17114c2a15447311a89a6daa00a2cac6e08a6efe2c2f5a6978c8f3469"
     },
     {
       "id": "shipyard-slipway",
@@ -594,7 +594,7 @@
       "tone": "witty",
       "kind": "shipyard",
       "status": "live",
-      "verifiedSha": "893980646a2cc5fcc98ef3b0ecdd997377861baff40924e6fc4927583fde6630"
+      "verifiedSha": "90145cd47099db62e3eabfa0b532e12973f542c84b48e4a4c528c864e36d318c"
     },
     {
       "id": "mosaic-studio",
@@ -603,7 +603,7 @@
       "tone": "light-mystery",
       "kind": "mosaic",
       "status": "live",
-      "verifiedSha": "5bdee3b49e3091e56ba3a08398a2e47aa49ddd2c8355c668f741fb907c316fda"
+      "verifiedSha": "56214d33bade9fefac30900d21bb18ea599d058706a4835ce42d6792b699a3ca"
     },
     {
       "id": "cat-cafe",
@@ -612,7 +612,7 @@
       "tone": "cozy",
       "kind": "catcafe",
       "status": "live",
-      "verifiedSha": "0981de8cda0815e19d23c81891900a00119cb3a5e8bbabb6a830d05aeebf8096"
+      "verifiedSha": "7128f53bbf79e38fb82edc23c6722bacf458e8b02a5fc7c2d42db5146480cf85"
     },
     {
       "id": "pet-parade",
@@ -621,7 +621,7 @@
       "tone": "whimsical",
       "kind": "petparade",
       "status": "live",
-      "verifiedSha": "0ecd2c1379605afacea1996bd531021a53d8d029199ab834473593bfec4a8014"
+      "verifiedSha": "d322c2054969339ca1da620a195ff8a947120e4b9777e03941a2eb1d772d65e9"
     },
     {
       "id": "bakery",
@@ -630,7 +630,7 @@
       "tone": "cozy",
       "kind": "bakery",
       "status": "live",
-      "verifiedSha": "2c8bcdf50f78733658785087693e0dd75dc07be213f60539c2abf666efbb1c1b"
+      "verifiedSha": "821d28a961ec187f12b5a04e0781bf48fd99150c0bde38536d56ae31be052c4a"
     },
     {
       "id": "tailor-shop",
@@ -639,7 +639,7 @@
       "tone": "light-mystery",
       "kind": "tailor",
       "status": "live",
-      "verifiedSha": "b1ce2ebad3b88d5b4c7992511fd6bba06937b4ba367a6214393f9b9687536088"
+      "verifiedSha": "fd1ae2add9e5ce19b8e4e933534f04316fb2958139d619da509ff98caa93cd6c"
     },
     {
       "id": "craft-fair",
@@ -648,7 +648,7 @@
       "tone": "whimsical",
       "kind": "craftfair",
       "status": "live",
-      "verifiedSha": "ec12251c945cb16f20da147f8d4b0192e15adb87dba2bf8b9ab851c9378c32ac"
+      "verifiedSha": "01cc6938263b46273b39b381d35037ba58eb46cb3a4e540f8123c8ab67ec79de"
     },
     {
       "id": "greengrocer",
@@ -657,7 +657,7 @@
       "tone": "cozy",
       "kind": "greengrocer",
       "status": "live",
-      "verifiedSha": "c1617804f5561295e5fb70d12ef06f5ae7dedaae0e5798299ee7a8ad97a5f3eb"
+      "verifiedSha": "96f5692e2edd89eb10995e98b8bacf1484927374bb15cd23405b1ad9ed36cd62"
     },
     {
       "id": "sports-club",
@@ -666,7 +666,7 @@
       "tone": "witty",
       "kind": "sportsclub",
       "status": "live",
-      "verifiedSha": "fb9901c728c9c0ada1dcb1c483821e231b2eef2932495f38b421d0980b9c8ae6"
+      "verifiedSha": "e35b1e06183aaa38380f72c6bd3ad5de6979fbcccaf285d6be2dc6b3f00889f0"
     },
     {
       "id": "auto-garage",
@@ -675,7 +675,7 @@
       "tone": "witty",
       "kind": "garage",
       "status": "live",
-      "verifiedSha": "a8c47d1da1e20716f4eb2d07f29c1e3c478ec832776b327ce9c9def14eaf741c"
+      "verifiedSha": "5fab5f483497ac2c0a2938b929aa5d35b87491f8dd3c97ffc8f376eca49a24ce"
     },
     {
       "id": "florist",
@@ -684,7 +684,7 @@
       "tone": "light-mystery",
       "kind": "florist",
       "status": "live",
-      "verifiedSha": "75b0826b2aa6fb5f84a926c68ed652e47a5300afb830f9ac4431a55c78dfcc06"
+      "verifiedSha": "0831d17f5c07bb4c08f5dfc26c87b63c3e8bcb021eee5cf8f480c453ab33b3b4"
     },
     {
       "id": "moving-day",
@@ -693,7 +693,7 @@
       "tone": "witty",
       "kind": "removals",
       "status": "live",
-      "verifiedSha": "464bf6c6d01ddd744a441098420e2ef63e3dbff4034a8aa838e0506a4a1cca0f"
+      "verifiedSha": "d30c9dfb9ff3a3096d89ea39db435be503f83250548f74992a7863c79a862e7c"
     },
     {
       "id": "travel-agency",
@@ -702,7 +702,7 @@
       "tone": "whimsical",
       "kind": "travelagency",
       "status": "live",
-      "verifiedSha": "146c67bc4db097a53988fa9b7df1b124f0f7077652e0fa9c3cd7644d387fdfe8"
+      "verifiedSha": "7ef3e8877ad9efd276526bc65dc92fb77e3cf27246d91e2241973456be881b8a"
     },
     {
       "id": "career-day",
@@ -711,7 +711,7 @@
       "tone": "witty",
       "kind": "careerday",
       "status": "live",
-      "verifiedSha": "b0c0f77ad282785a7fadeac127034631899b6a71e69d8c9a891afccb9b11d3fc"
+      "verifiedSha": "61611cd7270c7f7889de4540e9bfe618c2321acab2f3208d35ff83739a7e769a"
     },
     {
       "id": "quilting-bee",
@@ -720,7 +720,7 @@
       "tone": "cozy",
       "kind": "quilting",
       "status": "live",
-      "verifiedSha": "5789d2006fb94272f5c362f07fe55dfb697d887c5d03e6ab154888f65f0b4f3c"
+      "verifiedSha": "bc0ddad445ec359e5124c20bdbd018c464f289f9ccc869dd973b5d1338444abf"
     },
     {
       "id": "spaceport",
@@ -729,7 +729,7 @@
       "tone": "whimsical",
       "kind": "spaceport",
       "status": "live",
-      "verifiedSha": "fb2cf39917bb7b61e5200149add4c54bdeb8922ee5a0607fd3058149b05eb28c"
+      "verifiedSha": "c05785cb6984a81283b611e7a5cd884674e118b0fa60ced57c913617de6539e4"
     },
     {
       "id": "paint-studio",
@@ -738,7 +738,7 @@
       "tone": "light-mystery",
       "kind": "paintstudio",
       "status": "live",
-      "verifiedSha": "9568ffda039e9731e520e6eb5c030a0a42deb3f676d23c42d5eb31df15ee6794"
+      "verifiedSha": "fc9150d295488ee8dcb0ce09281984fb943b5aa87f9485246607430a6183df95"
     },
     {
       "id": "hot-spring",
@@ -747,7 +747,7 @@
       "tone": "cozy",
       "kind": "hotspring",
       "status": "live",
-      "verifiedSha": "322da747e3bc8d5238feced1be19eefa1e2bdd8de1917680a3aeb1d6c8f09c5a"
+      "verifiedSha": "576ab83ccdbc88cab251edff2b07478028309f6d8c7ea2c06892b5ca34d08e15"
     },
     {
       "id": "pickle-works",
@@ -756,7 +756,7 @@
       "tone": "cozy",
       "kind": "pickleworks",
       "status": "live",
-      "verifiedSha": "46472c644e4d2abd4f82342283fc6ded7e2c8e982a00b8082c55f2fb930101a7"
+      "verifiedSha": "3264115076edd3d63cd1a8191ec379d5a3e323878aadeb6e69527eff829ad2bf"
     },
     {
       "id": "campground",
@@ -765,7 +765,7 @@
       "tone": "cozy",
       "kind": "campground",
       "status": "live",
-      "verifiedSha": "d077c5aa89afa158c62a8d819c084b64687351df4d98689bb46b6cf5d523c174"
+      "verifiedSha": "52564d1333906255f53bc4dde729f1b81c79b59c90832bff813e80495f78741d"
     },
     {
       "id": "petting-zoo",
@@ -774,7 +774,7 @@
       "tone": "cozy",
       "kind": "pettingzoo",
       "status": "live",
-      "verifiedSha": "899a7a22fe764c4906801ec60e494017f1742da4e50a0e02ef654b02339ff9e8"
+      "verifiedSha": "15893045a0181ce4034467306523191d383e4a4280c33f3301bd2a7b2c88de8a"
     },
     {
       "id": "laundromat",
@@ -783,7 +783,7 @@
       "tone": "witty",
       "kind": "laundromat",
       "status": "live",
-      "verifiedSha": "76b9edff3ab725d233fe2e047589b5714529c5df547ebff9b0ab8961f9556906"
+      "verifiedSha": "6e2adaa2226bddcef4a5f439c1da95eb0d29ddc277e14e6612bf54d615a62464"
     },
     {
       "id": "gymnasium",
@@ -792,7 +792,7 @@
       "tone": "witty",
       "kind": "gymnasium",
       "status": "live",
-      "verifiedSha": "03e8425370946d40f23aea8d60808d670cc4f2254f5aebe0337b8b0b15fe5d08"
+      "verifiedSha": "f8d66595bdbd6966095319b734b3eb786356f8dd0e818d15a56816516c9ade1b"
     },
     {
       "id": "radio-station",
@@ -801,7 +801,7 @@
       "tone": "witty",
       "kind": "radiostation",
       "status": "live",
-      "verifiedSha": "809ebf8f3afb45dada243db61d7bd7308f2d0a57def15796b8680b2c47a3200c"
+      "verifiedSha": "21c3904859d9b7b61bdcd1ea6edb6709858d7e392e26cfd912678a6dc481e78f"
     },
     {
       "id": "mini-golf",
@@ -810,7 +810,7 @@
       "tone": "witty",
       "kind": "minigolf",
       "status": "live",
-      "verifiedSha": "6fed5f17561576d9c5a609781830728577e55943e0edbcab25261efdd44d8b5b"
+      "verifiedSha": "f16056a49817bf9ba7840c8466e952009f4f1dc3e5d5567ddba6a310f367a84f"
     },
     {
       "id": "antiques-shop",
@@ -819,7 +819,7 @@
       "tone": "light-mystery",
       "kind": "antiques",
       "status": "live",
-      "verifiedSha": "1cce5369a65148f7f6fbc9cf0ee9052212f62977065bb8407e4594c5cea74e57"
+      "verifiedSha": "017fe2a881f22cd16f3e76350bc4f01d100d343d90c9fd14f3c90be213c5123e"
     },
     {
       "id": "flea-market",
@@ -828,7 +828,7 @@
       "tone": "light-mystery",
       "kind": "fleamarket",
       "status": "live",
-      "verifiedSha": "2264330715aac17596c1d65ca12f236ae949a10764061be6346708d06eaa79c2"
+      "verifiedSha": "cea6a505d74d7ae17c6ab9219d1fa9f10b8037768ac16ca97f8ca558bef89e6b"
     },
     {
       "id": "record-store",
@@ -837,7 +837,7 @@
       "tone": "light-mystery",
       "kind": "recordstore",
       "status": "live",
-      "verifiedSha": "89902a0d879b9f3d39ff54989acf3b92049385b311852e38691b1ca5f8b829a1"
+      "verifiedSha": "ca5b5fbd9f47c7f60e3d4d901e49247f8f4fbdb01c0f015ec5a34f5d077c80a6"
     },
     {
       "id": "weather-station",
@@ -846,7 +846,7 @@
       "tone": "light-mystery",
       "kind": "weatherstation",
       "status": "live",
-      "verifiedSha": "fadc584e3f6426b70a28b348a27c59f24203d9896cd94442bd79ca0d20556e72"
+      "verifiedSha": "210301b529671d28bfd7d458c75ed8dbccb4b85e8c85f680e7553ada7fc72b6b"
     },
     {
       "id": "map-room",
@@ -855,7 +855,7 @@
       "tone": "light-mystery",
       "kind": "maproom",
       "status": "live",
-      "verifiedSha": "5ecc5feb571d8f3db4914ee374639f45ad1db9fb2fc1dc76f300e2ca3ed6447e"
+      "verifiedSha": "7470c9fb09ec765163978c4bacd21be19b7fee4677c2daf95c5e250d7672b54a"
     },
     {
       "id": "veterinary-clinic",
@@ -864,7 +864,7 @@
       "tone": "whimsical",
       "kind": "vetclinic",
       "status": "live",
-      "verifiedSha": "bb0d59c21f38c86768c10dc5212a563bf7f726ba5bf9775f95140824f0198458"
+      "verifiedSha": "50b9afb177aa22576c938023d80db860315036f69d49b4f39d91b2be0db9bc03"
     },
     {
       "id": "arcade",
@@ -873,7 +873,7 @@
       "tone": "whimsical",
       "kind": "arcade",
       "status": "live",
-      "verifiedSha": "3b6b0f4ba863e03a564d06a2e3a2bc6c7b713103ed3278c8486b9e58adcc9c30"
+      "verifiedSha": "281bb3ad8fb8bbf3eab02bae1aa006d2661e8474b5df1433403a854cd38cb770"
     },
     {
       "id": "fireworks-show",
@@ -882,7 +882,7 @@
       "tone": "whimsical",
       "kind": "fireworks",
       "status": "live",
-      "verifiedSha": "eddf96b88cf81062f5b2c9eb6e6beb694f3bdc03d026bdcb1a64b4bcc7d9c348"
+      "verifiedSha": "fcb3b623eaa8ab4fde242189197ee87cdf8acf929c7b971f54b4f1b0f2fedabd"
     },
     {
       "id": "birdwatching",
@@ -891,7 +891,7 @@
       "tone": "whimsical",
       "kind": "birdwatching",
       "status": "live",
-      "verifiedSha": "55e214f1504a214402e2f1f1f6d2af84697275cc6f1c57e6192f410da7cdf178"
+      "verifiedSha": "ce08cfcd06314b71c43e5b46c1a328e1701af31e436eb07fb44e57403de39c8d"
     },
     {
       "id": "ice-rink",
@@ -900,7 +900,7 @@
       "tone": "whimsical",
       "kind": "icerink",
       "status": "live",
-      "verifiedSha": "0a725b308a2b19db7f478ec2c5f0bc1de4e41c5a5f3c84c69817be93154e361c"
+      "verifiedSha": "fe1b7933b42fbc9c1e830641e258df6c9c15e79cdb0efbb74a3d1e904f968b30"
     },
     {
       "id": "city-inspection",
