@@ -1,6 +1,6 @@
 {
-  "builtAt": "2026-09-23T00:00:00Z",
-  "generatedSeed": "2026-09-23",
+  "builtAt": "2026-09-24T00:00:00Z",
+  "generatedSeed": "2026-09-24",
   "puzzles": [
     {
       "date": "2026-06-24",
@@ -2575,6 +2575,34 @@
       "date": "2026-09-23",
       "file": "2026-09-23-expert.json",
       "sha": "139ccf9fe51e34da4c79bb91091ada8bdf96e93f9cde721fd3286cb305567ea0",
+      "shapeId": "grid",
+      "tier": "expert"
+    },
+    {
+      "date": "2026-09-24",
+      "file": "2026-09-24-easy.json",
+      "sha": "cefa56325d7278ef148bb861e4fe454632d5305a917a7d3ef3249b85e2e7b874",
+      "shapeId": "grid",
+      "tier": "easy"
+    },
+    {
+      "date": "2026-09-24",
+      "file": "2026-09-24-standard.json",
+      "sha": "36eb03c686b7e6c7532f75b16bd394d617e5e9336f4a7b155d7e7f1d60d841f3",
+      "shapeId": "grid",
+      "tier": "standard"
+    },
+    {
+      "date": "2026-09-24",
+      "file": "2026-09-24-sharp.json",
+      "sha": "444b9a031c74dd9a618f6e933d211f0473f81d039f59a30d61e770a876e115cd",
+      "shapeId": "grid",
+      "tier": "sharp"
+    },
+    {
+      "date": "2026-09-24",
+      "file": "2026-09-24-expert.json",
+      "sha": "397ac706fc04fd4d47d4bf4054bc9c7d38e3ae7f93e518112bbf84bd29ccff29",
       "shapeId": "grid",
       "tier": "expert"
     }
